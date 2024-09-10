@@ -1,0 +1,60 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.12">
+  <diagram name="Página-1" id="Un61sBPoxOEvwUx4YEu0">
+    <mxGraphModel dx="1493" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1XQclkzCjRKh8gIvvATt-1" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="70" y="90" width="620" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="1XQclkzCjRKh8gIvvATt-2" target="1XQclkzCjRKh8gIvvATt-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-2" value="Cargar plantilla" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-5" value="Cargar datos de plantilla" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="200" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="1XQclkzCjRKh8gIvvATt-8" target="1XQclkzCjRKh8gIvvATt-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="1XQclkzCjRKh8gIvvATt-8" target="1XQclkzCjRKh8gIvvATt-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="340" />
+              <mxPoint x="510" y="540" />
+              <mxPoint x="380" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-8" value="¿Quiere guardar los cambios?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="327" y="290" width="106" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="1XQclkzCjRKh8gIvvATt-5" target="1XQclkzCjRKh8gIvvATt-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="1XQclkzCjRKh8gIvvATt-10" target="1XQclkzCjRKh8gIvvATt-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="540" />
+              <mxPoint x="380" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-10" value="Guardar cambios" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="440" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1XQclkzCjRKh8gIvvATt-12" value="Fin" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="570" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
