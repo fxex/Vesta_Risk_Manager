@@ -1,151 +1,14 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.7.14" pages="2">
-  <diagram name="Página-1" id="BYZrg6UX77zK-VVSidpS">
-    <mxGraphModel dx="920" dy="535" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-        <mxCell id="SQLzmbsMBf419I0D_pn_-6" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="200" y="10" width="580" height="850" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-24" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-39" target="SQLzmbsMBf419I0D_pn_-8">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-31" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-24">
-          <mxGeometry x="0.1277" y="2" relative="1" as="geometry">
-            <mxPoint x="-17" y="2" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-26" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-39" target="SQLzmbsMBf419I0D_pn_-9">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-32" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-26">
-          <mxGeometry x="-0.0316" y="-1" relative="1" as="geometry">
-            <mxPoint y="-1" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-27" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-7" target="SQLzmbsMBf419I0D_pn_-10">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-33" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-27">
-          <mxGeometry x="0.1269" y="-4" relative="1" as="geometry">
-            <mxPoint x="4" y="-4" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-7" target="SQLzmbsMBf419I0D_pn_-12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-46" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-44">
-          <mxGeometry x="-0.2193" y="-2" relative="1" as="geometry">
-            <mxPoint x="4" y="-2" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-7" value="Autentificarse" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="250" y="210" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-8" value="Administrar acceso al sistema" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="490" y="30" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-9" value="Administrar proyectos" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="250" y="140" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-28" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-10" target="SQLzmbsMBf419I0D_pn_-11">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-38" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-28">
-          <mxGeometry x="-0.0921" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-53" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-10" target="SQLzmbsMBf419I0D_pn_-13">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-54" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-53">
-          <mxGeometry x="-0.1078" y="1" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-10" value="Añadir lista de riesgos" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="250" y="380" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-55" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-11" target="SQLzmbsMBf419I0D_pn_-14">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-56" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-55">
-          <mxGeometry x="0.0395" y="-2" relative="1" as="geometry">
-            <mxPoint x="-1" y="-2" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-11" value="Modificar lista de riesgos" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="370" y="480" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-12" value="Administrar categorías de risgos" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="490" y="210" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-13" value="Realizar evaluación de riesgo" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="370" y="280" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-14" value="&lt;div&gt;Añadir plan de&lt;/div&gt;&lt;div&gt;acción&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="600" y="480" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-15" value="Modificar plan de acción" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="860" y="590" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-16" value="Programar evaluación de riesgo" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="860" y="660" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-17" value="Realizar informes" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="860" y="730" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-18" value="Exportar archivos" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="860" y="800" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-21" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-20" target="SQLzmbsMBf419I0D_pn_-39">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-20" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="20" width="40" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-23" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;targetPerimeterSpacing=0;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-22" target="SQLzmbsMBf419I0D_pn_-7">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-22" value="Lider del proyecto" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="200" width="40" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-30" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-29" target="SQLzmbsMBf419I0D_pn_-42">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="170" y="300" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-29" value="Desarrollador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="120" y="545" width="40" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-39" value="Autentificarse" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="250" y="30" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-43" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="SQLzmbsMBf419I0D_pn_-42" target="SQLzmbsMBf419I0D_pn_-10">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-45" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="SQLzmbsMBf419I0D_pn_-43">
-          <mxGeometry x="-0.016" y="-3" relative="1" as="geometry">
-            <mxPoint x="-3" as="offset" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="SQLzmbsMBf419I0D_pn_-42" value="Autentificarse" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="250" y="555" width="120" height="60" as="geometry" />
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0" version="24.7.14">
   <diagram id="sK6u0aQZh5gKvJ8_Eq7y" name="Página-2">
-    <mxGraphModel dx="1588" dy="922" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1591" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-23" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry y="30" width="940" height="880" as="geometry" />
+          <mxGeometry y="30" width="1070" height="880" as="geometry" />
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-76" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="120" y="70" width="780" height="800" as="geometry" />
+          <mxGeometry x="120" y="70" width="920" height="800" as="geometry" />
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-77" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-79" target="-5TUY3w5zbnfjcx4eBSF-89" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -210,7 +73,7 @@
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-102" value="&amp;lt;&amp;lt; extends &amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-5TUY3w5zbnfjcx4eBSF-101" vertex="1" connectable="0">
           <mxGeometry x="0.0329" y="-1" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-1" y="-7" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-103" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-107" target="-5TUY3w5zbnfjcx4eBSF-115" edge="1">
@@ -228,6 +91,9 @@
           <mxGeometry x="0.1032" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="D7hPwTgN9Ad0S_OiSbyl-2" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="-5TUY3w5zbnfjcx4eBSF-107" target="D7hPwTgN9Ad0S_OiSbyl-1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-107" value="Añadir lista de riesgos" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="600" y="750" width="120" height="60" as="geometry" />
@@ -326,7 +192,7 @@
             <mxPoint y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="v8ho_6EPoCGN8s73HlzQ-10" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-110" edge="1" target="-5TUY3w5zbnfjcx4eBSF-121">
+        <mxCell id="v8ho_6EPoCGN8s73HlzQ-10" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-110" target="-5TUY3w5zbnfjcx4eBSF-121" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="246" y="506" as="sourcePoint" />
             <mxPoint x="634" y="244" as="targetPoint" />
@@ -364,6 +230,18 @@
           <mxGeometry x="0.0383" y="-1" relative="1" as="geometry">
             <mxPoint y="-1" as="offset" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="D7hPwTgN9Ad0S_OiSbyl-3" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="D7hPwTgN9Ad0S_OiSbyl-1" target="-5TUY3w5zbnfjcx4eBSF-121">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="D7hPwTgN9Ad0S_OiSbyl-1" value="Realizar análisis de riesgo" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="490" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="D7hPwTgN9Ad0S_OiSbyl-4" value="&amp;lt;&amp;lt; include &amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="810.0003232882593" y="359.9964564455821" as="geometry" />
+        </mxCell>
+        <mxCell id="D7hPwTgN9Ad0S_OiSbyl-5" value="&amp;lt;&amp;lt; extends &amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="819.9973848297927" y="640.0029337339619" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
