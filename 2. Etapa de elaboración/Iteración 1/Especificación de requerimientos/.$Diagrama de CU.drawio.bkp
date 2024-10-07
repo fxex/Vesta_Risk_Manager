@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.16">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.7.17">
   <diagram id="sK6u0aQZh5gKvJ8_Eq7y" name="Página-2">
-    <mxGraphModel dx="1173" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1457" dy="847" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -16,7 +16,7 @@
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-78" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-79" target="-5TUY3w5zbnfjcx4eBSF-92" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="dsdEelzjTaVAezbVnpXR-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-79" target="-5TUY3w5zbnfjcx4eBSF-113" edge="1">
+        <mxCell id="dsdEelzjTaVAezbVnpXR-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="-5TUY3w5zbnfjcx4eBSF-79" target="-5TUY3w5zbnfjcx4eBSF-113">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-79" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
@@ -149,7 +149,7 @@
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-121" value="Autentificarse" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="910" y="290" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="-5TUY3w5zbnfjcx4eBSF-124" value="Realizar y solicitar informes" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="-5TUY3w5zbnfjcx4eBSF-124" value="Realizar informes" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1110" y="665" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="dX3sOXWLlkZk12BEzYUn-9" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-127" target="-5TUY3w5zbnfjcx4eBSF-107" edge="1">
