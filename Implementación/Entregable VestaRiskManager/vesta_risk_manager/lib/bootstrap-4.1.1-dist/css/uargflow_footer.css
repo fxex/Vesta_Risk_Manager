@@ -1,0 +1,33 @@
+/* 
+Pie de pagina fijo
+
+Los estilos son definidos en este archivo (al contrario del navbar), en tanto ésta
+es una extensión del formato estándar de Bootstrap.
+
+Para más información, ver https://v4-alpha.getbootstrap.com/examples/sticky-footer/
+*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 55px;
+    line-height: 50px; /* Vertically center the text there */
+    color: white;
+
+    padding: 0;
+    margin: 0;
+    border: 0;
+
+    text-align: center; 
+    background-color: #343a40 !important; 
+    border-top: 5px solid #17a2b8;            
+}
