@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.16">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.0.2 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" modified="2024-10-10T02:45:05.348Z" version="23.0.2" etag="JJcDbaK_8rI9klVdLK9b" type="device">
   <diagram id="sK6u0aQZh5gKvJ8_Eq7y" name="Página-2">
-    <mxGraphModel dx="1173" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="926" dy="552" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -23,9 +23,6 @@
           <mxGeometry x="330" y="230" width="40" height="80" as="geometry" />
         </mxCell>
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-82" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-84" target="-5TUY3w5zbnfjcx4eBSF-118" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="-5TUY3w5zbnfjcx4eBSF-83" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-84" target="-5TUY3w5zbnfjcx4eBSF-127" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="dX3sOXWLlkZk12BEzYUn-5" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-84" target="-5TUY3w5zbnfjcx4eBSF-110" edge="1">
@@ -152,23 +149,6 @@
         <mxCell id="-5TUY3w5zbnfjcx4eBSF-124" value="Realizar y solicitar informes" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1110" y="665" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="dX3sOXWLlkZk12BEzYUn-9" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=12 12;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-127" target="-5TUY3w5zbnfjcx4eBSF-107" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="-5TUY3w5zbnfjcx4eBSF-127" value="Programar evaluación de riesgo" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="540" y="480" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="v8ho_6EPoCGN8s73HlzQ-8" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-127" target="-5TUY3w5zbnfjcx4eBSF-121" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="926" y="610" as="sourcePoint" />
-            <mxPoint x="974" y="360" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="v8ho_6EPoCGN8s73HlzQ-9" value="&amp;lt;&amp;lt; include &amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="v8ho_6EPoCGN8s73HlzQ-8" vertex="1" connectable="0">
-          <mxGeometry x="0.0383" y="-1" relative="1" as="geometry">
-            <mxPoint y="-1" as="offset" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="v8ho_6EPoCGN8s73HlzQ-10" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;" parent="1" source="-5TUY3w5zbnfjcx4eBSF-110" target="-5TUY3w5zbnfjcx4eBSF-121" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="556" y="616" as="sourcePoint" />
@@ -202,7 +182,7 @@
           <mxGeometry x="723.998948358475" y="719.9998328742906" as="geometry" />
         </mxCell>
         <mxCell id="dX3sOXWLlkZk12BEzYUn-10" value="&amp;lt;&amp;lt; include &amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="759.998948358475" y="669.9998328742906" as="geometry" />
+          <mxGeometry x="749.998948358475" y="569.9998328742906" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

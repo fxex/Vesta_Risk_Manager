@@ -102,9 +102,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nombre`, `email`) VALUES
-(26, 'Hernandez Cintia', 'cintiah378@gmail.com'),
-(25, 'Collareda Agustin', 'collaredaagustinpmg@gmail.com'),
-(27, 'Frey Hugo', 'hugofrey202@gmail.com');
+(1, 'Hernandez Cintia', 'cintiah378@gmail.com'),
+(2, 'Collareda Agustin', 'collaredaagustinpmg@gmail.com'),
+(3, 'Frey Hugo', 'hugofrey202@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -122,9 +122,9 @@ CREATE TABLE `usuario_rol` (
 --
 
 INSERT INTO `usuario_rol` (`id_usuario`, `id_rol`) VALUES
-(25, 8),
-(26, 8),
-(27, 8);
+(1, 8),
+(2, 8),
+(3, 8);
 
 --
 -- Índices para tablas volcadas
