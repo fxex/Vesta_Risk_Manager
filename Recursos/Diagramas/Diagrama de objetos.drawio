@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.7.17">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1393" dy="678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1216" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -48,7 +48,7 @@
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="zkfFHV4jXpPFQw0GAbJ--1" value="- idRiesgo: 9&#xa;- descripcion: Dadas las&#xa;dificultades en la (...).&#xa;- responsable: Cintia Hernandez&#xa;- fechaInicio: String&#xa;- categoria: Tecnologia&#xa;- atributo: String" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
+        <mxCell id="zkfFHV4jXpPFQw0GAbJ--1" value="- idRiesgo: 9&#xa;- descripcion: Dadas las&#xa;dificultades en la (...).&#xa;- responsable: Cintia Hernandez&#xa;- fechaCreacion: 20 09 2024&#xa;- categoria: Tareas" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
           <mxGeometry y="26" width="183" height="114" as="geometry" />
         </mxCell>
         <mxCell id="zkfFHV4jXpPFQw0GAbJ--4" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="zkfFHV4jXpPFQw0GAbJ--0" vertex="1">
@@ -85,20 +85,20 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="AexJaZ2pixQEeQAk4NjD-6" value="Categoria" style="swimlane;fontStyle=2;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeLast=0;collapsible=1;marginBottom=0;rounded=0;shadow=0;strokeWidth=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="20" y="502" width="180" height="94" as="geometry">
+          <mxGeometry x="20" y="492" width="190" height="114" as="geometry">
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="AexJaZ2pixQEeQAk4NjD-7" value="- nombreCategoria: Tareas&#xa;- descripcion: String&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-6" vertex="1">
-          <mxGeometry y="26" width="180" height="34" as="geometry" />
+        <mxCell id="AexJaZ2pixQEeQAk4NjD-7" value="- nombreCategoria: Tareas&#xa;- descripcion: Riesgos asociados&#xa;a la ejecución de las tareas.&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-6" vertex="1">
+          <mxGeometry y="26" width="190" height="54" as="geometry" />
         </mxCell>
         <mxCell id="AexJaZ2pixQEeQAk4NjD-10" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-6" vertex="1">
-          <mxGeometry y="60" width="180" height="8" as="geometry" />
+          <mxGeometry y="80" width="190" height="8" as="geometry" />
         </mxCell>
         <mxCell id="AexJaZ2pixQEeQAk4NjD-11" value="+ /getters/setters" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-6" vertex="1">
-          <mxGeometry y="68" width="180" height="26" as="geometry" />
+          <mxGeometry y="88" width="190" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="AexJaZ2pixQEeQAk4NjD-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;endSize=9;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="AexJaZ2pixQEeQAk4NjD-18" edge="1" target="AexJaZ2pixQEeQAk4NjD-94">
+        <mxCell id="AexJaZ2pixQEeQAk4NjD-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=0;endSize=9;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="AexJaZ2pixQEeQAk4NjD-18" target="AexJaZ2pixQEeQAk4NjD-94" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="240" y="880" as="targetPoint" />
             <Array as="points" />
@@ -175,7 +175,7 @@
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="AexJaZ2pixQEeQAk4NjD-49" value="- idLista: 1&#xa;- riesgo: Riesgo()&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-48" vertex="1">
+        <mxCell id="AexJaZ2pixQEeQAk4NjD-49" value="- idLista: 1&#xa;- idRiesgo: 9&#xa;" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-48" vertex="1">
           <mxGeometry y="26" width="160" height="44" as="geometry" />
         </mxCell>
         <mxCell id="AexJaZ2pixQEeQAk4NjD-52" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-48" vertex="1">
@@ -208,7 +208,7 @@
             <mxRectangle x="230" y="140" width="160" height="26" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="AexJaZ2pixQEeQAk4NjD-55" value="- idInforme: 1&#xa;- fechaInicio: String&#xa;- fechaFin: String" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-54" vertex="1">
+        <mxCell id="AexJaZ2pixQEeQAk4NjD-55" value="- idInforme: 1&#xa;- fechaCreacion: 13 10 2024" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-54" vertex="1">
           <mxGeometry y="26" width="233" height="54" as="geometry" />
         </mxCell>
         <mxCell id="AexJaZ2pixQEeQAk4NjD-58" value="" style="line;html=1;strokeWidth=1;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="AexJaZ2pixQEeQAk4NjD-54" vertex="1">

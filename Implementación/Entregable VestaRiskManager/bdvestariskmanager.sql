@@ -36,7 +36,7 @@ CREATE TABLE `permiso` (
 -- Volcado de datos para la tabla `permiso`
 --
 
-INSERT INTO `permiso` (`id`, `nombre`) VALUES
+INSERT INTO `permiso` (`id_permiso`, `nombre`) VALUES
 (7, 'Usuarios'),
 (8, 'Roles'),
 (9, 'Permisos'),
@@ -58,7 +58,7 @@ CREATE TABLE `rol` (
 -- Volcado de datos para la tabla `rol`
 --
 
-INSERT INTO `rol` (`id`, `nombre`) VALUES
+INSERT INTO `rol` (`id_rol`, `nombre`) VALUES
 (7, 'Usuario Comun'),
 (8, 'Administrador');
 
@@ -101,7 +101,7 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nombre`, `email`) VALUES
+INSERT INTO `usuario` (`id_usuario`, `nombre`, `email`) VALUES
 (1, 'Hernandez Cintia', 'cintiah378@gmail.com'),
 (2, 'Collareda Agustin', 'collaredaagustinpmg@gmail.com'),
 (3, 'Frey Hugo', 'hugofrey202@gmail.com');
