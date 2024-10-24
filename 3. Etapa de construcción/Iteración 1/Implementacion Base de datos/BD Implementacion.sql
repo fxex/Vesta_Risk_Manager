@@ -66,10 +66,8 @@ create table if not exists riesgo (
     factor_riesgo int null,
     fecha_creacion datetime not null default current_timestamp,
     id_categoria int not null,
-    id_iteracion int not null,
     primary key (id_riesgo),
-    constraint fk_riesgo_categoria foreign key (id_categoria) references categoria (id_categoria) on delete no action on update no action,
-    constraint fk_riesgo_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action
+    constraint fk_riesgo_categoria foreign key (id_categoria) references categoria (id_categoria) on delete no action on update no action
 );
 
 create table if not exists incidencia (
@@ -91,11 +89,9 @@ create table if not exists evaluacion (
     fecha_realizacion datetime not null default current_timestamp,
     id_usuario int,
     id_riesgo int not null,
-    id_iteracion int not null,
     primary key (id_evaluacion),
     constraint fk_evaluacion_usuario foreign key (id_usuario) references usuario (id_usuario) on delete no action on update no action,
-    constraint fk_evaluacion_riesgo foreign key (id_riesgo) references riesgo (id_riesgo) on delete no action on update no action,
-    constraint fk_evaluacion_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action
+    constraint fk_evaluacion_riesgo foreign key (id_riesgo) references riesgo (id_riesgo) on delete no action on update no action
 );
 
 create table if not exists plan (
@@ -122,7 +118,7 @@ create table if not exists tarea (
 create table if not exists iteracion_evaluacion (
 	id_iteracion int not null,
     id_evaluacion int not null,
-    primary key (id_iteracion, id_evaluacion),
+    primary key (id_iteracion),
     constraint fk_ie_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action,
     constraint fk_ie_evaluacion foreign key (id_evaluacion) references evaluacion (id_evaluacion) on delete no action on update no action
 );
@@ -138,7 +134,7 @@ create table if not exists proyecto_riesgo(
 create table if not exists iteracion_plan (
 	id_iteracion int not null,
     id_plan int not null,
-    primary key (id_iteracion, id_plan),
+    primary key (id_iteracion),
     constraint fk_ip_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action,
     constraint fk_ip_plan foreign key (id_plan) references plan (id_plan) on delete no action on update no action
 );
@@ -146,7 +142,7 @@ create table if not exists iteracion_plan (
 create table if not exists proyecto_participante(
 	id_proyecto int not null,
     id_usuario int,
-    rol varchar(255) not null,
+    rol enum ("lider del proyecto", "desarrollador") not null,
     primary key (id_proyecto, id_usuario),
     constraint fk_pp_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete no action on update no action,
     constraint fk_pp_participante foreign key (id_usuario) references usuario (id_usuario) on delete cascade on update cascade
