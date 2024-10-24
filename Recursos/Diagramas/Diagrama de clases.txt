@@ -116,8 +116,8 @@ class Riesgo {
     - iteracion: Iteracion
     - categoria: Categoria
     - incidencias: Incidencia[]
-    - evaluaciones: Evaluacion[]
-    - planes: Plan[]
+    - evaluacion: Evaluacion?
+    - planes: Plan[3]?
     - fechaCreacion: Date
     +getDescripcion()
     +setDescripcion()
@@ -131,8 +131,8 @@ class Riesgo {
     +setCategoria()
     +getIncidencias()
     +setIncidencias()
-    +getEvaluaciones()
-    +setEvaluaciones()
+    +getEvaluacion()
+    +setEvaluacion()
     +getPlanes()
     +setPlanes()
     +getFechaCreacion()
@@ -172,10 +172,20 @@ class Plan {
 class Iteracion {
     - fechaInicio: Date
     - fechaFin: Date
+    - evaluaciones: Evaluacion[]
+    - planes: Plan[]
     +getFechaInicio()
     +setFechaInicio()
     +getFechaFin()
     +setFechaFin()
+    +getEvaluaciones()
+    +setEvaluaciones()
+    +getPlanes()
+    +setPlanes()
+    +comprobarEvaluacionRiesgo()
+    +comprobarPlanesRiesgo()
+    +vincularPlanIteracion()
+    +vincularEvaluacionIteracion()
 }
 
 class Evaluacion {
@@ -214,14 +224,13 @@ Proyecto "1" *-- "0..n" Riesgo
 Proyecto "1" *-- "1..n" Iteracion
 Proyecto "1..n" -- "1..n" Categoria
 
-Riesgo "1" *-- "0..n" Plan
+Riesgo "1" -- "0..3" Plan
 Riesgo "1..n" -- "1" Categoria
-Riesgo "1" *-- "0..n" Evaluacion
+Riesgo "1" -- "0..1" Evaluacion
 Incidencia "0..n" --* "1" Riesgo
-Riesgo "0..n" -- "1" Iteracion
 
-Iteracion "1" -- "1" Evaluacion
-Iteracion "1" -- "1..3" Plan
+Iteracion "1" *-- "1..n" Evaluacion
+Iteracion "1" *-- "1..n" Plan
 Plan "1" *-- "1..n" Tarea
 
 @enduml
