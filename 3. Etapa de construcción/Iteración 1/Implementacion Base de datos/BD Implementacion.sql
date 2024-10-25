@@ -1,3 +1,4 @@
+drop database if exists bdvestariskmanager; 
 create database if not exists bdvestariskmanager;
 use bdvestariskmanager;
 
