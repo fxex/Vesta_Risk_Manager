@@ -54,6 +54,7 @@ create table if not exists proyecto (
 
 create table if not exists iteracion (
 	id_iteracion int not null auto_increment,
+    nombre_iteracion varchar(30) not null,
     fecha_inicio date not null,
     fecha_fin date not null,
     id_proyecto int not null,
