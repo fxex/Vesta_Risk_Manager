@@ -35,3 +35,17 @@ export async function obtenerCategoriaGeneral() {
   const json = await respuesta.json();
   return json;
 }
+
+export async function crearProyecto(formData) {
+  const respuesta = await fetch(`${URL}/proyecto/crear`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+  const json = await respuesta.text();
+  console.log(json);
+
+  return json;
+}

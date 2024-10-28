@@ -3,7 +3,6 @@ import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
 import { Alert, Button, Form, Modal, Table } from "react-bootstrap";
-import { crearUsuario } from "../../services/usuarios";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +14,10 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "./../../styles/modal.css";
-import { obtenerParticipanteNombre } from "../../services/proyectos";
+import {
+  crearProyecto,
+  obtenerParticipanteNombre,
+} from "../../services/proyectos";
 
 export default function CrearProyecto() {
   const categorias = useLoaderData();
@@ -27,7 +29,7 @@ export default function CrearProyecto() {
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
-    estado: "",
+    estado: "Activo",
     participantes: [],
     iteraciones: [],
     categorias: JSON.parse(categorias),
@@ -89,9 +91,8 @@ export default function CrearProyecto() {
   };
 
   const handleClick = async () => {
-    const resultado = await crearUsuario(formData);
+    const resultado = await crearProyecto(formData);
     setCreado(resultado);
-    // navigate("/inicio/usuarios");
   };
 
   const handleClickParticipante = () => {
@@ -169,6 +170,7 @@ export default function CrearProyecto() {
                 label="Activo"
                 value="Activo"
                 name="estado"
+                checked
                 onChange={handleChange}
               />
               <Form.Check
