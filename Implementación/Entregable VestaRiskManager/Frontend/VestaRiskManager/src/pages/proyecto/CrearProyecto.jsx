@@ -110,6 +110,22 @@ export default function CrearProyecto() {
     // navigate("/inicio/usuarios");
   };
 
+  const handleClickIteracion = () => {
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        iteraciones: [...prevFormData.iteraciones, formDataIteracion],
+      };
+    });
+    setFormDataIteracion({
+      nombre: "",
+      fecha_inicio: "",
+      fecha_fin: "",
+    });
+    handleMostrarIteracion();
+    // navigate("/inicio/usuarios");
+  };
+
   if (creado === null) {
     return (
       <>
@@ -232,12 +248,37 @@ export default function CrearProyecto() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Hugo Frey</td>
-                    <td>Hugo Frey</td>
-                    <td>Hugo Frey</td>
-                    <td>Hugo Frey</td>
-                  </tr>
+                  {formData.iteraciones && formData.iteraciones.length > 0
+                    ? formData.iteraciones.map((item, key) => (
+                        <>
+                          <tr key={key}>
+                            <td>{item.nombre}</td>
+                            <td>{item.fecha_inicio}</td>
+                            <td>{item.fecha_fin}</td>
+                            <td>
+                              <Button
+                                variant="outline-danger"
+                                className="mx-1"
+                                onClick={() => {
+                                  setFormData((prevFormData) => {
+                                    return {
+                                      ...prevFormData,
+                                      iteraciones:
+                                        prevFormData.iteraciones.filter(
+                                          (iteracion) =>
+                                            iteracion.nombre !== item.nombre
+                                        ),
+                                    };
+                                  });
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </Button>
+                            </td>
+                          </tr>
+                        </>
+                      ))
+                    : null}
                 </tbody>
               </Table>
             </Form.Group>
@@ -332,7 +373,7 @@ export default function CrearProyecto() {
               <Form.Group className="d-flex align-items-center mb-2">
                 <Form.Control
                   type="text"
-                  placeholder="Ingrese un nombre o correo del participante"
+                  placeholder="Ingrese el nombre del participante"
                   className="w-75"
                   name="nombre"
                   onChange={(e) => {
@@ -410,6 +451,7 @@ export default function CrearProyecto() {
               variant="outline-danger"
               onClick={handleMostrarParticipante}
             >
+              <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
               Cancelar
             </Button>
           </Modal.Footer>
@@ -465,16 +507,12 @@ export default function CrearProyecto() {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="outline-success"
-              onClick={() => {
-                console.log(formDataIteracion);
-              }}
-            >
+            <Button variant="outline-success" onClick={handleClickIteracion}>
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Añadir
             </Button>
             <Button variant="outline-danger" onClick={handleMostrarIteracion}>
+              <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
               Cancelar
             </Button>
           </Modal.Footer>

@@ -1,11 +1,13 @@
+import { URL } from "../utils/URL";
+
 export async function obtenerProyectos() {
-  const respuesta = await fetch("http://localhost/Vesta/proyecto");
+  const respuesta = await fetch(`${URL}/proyecto`);
   const json = await respuesta.json();
   return json;
 }
 
 export async function obtenerParticipanteNombre(nombre) {
-  const respuesta = await fetch("http://localhost/Vesta/proyecto", {
+  const respuesta = await fetch(`${URL}/proyecto`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +20,7 @@ export async function obtenerParticipanteNombre(nombre) {
 }
 
 export async function obtenerCategoriaGeneral() {
-  const respuesta = await fetch("http://localhost/Vesta/proyecto/categorias");
+  const respuesta = await fetch(`${URL}/proyecto/categorias`);
   const json = await respuesta.json();
   return json;
 }
