@@ -45,7 +45,7 @@ create table if not exists categoria (
 create table if not exists proyecto (
 	id_proyecto int not null auto_increment,
     nombre varchar(255) not null,
-    descripcion varchar(255) not null,
+    descripcion text not null,
     estado enum ("activo", "inactivo") not null,
     fecha_inicio date, 
     fecha_fin date,
@@ -144,7 +144,7 @@ create table if not exists iteracion_plan (
 create table if not exists proyecto_participante(
 	id_proyecto int not null,
     id_usuario int,
-    rol enum ("lider del proyecto", "desarrollador") not null,
+    rol enum ("Lider del proyecto", "Desarrollador") not null,
     primary key (id_proyecto, id_usuario),
     constraint fk_pp_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete no action on update no action,
     constraint fk_pp_participante foreign key (id_usuario) references usuario (id_usuario) on delete cascade on update cascade
