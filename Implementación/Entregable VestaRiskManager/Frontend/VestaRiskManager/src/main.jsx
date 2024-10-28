@@ -37,8 +37,11 @@ import ListaProyecto from "./pages/proyecto/ListaProyecto.jsx";
 import CrearProyecto from "./pages/proyecto/CrearProyecto.jsx";
 import {
   obtenerCategoriaGeneral,
+  obtenerProyectos,
+  obtenerProyectosId,
   obtenerProyectos as proyectoLoader,
 } from "./services/proyectos.js";
+import { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -110,6 +113,11 @@ const App = () => {
       path: "/inicio/proyectos/crear",
       element: <RutaProtegida element={<CrearProyecto />} isAdmin={true} />,
       loader: obtenerCategoriaGeneral,
+    },
+    {
+      path: "/inicio/proyectos/:id_proyecto",
+      element: <RutaProtegida element={<VerProyecto/>} isAdmin={true}/>,
+      loader: cargarProyecto
     },
     {
       path: "/salir",

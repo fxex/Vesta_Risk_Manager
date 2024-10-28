@@ -19,6 +19,17 @@ export async function obtenerParticipanteNombre(nombre) {
   return json;
 }
 
+export async function obtenerProyectosId(id) {
+  const respuesta = await fetch(`${URL}/proyecto/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+  return json;
+}
+
 export async function obtenerCategoriaGeneral() {
   const respuesta = await fetch(`${URL}/proyecto/categorias`);
   const json = await respuesta.json();
