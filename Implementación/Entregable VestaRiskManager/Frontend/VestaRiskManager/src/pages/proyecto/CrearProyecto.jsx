@@ -26,6 +26,12 @@ export default function CrearProyecto() {
 
   const [mostrarParticipante, setMostrarParticipante] = useState(false);
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
+  const [errorPrincipal, setErrorPrincipal] = useState(false);
+  const [errorParticipante, setErrorParticipante] = useState(false);
+  const [errorIteracion, setErrorIteracion] = useState({
+    validacion: false,
+    mensaje: "",
+  });
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -53,6 +59,7 @@ export default function CrearProyecto() {
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
+    setErrorPrincipal(false);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -60,6 +67,7 @@ export default function CrearProyecto() {
   };
 
   const handleChangeParticipante = (e) => {
+    setErrorParticipante(false);
     setFormDataParticipante({
       ...formDataParticipante,
       [e.target.name]: e.target.value,
@@ -67,6 +75,10 @@ export default function CrearProyecto() {
   };
 
   const handleChangeIteracion = (e) => {
+    setErrorIteracion({
+      validacion: false,
+      mensaje: "",
+    });
     setFormDataIteracion({
       ...formDataIteracion,
       [e.target.name]: e.target.value,
@@ -80,9 +92,14 @@ export default function CrearProyecto() {
       rol: "",
     });
     setParticipantes([]);
+    setErrorParticipante(false);
   };
 
   const handleMostrarIteracion = () => {
+    setErrorIteracion({
+      validacion: false,
+      mensaje: "",
+    });
     setMostrarIteracion(!mostrarIteracion);
     setFormDataIteracion({
       nombre: "",
@@ -91,49 +108,125 @@ export default function CrearProyecto() {
     });
   };
 
-  const handleClick = async () => {
+  const comprobarNuevaIteracion = (fecha_inicio) => {
     if (formData.iteraciones.length > 0) {
-      const primeraIteracion = formData.iteraciones[0];
       const ultimaIteracion =
         formData.iteraciones[formData.iteraciones.length - 1];
-      formData.fecha_inicio = primeraIteracion.fecha_inicio;
-      formData.fecha_fin = ultimaIteracion.fecha_fin;
+      let fechaNuevaIteracion = new Date(fecha_inicio);
+      let fechaUltimaIteracion = new Date(ultimaIteracion.fecha_fin);
+      const resultado = fechaNuevaIteracion - fechaUltimaIteracion;
+      if (resultado > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
     }
+  };
 
-    const resultado = await crearProyecto(formData);
-    setCreado(resultado);
+  const comprobarFechasNuevaIteracion = (fecha_inicio, fecha_fin) => {
+    let iteracionFechaInicio = new Date(fecha_inicio);
+    let iteracionFechaFin = new Date(fecha_fin);
+    const resultado = iteracionFechaFin - iteracionFechaInicio;
+    if (resultado > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const handleClick = async () => {
+    if (
+      formData.nombre.length === 0 ||
+      formData.descripcion.length === 0 ||
+      formData.estado.length === 0 ||
+      formData.categorias.length === 0
+    ) {
+      setErrorPrincipal(true);
+    } else {
+      setErrorPrincipal(false);
+      if (formData.iteraciones.length > 0) {
+        const primeraIteracion = formData.iteraciones[0];
+        const ultimaIteracion =
+          formData.iteraciones[formData.iteraciones.length - 1];
+        formData.fecha_inicio = primeraIteracion.fecha_inicio;
+        formData.fecha_fin = ultimaIteracion.fecha_fin;
+      }
+
+      const resultado = await crearProyecto(formData);
+      setCreado(resultado);
+    }
   };
 
   const handleClickParticipante = () => {
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        participantes: [...prevFormData.participantes, formDataParticipante],
-      };
-    });
-    setFormDataParticipante({
-      nombre: "",
-      rol: "",
-    });
-    setParticipantes([]);
-    handleMostrarParticipante();
-    // navigate("/inicio/usuarios");
+    if (
+      formDataParticipante.nombre.length === 0 ||
+      formDataParticipante.rol.length === 0
+    ) {
+      setErrorParticipante(true);
+    } else {
+      setErrorParticipante(false);
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          participantes: [...prevFormData.participantes, formDataParticipante],
+        };
+      });
+      setFormDataParticipante({
+        nombre: "",
+        rol: "",
+      });
+      setParticipantes([]);
+      handleMostrarParticipante();
+    }
   };
 
   const handleClickIteracion = () => {
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        iteraciones: [...prevFormData.iteraciones, formDataIteracion],
-      };
-    });
-    setFormDataIteracion({
-      nombre: "",
-      fecha_inicio: "",
-      fecha_fin: "",
-    });
-    handleMostrarIteracion();
-    // navigate("/inicio/usuarios");
+    if (
+      formDataIteracion.nombre.length === 0 ||
+      formDataIteracion.fecha_inicio.length === 0 ||
+      formDataIteracion.fecha_fin.length === 0
+    ) {
+      setErrorIteracion({
+        validacion: true,
+        mensaje: "Revise los campos ingresados",
+      });
+    } else {
+      if (
+        !comprobarFechasNuevaIteracion(
+          formDataIteracion.fecha_inicio,
+          formDataIteracion.fecha_fin
+        )
+      ) {
+        setErrorIteracion({
+          validacion: true,
+          mensaje:
+            "La fecha de fin no puede estar antes que la fecha de inicio",
+        });
+      } else {
+        if (!comprobarNuevaIteracion(formDataIteracion.fecha_fin)) {
+          setErrorIteracion({
+            validacion: true,
+            mensaje: "La iteraciones no se pueden superponer",
+          });
+        } else {
+          setErrorIteracion({ validacion: false, mensaje: "" });
+          setFormData((prevFormData) => {
+            return {
+              ...prevFormData,
+              iteraciones: [...prevFormData.iteraciones, formDataIteracion],
+            };
+          });
+          setFormDataIteracion({
+            nombre: "",
+            fecha_inicio: "",
+            fecha_fin: "",
+          });
+          handleMostrarIteracion();
+        }
+      }
+    }
   };
 
   if (creado === null) {
@@ -343,6 +436,9 @@ export default function CrearProyecto() {
                 </tbody>
               </Table>
             </Form.Group>
+            {errorPrincipal && (
+              <Alert variant="danger">Revise los campos ingresados</Alert>
+            )}
           </Form>
           <>
             <Button
@@ -448,6 +544,11 @@ export default function CrearProyecto() {
                   onChange={handleChangeParticipante}
                 />
               </Form.Group>
+              {errorParticipante && (
+                <Alert variant="danger" className="mt-4">
+                  Revise los campos ingresados
+                </Alert>
+              )}
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -512,6 +613,11 @@ export default function CrearProyecto() {
                   onChange={handleChangeIteracion}
                 />
               </Form.Group>
+              {errorIteracion.validacion && (
+                <Alert variant="danger" className="mt-4">
+                  {errorIteracion.mensaje}
+                </Alert>
+              )}
             </Form>
           </Modal.Body>
           <Modal.Footer>

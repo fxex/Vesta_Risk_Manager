@@ -43,6 +43,8 @@ import {
 } from "./services/proyectos.js";
 import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
 import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
+import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
+import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -106,7 +108,7 @@ const App = () => {
     },
     {
       path: "/inicio/proyectos",
-      element: <RutaProtegida element={<ListaProyecto />} />,
+      element: <RutaProtegida element={<ListaProyecto />} isAdmin={true} />,
       loader: proyectoLoader,
     },
 
@@ -124,6 +126,14 @@ const App = () => {
       path: "/inicio/proyectos/modificar/:id_proyecto",
       element: <RutaProtegida element={<ModificarProyecto />} isAdmin={true} />,
       loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyectos/lider",
+      element: <RutaProtegida element={<ListaProyectoLider />} />,
+    },
+    {
+      path: "/inicio/proyectos/lider/:id_proyecto",
+      element: <RutaProtegida element={<VerProyectoLider />} />,
     },
     {
       path: "/salir",

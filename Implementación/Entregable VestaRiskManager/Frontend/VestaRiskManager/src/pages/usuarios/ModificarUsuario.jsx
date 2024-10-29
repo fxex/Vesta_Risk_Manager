@@ -14,6 +14,7 @@ import BotonSalir from "../../components/BotonSalir";
 import { useUsuario } from "../../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { verificarCorreo } from "../../utils/verificarCorreo";
 
 export async function cargarModificarUsuario({ params }) {
   const usuario = await obtenerUsuariosId(params.id_usuario);
@@ -32,6 +33,8 @@ export default function ModificarUsuario() {
     correo: usuarioLoader.email,
     perfil: usuarioLoader.id_perfil,
   });
+  const [error, setError] = useState(false);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   const [modificado, setModificado] = useState(null);
 
@@ -44,8 +47,20 @@ export default function ModificarUsuario() {
   };
 
   const handleClick = async () => {
-    const resultado = await actualizarUsuario(id_usuario, formData);
-    setModificado(resultado);
+    if (
+      formData.nombre.length === 0 ||
+      formData.correo.length === 0 ||
+      !verificarCorreo(formData.correo) ||
+      formData.perfil == null ||
+      formData.perfil < 1
+    ) {
+      setError(true);
+    } else {
+      setBotonPresionado(true);
+      const resultado = await actualizarUsuario(id_usuario, formData);
+      setModificado(resultado);
+    }
+    setBotonPresionado(false);
   };
 
   if (modificado === null) {
@@ -99,12 +114,18 @@ export default function ModificarUsuario() {
                 />
               ))}
             </Form.Group>
+            {error && (
+              <Alert variant="danger" className="mt-4">
+                Revise los campos ingresados
+              </Alert>
+            )}
           </Form>
           <>
             <Button
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar

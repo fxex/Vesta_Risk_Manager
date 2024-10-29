@@ -23,10 +23,13 @@ export default function EliminarPerfil() {
   const { id_perfil } = useParams();
   const navigate = useNavigate();
   const [eliminado, setEliminado] = useState(null);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   const handleClick = async () => {
+    setBotonPresionado(true);
     const resultado = await eliminarPerfil(id_perfil);
     setEliminado(resultado);
+    setBotonPresionado(false);
   };
 
   if (eliminado === null) {
@@ -54,6 +57,7 @@ export default function EliminarPerfil() {
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Sí, deseo eliminar

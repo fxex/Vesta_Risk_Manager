@@ -57,8 +57,33 @@ export async function actualizarProyecto(id, formData) {
     },
     body: JSON.stringify(formData),
   });
-  const json = await respuesta.text();
-  console.log(json);
+  const json = await respuesta.json();
+
+  return json;
+}
+
+export async function obtenerProyectosUsuarioLider(correo) {
+  const respuesta = await fetch(`${URL}/proyecto/lider`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ correo: correo }),
+  });
+  const json = await respuesta.json();
+
+  return json;
+}
+
+export async function obtenerProyectosUsuarioDesarrollador(correo) {
+  const respuesta = await fetch(`${URL}/proyecto/desarrollador`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ correo: correo }),
+  });
+  const json = await respuesta.json();
 
   return json;
 }

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { verificarCorreo } from "../../utils/verificarCorreo";
 
 export default function CrearUsuario() {
   const perfiles = useLoaderData();
@@ -19,6 +20,8 @@ export default function CrearUsuario() {
     perfil: 1,
   });
   const [creado, setCreado] = useState(null);
+  const [error, setError] = useState(false);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -29,9 +32,21 @@ export default function CrearUsuario() {
   };
 
   const handleClick = async () => {
-    const resultado = await crearUsuario(formData);
-    setCreado(resultado);
-    // navigate("/inicio/usuarios");
+    if (
+      formData.nombre.length === 0 ||
+      formData.correo.length === 0 ||
+      !verificarCorreo(formData.correo) ||
+      formData.perfil == null ||
+      formData.perfil < 1
+    ) {
+      setError(true);
+    } else {
+      setBotonPresionado(true);
+      setError(false);
+      const resultado = await crearUsuario(formData);
+      setCreado(resultado);
+    }
+    setBotonPresionado(false);
   };
 
   if (creado === null) {
@@ -84,12 +99,18 @@ export default function CrearUsuario() {
                 />
               ))}
             </Form.Group>
+            {error && (
+              <Alert variant="danger" className="mt-4">
+                Revise los campos ingresados
+              </Alert>
+            )}
           </Form>
           <>
             <Button
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar

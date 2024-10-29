@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
@@ -55,6 +55,7 @@ export default function ListaPerfiles() {
                     <Button
                       variant="outline-warning"
                       className="mx-1"
+                      disabled={item.nombre === "Administrador"}
                       onClick={() => {
                         navigate(
                           `/inicio/perfiles/modificar/${item.id_perfil}`
@@ -66,6 +67,7 @@ export default function ListaPerfiles() {
                     <Button
                       variant="outline-danger"
                       className="mx-1"
+                      disabled={item.nombre === "Administrador"}
                       onClick={() => {
                         navigate(`/inicio/perfiles/eliminar/${item.id_perfil}`);
                       }}

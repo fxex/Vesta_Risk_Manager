@@ -33,8 +33,8 @@ export default function ModificarPerfil() {
       return item.id_permiso + "";
     }),
   });
-  console.log(formData);
-
+  const [error, setError] = useState(false);
+  const [botonPresionado, setbotonPresionado] = useState(false);
   const [modificado, setModificado] = useState(null);
 
   // Manejar cambios en los inputs
@@ -67,8 +67,15 @@ export default function ModificarPerfil() {
   };
 
   const handleClick = async () => {
-    const resultado = await actualizarPerfil(id_perfil, formData);
-    setModificado(resultado);
+    if (formData.nombre.length === 0 || formData.permisos.length === 0) {
+      setError(true);
+    } else {
+      setError(false);
+      setbotonPresionado(true);
+      const resultado = await actualizarPerfil(id_perfil, formData);
+      setModificado(resultado);
+    }
+    setbotonPresionado(false);
   };
 
   if (modificado === null) {
@@ -113,12 +120,18 @@ export default function ModificarPerfil() {
                 />
               ))}
             </Form.Group>
+            {error && (
+              <Alert variant="danger" className="mt-4">
+                Revise los campos ingresados
+              </Alert>
+            )}
           </Form>
           <>
             <Button
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar

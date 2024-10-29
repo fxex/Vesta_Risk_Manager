@@ -38,7 +38,29 @@ export default function Home() {
             </Button>
           </div>
         ) : (
-          <></>
+          <div style={{ minHeight: "40vh" }}>
+            <p>
+              Le damos la bienvenida a Vesta Risk Manager. En caso de tener
+              proyectos activos seleccione una de las siguientes opciones para
+              visualizar su proyecto:
+            </p>
+            <Button
+              className="px-4 py-3 me-2 boton_1"
+              onClick={() => {
+                navigate("/inicio/proyectos/lider");
+              }}
+            >
+              Proyectos de Líder
+            </Button>
+            <Button
+              className="px-4 py-3 me-2 boton_2"
+              onClick={() => {
+                navigate("/inicio/proyectos/crear");
+              }}
+            >
+              Proyectos de Desarrollador
+            </Button>
+          </div>
         )}
       </Contenedor>
       <Footer />

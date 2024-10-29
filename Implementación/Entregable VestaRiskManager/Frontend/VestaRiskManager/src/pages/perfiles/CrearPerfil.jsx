@@ -17,7 +17,9 @@ export default function CrearPerfil() {
     nombre: "",
     permisos: [],
   });
+  const [error, setError] = useState(false);
   const [creado, setCreado] = useState(null);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -49,8 +51,15 @@ export default function CrearPerfil() {
   };
 
   const handleClick = async () => {
-    const resultado = await crearPerfil(formData);
-    setCreado(resultado);
+    if (formData.nombre.length === 0 || formData.permisos.length === 0) {
+      setError(true);
+    } else {
+      setError(false);
+      setBotonPresionado(true);
+      const resultado = await crearPerfil(formData);
+      setCreado(resultado);
+    }
+    setBotonPresionado(false);
   };
 
   if (creado === null) {
@@ -92,12 +101,18 @@ export default function CrearPerfil() {
                 />
               ))}
             </Form.Group>
+            {error && (
+              <Alert variant="danger" className="mt-4">
+                Revise los campos ingresados
+              </Alert>
+            )}
           </Form>
           <>
             <Button
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar
