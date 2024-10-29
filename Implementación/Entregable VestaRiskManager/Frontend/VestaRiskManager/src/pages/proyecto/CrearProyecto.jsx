@@ -18,7 +18,10 @@ import {
   crearProyecto,
   obtenerParticipanteNombre,
 } from "../../services/proyectos";
-import { formatearFecha } from "../../utils/formatearFecha";
+import {
+  comprobarFechasNuevaIteracion,
+  formatearFecha,
+} from "../../utils/fecha";
 
 export default function CrearProyecto() {
   const categorias = useLoaderData();
@@ -56,6 +59,7 @@ export default function CrearProyecto() {
   const [participantes, setParticipantes] = useState([]);
 
   const [creado, setCreado] = useState(null);
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -125,17 +129,6 @@ export default function CrearProyecto() {
     }
   };
 
-  const comprobarFechasNuevaIteracion = (fecha_inicio, fecha_fin) => {
-    let iteracionFechaInicio = new Date(fecha_inicio);
-    let iteracionFechaFin = new Date(fecha_fin);
-    const resultado = iteracionFechaFin - iteracionFechaInicio;
-    if (resultado > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const handleClick = async () => {
     if (
       formData.nombre.length === 0 ||
@@ -145,6 +138,7 @@ export default function CrearProyecto() {
     ) {
       setErrorPrincipal(true);
     } else {
+      setBotonPresionado(true);
       setErrorPrincipal(false);
       if (formData.iteraciones.length > 0) {
         const primeraIteracion = formData.iteraciones[0];
@@ -157,9 +151,11 @@ export default function CrearProyecto() {
       const resultado = await crearProyecto(formData);
       setCreado(resultado);
     }
+    setBotonPresionado(false);
   };
 
   const handleClickParticipante = () => {
+    setBotonPresionado(true);
     if (
       formDataParticipante.nombre.length === 0 ||
       formDataParticipante.rol.length === 0
@@ -180,9 +176,11 @@ export default function CrearProyecto() {
       setParticipantes([]);
       handleMostrarParticipante();
     }
+    setBotonPresionado(false);
   };
 
   const handleClickIteracion = () => {
+    setBotonPresionado(true);
     if (
       formDataIteracion.nombre.length === 0 ||
       formDataIteracion.fecha_inicio.length === 0 ||
@@ -227,6 +225,7 @@ export default function CrearProyecto() {
         }
       }
     }
+    setBotonPresionado(false);
   };
 
   if (creado === null) {
@@ -445,6 +444,7 @@ export default function CrearProyecto() {
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar
@@ -552,7 +552,11 @@ export default function CrearProyecto() {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-success" onClick={handleClickParticipante}>
+            <Button
+              variant="outline-success"
+              onClick={handleClickParticipante}
+              disabled={botonPresionado}
+            >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Añadir
             </Button>
@@ -621,7 +625,11 @@ export default function CrearProyecto() {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-success" onClick={handleClickIteracion}>
+            <Button
+              variant="outline-success"
+              onClick={handleClickIteracion}
+              disabled={botonPresionado}
+            >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Añadir
             </Button>

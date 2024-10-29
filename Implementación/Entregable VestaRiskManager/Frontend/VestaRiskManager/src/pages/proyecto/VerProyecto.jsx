@@ -5,7 +5,7 @@ import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { obtenerProyectosId } from "../../services/proyectos";
 import { useLoaderData } from "react-router-dom";
-import { formatearFecha } from "../../utils/formatearFecha";
+import { formatearFecha } from "../../utils/fecha";
 
 export async function cargarProyecto({ params }) {
   const proyecto = await obtenerProyectosId(params.id_proyecto);

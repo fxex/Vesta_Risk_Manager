@@ -18,6 +18,10 @@ import {
   actualizarProyecto,
   obtenerParticipanteNombre,
 } from "../../services/proyectos";
+import {
+  comprobarFechasNuevaIteracion,
+  formatearFecha,
+} from "../../utils/fecha";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
@@ -26,6 +30,13 @@ export default function ModificarProyecto() {
 
   const [mostrarParticipante, setMostrarParticipante] = useState(false);
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
+  const [errorPrincipal, setErrorPrincipal] = useState(false);
+  const [errorParticipante, setErrorParticipante] = useState(false);
+  const [errorIteracion, setErrorIteracion] = useState({
+    validacion: false,
+    mensaje: "",
+  });
+  const [botonPresionado, setBotonPresionado] = useState(false);
 
   const [formData, setFormData] = useState({
     nombre: proyecto.nombre,
@@ -53,6 +64,7 @@ export default function ModificarProyecto() {
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
+    setErrorPrincipal(false);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -60,6 +72,7 @@ export default function ModificarProyecto() {
   };
 
   const handleChangeParticipante = (e) => {
+    setErrorParticipante(false);
     setFormDataParticipante({
       ...formDataParticipante,
       [e.target.name]: e.target.value,
@@ -67,6 +80,10 @@ export default function ModificarProyecto() {
   };
 
   const handleChangeIteracion = (e) => {
+    setErrorIteracion({
+      validacion: false,
+      mensaje: "",
+    });
     setFormDataIteracion({
       ...formDataIteracion,
       [e.target.name]: e.target.value,
@@ -80,9 +97,14 @@ export default function ModificarProyecto() {
       rol: "",
     });
     setParticipantes([]);
+    setErrorParticipante(false);
   };
 
   const handleMostrarIteracion = () => {
+    setErrorIteracion({
+      validacion: false,
+      mensaje: "",
+    });
     setMostrarIteracion(!mostrarIteracion);
     setFormDataIteracion({
       nombre: "",
@@ -91,48 +113,120 @@ export default function ModificarProyecto() {
     });
   };
 
-  const handleClick = async () => {
+  const comprobarNuevaIteracion = (fecha_inicio) => {
     if (formData.iteraciones.length > 0) {
-      const primeraIteracion = formData.iteraciones[0];
       const ultimaIteracion =
         formData.iteraciones[formData.iteraciones.length - 1];
-      formData.fecha_inicio = primeraIteracion.fecha_inicio;
-      formData.fecha_fin = ultimaIteracion.fecha_fin;
+      let fechaNuevaIteracion = new Date(fecha_inicio);
+      let fechaUltimaIteracion = new Date(ultimaIteracion.fecha_fin);
+      const resultado = fechaNuevaIteracion - fechaUltimaIteracion;
+      if (resultado > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
     }
-    const resultado = await actualizarProyecto(id_proyecto, formData);
-    setModificado(resultado);
+  };
+
+  const handleClick = async () => {
+    setBotonPresionado(true);
+    if (
+      formData.nombre.length === 0 ||
+      formData.descripcion.length === 0 ||
+      formData.estado.length === 0 ||
+      formData.categorias.length === 0
+    ) {
+      setErrorPrincipal(true);
+    } else {
+      setErrorPrincipal(false);
+      if (formData.iteraciones.length > 0) {
+        const primeraIteracion = formData.iteraciones[0];
+        const ultimaIteracion =
+          formData.iteraciones[formData.iteraciones.length - 1];
+        formData.fecha_inicio = primeraIteracion.fecha_inicio;
+        formData.fecha_fin = ultimaIteracion.fecha_fin;
+      }
+
+      const resultado = await actualizarProyecto(id_proyecto, formData);
+      setModificado(resultado);
+    }
+    setBotonPresionado(false);
   };
 
   const handleClickParticipante = () => {
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        participantes: [...prevFormData.participantes, formDataParticipante],
-      };
-    });
-    setFormDataParticipante({
-      nombre: "",
-      rol: "",
-    });
-    setParticipantes([]);
-    handleMostrarParticipante();
-    // navigate("/inicio/usuarios");
+    setBotonPresionado(true);
+    if (
+      formDataParticipante.nombre.length === 0 ||
+      formDataParticipante.rol.length === 0
+    ) {
+      setErrorParticipante(true);
+    } else {
+      setErrorParticipante(false);
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          participantes: [...prevFormData.participantes, formDataParticipante],
+        };
+      });
+      setFormDataParticipante({
+        nombre: "",
+        rol: "",
+      });
+      setParticipantes([]);
+      handleMostrarParticipante();
+    }
+    setBotonPresionado(false);
   };
 
   const handleClickIteracion = () => {
-    setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        iteraciones: [...prevFormData.iteraciones, formDataIteracion],
-      };
-    });
-    setFormDataIteracion({
-      nombre: "",
-      fecha_inicio: "",
-      fecha_fin: "",
-    });
-    handleMostrarIteracion();
-    // navigate("/inicio/usuarios");
+    setBotonPresionado(true);
+    if (
+      formDataIteracion.nombre.length === 0 ||
+      formDataIteracion.fecha_inicio.length === 0 ||
+      formDataIteracion.fecha_fin.length === 0
+    ) {
+      setErrorIteracion({
+        validacion: true,
+        mensaje: "Revise los campos ingresados",
+      });
+    } else {
+      if (
+        !comprobarFechasNuevaIteracion(
+          formDataIteracion.fecha_inicio,
+          formDataIteracion.fecha_fin
+        )
+      ) {
+        setErrorIteracion({
+          validacion: true,
+          mensaje:
+            "La fecha de fin no puede estar antes que la fecha de inicio",
+        });
+      } else {
+        if (!comprobarNuevaIteracion(formDataIteracion.fecha_fin)) {
+          setErrorIteracion({
+            validacion: true,
+            mensaje: "La iteraciones no se pueden superponer",
+          });
+        } else {
+          setErrorIteracion({ validacion: false, mensaje: "" });
+          setFormData((prevFormData) => {
+            return {
+              ...prevFormData,
+              iteraciones: [...prevFormData.iteraciones, formDataIteracion],
+            };
+          });
+          setFormDataIteracion({
+            nombre: "",
+            fecha_inicio: "",
+            fecha_fin: "",
+          });
+          handleMostrarIteracion();
+        }
+      }
+    }
+    setBotonPresionado(false);
   };
 
   if (modificado === null) {
@@ -141,7 +235,7 @@ export default function ModificarProyecto() {
         <Navegador />
         <Contenedor>
           <>
-            <h3>Actualizar Proyecto</h3>
+            <h3>Crear Proyecto</h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />
@@ -264,8 +358,8 @@ export default function ModificarProyecto() {
                         <>
                           <tr key={key}>
                             <td>{item.nombre}</td>
-                            <td>{item.fecha_inicio}</td>
-                            <td>{item.fecha_fin}</td>
+                            <td>{formatearFecha(item.fecha_inicio)}</td>
+                            <td>{formatearFecha(item.fecha_fin)}</td>
                             <td>
                               <Button
                                 variant="outline-danger"
@@ -339,19 +433,19 @@ export default function ModificarProyecto() {
                         </tr>
                       ))
                     : null}
-                  {/* <tr>
-                    <td>Hugo Frey</td>
-                    <td>Hugo Frey</td>
-                  </tr> */}
                 </tbody>
               </Table>
             </Form.Group>
+            {errorPrincipal && (
+              <Alert variant="danger">Revise los campos ingresados</Alert>
+            )}
           </Form>
           <>
             <Button
               variant="outline-success"
               className="mx-1"
               onClick={handleClick}
+              disabled={botonPresionado}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar
@@ -451,10 +545,19 @@ export default function ModificarProyecto() {
                   onChange={handleChangeParticipante}
                 />
               </Form.Group>
+              {errorParticipante && (
+                <Alert variant="danger" className="mt-4">
+                  Revise los campos ingresados
+                </Alert>
+              )}
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-success" onClick={handleClickParticipante}>
+            <Button
+              variant="outline-success"
+              onClick={handleClickParticipante}
+              disabled={botonPresionado}
+            >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Añadir
             </Button>
@@ -515,10 +618,19 @@ export default function ModificarProyecto() {
                   onChange={handleChangeIteracion}
                 />
               </Form.Group>
+              {errorIteracion.validacion && (
+                <Alert variant="danger" className="mt-4">
+                  {errorIteracion.mensaje}
+                </Alert>
+              )}
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-success" onClick={handleClickIteracion}>
+            <Button
+              variant="outline-success"
+              onClick={handleClickIteracion}
+              disabled={botonPresionado}
+            >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Añadir
             </Button>
@@ -535,7 +647,7 @@ export default function ModificarProyecto() {
       <>
         <Navegador />
         <Contenedor>
-          <h3>Crear Proyecto</h3>
+          <h3>Actualizar Proyecto</h3>
           <>
             {modificado ? (
               <Alert variant="success">Operación realizada con éxito.</Alert>
