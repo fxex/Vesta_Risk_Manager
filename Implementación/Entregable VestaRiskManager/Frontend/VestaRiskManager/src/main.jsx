@@ -41,7 +41,8 @@ import {
   obtenerProyectosId,
   obtenerProyectos as proyectoLoader,
 } from "./services/proyectos.js";
-import { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
+import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
+import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -116,8 +117,13 @@ const App = () => {
     },
     {
       path: "/inicio/proyectos/:id_proyecto",
-      element: <RutaProtegida element={<VerProyecto/>} isAdmin={true}/>,
-      loader: cargarProyecto
+      element: <RutaProtegida element={<VerProyecto />} isAdmin={true} />,
+      loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyectos/modificar/:id_proyecto",
+      element: <RutaProtegida element={<ModificarProyecto />} isAdmin={true} />,
+      loader: cargarProyecto,
     },
     {
       path: "/salir",

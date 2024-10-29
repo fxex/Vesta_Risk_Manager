@@ -18,6 +18,7 @@ import {
   crearProyecto,
   obtenerParticipanteNombre,
 } from "../../services/proyectos";
+import { formatearFecha } from "../../utils/formatearFecha";
 
 export default function CrearProyecto() {
   const categorias = useLoaderData();
@@ -91,6 +92,14 @@ export default function CrearProyecto() {
   };
 
   const handleClick = async () => {
+    if (formData.iteraciones.length > 0) {
+      const primeraIteracion = formData.iteraciones[0];
+      const ultimaIteracion =
+        formData.iteraciones[formData.iteraciones.length - 1];
+      formData.fecha_inicio = primeraIteracion.fecha_inicio;
+      formData.fecha_fin = ultimaIteracion.fecha_fin;
+    }
+
     const resultado = await crearProyecto(formData);
     setCreado(resultado);
   };
@@ -170,7 +179,7 @@ export default function CrearProyecto() {
                 label="Activo"
                 value="Activo"
                 name="estado"
-                checked
+                checked={formData.estado == "Activo"}
                 onChange={handleChange}
               />
               <Form.Check
@@ -178,6 +187,7 @@ export default function CrearProyecto() {
                 label="Inactivo"
                 value="Inactivo"
                 name="estado"
+                checked={formData.estado == "Inactivo"}
                 onChange={handleChange}
               />
             </Form.Group>
@@ -255,8 +265,8 @@ export default function CrearProyecto() {
                         <>
                           <tr key={key}>
                             <td>{item.nombre}</td>
-                            <td>{item.fecha_inicio}</td>
-                            <td>{item.fecha_fin}</td>
+                            <td>{formatearFecha(item.fecha_inicio)}</td>
+                            <td>{formatearFecha(item.fecha_fin)}</td>
                             <td>
                               <Button
                                 variant="outline-danger"
@@ -330,10 +340,6 @@ export default function CrearProyecto() {
                         </tr>
                       ))
                     : null}
-                  {/* <tr>
-                    <td>Hugo Frey</td>
-                    <td>Hugo Frey</td>
-                  </tr> */}
                 </tbody>
               </Table>
             </Form.Group>

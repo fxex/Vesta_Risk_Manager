@@ -44,6 +44,19 @@ export async function crearProyecto(formData) {
     },
     body: JSON.stringify(formData),
   });
+  const json = await respuesta.json();
+
+  return json;
+}
+
+export async function actualizarProyecto(id, formData) {
+  const respuesta = await fetch(`${URL}/proyecto/modificar/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
   const json = await respuesta.text();
   console.log(json);
 

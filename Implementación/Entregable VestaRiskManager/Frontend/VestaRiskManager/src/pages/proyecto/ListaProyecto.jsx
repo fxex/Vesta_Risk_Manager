@@ -1,14 +1,16 @@
 import React from "react";
 import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Contenedor from "../../components/Contenedor";
 import "./../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 export default function ListaProyecto() {
+  const navigate = useNavigate();
   const proyectos = useLoaderData();
 
   return (
@@ -20,10 +22,25 @@ export default function ListaProyecto() {
           {proyectos.map((item, key) => (
             <Button
               key={key}
-              className="w-100 d-flex boton_1 justify-content-between align-items-center py-3"
+              className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
             >
               {item.nombre}
-              <FontAwesomeIcon icon={faEye} className="fw-bold fs-3 me-2" />
+              <div className="w-25 d-flex justify-content-evenly align-items-center">
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  className="fw-bold fs-3 me-2 icono"
+                  onClick={() => {
+                    navigate(`/inicio/proyectos/modificar/${item.id_proyecto}`);
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={faEye}
+                  className="fw-bold fs-3 me-2 icono"
+                  onClick={() => {
+                    navigate(`/inicio/proyectos/${item.id_proyecto}`);
+                  }}
+                />
+              </div>
             </Button>
           ))}
         </div>
