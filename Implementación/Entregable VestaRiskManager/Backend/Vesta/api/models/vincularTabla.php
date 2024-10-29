@@ -9,6 +9,15 @@ class vincularTabla{
         }
     }
 
+    public static function crearVinculoAtributo($conexion, $tabla, $nombre1, $nombre2, $nombre_atributo, $id_primero, $id_segundo, $valor_atributo){
+        $query = "INSERT INTO {$tabla} ({$nombre1}, {$nombre2}, {$nombre_atributo}) VALUES (?, ?, ?)";
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("iis", $id_primero, $id_segundo, $valor_atributo);
+        if (!$stmt->execute()) {
+            throw new Exception("Error al asociar: " . $stmt->error);
+        }
+    }
+
     public static function modificarVinculo($conexion, $tabla, $nombre1, $nombre2, $id_primero, $id_segundo){
         $query = "UPDATE {$tabla} set {$nombre2} = ? where {$nombre1} = ?";
         $stmt = $conexion->prepare($query);

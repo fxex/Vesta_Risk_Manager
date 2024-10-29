@@ -170,4 +170,15 @@ class GestorUsuario {
         }
     }
 
+    public function obtenerIdUsuarioNombre($nombre){
+        $comprobar = !empty($nombre);
+        if ($comprobar) {
+            $this->usuario->setNombre($nombre);
+            $resultado = $this->usuario->obtenerIdUsuarioNombre();
+            return $resultado;
+        } else {
+            return null;
+        }
+    }
+
 }

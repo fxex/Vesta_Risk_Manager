@@ -114,4 +114,14 @@ class Usuario {
         }
     }
 
+    // Obtener id de un usuario por nombre
+    public function obtenerIdUsuarioNombre() {
+        $query = "SELECT id_usuario FROM usuario WHERE nombre = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("s", $this->nombre);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado; // Retorna el usuario
+    }
+
 }
