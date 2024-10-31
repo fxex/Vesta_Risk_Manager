@@ -7,7 +7,9 @@ import { useLoaderData } from "react-router-dom";
 import {
   actualizarUsuario,
   obtenerPerfiles,
+  obtenerUsuariosCorreo,
   obtenerUsuariosId,
+  obtenerUsuariosNombre,
 } from "../../services/usuarios";
 import { useNavigate, useParams } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
@@ -33,7 +35,13 @@ export default function ModificarUsuario() {
     correo: usuarioLoader.email,
     perfil: usuarioLoader.id_perfil,
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    nombre: false,
+    correo: false,
+    perfil: false,
+    nombreIgual: false,
+    correoIgual: false,
+  });
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   const [modificado, setModificado] = useState(null);
@@ -47,16 +55,44 @@ export default function ModificarUsuario() {
   };
 
   const handleClick = async () => {
-    if (
-      formData.nombre.length === 0 ||
+    setBotonPresionado(true);
+    const comprobarNombre =
+      usuarioLoader.nombre_usuario == formData.nombre ||
+      formData.nombre.length === 0
+        ? false
+        : await obtenerUsuariosNombre(formData.nombre);
+
+    const comprobarCorreoBD =
+      usuarioLoader.email == formData.correo ||
       formData.correo.length === 0 ||
-      !verificarCorreo(formData.correo) ||
-      formData.perfil == null ||
-      formData.perfil < 1
-    ) {
-      setError(true);
-    } else {
-      setBotonPresionado(true);
+      !verificarCorreo(formData.correo)
+        ? { validacion: false }
+        : await obtenerUsuariosCorreo(formData.correo);
+
+    console.log(
+      usuarioLoader.nombre_usuario == formData.nombre &&
+        formData.nombre.length === 0
+    );
+
+    const comprobacionError = {
+      nombre: formData.nombre.length === 0,
+      correo: formData.correo.length === 0 || !verificarCorreo(formData.correo),
+      perfil: formData.perfil == null || formData.perfil < 1,
+      nombreIgual: comprobarNombre,
+      correoIgual: comprobarCorreoBD.validacion,
+    };
+
+    setError(comprobacionError);
+    let comprobacion = false;
+    Object.values(comprobacionError);
+    for (const valor of Object.values(comprobacionError)) {
+      if (valor) {
+        comprobacion = valor;
+        break;
+      }
+    }
+
+    if (!comprobacion) {
       const resultado = await actualizarUsuario(id_usuario, formData);
       setModificado(resultado);
     }
@@ -86,6 +122,11 @@ export default function ModificarUsuario() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
+                style={
+                  error.nombre
+                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
+                    : null
+                }
               />
             </Form.Group>
             <Form.Group>
@@ -95,8 +136,12 @@ export default function ModificarUsuario() {
                 disabled={usuario.email === usuarioLoader.email}
                 placeholder="Ingrese el correo del usuario"
                 name="correo"
-                onChange={handleChange}
                 value={formData.correo}
+                style={
+                  error.correo
+                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
+                    : null
+                }
               />
             </Form.Group>
             <hr />
@@ -110,15 +155,18 @@ export default function ModificarUsuario() {
                   label={item.nombre}
                   value={item.id_perfil}
                   checked={item.id_perfil == formData.perfil}
-                  onChange={handleChange}
+                  disabled={usuario.email == usuarioLoader.email}
                 />
               ))}
             </Form.Group>
-            {error && (
-              <Alert variant="danger" className="mt-4">
-                Revise los campos ingresados
+            {error.correoIgual || error.nombreIgual ? (
+              <Alert variant="danger">
+                El usuario no puede poseer el mismo{" "}
+                {error.nombreIgual ? "nombre" : ""}{" "}
+                {error.correoIgual && error.nombreIgual ? "y " : ""}
+                {error.correoIgual ? "correo" : ""}
               </Alert>
-            )}
+            ) : null}
           </Form>
           <>
             <Button

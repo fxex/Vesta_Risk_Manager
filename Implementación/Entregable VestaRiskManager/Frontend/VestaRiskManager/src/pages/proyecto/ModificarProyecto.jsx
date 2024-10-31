@@ -235,7 +235,7 @@ export default function ModificarProyecto() {
         <Navegador />
         <Contenedor>
           <>
-            <h3>Crear Proyecto</h3>
+            <h3>Actualizar Proyecto - {proyecto.nombre}</h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />

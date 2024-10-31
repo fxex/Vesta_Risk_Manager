@@ -4,7 +4,11 @@ import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
 import { Alert, Button, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
-import { crearUsuario } from "../../services/usuarios";
+import {
+  crearUsuario,
+  obtenerUsuariosCorreo,
+  obtenerUsuariosNombre,
+} from "../../services/usuarios";
 import { useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,7 +24,13 @@ export default function CrearUsuario() {
     perfil: 1,
   });
   const [creado, setCreado] = useState(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    nombre: false,
+    correo: false,
+    perfil: false,
+    nombreIgual: false,
+    correoIgual: false,
+  });
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
@@ -32,17 +42,36 @@ export default function CrearUsuario() {
   };
 
   const handleClick = async () => {
-    if (
-      formData.nombre.length === 0 ||
-      formData.correo.length === 0 ||
-      !verificarCorreo(formData.correo) ||
-      formData.perfil == null ||
-      formData.perfil < 1
-    ) {
-      setError(true);
-    } else {
-      setBotonPresionado(true);
-      setError(false);
+    setBotonPresionado(true);
+    const comprobarNombre =
+      formData.nombre.length === 0
+        ? false
+        : await obtenerUsuariosNombre(formData.nombre);
+
+    const comprobarCorreoBD =
+      formData.correo.length === 0 || !verificarCorreo(formData.correo)
+        ? { validacion: false }
+        : await obtenerUsuariosCorreo(formData.correo);
+
+    const comprobacionError = {
+      nombre: formData.nombre.length === 0,
+      correo: formData.correo.length === 0 || !verificarCorreo(formData.correo),
+      perfil: formData.perfil == null || formData.perfil < 1,
+      nombreIgual: comprobarNombre,
+      correoIgual: comprobarCorreoBD.validacion,
+    };
+
+    setError(comprobacionError);
+    let comprobacion = false;
+    Object.values(comprobacionError);
+    for (const valor of Object.values(comprobacionError)) {
+      if (valor) {
+        comprobacion = valor;
+        break;
+      }
+    }
+
+    if (!comprobacion) {
       const resultado = await crearUsuario(formData);
       setCreado(resultado);
     }
@@ -72,6 +101,11 @@ export default function CrearUsuario() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
+                style={
+                  error.nombre
+                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
+                    : null
+                }
               />
             </Form.Group>
             <Form.Group>
@@ -82,6 +116,11 @@ export default function CrearUsuario() {
                 name="correo"
                 onChange={handleChange}
                 value={formData.correo}
+                style={
+                  error.correo
+                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
+                    : null
+                }
               />
             </Form.Group>
             <hr />
@@ -99,11 +138,14 @@ export default function CrearUsuario() {
                 />
               ))}
             </Form.Group>
-            {error && (
-              <Alert variant="danger" className="mt-4">
-                Revise los campos ingresados
+            {error.correoIgual || error.nombreIgual ? (
+              <Alert variant="danger">
+                El usuario no puede poseer el mismo{" "}
+                {error.nombreIgual ? "nombre" : ""}{" "}
+                {error.correoIgual && error.nombreIgual ? "y " : ""}
+                {error.correoIgual ? "correo" : ""}
               </Alert>
-            )}
+            ) : null}
           </Form>
           <>
             <Button

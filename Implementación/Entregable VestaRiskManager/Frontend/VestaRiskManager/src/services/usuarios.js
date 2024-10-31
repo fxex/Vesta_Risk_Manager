@@ -30,6 +30,18 @@ export async function obtenerUsuariosId(id) {
   return json;
 }
 
+export async function obtenerUsuariosNombre(nombre) {
+  const respuesta = await fetch(`${URL}/usuario/comprobar/${nombre}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+}
+
 export async function crearUsuario(formData) {
   const respuesta = await fetch(`${URL}/usuario/crear`, {
     method: "POST",
