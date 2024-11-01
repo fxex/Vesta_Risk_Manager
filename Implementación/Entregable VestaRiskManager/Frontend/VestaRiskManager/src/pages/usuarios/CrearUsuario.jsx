@@ -6,8 +6,8 @@ import { Alert, Button, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import {
   crearUsuario,
+  obtenerUsuarioNombre,
   obtenerUsuariosCorreo,
-  obtenerUsuariosNombre,
 } from "../../services/usuarios";
 import { useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
@@ -35,27 +35,37 @@ export default function CrearUsuario() {
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
+    });
+    setError({
+      ...error,
+      [name]: false,
     });
   };
 
   const handleClick = async () => {
     setBotonPresionado(true);
     const comprobarNombre =
-      formData.nombre.length === 0
+      formData.nombre.length === 0 || formData.nombre.length > 30
         ? false
-        : await obtenerUsuariosNombre(formData.nombre);
+        : await obtenerUsuarioNombre(formData.nombre);
 
     const comprobarCorreoBD =
-      formData.correo.length === 0 || !verificarCorreo(formData.correo)
+      formData.correo.length === 0 ||
+      !verificarCorreo(formData.correo) ||
+      formData.correo.length > 60
         ? { validacion: false }
         : await obtenerUsuariosCorreo(formData.correo);
 
     const comprobacionError = {
-      nombre: formData.nombre.length === 0,
-      correo: formData.correo.length === 0 || !verificarCorreo(formData.correo),
+      nombre: formData.nombre.length === 0 || formData.nombre.length > 30,
+      correo:
+        formData.correo.length === 0 ||
+        !verificarCorreo(formData.correo) ||
+        formData.correo.length > 60,
       perfil: formData.perfil == null || formData.perfil < 1,
       nombreIgual: comprobarNombre,
       correoIgual: comprobarCorreoBD.validacion,
@@ -101,12 +111,20 @@ export default function CrearUsuario() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
-                style={
-                  error.nombre
-                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
-                    : null
-                }
+                isInvalid={error.nombre || error.nombreIgual}
               />
+              {(error.nombre || error.nombreIgual) && (
+                <Form.Text className="text-danger">
+                  Revise que el nombre{" "}
+                  {formData.nombre.length === 0
+                    ? "no este vacio"
+                    : formData.nombre.length > 30
+                    ? "no supere la cantidad maxima"
+                    : error.nombreIgual
+                    ? "no sea igual al de otro usuario"
+                    : null}
+                </Form.Text>
+              )}
             </Form.Group>
             <Form.Group>
               <Form.Label>Correo</Form.Label>
@@ -116,12 +134,22 @@ export default function CrearUsuario() {
                 name="correo"
                 onChange={handleChange}
                 value={formData.correo}
-                style={
-                  error.correo
-                    ? { outline: "2px solid rgba(255, 0, 0, 0.5)" }
-                    : null
-                }
+                isInvalid={error.correo || error.correoIgual}
               />
+              {(error.correo || error.correoIgual) && (
+                <Form.Text className="text-danger">
+                  Revise que el correo{" "}
+                  {formData.correo.length === 0
+                    ? "no este vacio."
+                    : !verificarCorreo(formData.correo)
+                    ? "sea valido."
+                    : formData.correo.length > 60
+                    ? "no supere la cantidad maxima."
+                    : error.correoIgual
+                    ? "no sea igual al de otro usuario."
+                    : null}
+                </Form.Text>
+              )}
             </Form.Group>
             <hr />
             <h4>Perfiles</h4>
@@ -138,14 +166,6 @@ export default function CrearUsuario() {
                 />
               ))}
             </Form.Group>
-            {error.correoIgual || error.nombreIgual ? (
-              <Alert variant="danger">
-                El usuario no puede poseer el mismo{" "}
-                {error.nombreIgual ? "nombre" : ""}{" "}
-                {error.correoIgual && error.nombreIgual ? "y " : ""}
-                {error.correoIgual ? "correo" : ""}
-              </Alert>
-            ) : null}
           </Form>
           <>
             <Button

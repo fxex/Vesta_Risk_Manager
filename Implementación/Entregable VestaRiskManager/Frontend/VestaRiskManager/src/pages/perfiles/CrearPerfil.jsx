@@ -4,7 +4,7 @@ import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
 import { Alert, Button, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
-import { crearPerfil } from "../../services/usuarios";
+import { crearPerfil, obtenerPerfilNombre } from "../../services/usuarios";
 import { useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,20 +17,30 @@ export default function CrearPerfil() {
     nombre: "",
     permisos: [],
   });
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({
+    nombre: false,
+    permisos: false,
+    nombreIgual: false,
+  });
   const [creado, setCreado] = useState(null);
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
+    });
+    setError({
+      ...error,
+      [name]: false,
     });
   };
 
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
+    setError({ ...error, ["permisos"]: false });
     setFormData((prevFormData) => {
       if (checked) {
         // Agrega el permiso si está seleccionado
@@ -51,14 +61,32 @@ export default function CrearPerfil() {
   };
 
   const handleClick = async () => {
-    if (formData.nombre.length === 0 || formData.permisos.length === 0) {
-      setError(true);
-    } else {
-      setError(false);
-      setBotonPresionado(true);
+    setBotonPresionado(true);
+    const comprobarNombre =
+      formData.nombre.length === 0 || formData.nombre.length > 30
+        ? false
+        : await obtenerPerfilNombre(formData.nombre);
+
+    const comprobacionError = {
+      nombre: formData.nombre.length === 0 || formData.nombre.length > 30,
+      permisos: formData.permisos.length === 0,
+      nombreIgual: comprobarNombre,
+    };
+    setError(comprobacionError);
+
+    let comprobacion = false;
+    Object.values(comprobacionError);
+    for (const valor of Object.values(comprobacionError)) {
+      if (valor) {
+        comprobacion = valor;
+        break;
+      }
+    }
+    if (!comprobacion) {
       const resultado = await crearPerfil(formData);
       setCreado(resultado);
     }
+
     setBotonPresionado(false);
   };
 
@@ -85,7 +113,20 @@ export default function CrearPerfil() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
+                isInvalid={error.nombre || error.nombreIgual}
               />
+              {(error.nombre || error.nombreIgual) && (
+                <Form.Text className="text-danger">
+                  Revise que el nombre{" "}
+                  {formData.nombre.length === 0
+                    ? "no este vacio"
+                    : formData.nombre.length > 30
+                    ? "no supere la cantidad maxima"
+                    : error.nombreIgual
+                    ? "no sea igual al de otro perfil"
+                    : null}
+                </Form.Text>
+              )}
             </Form.Group>
             <hr />
             <h4>Permisos</h4>
@@ -98,14 +139,15 @@ export default function CrearPerfil() {
                   label={item.nombre}
                   value={item.id_permiso}
                   onChange={handleCheckboxChange}
+                  isInvalid={error.permisos}
                 />
               ))}
+              {error.permisos && (
+                <Form.Text className="text-danger">
+                  Seleccione al menos un permiso
+                </Form.Text>
+              )}
             </Form.Group>
-            {error && (
-              <Alert variant="danger" className="mt-4">
-                Revise los campos ingresados
-              </Alert>
-            )}
           </Form>
           <>
             <Button

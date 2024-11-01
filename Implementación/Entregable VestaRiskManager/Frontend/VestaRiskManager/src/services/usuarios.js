@@ -30,7 +30,7 @@ export async function obtenerUsuariosId(id) {
   return json;
 }
 
-export async function obtenerUsuariosNombre(nombre) {
+export async function obtenerUsuarioNombre(nombre) {
   const respuesta = await fetch(`${URL}/usuario/comprobar/${nombre}`, {
     method: "GET",
     headers: {
@@ -132,6 +132,18 @@ export async function actualizarPerfil(id, formData) {
 export async function eliminarPerfil(id) {
   const respuesta = await fetch(`${URL}/perfil/eliminar/${id}`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+}
+
+export async function obtenerPerfilNombre(nombre) {
+  const respuesta = await fetch(`${URL}/perfil/comprobar/${nombre}`, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },

@@ -7,11 +7,11 @@ import { useLoaderData } from "react-router-dom";
 import {
   actualizarPerfil,
   obtenerPerfilId,
+  obtenerPerfilNombre,
   obtenerPermisos,
 } from "../../services/usuarios";
 import { useNavigate, useParams } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
-import { useUsuario } from "../../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -33,20 +33,27 @@ export default function ModificarPerfil() {
       return item.id_permiso + "";
     }),
   });
-  const [error, setError] = useState(false);
-  const [botonPresionado, setbotonPresionado] = useState(false);
+  const [error, setError] = useState({
+    nombre: false,
+    permisos: false,
+    nombreIgual: false,
+  });
+  const [botonPresionado, setBotonPresionado] = useState(false);
   const [modificado, setModificado] = useState(null);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    setError({ ...error, [name]: false });
   };
 
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
+    setError({ ...error, ["permisos"]: false });
     setFormData((prevFormData) => {
       if (checked) {
         // Agrega el permiso si está seleccionado
@@ -67,15 +74,35 @@ export default function ModificarPerfil() {
   };
 
   const handleClick = async () => {
-    if (formData.nombre.length === 0 || formData.permisos.length === 0) {
-      setError(true);
-    } else {
-      setError(false);
-      setbotonPresionado(true);
+    setBotonPresionado(true);
+    const comprobarNombre =
+      perfil.nombre === formData.nombre ||
+      formData.nombre.length === 0 ||
+      formData.nombre.length > 30
+        ? false
+        : await obtenerPerfilNombre(formData.nombre);
+
+    const comprobacionError = {
+      nombre: formData.nombre.length === 0 || formData.nombre.length > 30,
+      permisos: formData.permisos.length === 0,
+      nombreIgual: comprobarNombre,
+    };
+    setError(comprobacionError);
+
+    let comprobacion = false;
+    Object.values(comprobacionError);
+    for (const valor of Object.values(comprobacionError)) {
+      if (valor) {
+        comprobacion = valor;
+        break;
+      }
+    }
+    if (!comprobacion) {
       const resultado = await actualizarPerfil(id_perfil, formData);
       setModificado(resultado);
     }
-    setbotonPresionado(false);
+
+    setBotonPresionado(false);
   };
 
   if (modificado === null) {
@@ -101,7 +128,20 @@ export default function ModificarPerfil() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
+                isInvalid={error.nombre || error.nombreIgual}
               />
+              {(error.nombre || error.nombreIgual) && (
+                <Form.Text className="text-danger">
+                  Revise que el nombre{" "}
+                  {formData.nombre.length === 0
+                    ? "no este vacio"
+                    : formData.nombre.length > 30
+                    ? "no supere la cantidad maxima"
+                    : error.nombreIgual
+                    ? "no sea igual al de otro perfil"
+                    : null}
+                </Form.Text>
+              )}
             </Form.Group>
             <hr />
             <h4>Permisos</h4>
@@ -117,14 +157,15 @@ export default function ModificarPerfil() {
                     (permiso) => permiso == item.id_permiso
                   )}
                   onChange={handleCheckboxChange}
+                  isInvalid={error.permisos}
                 />
               ))}
+              {error.permisos && (
+                <Form.Text className="text-danger">
+                  Seleccione al menos un permiso
+                </Form.Text>
+              )}
             </Form.Group>
-            {error && (
-              <Alert variant="danger" className="mt-4">
-                Revise los campos ingresados
-              </Alert>
-            )}
           </Form>
           <>
             <Button
