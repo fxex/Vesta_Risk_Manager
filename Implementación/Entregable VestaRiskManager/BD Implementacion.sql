@@ -4,12 +4,12 @@ use bdvestariskmanager;
 
 create table if not exists permiso (
 	id_permiso int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(30) not null,
     primary key (id_permiso)
 );
 create table if not exists perfil (
 	id_perfil int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(30) not null,
     primary key (id_perfil)
 );
 create table if not exists perfil_permiso (
@@ -21,8 +21,8 @@ create table if not exists perfil_permiso (
 );
 create table if not exists usuario (
 	id_usuario int not null auto_increment,
-    nombre varchar(255) not null,
-    email varchar(255) not null,
+    nombre varchar(30) not null,
+    email varchar(60) not null,
     primary key (id_usuario),
     unique key UN_USUARIO (nombre, email)
 );
@@ -37,14 +37,14 @@ create table if not exists usuario_perfil (
 
 create table if not exists categoria (
 	id_categoria int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(40) not null,
     descripcion varchar(255) not null,
     primary key (id_categoria)
 );
 
 create table if not exists proyecto (
 	id_proyecto int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(50) not null,
     descripcion text not null,
     estado enum ("activo", "inactivo") not null,
     fecha_inicio date, 
@@ -107,7 +107,7 @@ create table if not exists plan (
 
 create table if not exists tarea (
 	id_tarea int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(80) not null,
     descripcion text not null,
     estado enum ("1", "0") not null comment "1: completada, 0: no completada",
     id_plan int not null,
