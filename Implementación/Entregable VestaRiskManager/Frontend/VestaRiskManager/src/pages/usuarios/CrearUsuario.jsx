@@ -117,7 +117,7 @@ export default function CrearUsuario() {
                 <Form.Text className="text-danger">
                   Revise que el nombre{" "}
                   {formData.nombre.length === 0
-                    ? "no este vacio"
+                    ? "no este vacío"
                     : formData.nombre.length > 30
                     ? "no supere la cantidad maxima"
                     : error.nombreIgual
