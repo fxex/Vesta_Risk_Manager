@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Alert, Button, Form, Table } from "react-bootstrap";
+import { Alert, Button, Form, Pagination, Table } from "react-bootstrap";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,8 +34,17 @@ export default function CrearProyecto() {
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
 
   // Estados relacionados a los errores.
-  const [errorPrincipal, setErrorPrincipal] = useState(false);
-  const [errorParticipante, setErrorParticipante] = useState(false);
+  const [errorPrincipal, setErrorPrincipal] = useState({
+    nombre: false,
+    descripcion: false,
+    categorias: false,
+    nombreIgual: false,
+  });
+  const [errorParticipante, setErrorParticipante] = useState({
+    nombre: false,
+    usuarioElegido: false,
+    rol: false,
+  });
   const [errorIteracion, setErrorIteracion] = useState({
     validacion: false,
     mensaje: "",
@@ -45,7 +54,7 @@ export default function CrearProyecto() {
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
-    estado: "Activo",
+    estado: "Inactivo",
     participantes: [],
     iteraciones: [],
     categorias: JSON.parse(categorias),
@@ -63,26 +72,34 @@ export default function CrearProyecto() {
     fecha_fin: "",
   });
 
-  const [participantes, setParticipantes] = useState([]);
+  const [participantesTotal, setParticipantesTotal] = useState([]);
+  const [participantesMostrado, setParticipantesMostrado] = useState([]);
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState();
+  const ITEMSPORPAGINA = 5; // Número de elementos por página
 
   const [creado, setCreado] = useState(null);
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
-    setErrorPrincipal(false);
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    setErrorPrincipal({ ...errorPrincipal, [name]: false });
   };
 
   const handleChangeParticipante = (e) => {
-    setErrorParticipante(false);
+    let { name, value } = e.target;
+    value = name === "usuarioElegido" ? JSON.parse(value) : value;
+
     setFormDataParticipante({
       ...formDataParticipante,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
+    setErrorParticipante({ ...errorParticipante, [name]: false });
   };
 
   const handleChangeIteracion = (e) => {
@@ -102,7 +119,8 @@ export default function CrearProyecto() {
       nombre: "",
       rol: "",
     });
-    setParticipantes([]);
+    setParticipantesTotal([]);
+    setParticipantesMostrado([]);
     setErrorParticipante(false);
   };
 
@@ -126,33 +144,46 @@ export default function CrearProyecto() {
       let fechaNuevaIteracion = new Date(fecha_inicio);
       let fechaUltimaIteracion = new Date(ultimaIteracion.fecha_fin);
       const resultado = fechaNuevaIteracion - fechaUltimaIteracion;
-      if (resultado > 0) {
-        return true;
-      } else {
-        return false;
-      }
+      return resultado > 0;
     } else {
       return true;
     }
   };
 
+  const comprobarEstado = (iteracion_inicio) => {
+    const fecha_actual = new Date();
+    const fecha_iteracion = new Date(iteracion_inicio);
+    const resultado = fecha_actual - fecha_iteracion;
+    return resultado > 0 ? "Activo" : "Inactivo";
+  };
+
   const handleClick = async () => {
-    if (
-      formData.nombre.length === 0 ||
-      formData.descripcion.length === 0 ||
-      formData.estado.length === 0 ||
-      formData.categorias.length === 0
-    ) {
-      setErrorPrincipal(true);
-    } else {
-      setBotonPresionado(true);
-      setErrorPrincipal(false);
+    setBotonPresionado(true);
+    const comprobacionError = {
+      nombre: formData.nombre.length === 0 || formData.nombre.length > 30,
+      descripcion: formData.descripcion.length === 0,
+      categorias: formData.categorias.length === 0,
+      nombreIgual: false,
+    };
+
+    setErrorPrincipal(comprobacionError);
+    let comprobacion = false;
+    Object.values(comprobacionError);
+    for (const valor of Object.values(comprobacionError)) {
+      if (valor) {
+        comprobacion = valor;
+        break;
+      }
+    }
+    if (!comprobacion) {
       if (formData.iteraciones.length > 0) {
         const primeraIteracion = formData.iteraciones[0];
         const ultimaIteracion =
           formData.iteraciones[formData.iteraciones.length - 1];
         formData.fecha_inicio = primeraIteracion.fecha_inicio;
         formData.fecha_fin = ultimaIteracion.fecha_fin;
+        const estado = comprobarEstado(primeraIteracion);
+        formData.estado = estado;
       }
 
       const resultado = await crearProyecto(formData);
@@ -163,27 +194,33 @@ export default function CrearProyecto() {
 
   const handleClickParticipante = () => {
     setBotonPresionado(true);
-    if (
-      formDataParticipante.nombre.length === 0 ||
-      formDataParticipante.rol.length === 0
-    ) {
-      setErrorParticipante(true);
-    } else {
-      setErrorParticipante(false);
-      setFormData((prevFormData) => {
-        return {
-          ...prevFormData,
-          participantes: [...prevFormData.participantes, formDataParticipante],
-        };
-      });
-      setFormDataParticipante({
-        nombre: "",
-        rol: "",
-      });
-      setParticipantes([]);
-      handleMostrarParticipante();
-    }
+    const comprobarError = {
+      nombre: formDataParticipante.nombre.length === 0,
+      usuarioElegido: formDataParticipante.usuarioElegido == null,
+      rol: formDataParticipante.rol.length === 0,
+    };
+
+    setErrorParticipante(comprobarError);
+
+    // setFormData((prevFormData) => {
+    //   return {
+    //     ...prevFormData,
+    //     participantes: [...prevFormData.participantes, formDataParticipante],
+    //   };
+    // });
+    // setFormDataParticipante({
+    //   nombre: "",
+    //   rol: "",
+    // });
+    // setParticipantes([]);
+    // handleMostrarParticipante();
     setBotonPresionado(false);
+  };
+
+  const handlePageChange = (nuevaPagina) => {
+    if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
+      setPagina(nuevaPagina);
+    }
   };
 
   const handleClickIteracion = () => {
@@ -235,6 +272,17 @@ export default function CrearProyecto() {
     setBotonPresionado(false);
   };
 
+  useEffect(() => {
+    if (!(participantesTotal.length === 0)) {
+      setParticipantesMostrado(
+        participantesTotal.slice(
+          (pagina - 1) * ITEMSPORPAGINA,
+          ITEMSPORPAGINA * pagina
+        )
+      );
+    }
+  }, [pagina]);
+
   if (creado === null) {
     return (
       <>
@@ -258,37 +306,38 @@ export default function CrearProyecto() {
                 onChange={handleChange}
                 name="nombre"
                 value={formData.nombre}
+                isInvalid={errorPrincipal.nombre || errorPrincipal.nombreIgual}
               />
+              {(errorPrincipal.nombre || errorPrincipal.nombreIgual) && (
+                <Form.Text className="text-danger">
+                  Revise que el nombre{" "}
+                  {formData.nombre.length === 0
+                    ? "no este vacío"
+                    : formData.nombre.length > 30
+                    ? "no supere la cantidad maxima"
+                    : errorPrincipal.nombreIgual
+                    ? "no sea igual al de otro proyecto"
+                    : null}
+                  .
+                </Form.Text>
+              )}
             </Form.Group>
             <Form.Group>
-              <Form.Label>Descripcion</Form.Label>
+              <Form.Label>Descripción</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="Ingrese la descripcion del proyecto"
+                placeholder="Ingrese la descripción del proyecto"
                 name="descripcion"
                 onChange={handleChange}
                 value={formData.descripcion}
+                isInvalid={errorPrincipal.descripcion}
               />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Estado</Form.Label>
-              <Form.Check
-                type="radio"
-                label="Activo"
-                value="Activo"
-                name="estado"
-                checked={formData.estado == "Activo"}
-                onChange={handleChange}
-              />
-              <Form.Check
-                type="radio"
-                label="Inactivo"
-                value="Inactivo"
-                name="estado"
-                checked={formData.estado == "Inactivo"}
-                onChange={handleChange}
-              />
+              {errorPrincipal.descripcion && (
+                <Form.Text className="text-danger">
+                  Revise que la descripción no este vacía.
+                </Form.Text>
+              )}
             </Form.Group>
             <Form.Group>
               <Form.Label>
@@ -347,7 +396,7 @@ export default function CrearProyecto() {
               <br></br>
               <Button variant="success" onClick={handleMostrarIteracion}>
                 <FontAwesomeIcon icon={faPlus} className="mx-1" />
-                Agregar Iteracion
+                Agregar Iteración
               </Button>
               <Table size="sm" hover className="mt-2">
                 <thead className="table-info">
@@ -442,9 +491,6 @@ export default function CrearProyecto() {
                 </tbody>
               </Table>
             </Form.Group>
-            {errorPrincipal && (
-              <Alert variant="danger">Revise los campos ingresados</Alert>
-            )}
           </Form>
           <>
             <Button
@@ -473,9 +519,13 @@ export default function CrearProyecto() {
         <ModalPersonalizado
           title={"Añadir Participante"}
           show={mostrarParticipante}
-          setShow={setMostrarIteracion}
+          setShow={setMostrarParticipante}
           onConfirm={handleClickParticipante}
           datosDefecto={() => {
+            setParticipantesTotal([]);
+            setParticipantesMostrado([]);
+            setPagina(1);
+            setTotalPaginas(0);
             setFormDataParticipante({
               usuarioElegido: {},
               nombre: "",
@@ -493,49 +543,101 @@ export default function CrearProyecto() {
                 name="nombre"
                 onChange={(e) => {
                   handleChangeParticipante(e);
-                  setParticipantes([]);
+                  setParticipantesTotal([]);
+                  setParticipantesMostrado([]);
                 }}
+                isInvalid={errorParticipante.nombre}
               />
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
+                color={errorParticipante.nombre ? "red" : "black"}
                 style={{
                   marginLeft: "10px",
                   fontSize: "20px",
                   cursor: "pointer",
                 }}
                 onClick={async () => {
-                  const data = await obtenerParticipanteNombre(
-                    formDataParticipante.nombre
-                  );
-                  const json = JSON.parse(data);
-                  // Crear un conjunto con los nombres en formData.participantes
-                  const nombresFormData = new Set(
-                    formData.participantes.map((item) => item.nombre)
-                  );
+                  if (formDataParticipante.nombre.length === 0) {
+                    setErrorParticipante({
+                      ...errorParticipante,
+                      ["nombre"]: true,
+                    });
+                  } else {
+                    const data = await obtenerParticipanteNombre(
+                      formDataParticipante.nombre
+                    );
+                    const json = JSON.parse(data);
+                    // Crear un conjunto con los nombres en formData.participantes
+                    const nombresFormData = new Set(
+                      formData.participantes.map((item) => item.nombre)
+                    );
 
-                  const participantesFiltrados = json.filter(
-                    (item) => !nombresFormData.has(item.nombre_usuario)
-                  );
+                    const participantesFiltrados = json.filter(
+                      (item) => !nombresFormData.has(item.nombre_usuario)
+                    );
 
-                  setParticipantes(participantesFiltrados);
+                    setParticipantesTotal(participantesFiltrados);
+                    setParticipantesMostrado(
+                      participantesFiltrados.slice(pagina - 1, ITEMSPORPAGINA)
+                    );
+                    const cantidadPaginas = Math.ceil(
+                      participantesFiltrados.length / ITEMSPORPAGINA
+                    );
+                    setTotalPaginas(cantidadPaginas);
+                  }
                 }}
               />
             </Form.Group>
+            {errorParticipante.nombre && (
+              <Form.Text className="text-danger">
+                Revise que el campo no esta vacío.
+              </Form.Text>
+            )}
             <Form.Group>
               <h5>Participantes</h5>
-              {participantes && participantes.length > 0 ? (
-                participantes.map((item, key) => (
+              {participantesMostrado && participantesMostrado.length > 0 ? (
+                participantesMostrado.map((item, key) => (
                   <Form.Check
                     key={key}
-                    label={item.nombre_usuario}
-                    value={item.nombre_usuario}
-                    name="nombre"
+                    label={`${item.nombre_usuario} - ${item.email}`}
+                    value={JSON.stringify(item)}
+                    name="usuarioElegido"
                     type="radio"
                     onChange={handleChangeParticipante}
+                    isInvalid={errorParticipante.usuarioElegido}
                   />
                 ))
               ) : (
                 <p>No hay participantes disponibles.</p>
+              )}
+              {errorParticipante.usuarioElegido && (
+                <Form.Text className="text-danger">
+                  Seleccione un participante.
+                </Form.Text>
+              )}
+              {totalPaginas > 1 && (
+                <Pagination size="sm">
+                  <Pagination.Prev
+                    onClick={() => handlePageChange(pagina - 1)}
+                    disabled={pagina === 1}
+                  />
+                  {Array.from({ length: totalPaginas }, (_, index) => (
+                    <Pagination.Item
+                      key={index + 1}
+                      active={index + 1 === pagina}
+                      onClick={() => {
+                        setPagina(index + 1);
+                      }}
+                    >
+                      {index + 1}
+                    </Pagination.Item>
+                  ))}
+
+                  <Pagination.Next
+                    onClick={() => handlePageChange(pagina + 1)}
+                    disabled={pagina === totalPaginas}
+                  />
+                </Pagination>
               )}
             </Form.Group>
             <Form.Group>
@@ -546,6 +648,7 @@ export default function CrearProyecto() {
                 label="Lider del proyecto"
                 value="Lider del proyecto"
                 onChange={handleChangeParticipante}
+                isInvalid={errorParticipante.rol}
               />
               <Form.Check
                 type="radio"
@@ -553,13 +656,14 @@ export default function CrearProyecto() {
                 label="Desarrollador"
                 value="Desarrollador"
                 onChange={handleChangeParticipante}
+                isInvalid={errorParticipante.rol}
               />
+              {errorParticipante.rol && (
+                <Form.Text className="text-danger">
+                  Seleccione un rol.
+                </Form.Text>
+              )}
             </Form.Group>
-            {errorParticipante && (
-              <Alert variant="danger" className="mt-4">
-                Revise los campos ingresados
-              </Alert>
-            )}
           </Form>
         </ModalPersonalizado>
         {/* <Modal
