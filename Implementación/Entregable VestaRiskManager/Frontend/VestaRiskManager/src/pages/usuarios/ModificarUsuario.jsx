@@ -70,7 +70,8 @@ export default function ModificarUsuario() {
     const comprobarCorreoBD =
       usuarioLoader.email == formData.correo ||
       formData.correo.length === 0 ||
-      !verificarCorreo(formData.correo)
+      !verificarCorreo(formData.correo) ||
+      formData.correo.length > 64
         ? { validacion: false }
         : await obtenerUsuariosCorreo(formData.correo);
 
@@ -79,7 +80,7 @@ export default function ModificarUsuario() {
       correo:
         formData.correo.length === 0 ||
         !verificarCorreo(formData.correo) ||
-        formData.correo.length > 60,
+        formData.correo.length > 64,
       perfil: formData.perfil == null || formData.perfil < 1,
       nombreIgual: comprobarNombre,
       correoIgual: comprobarCorreoBD.validacion,
@@ -137,6 +138,7 @@ export default function ModificarUsuario() {
                     : error.nombreIgual
                     ? "no sea igual al de otro usuario"
                     : null}
+                  .
                 </Form.Text>
               )}
             </Form.Group>
@@ -154,14 +156,15 @@ export default function ModificarUsuario() {
                 <Form.Text className="text-danger">
                   Revise que el correo{" "}
                   {formData.correo.length === 0
-                    ? "no este vacio."
+                    ? "no este vacio"
                     : !verificarCorreo(formData.correo)
-                    ? "sea valido."
-                    : formData.correo.length > 60
-                    ? "no supere la cantidad maxima."
+                    ? "sea valido"
+                    : formData.correo.length > 64
+                    ? "no supere la cantidad maxima"
                     : error.correoIgual
-                    ? "no sea igual al de otro usuario."
+                    ? "no sea igual al de otro usuario"
                     : null}
+                  .
                 </Form.Text>
               )}
             </Form.Group>

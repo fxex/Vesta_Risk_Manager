@@ -22,7 +22,7 @@ create table if not exists perfil_permiso (
 create table if not exists usuario (
 	id_usuario int not null auto_increment,
     nombre varchar(30) not null,
-    email varchar(60) not null,
+    email varchar(64) not null,
     primary key (id_usuario),
     unique key UN_USUARIO (nombre, email)
 );
@@ -44,7 +44,7 @@ create table if not exists categoria (
 
 create table if not exists proyecto (
 	id_proyecto int not null auto_increment,
-    nombre varchar(50) not null,
+    nombre varchar(30) not null,
     descripcion text not null,
     estado enum ("activo", "inactivo") not null,
     fecha_inicio date, 

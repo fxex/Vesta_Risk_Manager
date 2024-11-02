@@ -140,6 +140,7 @@ export default function ModificarPerfil() {
                     : error.nombreIgual
                     ? "no sea igual al de otro perfil"
                     : null}
+                  .
                 </Form.Text>
               )}
             </Form.Group>
@@ -162,7 +163,7 @@ export default function ModificarPerfil() {
               ))}
               {error.permisos && (
                 <Form.Text className="text-danger">
-                  Seleccione al menos un permiso
+                  Seleccione al menos un permiso.
                 </Form.Text>
               )}
             </Form.Group>

@@ -14,6 +14,8 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 export default function ListaPerfiles() {
   const perfiles = useLoaderData();
+  console.log(perfiles);
+
   const navigate = useNavigate();
 
   return (
@@ -67,7 +69,10 @@ export default function ListaPerfiles() {
                     <Button
                       variant="outline-danger"
                       className="mx-1"
-                      disabled={item.nombre === "Administrador"}
+                      disabled={
+                        item.nombre === "Administrador" ||
+                        item.total_usuarios > 0
+                      }
                       onClick={() => {
                         navigate(`/inicio/perfiles/eliminar/${item.id_perfil}`);
                       }}
