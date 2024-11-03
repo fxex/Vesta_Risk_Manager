@@ -40,19 +40,11 @@ class GestorProyecto {
         return $resultado;
     }
 
-    public function obtenerParticipanteNombre($data){
-        $url = "http://localhost/Vesta/participante";
-        $jsonData = json_encode($data);
+    public function obtenerParticipanteNombre($nombre){
+        $url = "http://localhost/Vesta/participante/". $nombre;
         
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
-        curl_setopt($ch, CURLOPT_POST, true);            // Especificar que será un POST
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData); // Pasar los datos JSON
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Content-Length: ' . strlen($jsonData)
-        ]);
 
         // 6. Ejecutar la solicitud y obtener la respuesta
         $response = curl_exec($ch);
@@ -100,16 +92,7 @@ class GestorProyecto {
             $id_proyecto = $this->proyecto->crearProyecto();
             if (!empty($data["participantes"])) {
                 foreach ($data["participantes"] as $participante) {
-                    $urlName = urlencode($participante["nombre"]);
-                    $url = "http://localhost/Vesta/participante/".$urlName;
-                    $ch = curl_init($url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
-                    $response = curl_exec($ch);
-                    
-                    $datos = json_decode($response, true);
-                   
-                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$datos["id_usuario"],$participante["rol"]);                    
-                    curl_close($ch);
+                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$participante["id_usuario"],$participante["rol"]);                    
                 }
             }
             if (!empty($data["categorias"])) {
@@ -153,16 +136,7 @@ class GestorProyecto {
             $resultado = $this->proyecto->actualizarProyecto($id_proyecto);
             if (!empty($data["participantes"])) {
                 foreach ($data["participantes"] as $participante) {
-                    $urlName = urlencode($participante["nombre"]);
-                    $url = "http://localhost/Vesta/participante/".$urlName;
-                    $ch = curl_init($url);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
-                    $response = curl_exec($ch);
-                    
-                    $datos = json_decode($response, true);
-                   
-                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$datos["id_usuario"],$participante["rol"]);          
-                    curl_close($ch);
+                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$participante["id_usuario"],$participante["rol"]);                    
                 }
             }
 

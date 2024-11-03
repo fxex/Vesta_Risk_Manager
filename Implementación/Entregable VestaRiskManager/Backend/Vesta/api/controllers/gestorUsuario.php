@@ -146,6 +146,7 @@ class GestorUsuario {
     public function eliminarPerfil($id){
         if (is_numeric($id)) {
             vincularTabla::eliminarVinculo($this->conexion, "perfil_permiso", "id_perfil", $id);
+            vincularTabla::eliminarVinculo($this->conexion, "usuario_perfil", "id_perfil", $id);
             $this->perfil->setNombre(null);
             $this->perfil->setPermisos(null);
             $resultado = $this->perfil->eliminarPerfil($id);
@@ -170,6 +171,16 @@ class GestorUsuario {
         }
     }
 
+    public function obtenerUsuariosNombreEqual($nombre){
+        if (!empty($nombre)) {
+            $this->usuario->setNombre($nombre);
+            $resultado = $this->usuario->obtenerUsuariosNombreEqual();
+            return $resultado;
+        }else{
+            return null;
+        }
+    }
+
     public function obtenerIdUsuarioNombre($nombre){
         $comprobar = !empty($nombre);
         if ($comprobar) {
@@ -177,6 +188,17 @@ class GestorUsuario {
             $resultado = $this->usuario->obtenerIdUsuarioNombre();
             return $resultado;
         } else {
+            return null;
+        }
+    }
+
+    public function obtenerPerfilNombre($nombre){
+        $comprobar = !empty($nombre);
+        if ($comprobar) {
+            $this->perfil->setNombre($nombre);
+            $resultado = $this->perfil->obtenerPerfilNombre();
+            return $resultado;
+        }else{
             return null;
         }
     }

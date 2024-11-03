@@ -60,7 +60,7 @@ class Usuario {
     }
 
     public function obtenerUsuariosNombre() {
-        $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre like ?";
+        $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre like ?";
         $stmt = $this->conexion->prepare($query);
         $search = "%". $this->nombre ."%";
         $stmt->bind_param("s", $search);
@@ -73,15 +73,28 @@ class Usuario {
 
         return $resultado; // Retorna el usuario
     }
+
+    public function obtenerUsuariosNombreEqual() {
+        $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre = ?";
+        $stmt = $this->conexion->prepare($query);
+        $search = $this->nombre;
+        $stmt->bind_param("s", $search);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+
+        return $resultado; // Retorna el usuario
+    }
     // Obtener usuario por Email
     public function obtenerUsuarioEmail() {
-        $query = "SELECT u.nombre as nombre_usuario, u.email, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.email = ?";
+        $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.email = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $this->email);
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
 
-        $this->setNombre($resultado["nombre_usuario"]);
+        if (!empty($resultado)) {
+            $this->setNombre($resultado["nombre_usuario"]);
+        }
 
         return $resultado; // Retorna el usuario
     }

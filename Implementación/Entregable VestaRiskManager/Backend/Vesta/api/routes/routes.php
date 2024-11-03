@@ -13,24 +13,26 @@ $controladorRiesgo = new GestorRiesgo();
 
 
 // Rutas para el Gestor de usuarios
-
-$router->add("GET", "usuario", function() use ($controladorUsuario){
+// Usuarios
+$router->add("GET", "usuarios", function() use ($controladorUsuario){
     $resultado = $controladorUsuario->obtenerTodosUsuarios(); 
     echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
 });
 
-$router->add("POST","usuario", function() use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->obtenerUsuarioCorreo($data["correo"]);
-        echo json_encode(["validacion"=>!empty($resultado), "datos"=> $resultado]); 
-    } else {
-        echo json_encode(["validacion"=>false]);
+$router->add("GET","usuario/{parametro}", function($parametro) use($controladorUsuario){
+    $resultado = null;
+    if (is_numeric($parametro)) {
+        $resultado = $controladorUsuario->obtenerUsuarioId($parametro);
+    }elseif (filter_var($parametro, FILTER_VALIDATE_EMAIL)) {
+        $resultado = $controladorUsuario->obtenerUsuarioCorreo($parametro);
+    }else{
+        
     }
+    echo json_encode($resultado);
+    
 });
 
-$router->add("POST","usuario/crear", function() use($controladorUsuario){
+$router->add("POST","usuario", function() use($controladorUsuario){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -41,7 +43,7 @@ $router->add("POST","usuario/crear", function() use($controladorUsuario){
     }
 });
 
-$router->add("POST", "usuario/modificar/{id}",function($id) use($controladorUsuario){
+$router->add("PUT", "usuario/{id}",function($id) use($controladorUsuario){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -52,22 +54,18 @@ $router->add("POST", "usuario/modificar/{id}",function($id) use($controladorUsua
     }
 });
 
-$router->add("POST", "usuario/eliminar/{id}",function($id) use($controladorUsuario){
+$router->add("DELETE", "usuario/{id}",function($id) use($controladorUsuario){
         $resultado = $controladorUsuario->eliminarUsuario($id);
         echo json_encode(["eliminado"=>$resultado]); 
 });
 
-$router->add("GET", "usuario/{id}", function($id) use($controladorUsuario) {
-    $resultado = $controladorUsuario->obtenerUsuarioId($id);
-    echo json_encode($resultado);
-});
 
-$router->add("GET", "perfil", function() use ($controladorUsuario){
+$router->add("GET", "perfiles", function() use ($controladorUsuario){
     $resultado = $controladorUsuario->obtenerTodosPerfiles(); 
     echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
 });
 
-$router->add("POST","perfil/crear", function() use($controladorUsuario){
+$router->add("POST","perfil", function() use($controladorUsuario){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -78,7 +76,7 @@ $router->add("POST","perfil/crear", function() use($controladorUsuario){
     }
 });
 
-$router->add("POST", "perfil/modificar/{id}",function($id) use($controladorUsuario){
+$router->add("PUT", "perfil/{id}",function($id) use($controladorUsuario){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -89,7 +87,7 @@ $router->add("POST", "perfil/modificar/{id}",function($id) use($controladorUsuar
     }
 });
 
-$router->add("POST", "perfil/eliminar/{id}",function($id) use($controladorUsuario){
+$router->add("DELETE", "perfil/{id}",function($id) use($controladorUsuario){
     $resultado = $controladorUsuario->eliminarPerfil($id);
     echo json_encode(["eliminado"=>$resultado]); 
 });
@@ -100,31 +98,30 @@ $router->add("GET", "perfil/{id}", function($id) use($controladorUsuario) {
     echo json_encode($resultado);
 });
 
+$router->add("GET","perfil/comprobar/{nombre}", function($nombre) use($controladorUsuario){
+    $resultado = $controladorUsuario->obtenerPerfilNombre(urldecode($nombre));
+    echo json_encode($resultado); 
+});
 
-$router->add("GET", "permiso", function() use ($controladorUsuario){
+$router->add("GET", "permisos", function() use ($controladorUsuario){
     $resultado = $controladorUsuario->obtenerTodosPermisos(); 
     echo json_encode($resultado); 
 });
 
-$router->add("POST","participante", function() use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->obtenerUsuariosNombre($data["nombre"]);
-        echo json_encode($resultado); 
-    } else {
-        echo json_encode(null);
-    }
-});
 
 $router->add("GET","participante/{nombre}", function($nombre) use($controladorUsuario){
-    $resultado = $controladorUsuario->obtenerIdUsuarioNombre(urldecode($nombre));
+    $resultado = $controladorUsuario->obtenerUsuariosNombre(urldecode($nombre));
+    echo json_encode($resultado); 
+});
+$router->add("GET","usuario/comprobar/{nombre}", function($nombre) use($controladorUsuario){
+    $resultado = $controladorUsuario->obtenerUsuariosNombreEqual(urldecode($nombre));
     echo json_encode($resultado); 
 });
 
+
 // Rutas para el Gestor de Proyecto
 
-$router->add("GET", "proyecto", function() use ($controladorProyecto){
+$router->add("GET", "proyectos", function() use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerTodosProyecto(); 
     echo json_encode($resultado);
 });
@@ -134,40 +131,34 @@ $router->add("GET","proyecto/categorias", function() use($controladorProyecto){
     echo json_encode($resultado); 
 });
 
+$router->add("GET","proyecto/participante/{nombre}", function($nombre) use($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerParticipanteNombre($nombre);
+    echo json_encode($resultado); 
+});
+
+$router->add("POST","proyectos/lider", function() use($controladorProyecto){
+    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    if (!empty($body)) {
+        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $resultado = $controladorProyecto->obtenerTodosProyectoLider($data["correo"]);
+        echo json_encode($resultado); 
+    } else {
+        echo json_encode(null);
+    }
+});
+
+$router->add("POST","proyectos/desarrollador", function() use($controladorProyecto){
+    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    if (!empty($body)) {
+        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $resultado = $controladorProyecto->obtenerTodosProyectoDesarrollador($data["correo"]);
+        echo json_encode($resultado); 
+    } else {
+        echo json_encode(null);
+    }
+});
+
 $router->add("POST","proyecto", function() use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorProyecto->obtenerParticipanteNombre($data);
-        echo json_encode($resultado); 
-    } else {
-        echo json_encode(null);
-    }
-});
-
-$router->add("POST","proyecto/lider", function() use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorProyecto->obtenerTodosProyectoLider($data["correo"]);
-        echo json_encode($resultado); 
-    } else {
-        echo json_encode(null);
-    }
-});
-
-$router->add("POST","proyecto/desarrollador", function() use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorProyecto->obtenerTodosProyectoLider($data["correo"]);
-        echo json_encode($resultado); 
-    } else {
-        echo json_encode(null);
-    }
-});
-
-$router->add("POST","proyecto/crear", function() use($controladorProyecto){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -182,8 +173,12 @@ $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerProyectoId($id); 
     echo json_encode($resultado);
 });
+$router->add("GET", "proyecto/{id}/riesgos", function($id) use ($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerProyectoId($id); 
+    echo json_encode($resultado);
+});
 
-$router->add("POST", "proyecto/modificar/{id}",function($id) use($controladorProyecto){
+$router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
@@ -196,6 +191,11 @@ $router->add("POST", "proyecto/modificar/{id}",function($id) use($controladorPro
 
 
 
+
+$router->add("GET","categoria/generales", function() use($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
+    echo json_encode($resultado); 
+});
 
 $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
