@@ -537,7 +537,7 @@ export default function ModificarProyecto() {
               variant="outline-danger"
               className="mx-1"
               onClick={() => {
-                navigate("/inicio");
+                navigate("/inicio/proyectos");
               }}
             >
               <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
@@ -1000,7 +1000,7 @@ export default function ModificarProyecto() {
             )}
             <hr />
             <h5>Opciones</h5>
-            <BotonSalir ruta={"/inicio"} />
+            <BotonSalir ruta={"/inicio/proyectos"} />
           </>
         </Contenedor>
       </>

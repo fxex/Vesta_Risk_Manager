@@ -49,12 +49,12 @@ export default function Index() {
             onSuccess={(credentialResponse) => {
               const decode = jwtDecode(credentialResponse.credential);
               obtenerUsuariosCorreo(decode.email).then((item) => {
-                if (item.validacion) {
+                if (item) {
                   localStorage.setItem("jwt", credentialResponse.credential);
                   iniciarSesion(
-                    item.datos.nombre_usuario,
-                    item.datos.email,
-                    item.datos.nombre_perfil
+                    item.nombre_usuario,
+                    item.email,
+                    item.nombre_perfil
                   );
                   navigation("/inicio");
                   setError(false);

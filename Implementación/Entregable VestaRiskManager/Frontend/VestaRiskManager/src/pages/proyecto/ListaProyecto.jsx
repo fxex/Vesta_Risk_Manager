@@ -30,14 +30,14 @@ export default function ListaProyecto() {
                   icon={faPenToSquare}
                   className="fw-bold fs-3 me-2 icono"
                   onClick={() => {
-                    navigate(`/inicio/proyectos/modificar/${item.id_proyecto}`);
+                    navigate(`/inicio/proyecto/modificar/${item.id_proyecto}`);
                   }}
                 />
                 <FontAwesomeIcon
                   icon={faEye}
                   className="fw-bold fs-3 me-2 icono"
                   onClick={() => {
-                    navigate(`/inicio/proyectos/${item.id_proyecto}`);
+                    navigate(`/inicio/proyecto/${item.id_proyecto}`);
                   }}
                 />
               </div>

@@ -31,7 +31,7 @@ export default function Home() {
             <Button
               className="px-4 py-3 me-2 boton_2"
               onClick={() => {
-                navigate("/inicio/proyectos/crear");
+                navigate("/inicio/proyecto/crear");
               }}
             >
               Crear Proyecto
@@ -55,7 +55,7 @@ export default function Home() {
             <Button
               className="px-4 py-3 me-2 boton_2"
               onClick={() => {
-                navigate("/inicio/proyectos/crear");
+                navigate("/inicio/proyectos/desarrollador");
               }}
             >
               Proyectos de Desarrollador

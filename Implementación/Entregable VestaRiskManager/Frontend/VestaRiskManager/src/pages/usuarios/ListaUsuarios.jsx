@@ -28,7 +28,7 @@ export default function ListaUsuarios() {
           <Button
             variant="success"
             onClick={() => {
-              navigate("/inicio/usuarios/crear");
+              navigate("/inicio/usuario/crear");
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
@@ -54,7 +54,7 @@ export default function ListaUsuarios() {
                       variant="outline-primary"
                       className="mx-1"
                       onClick={() => {
-                        navigate(`/inicio/usuarios/${item.id_usuario}`);
+                        navigate(`/inicio/usuario/${item.id_usuario}`);
                       }}
                     >
                       <FontAwesomeIcon icon={faSearch} />
@@ -64,7 +64,7 @@ export default function ListaUsuarios() {
                       className="mx-1"
                       onClick={() => {
                         navigate(
-                          `/inicio/usuarios/modificar/${item.id_usuario}`
+                          `/inicio/usuario/modificar/${item.id_usuario}`
                         );
                       }}
                     >
@@ -75,9 +75,7 @@ export default function ListaUsuarios() {
                       className="mx-1"
                       disabled={usuario.email == item.email}
                       onClick={() => {
-                        navigate(
-                          `/inicio/usuarios/eliminar/${item.id_usuario}`
-                        );
+                        navigate(`/inicio/usuario/eliminar/${item.id_usuario}`);
                       }}
                     >
                       <FontAwesomeIcon icon={faTrashCan} />

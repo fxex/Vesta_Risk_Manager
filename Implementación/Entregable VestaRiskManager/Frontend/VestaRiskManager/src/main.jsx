@@ -45,6 +45,7 @@ import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
 import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
 import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
 import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
+import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -62,22 +63,22 @@ const App = () => {
       loader: userLoader,
     },
     {
-      path: "/inicio/usuarios/crear",
+      path: "/inicio/usuario/crear",
       element: <RutaProtegida element={<CrearUsuario />} isAdmin={true} />,
       loader: perfilLoader,
     },
     {
-      path: "/inicio/usuarios/:id_usuario",
+      path: "/inicio/usuario/:id_usuario",
       element: <RutaProtegida element={<VerUsuario />} isAdmin={true} />,
       loader: cargarUsuario,
     },
     {
-      path: "/inicio/usuarios/modificar/:id_usuario",
+      path: "/inicio/usuario/modificar/:id_usuario",
       element: <RutaProtegida element={<ModificarUsuario />} isAdmin={true} />,
       loader: cargarModificarUsuario,
     },
     {
-      path: "/inicio/usuarios/eliminar/:id_usuario",
+      path: "/inicio/usuario/eliminar/:id_usuario",
       element: <RutaProtegida element={<EliminarUsuario />} isAdmin={true} />,
       loader: cargarEliminarUsuario,
     },
@@ -87,22 +88,22 @@ const App = () => {
       loader: perfilLoader,
     },
     {
-      path: "/inicio/perfiles/crear",
+      path: "/inicio/perfil/crear",
       element: <RutaProtegida element={<CrearPerfil />} isAdmin={true} />,
       loader: permisoLoader,
     },
     {
-      path: "/inicio/perfiles/:id_perfil",
+      path: "/inicio/perfil/:id_perfil",
       element: <RutaProtegida element={<VerPerfil />} isAdmin={true} />,
       loader: cargarPerfilId,
     },
     {
-      path: "/inicio/perfiles/modificar/:id_perfil",
+      path: "/inicio/perfil/modificar/:id_perfil",
       element: <RutaProtegida element={<ModificarPerfil />} isAdmin={true} />,
       loader: cargarModificarPerfil,
     },
     {
-      path: "/inicio/perfiles/eliminar/:id_perfil",
+      path: "/inicio/perfil/eliminar/:id_perfil",
       element: <RutaProtegida element={<EliminarPerfil />} isAdmin={true} />,
       loader: cargarEliminarPerfil,
     },
@@ -113,17 +114,17 @@ const App = () => {
     },
 
     {
-      path: "/inicio/proyectos/crear",
+      path: "/inicio/proyecto/crear",
       element: <RutaProtegida element={<CrearProyecto />} isAdmin={true} />,
       loader: obtenerCategoriaGeneral,
     },
     {
-      path: "/inicio/proyectos/:id_proyecto",
+      path: "/inicio/proyecto/:id_proyecto",
       element: <RutaProtegida element={<VerProyecto />} isAdmin={true} />,
       loader: cargarProyecto,
     },
     {
-      path: "/inicio/proyectos/modificar/:id_proyecto",
+      path: "/inicio/proyecto/modificar/:id_proyecto",
       element: <RutaProtegida element={<ModificarProyecto />} isAdmin={true} />,
       loader: cargarProyecto,
     },
@@ -132,7 +133,15 @@ const App = () => {
       element: <RutaProtegida element={<ListaProyectoLider />} />,
     },
     {
-      path: "/inicio/proyectos/lider/:id_proyecto",
+      path: "/inicio/proyectos/desarrollador",
+      element: <RutaProtegida element={<ListaProyectoDesarrollador />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto",
+      element: <RutaProtegida element={<VerProyectoLider />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo",
       element: <RutaProtegida element={<VerProyectoLider />} />,
     },
     {

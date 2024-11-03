@@ -7,15 +7,15 @@ import "./../../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { obtenerProyectosUsuarioLider } from "../../../services/proyectos";
+import { obtenerProyectosUsuarioDesarrollador } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 
-export default function ListaProyectoLider() {
+export default function ListaProyectoDesarrollador() {
   const navigate = useNavigate();
   const { usuario } = useUsuario();
   const [proyectos, setProyectos] = useState([]);
   useEffect(() => {
-    obtenerProyectosUsuarioLider(usuario.email).then((item) => {
+    obtenerProyectosUsuarioDesarrollador(usuario.email).then((item) => {
       setProyectos(item);
     });
   }, []);
@@ -24,7 +24,7 @@ export default function ListaProyectoLider() {
     <>
       <Navegador />
       <Contenedor>
-        <h3>Proyectos de Líder</h3>
+        <h3>Proyectos de Desarrollador</h3>
         <div style={{ minHeight: "40vh" }}>
           {proyectos.map((item, key) => (
             <Button
@@ -36,7 +36,9 @@ export default function ListaProyectoLider() {
                 icon={faEye}
                 className="fw-bold fs-3 me-2 icono"
                 onClick={() => {
-                  navigate(`/inicio/proyecto/lider/${item.id_proyecto}`);
+                  navigate(
+                    `/inicio/proyecto/desarrollador/${item.id_proyecto}`
+                  );
                 }}
               />
             </Button>

@@ -6,7 +6,14 @@ export default function VerProyectoLider() {
   return (
     <>
       <NavegadorLider />
-      <div style={{ minHeight: "70vh" }}></div>
+      <div style={{ minHeight: "70vh" }}>
+        <p>Grafico 1</p>
+        <p>Grafico 1</p>
+        <p>Grafico 1</p>
+        <p>Grafico 1</p>
+        <p>Grafico 1</p>
+        <p>Grafico 1</p>
+      </div>
       <Footer />
     </>
   );

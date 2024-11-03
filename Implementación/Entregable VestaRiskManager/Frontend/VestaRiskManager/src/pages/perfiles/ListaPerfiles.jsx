@@ -27,7 +27,7 @@ export default function ListaPerfiles() {
           <Button
             variant="success"
             onClick={() => {
-              navigate("/inicio/perfiles/crear");
+              navigate("/inicio/perfil/crear");
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
@@ -49,7 +49,7 @@ export default function ListaPerfiles() {
                       variant="outline-primary"
                       className="mx-1"
                       onClick={() => {
-                        navigate(`/inicio/perfiles/${item.id_perfil}`);
+                        navigate(`/inicio/perfil/${item.id_perfil}`);
                       }}
                     >
                       <FontAwesomeIcon icon={faSearch} />
@@ -59,9 +59,7 @@ export default function ListaPerfiles() {
                       className="mx-1"
                       disabled={item.nombre === "Administrador"}
                       onClick={() => {
-                        navigate(
-                          `/inicio/perfiles/modificar/${item.id_perfil}`
-                        );
+                        navigate(`/inicio/perfil/modificar/${item.id_perfil}`);
                       }}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
@@ -74,7 +72,7 @@ export default function ListaPerfiles() {
                         item.total_usuarios > 0
                       }
                       onClick={() => {
-                        navigate(`/inicio/perfiles/eliminar/${item.id_perfil}`);
+                        navigate(`/inicio/perfil/eliminar/${item.id_perfil}`);
                       }}
                     >
                       <FontAwesomeIcon icon={faTrashCan} />

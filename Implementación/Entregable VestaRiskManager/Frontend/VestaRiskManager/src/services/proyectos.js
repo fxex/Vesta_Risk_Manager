@@ -1,31 +1,19 @@
 import { URL } from "../utils/URL";
 
 export async function obtenerProyectos() {
-  const respuesta = await fetch(`${URL}/proyecto`);
+  const respuesta = await fetch(`${URL}/proyectos`);
   const json = await respuesta.json();
   return json;
 }
 
 export async function obtenerParticipanteNombre(nombre) {
-  const respuesta = await fetch(`${URL}/proyecto`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ nombre: nombre }),
-  });
+  const respuesta = await fetch(`${URL}/proyecto/participante/${nombre}`);
   const json = await respuesta.json();
-
   return json;
 }
 
 export async function obtenerProyectosId(id) {
-  const respuesta = await fetch(`${URL}/proyecto/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const respuesta = await fetch(`${URL}/proyecto/${id}`);
   const json = await respuesta.json();
   return json;
 }
@@ -37,7 +25,7 @@ export async function obtenerCategoriaGeneral() {
 }
 
 export async function crearProyecto(formData) {
-  const respuesta = await fetch(`${URL}/proyecto/crear`, {
+  const respuesta = await fetch(`${URL}/proyecto`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -50,8 +38,8 @@ export async function crearProyecto(formData) {
 }
 
 export async function actualizarProyecto(id, formData) {
-  const respuesta = await fetch(`${URL}/proyecto/modificar/${id}`, {
-    method: "POST",
+  const respuesta = await fetch(`${URL}/proyecto/${id}`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
@@ -63,7 +51,7 @@ export async function actualizarProyecto(id, formData) {
 }
 
 export async function obtenerProyectosUsuarioLider(correo) {
-  const respuesta = await fetch(`${URL}/proyecto/lider`, {
+  const respuesta = await fetch(`${URL}/proyectos/lider`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +64,7 @@ export async function obtenerProyectosUsuarioLider(correo) {
 }
 
 export async function obtenerProyectosUsuarioDesarrollador(correo) {
-  const respuesta = await fetch(`${URL}/proyecto/desarrollador`, {
+  const respuesta = await fetch(`${URL}/proyectos/desarrollador`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
