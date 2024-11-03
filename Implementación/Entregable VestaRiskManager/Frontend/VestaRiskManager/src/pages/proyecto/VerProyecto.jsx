@@ -25,11 +25,11 @@ export default function VerProyecto() {
           <h4>Nombre</h4>
           <p>{proyecto.nombre}</p>
           <hr />
-          <h4>Descripcion</h4>
+          <h4>Descripción</h4>
           <p>{proyecto.descripcion}</p>
           <h4>Estado</h4>
           <p>{proyecto.estado}</p>
-          <h4>Duracion</h4>
+          <h4>Duración</h4>
           <p>
             {proyecto.fecha_inicio
               ? formatearFecha(proyecto.fecha_inicio)
@@ -60,7 +60,7 @@ export default function VerProyecto() {
               </li>
             ))}
           </ul>
-          <h4>Categorias</h4>
+          <h4>Categorías</h4>
 
           {proyecto.categorias.map((item, key) => (
             <p key={key}>{item.nombre}</p>
