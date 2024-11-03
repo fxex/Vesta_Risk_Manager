@@ -389,7 +389,9 @@ export default function ModificarProyecto() {
                   {formData.participantes && formData.participantes.length > 0
                     ? formData.participantes.map((item, key) => (
                         <tr key={key}>
-                          <td>{item.nombre_usuario}</td>
+                          <td>
+                            {item.nombre ? item.nombre : item.nombre_usuario}
+                          </td>
                           <td>{item.rol}</td>
                           <td>
                             <Button
@@ -607,9 +609,13 @@ export default function ModificarProyecto() {
                     );
 
                     const participantesFiltrados = json.filter(
-                      (item) => !nombresFormData.has(item.nombre_usuario)
+                      (item) =>
+                        !nombresFormData.has(
+                          item.nombre_usuario
+                            ? item.nombre_usuario
+                            : item.nombre
+                        )
                     );
-                    console.log(participantesFiltrados);
 
                     setParticipantesTotal(participantesFiltrados);
                     setParticipantesMostrado(
