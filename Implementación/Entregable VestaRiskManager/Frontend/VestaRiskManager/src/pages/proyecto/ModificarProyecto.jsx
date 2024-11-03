@@ -476,7 +476,7 @@ export default function ModificarProyecto() {
 
             <Form.Group>
               <Form.Label>
-                <b>Categorias</b>
+                <b>Categorías</b>
               </Form.Label>
               <br></br>
               {/* <Button variant="success" onClick={() => {}}>
@@ -487,7 +487,7 @@ export default function ModificarProyecto() {
                 <thead className="table-info">
                   <tr>
                     <th>Nombre</th>
-                    <th>Descripcion</th>
+                    <th>Descripción</th>
                     {/* <th>Opciones</th> */}
                   </tr>
                 </thead>
