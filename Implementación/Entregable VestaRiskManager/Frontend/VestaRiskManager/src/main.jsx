@@ -37,8 +37,6 @@ import ListaProyecto from "./pages/proyecto/ListaProyecto.jsx";
 import CrearProyecto from "./pages/proyecto/CrearProyecto.jsx";
 import {
   obtenerCategoriaGeneral,
-  obtenerProyectos,
-  obtenerProyectosId,
   obtenerProyectos as proyectoLoader,
 } from "./services/proyectos.js";
 import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
@@ -46,6 +44,8 @@ import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
 import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
 import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
 import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
+import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
+import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -141,8 +141,14 @@ const App = () => {
       element: <RutaProtegida element={<VerProyectoLider />} />,
     },
     {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgo",
-      element: <RutaProtegida element={<VerProyectoLider />} />,
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
+      element: <RutaProtegida element={<CrearRiesgo />} />,
+      loader: cargarProyecto,
     },
     {
       path: "/salir",

@@ -37,7 +37,7 @@ export default function ListaProyectoDesarrollador() {
                 className="fw-bold fs-3 me-2 icono"
                 onClick={() => {
                   navigate(
-                    `/inicio/proyecto/desarrollador/${item.id_proyecto}`
+                    `/inicio/proyecto/desarrollador/${item.id_proyecto}/riesgos`
                   );
                 }}
               />

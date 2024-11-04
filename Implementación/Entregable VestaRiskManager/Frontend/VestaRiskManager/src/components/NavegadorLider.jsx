@@ -5,14 +5,15 @@ import "../styles/GradientBorderComponent.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
-  faUser,
-  faUserGear,
   faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
+import useProyecto from "../hooks/useProyecto";
 
 export default function NavegadorLider() {
+  const navigate = useNavigate();
+  const [value] = useProyecto("proyecto_seleccionado", "");
   const location = useLocation();
   const { usuario } = useUsuario();
   return (
@@ -34,9 +35,19 @@ export default function NavegadorLider() {
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
               Inicio
             </Nav.Link>
-            <Nav.Link href="/inicio">Dashboard</Nav.Link>
-            <Nav.Link href="/inicio">Lista de Riesgos</Nav.Link>
-            <Nav.Link href="/inicio">Monitoreo</Nav.Link>
+            <Nav.Link href={`/inicio/proyecto/lider/${value.id_proyecto}`}>
+              Dashboard
+            </Nav.Link>
+            <Nav.Link
+              href={`/inicio/proyecto/lider/${value.id_proyecto}/riesgos`}
+            >
+              Lista de Riesgos
+            </Nav.Link>
+            <Nav.Link
+              href={`/inicio/proyecto/lider/${value.id_proyecto}/monitoreo`}
+            >
+              Monitoreo
+            </Nav.Link>
 
             <Nav.Link href="/salir">
               <FontAwesomeIcon
