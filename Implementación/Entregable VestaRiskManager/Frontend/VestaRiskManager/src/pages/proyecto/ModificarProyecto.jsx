@@ -23,6 +23,7 @@ import {
   formatearFecha,
 } from "../../utils/fecha";
 import ModalPersonalizado from "../../components/ModalPersonalizado";
+import { verificarError } from "../../utils/verificarErrores";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
@@ -173,14 +174,7 @@ export default function ModificarProyecto() {
     };
 
     setErrorPrincipal(comprobacionError);
-    let comprobacion = false;
-    Object.values(comprobacionError);
-    for (const valor of Object.values(comprobacionError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobacionError);
     if (!comprobacion) {
       if (formData.iteraciones.length > 0) {
         const primeraIteracion = formData.iteraciones[0];
@@ -208,14 +202,7 @@ export default function ModificarProyecto() {
 
     setErrorParticipante(comprobarError);
 
-    let comprobacion = false;
-    Object.values(comprobarError);
-    for (const valor of Object.values(comprobarError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobarError);
     if (!comprobacion) {
       setErrorParticipante({
         nombre: false,
@@ -269,14 +256,7 @@ export default function ModificarProyecto() {
       ),
     };
     setErrorIteracion(comprobacionError);
-    let comprobacion = false;
-    Object.values(comprobacionError);
-    for (const valor of Object.values(comprobacionError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobacionError);
     if (!comprobacion) {
       setErrorIteracion({
         nombre: false,

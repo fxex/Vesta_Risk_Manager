@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { verificarError } from "../../utils/verificarErrores";
 
 export default function CrearPerfil() {
   const permisos = useLoaderData();
@@ -74,14 +75,7 @@ export default function CrearPerfil() {
     };
     setError(comprobacionError);
 
-    let comprobacion = false;
-    Object.values(comprobacionError);
-    for (const valor of Object.values(comprobacionError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobacionError);
     if (!comprobacion) {
       const resultado = await crearPerfil(formData);
       setCreado(resultado);

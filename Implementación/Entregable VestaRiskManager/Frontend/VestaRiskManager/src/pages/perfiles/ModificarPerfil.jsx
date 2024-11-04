@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { verificarError } from "../../utils/verificarErrores";
 
 export async function cargarModificarPerfil({ params }) {
   const perfil = await obtenerPerfilId(params.id_perfil);
@@ -89,14 +90,7 @@ export default function ModificarPerfil() {
     };
     setError(comprobacionError);
 
-    let comprobacion = false;
-    Object.values(comprobacionError);
-    for (const valor of Object.values(comprobacionError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobacionError);
     if (!comprobacion) {
       const resultado = await actualizarPerfil(id_perfil, formData);
       setModificado(resultado);

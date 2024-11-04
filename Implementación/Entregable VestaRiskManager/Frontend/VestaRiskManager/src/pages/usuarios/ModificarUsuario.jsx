@@ -17,6 +17,7 @@ import { useUsuario } from "../../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarCorreo } from "../../utils/verificarCorreo";
+import { verificarError } from "../../utils/verificarErrores";
 
 export async function cargarModificarUsuario({ params }) {
   const usuario = await obtenerUsuariosId(params.id_usuario);
@@ -87,14 +88,7 @@ export default function ModificarUsuario() {
     };
 
     setError(comprobacionError);
-    let comprobacion = false;
-    Object.values(comprobacionError);
-    for (const valor of Object.values(comprobacionError)) {
-      if (valor) {
-        comprobacion = valor;
-        break;
-      }
-    }
+    const comprobacion = verificarError(comprobacionError);
 
     if (!comprobacion) {
       const resultado = await actualizarUsuario(id_usuario, formData);
