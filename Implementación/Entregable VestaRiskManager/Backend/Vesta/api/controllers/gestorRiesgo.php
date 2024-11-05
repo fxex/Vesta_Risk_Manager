@@ -21,8 +21,10 @@ class GestorRiesgo {
 
     public function obtenerRiesgoProyecto($id_proyecto){
         $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto);
-        foreach ($resultado as &$riesgo) {
-            $riesgo["responsables"] = $this->riesgo->obtenerParticipantesRiesgo($riesgo["id_riesgo"]);
+        if (!empty($resultado)) {
+            foreach ($resultado as &$riesgo) {
+                $riesgo["responsables"] = $this->riesgo->obtenerParticipantesRiesgo($riesgo["id_riesgo"]);
+            }
         }
         return $resultado;
     }
