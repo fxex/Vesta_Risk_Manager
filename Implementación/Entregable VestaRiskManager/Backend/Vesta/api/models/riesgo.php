@@ -35,7 +35,11 @@ class Riesgo {
     }
 
     public function obtenerRiesgoProyecto($id_proyecto){
-        $query = "SELECT r.* FROM riesgo r inner join proyecto_riesgo pr on pr.id_riesgo = r.id_riesgo where pr.id_proyecto = ?";
+        $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
+        inner join proyecto_riesgo pr on pr.id_riesgo = r.id_riesgo 
+        inner join proyecto p on pr.id_proyecto = p.id_proyecto
+        inner join categoria c on r.id_categoria = c.id_categoria 
+        where pr.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
@@ -45,5 +49,32 @@ class Riesgo {
             $resultado[] = $fila;
         }
         return $resultado;
+    }
+
+    public function obtenerParticipantesRiesgo($id_riesgo){
+        $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_riesgo);
+        $stmt->execute();
+        $participantes   = $stmt->get_result();
+        
+        $resultado = [];
+        while ($fila = $participantes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
+    public function crearRiesgo($id_categoria){
+        $query = "INSERT INTO riesgo (descripcion, id_categoria) VALUES (?, ?)";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("si", $this->descripcion, $id_categoria);
+        if ($stmt->execute()) {
+            return $this->conexion->insert_id;
+        } else {
+            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            return -1;
+        }
+        
     }
 }

@@ -163,8 +163,9 @@ $router->add("POST","proyecto", function() use($controladorProyecto){
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
         $resultado = $controladorProyecto->crearProyecto($data);
-        print_r($resultado);
+        echo json_encode(["creacion"=>$resultado]);
     } else {
+        echo json_encode(["creacion"=>false]);
     }
 });
 
@@ -173,11 +174,6 @@ $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerProyectoId($id); 
     echo json_encode($resultado);
 });
-$router->add("GET", "proyecto/{id}/riesgos", function($id) use ($controladorProyecto){
-    $resultado = $controladorProyecto->obtenerProyectoId($id); 
-    echo json_encode($resultado);
-});
-
 $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
@@ -197,9 +193,21 @@ $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     echo json_encode($resultado); 
 });
 
-$router->add("GET","categoria/generales", function() use($controladorRiesgo){
-    $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
-    echo json_encode($resultado); 
+$router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerRiesgoProyecto($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("POST", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use ($controladorRiesgo){
+    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    if (!empty($body)) {
+        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        
+        $resultado = $controladorRiesgo->crearRiesgo($id_proyecto, $data);
+        echo json_encode(["creacion"=>$resultado]);
+    } else {
+        echo json_encode(["creacion"=>false]);
+    }
 });
 
 

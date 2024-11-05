@@ -110,7 +110,7 @@ class GestorProyecto {
                     $this->iteracion->crearIteracion($id_proyecto);
                 }
             }
-            return !empty($id_proyecto);
+            return $id_proyecto > 0;
         } else {
             return false;
         }
