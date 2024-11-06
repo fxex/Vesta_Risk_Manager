@@ -151,6 +151,16 @@ const App = () => {
       loader: cargarProyecto,
     },
     {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/crear",
+      element: <RutaProtegida element={<CrearRiesgo />} />,
+      loader: cargarProyecto,
+    },
+    {
       path: "/salir",
       element: <RutaProtegida element={<Salir />} />,
     },

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
@@ -74,6 +74,9 @@ export default function CrearRiesgo() {
       setCreado(resultado);
     }
   };
+
+  const location = useLocation();
+  const comprobacionLider = location.pathname.includes("lider");
 
   if (creado === null) {
     return (
@@ -163,7 +166,11 @@ export default function CrearRiesgo() {
               variant="outline-danger"
               className="mx-1"
               onClick={() => {
-                navigate("/inicio/usuarios");
+                navigate(
+                  `/inicio/proyecto/${
+                    comprobacionLider ? "lider" : "desarrollador"
+                  }/${proyecto.id_proyecto}/riesgos`
+                );
               }}
             >
               <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
@@ -189,7 +196,9 @@ export default function CrearRiesgo() {
             <hr />
             <h5>Opciones</h5>
             <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
+              ruta={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/riesgos`}
             />
           </>
         </Contenedor>

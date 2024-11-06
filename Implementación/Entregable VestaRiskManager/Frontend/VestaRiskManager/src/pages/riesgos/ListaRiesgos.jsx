@@ -2,7 +2,7 @@ import React from "react";
 import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
-import { Button, Table } from "react-bootstrap";
+import { Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faNetworkWired,
@@ -23,7 +23,7 @@ import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardLi
 export const riesgoLoader = async ({ params }) => {
   const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
   riesgos.map((item, key) => {
-    item.id_riesgo = key + 1;
+    item.id_riesgo_local = key + 1;
   });
 
   return riesgos;
@@ -79,9 +79,9 @@ export default function ListaRiesgos() {
                   <td className="td">Escudo</td>
                   <td className="td">
                     RK
-                    {item.id_riesgo < 10
-                      ? `0${item.id_riesgo}`
-                      : item.id_riesgo}
+                    {item.id_riesgo_local < 10
+                      ? `0${item.id_riesgo_local}`
+                      : item.id_riesgo_local}
                   </td>
                   <td className="td">{item.nombre_categoria}</td>
                   <td
@@ -99,22 +99,50 @@ export default function ListaRiesgos() {
                   </td>
                   <td className="td">{item.factor_riesgo}</td>
                   <td className="td">
-                    <div>
-                      <Button>
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </Button>
-                      <Button style={{ marginLeft: "5px" }}>
-                        <FontAwesomeIcon icon={faTrashCan} />
-                      </Button>
+                    <div className={`${comprobacionLider ? "" : "d-none"}`}>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                      >
+                        <Button variant="outline-warning">
+                          <FontAwesomeIcon icon={faPenToSquare} />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                      >
+                        <Button
+                          style={{ marginLeft: "5px" }}
+                          variant="outline-danger"
+                        >
+                          <FontAwesomeIcon icon={faTrashCan} />
+                        </Button>
+                      </OverlayTrigger>
                     </div>
                     <br />
                     <div>
-                      <Button>
-                        <FontAwesomeIcon icon={faClipboardList} />
-                      </Button>
-                      <Button style={{ marginLeft: "5px" }}>
-                        <FontAwesomeIcon icon={faNetworkWired} />
-                      </Button>
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={<Tooltip id="tooltip-edit">Evaluar</Tooltip>}
+                      >
+                        <Button variant="outline-primary">
+                          <FontAwesomeIcon icon={faClipboardList} />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={
+                          <Tooltip id="tooltip-edit">Planificar</Tooltip>
+                        }
+                      >
+                        <Button
+                          style={{ marginLeft: "5px" }}
+                          variant="outline-success"
+                        >
+                          <FontAwesomeIcon icon={faNetworkWired} />
+                        </Button>
+                      </OverlayTrigger>
                     </div>
                   </td>
                 </tr>

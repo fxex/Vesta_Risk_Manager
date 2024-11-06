@@ -36,6 +36,10 @@ export default function ListaProyectoDesarrollador() {
                 icon={faEye}
                 className="fw-bold fs-3 me-2 icono"
                 onClick={() => {
+                  localStorage.setItem(
+                    "proyecto_seleccionado",
+                    JSON.stringify(item)
+                  );
                   navigate(
                     `/inicio/proyecto/desarrollador/${item.id_proyecto}/riesgos`
                   );
