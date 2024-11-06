@@ -18,7 +18,6 @@ import {
 } from "react-router-dom";
 import { obtenerRiesgosProyecto } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
-import useProyecto from "../../hooks/useProyecto";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardList";
 
 export const riesgoLoader = async ({ params }) => {
@@ -33,18 +32,17 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const riesgos = useLoaderData();
-  const [value] = useProyecto("proyecto_seleccionado", "");
   const location = useLocation();
-  console.log(riesgos);
 
   const navigate = useNavigate();
   const comprobacionLider = location.pathname.includes("lider");
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   return (
     <>
       <NavegadorLider />
       <Contenedor>
-        <h3>{value.nombre}</h3>
+        <h3>{proyecto.nombre}</h3>
         <>
           <Button
             variant="success"
@@ -62,38 +60,45 @@ export default function ListaRiesgos() {
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
-                <th style={{ minWidth: "4em" }}></th>
-                <th>ID</th>
-                <th>Categoria</th>
-                <th>Descripción</th>
-                <th style={{ maxWidth: "2em" }}>Responsable</th>
-                <th style={{ maxWidth: "5em" }}>Factor de riesgo</th>
-                <th>Acciones</th>
+                <th style={{ minWidth: "4em" }} className="th"></th>
+                <th className="th">ID</th>
+                <th className="th">Categoria</th>
+                <th className="th">Descripción</th>
+                <th style={{ maxWidth: "2em" }} className="th">
+                  Responsable
+                </th>
+                <th style={{ maxWidth: "5em" }} className="th">
+                  Factor de riesgo
+                </th>
+                <th className="th">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {riesgos.map((item, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
-                  <td>Escudo</td>
-                  <td>
+                  <td className="td">Escudo</td>
+                  <td className="td">
                     RK
                     {item.id_riesgo < 10
                       ? `0${item.id_riesgo}`
                       : item.id_riesgo}
                   </td>
-                  <td>{item.nombre_categoria}</td>
-                  <td style={{ maxWidth: "20em", textAlign: "justify" }}>
+                  <td className="td">{item.nombre_categoria}</td>
+                  <td
+                    style={{ maxWidth: "20em", textAlign: "justify" }}
+                    className="td"
+                  >
                     {item.descripcion}
                   </td>
-                  <td>
+                  <td className="td">
                     {item.responsables.map((item) => (
                       <>
                         {item.nombre} <br />
                       </>
                     ))}
                   </td>
-                  <td>{item.factor_riesgo}</td>
-                  <td>
+                  <td className="td">{item.factor_riesgo}</td>
+                  <td className="td">
                     <div>
                       <Button>
                         <FontAwesomeIcon icon={faPenToSquare} />

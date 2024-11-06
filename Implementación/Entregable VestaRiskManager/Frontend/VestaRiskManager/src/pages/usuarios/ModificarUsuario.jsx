@@ -73,7 +73,7 @@ export default function ModificarUsuario() {
       formData.correo.length === 0 ||
       !verificarCorreo(formData.correo) ||
       formData.correo.length > 64
-        ? { validacion: false }
+        ? false
         : await obtenerUsuariosCorreo(formData.correo);
 
     const comprobacionError = {
@@ -84,7 +84,7 @@ export default function ModificarUsuario() {
         formData.correo.length > 64,
       perfil: formData.perfil == null || formData.perfil < 1,
       nombreIgual: comprobarNombre,
-      correoIgual: comprobarCorreoBD.validacion,
+      correoIgual: comprobarCorreoBD,
     };
 
     setError(comprobacionError);
