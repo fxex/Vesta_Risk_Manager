@@ -1,16 +1,18 @@
 <?php
 require_once __DIR__ . "/../models/categoria.php";
 require_once __DIR__ . "/../models/riesgo.php";
+require_once __DIR__ . "/../models/evaluacion.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
 class GestorRiesgo {
-    private $conexion, $riesgo, $categoria;
+    private $conexion, $riesgo, $categoria, $evaluacion;
 
     function __construct() {
         $this->conexion = BDConexion::getInstancia();
         $this->categoria = new Categoria($this->conexion);
         $this->riesgo = new Riesgo($this->conexion);
+        $this->evaluacion = new Evaluacion($this->conexion);
         $this->conexion->set_charset("utf8");
     }
 
@@ -32,6 +34,7 @@ class GestorRiesgo {
     public function crearRiesgo($id_proyecto, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["categoria"]) && !empty($data["responsables"]) && is_numeric($data["categoria"]);
         if ($comprobar) {
+            $this->riesgo->setFactorRiesgo(null);
             $this->riesgo->setDescripcion($data["descripcion"]);
             $id_riesgo = $this->riesgo->crearRiesgo($data["categoria"]);
             vincularTabla::crearVinculo($this->conexion, "proyecto_riesgo", "id_proyecto", "id_riesgo",$id_proyecto, $id_riesgo);
@@ -42,6 +45,29 @@ class GestorRiesgo {
         }else{
             return false;
         }
+    }
+
+    public function crearEvaluacion($id_riesgo, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable") && !empty($data["id_iteracion"]);
+        if ($comprobar) {
+            $this->evaluacion->setDescripcion($data["descripcion"]);
+            $this->evaluacion->setImpacto($data["impacto"]);
+            $this->evaluacion->setProbabilidad($data["probabilidad"]);
+            $this->evaluacion->setFechaRealizacion(date("Y-m-d H:i:s"));
+            $id_evaluacion = $this->evaluacion->crearEvaluacion($data["responsable"], $id_riesgo);
+            vincularTabla::crearVinculo($this->conexion, "iteracion_evaluacion", "id_iteracion", "id_evaluacion",$data["id_iteracion"], $id_evaluacion);
+            $factorRiesgo = $data["impacto"] * $data["probabilidad"];
+            $this->riesgo->setFactorRiesgo($factorRiesgo);
+            $this->riesgo->actualizarFactorRiesgo($id_riesgo);
+            return $id_evaluacion > 0;
+        }else{
+            return false;
+        }
+    }
+
+    public function obtenerRiesgoId($id_riesgo){
+        $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo);
+        return $resultado;
     }
 
 

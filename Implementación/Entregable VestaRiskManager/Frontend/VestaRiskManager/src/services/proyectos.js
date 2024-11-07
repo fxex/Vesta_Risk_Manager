@@ -75,3 +75,15 @@ export async function obtenerProyectosUsuarioDesarrollador(correo) {
 
   return json;
 }
+
+export const obtenerIteracionActual = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/iteracion`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};

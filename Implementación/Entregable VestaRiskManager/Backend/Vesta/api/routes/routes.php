@@ -26,7 +26,7 @@ $router->add("GET","usuario/{parametro}", function($parametro) use($controladorU
     }elseif (filter_var($parametro, FILTER_VALIDATE_EMAIL)) {
         $resultado = $controladorUsuario->obtenerUsuarioCorreo($parametro);
     }else{
-        
+        //TODO Modificar
     }
     echo json_encode($resultado);
     
@@ -169,11 +169,16 @@ $router->add("POST","proyecto", function() use($controladorProyecto){
     }
 });
 
-
 $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerProyectoId($id); 
     echo json_encode($resultado);
 });
+
+$router->add("GET", "proyecto/{id}/iteracion", function($id) use ($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerIteracionActual($id); 
+    echo json_encode($resultado);
+});
+
 $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
@@ -186,8 +191,6 @@ $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
 });
 
 
-
-
 $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
     echo json_encode($resultado); 
@@ -198,12 +201,29 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use
     echo json_encode($resultado);
 });
 
+
 $router->add("POST", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use ($controladorRiesgo){
     $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
         
         $resultado = $controladorRiesgo->crearRiesgo($id_proyecto, $data);
+        echo json_encode(["creacion"=>$resultado]);
+    } else {
+        echo json_encode(["creacion"=>false]);
+    }
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerRiesgoId($id_riesgo);
+    echo json_encode($resultado);
+});
+
+$router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){
+    $body = file_get_contents('php://input');          
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->crearEvaluacion($id_riesgo, $data);
         echo json_encode(["creacion"=>$resultado]);
     } else {
         echo json_encode(["creacion"=>false]);

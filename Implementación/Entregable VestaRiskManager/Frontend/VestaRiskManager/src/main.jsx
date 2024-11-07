@@ -46,6 +46,9 @@ import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
 import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
 import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
 import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
+import CrearEvaluacion, {
+  evaluacionCreacionLoader,
+} from "./pages/evaluacion/lider/CrearEvaluacion.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -149,6 +152,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
       element: <RutaProtegida element={<CrearRiesgo />} />,
       loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
+      element: <RutaProtegida element={<CrearEvaluacion />} />,
+      loader: evaluacionCreacionLoader,
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",

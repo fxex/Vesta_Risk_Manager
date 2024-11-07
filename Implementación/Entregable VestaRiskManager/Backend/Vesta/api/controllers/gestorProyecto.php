@@ -155,7 +155,9 @@ class GestorProyecto {
         }
     }
 
-    
-
-
+    public function obtenerIteracionActual($id_proyecto){
+        $fecha_actual = date("Y-m-d");
+        $resultado = $this->proyecto->obtenerIteracionActual($id_proyecto, $fecha_actual);
+        return $resultado;
+    }
 }

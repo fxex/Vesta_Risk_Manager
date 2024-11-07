@@ -84,7 +84,7 @@ export default function CrearRiesgo() {
         <NavegadorLider />
         <Contenedor>
           <>
-            <h3>Crear Riesgo - {proyecto.nombre}</h3>
+            <h3>{proyecto.nombre} - Crear Riesgo</h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />
@@ -96,6 +96,8 @@ export default function CrearRiesgo() {
             <Form.Group>
               <Form.Label>Descripción</Form.Label>
               <Form.Control
+                as="textarea"
+                rows={3}
                 placeholder="Dada una o varias causas"
                 onChange={handleChangeControl}
                 value={formData.descripcion}
@@ -186,7 +188,7 @@ export default function CrearRiesgo() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>Crear Riesgo - {proyecto.nombre}</h3>
+          <h3>{proyecto.nombre} - Crear Riesgo</h3>
           <>
             {creado ? (
               <Alert variant="success">Operación realizada con éxito.</Alert>

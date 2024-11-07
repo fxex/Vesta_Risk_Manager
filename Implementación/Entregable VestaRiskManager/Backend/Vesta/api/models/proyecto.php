@@ -188,8 +188,17 @@ class Proyecto{
         if ($stmt->execute()) {
             return true;
         } else {
-            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            throw new Exception("Error al crear el proyecto: " . $stmt->error);
             return false;
         }
+    }
+
+    public function obtenerIteracionActual($id_proyecto, $fecha_actual){
+        $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin from proyecto p inner join iteracion i on p.id_proyecto = i.id_proyecto where p.id_proyecto = ? and (? BETWEEN i.fecha_inicio and i.fecha_fin)";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("is", $id_proyecto, $fecha_actual);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
     }
 }
