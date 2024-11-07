@@ -30,6 +30,7 @@ import escudoAmarillo from "../../assets/img/escudo amarillo.png";
 import escudoGris from "../../assets/img/escudo gris.png";
 import escudoAzul from "../../assets/img/Escudo azul.png";
 import escudoRojo from "../../assets/img/escudo rojo.png";
+import escudoCritico from "../../assets/img/Escudo critico.png";
 
 export const riesgoLoader = async ({ params }) => {
   const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
@@ -92,7 +93,7 @@ export default function ListaRiesgos() {
             <tbody>
               {riesgos.map((item, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
-                  <td className="td">
+                  <td className="td" style={{}}>
                     {item.factor_riesgo === null ? (
                       <Figure.Image src={escudoAmarillo}></Figure.Image>
                     ) : item.factor_riesgo < 9 ? (
@@ -101,7 +102,9 @@ export default function ListaRiesgos() {
                       <Figure.Image src={escudoAzul}></Figure.Image>
                     ) : item.factor_riesgo < 64 ? (
                       <Figure.Image src={escudoRojo}></Figure.Image>
-                    ) : null}
+                    ) : (
+                      <Figure.Image src={escudoCritico}></Figure.Image>
+                    )}
                   </td>
                   <td className="td">
                     RK
@@ -149,7 +152,7 @@ export default function ListaRiesgos() {
                     <br />
                     <div>
                       <OverlayTrigger
-                        placement="bottom"
+                        placement={comprobacionLider ? "bottom" : "top"}
                         overlay={<Tooltip id="tooltip-edit">Evaluar</Tooltip>}
                       >
                         <Button
@@ -168,7 +171,7 @@ export default function ListaRiesgos() {
                         </Button>
                       </OverlayTrigger>
                       <OverlayTrigger
-                        placement="bottom"
+                        placement={comprobacionLider ? "bottom" : "top"}
                         overlay={
                           <Tooltip id="tooltip-edit">Planificar</Tooltip>
                         }

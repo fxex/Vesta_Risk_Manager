@@ -43,12 +43,16 @@ export default function NavegadorLider() {
               Dashboard
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
+              href={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/riesgos`}
             >
               Lista de Riesgos
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo`}
+              href={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/monitoreo`}
             >
               Monitoreo
             </Nav.Link>

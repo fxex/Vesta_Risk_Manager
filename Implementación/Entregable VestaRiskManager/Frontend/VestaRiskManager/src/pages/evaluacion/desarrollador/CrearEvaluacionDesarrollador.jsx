@@ -2,25 +2,18 @@ import React, { useState } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Alert, Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../../utils/verificarErrores";
 import { crearEvaluacion, obtenerRiesgoId } from "../../../services/riesgos";
-import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 import BotonSalir from "../../../components/BotonSalir";
 
-export const evaluacionCreacionLoader = async ({ params }) => {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { riesgo, iteracion };
-};
-
-export default function CrearEvaluacion() {
+export default function CrearEvaluacionDesarrollador() {
   const { riesgo, iteracion } = useLoaderData();
+  const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
   const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
@@ -170,6 +163,8 @@ export default function CrearEvaluacion() {
             <Form.Group>
               <Form.Label>Justificación</Form.Label>
               <Form.Control
+                as="textarea"
+                rows={3}
                 placeholder="Ingrese la justificación de la evaluacion realizada"
                 name="descripcion"
                 onChange={handleChangeControl}
@@ -197,7 +192,11 @@ export default function CrearEvaluacion() {
             <Button
               variant="outline-danger"
               className="mx-1"
-              onClick={() => {}}
+              onClick={() => {
+                navigate(
+                  `/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`
+                );
+              }}
             >
               <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
               Cancelar
@@ -224,9 +223,7 @@ export default function CrearEvaluacion() {
             <hr />
             <h5>Opciones</h5>
             <BotonSalir
-              ruta={`/inicio/proyecto/${"lider"}/${
-                proyecto.id_proyecto
-              }/riesgos`}
+              ruta={`/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`}
             />
           </>
         </Contenedor>
