@@ -96,7 +96,14 @@ class Riesgo {
         }else{
             throw new Exception("Error al crear la evaluación: " . $stmt->error);
             return false;
-        }
-        
+        }   
+    }
+
+    public function obtenerCantidadEvaluaciones($id_riesgo, $id_iteracion){
+        $query = "SELECT r.id_riesgo, count(e.id_evaluacion) as total_evaluaciones from riesgo r 
+                    left join evaluacion e on r.id_riesgo = e.id_riesgo 
+                    inner join iteracion_evaluacion ie on e.id_evaluacion = ie.id_evaluacion
+                    where ie.id_iteracion = ? and r.id_riesgo = ?
+                    group by r.id_riesgo"; 
     }
 }

@@ -1,5 +1,8 @@
 <?php
 use PHPUnit\Framework\TestCase;
-require_once __DIR__ . "/../api/controllers/gestorProyecto.php";
+require_once __DIR__ . "/../api/controllers/gestorRiesgo.php";
 
-echo date("Y-m-d H:i:s");
+$controlador = new GestorRiesgo();
+
+$iteracion = $controlador->obtenerRiesgoProyecto(4);
+print_r($iteracion);

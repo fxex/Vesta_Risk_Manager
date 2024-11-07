@@ -23,6 +23,7 @@ class GestorRiesgo {
 
     public function obtenerRiesgoProyecto($id_proyecto){
         $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto);
+        $iteracion = $this->obtenerIteracionActual($id_proyecto);
         if (!empty($resultado)) {
             foreach ($resultado as &$riesgo) {
                 $riesgo["responsables"] = $this->riesgo->obtenerParticipantesRiesgo($riesgo["id_riesgo"]);
@@ -70,5 +71,22 @@ class GestorRiesgo {
         return $resultado;
     }
 
+
+    public function obtenerIteracionActual($id_proyecto){
+        $url = "http://localhost/Vesta/proyecto/". $id_proyecto . "/iteracion";
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
+
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        } else {
+            return $response;
+        }
+        
+        curl_close($ch);
+    }
 
 }
