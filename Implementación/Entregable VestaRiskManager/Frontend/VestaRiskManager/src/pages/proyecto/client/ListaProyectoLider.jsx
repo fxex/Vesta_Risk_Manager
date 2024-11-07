@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { obtenerProyectosUsuarioLider } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
-import useProyecto from "../../../hooks/useProyecto";
 
 export default function ListaProyectoLider() {
   const navigate = useNavigate();
@@ -20,8 +19,6 @@ export default function ListaProyectoLider() {
       setProyectos(item);
     });
   }, []);
-
-  const [value, setValue] = useProyecto("proyecto_seleccionado", "");
 
   return (
     <>
@@ -39,8 +36,11 @@ export default function ListaProyectoLider() {
                 icon={faEye}
                 className="fw-bold fs-3 me-2 icono"
                 onClick={() => {
+                  localStorage.setItem(
+                    "proyecto_seleccionado",
+                    JSON.stringify(item)
+                  );
                   navigate(`/inicio/proyecto/lider/${item.id_proyecto}`);
-                  setValue(item);
                 }}
               />
             </Button>

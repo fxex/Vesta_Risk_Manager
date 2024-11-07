@@ -46,6 +46,11 @@ import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
 import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
 import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
 import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
+import CrearEvaluacionLider, {
+  evaluacionCreacionLoader,
+} from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
+
+import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/CrearEvaluacionDesarrollador.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -149,6 +154,26 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
       element: <RutaProtegida element={<CrearRiesgo />} />,
       loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
+      element: <RutaProtegida element={<CrearEvaluacionLider />} />,
+      loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/crear",
+      element: <RutaProtegida element={<CrearRiesgo />} />,
+      loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
+      element: <RutaProtegida element={<CrearEvaluacionDesarrollador />} />,
+      loader: evaluacionCreacionLoader,
     },
     {
       path: "/salir",

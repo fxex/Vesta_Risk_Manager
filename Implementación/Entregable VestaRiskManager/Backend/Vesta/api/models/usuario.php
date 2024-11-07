@@ -86,7 +86,7 @@ class Usuario {
     }
     // Obtener usuario por Email
     public function obtenerUsuarioEmail() {
-        $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.email = ?";
+        $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.email = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $this->email);
         $stmt->execute();

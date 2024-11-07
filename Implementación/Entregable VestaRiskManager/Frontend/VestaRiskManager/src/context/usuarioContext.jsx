@@ -12,8 +12,8 @@ export function UsuarioProvider({ children }) {
   });
 
   // Función para iniciar sesión y almacenar el usuario en localStorage
-  function iniciarSesion(nombre, email, perfil) {
-    const usuarioData = { nombre, email, perfil };
+  function iniciarSesion(id_usuario, nombre, email, perfil) {
+    const usuarioData = { id_usuario, nombre, email, perfil };
     setUsuario(usuarioData);
     localStorage.setItem("usuario", JSON.stringify(usuarioData)); // Guarda en localStorage
   }

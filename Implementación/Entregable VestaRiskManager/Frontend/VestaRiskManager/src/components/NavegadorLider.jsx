@@ -9,13 +9,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
-import useProyecto from "../hooks/useProyecto";
 
 export default function NavegadorLider() {
   const navigate = useNavigate();
-  const [value] = useProyecto("proyecto_seleccionado", "");
   const location = useLocation();
+  const comprobacionLider = location.pathname.includes("lider");
+
   const { usuario } = useUsuario();
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   return (
     <Navbar
       expand="lg"
@@ -35,16 +36,23 @@ export default function NavegadorLider() {
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
               Inicio
             </Nav.Link>
-            <Nav.Link href={`/inicio/proyecto/lider/${value.id_proyecto}`}>
+            <Nav.Link
+              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
+              className={`${comprobacionLider ? "" : "d-none"}`}
+            >
               Dashboard
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/lider/${value.id_proyecto}/riesgos`}
+              href={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/riesgos`}
             >
               Lista de Riesgos
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/lider/${value.id_proyecto}/monitoreo`}
+              href={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/monitoreo`}
             >
               Monitoreo
             </Nav.Link>

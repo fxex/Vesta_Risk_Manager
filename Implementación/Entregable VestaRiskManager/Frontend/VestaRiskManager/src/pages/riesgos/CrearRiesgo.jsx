@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
@@ -75,13 +75,16 @@ export default function CrearRiesgo() {
     }
   };
 
+  const location = useLocation();
+  const comprobacionLider = location.pathname.includes("lider");
+
   if (creado === null) {
     return (
       <>
         <NavegadorLider />
         <Contenedor>
           <>
-            <h3>Crear Riesgo - {proyecto.nombre}</h3>
+            <h3>{proyecto.nombre} - Crear Riesgo</h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />
@@ -93,6 +96,8 @@ export default function CrearRiesgo() {
             <Form.Group>
               <Form.Label>Descripción</Form.Label>
               <Form.Control
+                as="textarea"
+                rows={3}
                 placeholder="Dada una o varias causas"
                 onChange={handleChangeControl}
                 value={formData.descripcion}
@@ -163,7 +168,11 @@ export default function CrearRiesgo() {
               variant="outline-danger"
               className="mx-1"
               onClick={() => {
-                navigate("/inicio/usuarios");
+                navigate(
+                  `/inicio/proyecto/${
+                    comprobacionLider ? "lider" : "desarrollador"
+                  }/${proyecto.id_proyecto}/riesgos`
+                );
               }}
             >
               <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
@@ -179,7 +188,7 @@ export default function CrearRiesgo() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>Crear Riesgo - {proyecto.nombre}</h3>
+          <h3>{proyecto.nombre} - Crear Riesgo</h3>
           <>
             {creado ? (
               <Alert variant="success">Operación realizada con éxito.</Alert>
@@ -189,7 +198,9 @@ export default function CrearRiesgo() {
             <hr />
             <h5>Opciones</h5>
             <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
+              ruta={`/inicio/proyecto/${
+                comprobacionLider ? "lider" : "desarrollador"
+              }/${proyecto.id_proyecto}/riesgos`}
             />
           </>
         </Contenedor>

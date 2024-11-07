@@ -52,6 +52,7 @@ export default function Index() {
                 if (item) {
                   localStorage.setItem("jwt", credentialResponse.credential);
                   iniciarSesion(
+                    item.id_usuario,
                     item.nombre_usuario,
                     item.email,
                     item.nombre_perfil
