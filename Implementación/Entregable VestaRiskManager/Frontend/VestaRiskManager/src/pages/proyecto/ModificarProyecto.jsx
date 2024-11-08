@@ -52,6 +52,7 @@ export default function ModificarProyecto() {
     fecha_fin: false,
     fechasSuperpuestas: false,
     fechasFinAntes: false,
+    nombreIgual: false,
   });
 
   // Estados relacionados al formulario
@@ -254,6 +255,9 @@ export default function ModificarProyecto() {
         formDataIteracion.fecha_inicio,
         formDataIteracion.fecha_fin
       ),
+      nombreIgual: formData.iteraciones.some(
+        (item) => item.nombre === formDataIteracion.nombre
+      ),
     };
     setErrorIteracion(comprobacionError);
     const comprobacion = verificarError(comprobacionError);
@@ -264,6 +268,7 @@ export default function ModificarProyecto() {
         fecha_fin: false,
         fechasSuperpuestas: false,
         fechasFinAntes: false,
+        nombreIgual: false,
       });
       setFormData((prevFormData) => {
         return {
@@ -826,16 +831,16 @@ export default function ModificarProyecto() {
                 className="w-75"
                 value={formDataIteracion.nombre}
                 onChange={handleChangeIteracion}
-                isInvalid={errorIteracion.nombre}
+                isInvalid={errorIteracion.nombre || errorIteracion.nombreIgual}
               />
-              {errorIteracion.nombre ? (
+              {errorIteracion.nombre || errorIteracion.nombreIgual ? (
                 <Form.Text className="text-danger">
                   Revise que el nombre{" "}
                   {formDataIteracion.nombre.length === 0
                     ? "no este vacío"
                     : formDataIteracion.nombre.length > 60
                     ? "no supere la cantidad maxima"
-                    : ""}
+                    : "no sea igual al de otras iteraciones"}
                   .
                 </Form.Text>
               ) : null}

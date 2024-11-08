@@ -141,6 +141,7 @@ export default function ModificarUsuario() {
               <Form.Control
                 type="email"
                 disabled={usuario.email === usuarioLoader.email}
+                onChange={handleChange}
                 placeholder="Ingrese el correo del usuario"
                 name="correo"
                 value={formData.correo}

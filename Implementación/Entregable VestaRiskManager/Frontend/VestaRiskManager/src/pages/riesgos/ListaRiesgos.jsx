@@ -46,6 +46,8 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
+  console.log(riesgos);
+
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -58,7 +60,7 @@ export default function ListaRiesgos() {
       <Contenedor>
         <>
           <h3>{proyecto.nombre}</h3>
-          <h4>{iteracion.nombre}</h4>
+          {iteracion.nombre ? <h4>{iteracion.nombre}</h4> : null}
         </>
         <>
           <Button
@@ -91,16 +93,16 @@ export default function ListaRiesgos() {
               </tr>
             </thead>
             <tbody>
-              {riesgos.map((item, key) => (
+              {riesgos.map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
-                    {item.factor_riesgo === null ? (
+                    {riesgo.factor_riesgo === null ? (
                       <Figure.Image src={escudoAmarillo}></Figure.Image>
-                    ) : item.factor_riesgo < 9 ? (
+                    ) : riesgo.factor_riesgo < 9 ? (
                       <Figure.Image src={escudoGris}></Figure.Image>
-                    ) : item.factor_riesgo < 36 ? (
+                    ) : riesgo.factor_riesgo < 36 ? (
                       <Figure.Image src={escudoAzul}></Figure.Image>
-                    ) : item.factor_riesgo < 64 ? (
+                    ) : riesgo.factor_riesgo < 64 ? (
                       <Figure.Image src={escudoRojo}></Figure.Image>
                     ) : (
                       <Figure.Image src={escudoCritico}></Figure.Image>
@@ -108,32 +110,35 @@ export default function ListaRiesgos() {
                   </td>
                   <td className="td">
                     RK
-                    {item.id_riesgo_local < 10
-                      ? `0${item.id_riesgo_local}`
-                      : item.id_riesgo_local}
+                    {riesgo.id_riesgo_local < 10
+                      ? `0${riesgo.id_riesgo_local}`
+                      : riesgo.id_riesgo_local}
                   </td>
-                  <td className="td">{item.nombre_categoria}</td>
+                  <td className="td">{riesgo.nombre_categoria}</td>
                   <td
                     style={{ maxWidth: "20em", textAlign: "justify" }}
                     className="td"
                   >
-                    {item.descripcion}
+                    {riesgo.descripcion}
                   </td>
                   <td className="td">
-                    {item.responsables.map((item) => (
+                    {riesgo.responsables.map((riesgo) => (
                       <>
-                        {item.nombre} <br />
+                        {riesgo.nombre} <br />
                       </>
                     ))}
                   </td>
-                  <td className="td">{item.factor_riesgo}</td>
+                  <td className="td">{riesgo.factor_riesgo}</td>
                   <td className="td">
                     <div className={`${comprobacionLider ? "" : "d-none"}`}>
                       <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                       >
-                        <Button variant="outline-warning">
+                        <Button
+                          variant="outline-warning"
+                          disabled={iteracion === null}
+                        >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </Button>
                       </OverlayTrigger>
@@ -144,6 +149,7 @@ export default function ListaRiesgos() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-danger"
+                          disabled={iteracion === null}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </Button>
@@ -157,12 +163,13 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-primary"
+                          disabled={iteracion === null || riesgo.evaluado}
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${
                                 comprobacionLider ? "lider" : "desarrollador"
-                              }/${id_proyecto}/riesgo/${item.id_riesgo}-${
-                                item.id_riesgo_local
+                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                riesgo.id_riesgo_local
                               }/evaluacion/crear`
                             );
                           }}
@@ -179,6 +186,7 @@ export default function ListaRiesgos() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-success"
+                          disabled={iteracion === null}
                         >
                           <FontAwesomeIcon icon={faNetworkWired} />
                         </Button>

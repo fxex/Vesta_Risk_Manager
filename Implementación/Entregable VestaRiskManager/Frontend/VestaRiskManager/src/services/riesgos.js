@@ -8,6 +8,7 @@ export const obtenerRiesgosProyecto = async (id_proyecto) => {
     },
   });
   const json = await respuesta.json();
+
   return json;
 };
 
