@@ -55,3 +55,18 @@ export const crearEvaluacion = async (id_proyecto, id_riesgo, data) => {
 
   return json;
 };
+
+export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/plan/tipo/cantidad`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const json = await respuesta.json();
+
+  return json;
+};

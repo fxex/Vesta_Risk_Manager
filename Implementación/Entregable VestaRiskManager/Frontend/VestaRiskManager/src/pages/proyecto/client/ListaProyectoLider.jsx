@@ -7,7 +7,10 @@ import "./../../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { obtenerProyectosUsuarioLider } from "../../../services/proyectos";
+import {
+  obtenerProyectosId,
+  obtenerProyectosUsuarioLider,
+} from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 
 export default function ListaProyectoLider() {
@@ -35,10 +38,12 @@ export default function ListaProyectoLider() {
               <FontAwesomeIcon
                 icon={faEye}
                 className="fw-bold fs-3 me-2 icono"
-                onClick={() => {
+                onClick={async () => {
+                  const proyecto = await obtenerProyectosId(item.id_proyecto);
+
                   localStorage.setItem(
                     "proyecto_seleccionado",
-                    JSON.stringify(item)
+                    JSON.stringify(proyecto)
                   );
                   navigate(`/inicio/proyecto/lider/${item.id_proyecto}`);
                 }}

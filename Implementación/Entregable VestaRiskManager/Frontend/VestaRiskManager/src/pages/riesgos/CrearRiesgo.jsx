@@ -94,11 +94,18 @@ export default function CrearRiesgo() {
           <Form>
             <h4>Propiedades</h4>
             <Form.Group>
-              <Form.Label>Descripción</Form.Label>
+              <Form.Label className="mb-0">Descripción</Form.Label>
+              <br />
+              <Form.Text className="ms-2">
+                <b>Sugerencia</b>:{" "}
+                {
+                  "Dada/s <una o más causas>, podría ocurrir <el riesgo>, lo que conduciría a <uno o más efectos>."
+                }
+              </Form.Text>
               <Form.Control
                 as="textarea"
                 rows={3}
-                placeholder="Dada una o varias causas"
+                placeholder="Ingrese la descripción del riesgo"
                 onChange={handleChangeControl}
                 value={formData.descripcion}
                 name="descripcion"

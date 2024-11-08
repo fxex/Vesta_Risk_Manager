@@ -7,7 +7,10 @@ import "./../../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { obtenerProyectosUsuarioDesarrollador } from "../../../services/proyectos";
+import {
+  obtenerProyectosId,
+  obtenerProyectosUsuarioDesarrollador,
+} from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 
 export default function ListaProyectoDesarrollador() {
@@ -35,10 +38,11 @@ export default function ListaProyectoDesarrollador() {
               <FontAwesomeIcon
                 icon={faEye}
                 className="fw-bold fs-3 me-2 icono"
-                onClick={() => {
+                onClick={async () => {
+                  const proyecto = await obtenerProyectosId(item.id_proyecto);
                   localStorage.setItem(
                     "proyecto_seleccionado",
-                    JSON.stringify(item)
+                    JSON.stringify(proyecto)
                   );
                   navigate(
                     `/inicio/proyecto/desarrollador/${item.id_proyecto}/riesgos`
