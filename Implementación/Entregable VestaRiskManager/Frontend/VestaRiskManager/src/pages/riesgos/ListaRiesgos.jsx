@@ -46,7 +46,6 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
-  console.log(riesgos);
 
   const location = useLocation();
 
@@ -187,6 +186,15 @@ export default function ListaRiesgos() {
                           style={{ marginLeft: "5px" }}
                           variant="outline-success"
                           disabled={iteracion === null}
+                          onClick={() => {
+                            navigate(
+                              `/inicio/proyecto/${
+                                comprobacionLider ? "lider" : "desarrollador"
+                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                riesgo.id_riesgo_local
+                              }/plan/crear`
+                            );
+                          }}
                         >
                           <FontAwesomeIcon icon={faNetworkWired} />
                         </Button>

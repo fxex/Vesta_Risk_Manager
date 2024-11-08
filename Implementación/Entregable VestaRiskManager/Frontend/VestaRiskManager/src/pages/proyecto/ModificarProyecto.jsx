@@ -129,13 +129,21 @@ export default function ModificarProyecto() {
     });
     setParticipantesTotal([]);
     setParticipantesMostrado([]);
-    setErrorParticipante(false);
+    setErrorParticipante({
+      nombre: false,
+      usuarioElegido: false,
+      rol: false,
+    });
   };
 
   const handleMostrarIteracion = () => {
     setErrorIteracion({
-      validacion: false,
-      mensaje: "",
+      nombre: false,
+      fecha_inicio: false,
+      fecha_fin: false,
+      fechasSuperpuestas: false,
+      fechasFinAntes: false,
+      nombreIgual: false,
     });
     setMostrarIteracion(!mostrarIteracion);
     setFormDataIteracion({

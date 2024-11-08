@@ -51,6 +51,9 @@ import CrearEvaluacionLider, {
 } from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
 
 import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/CrearEvaluacionDesarrollador.jsx";
+import CrearPlanLider, {
+  planCreacionLoader,
+} from "./pages/plan/lider/crearPlanLider.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -159,6 +162,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionLider />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+      element: <RutaProtegida element={<CrearPlanLider />} />,
+      loader: planCreacionLoader,
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
