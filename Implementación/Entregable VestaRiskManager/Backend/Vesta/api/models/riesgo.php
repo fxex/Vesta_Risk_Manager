@@ -105,5 +105,11 @@ class Riesgo {
                     inner join iteracion_evaluacion ie on e.id_evaluacion = ie.id_evaluacion
                     where ie.id_iteracion = ? and r.id_riesgo = ?
                     group by r.id_riesgo"; 
+         $stmt = $this->conexion->prepare($query);
+         $stmt->bind_param("ii",$id_iteracion, $id_riesgo);
+         $stmt->execute();
+         $resultado = $stmt->get_result()->fetch_assoc(); 
+         return $resultado;
+        
     }
 }

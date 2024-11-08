@@ -23,10 +23,18 @@ class GestorRiesgo {
 
     public function obtenerRiesgoProyecto($id_proyecto){
         $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto);
-        $iteracion = $this->obtenerIteracionActual($id_proyecto);
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         if (!empty($resultado)) {
             foreach ($resultado as &$riesgo) {
                 $riesgo["responsables"] = $this->riesgo->obtenerParticipantesRiesgo($riesgo["id_riesgo"]);
+                if (!empty($iteracion)) {
+                    $cantidad = $this->riesgo->obtenerCantidadEvaluaciones($riesgo["id_riesgo"], $iteracion["id_iteracion"]);
+                    if (!empty($cantidad)) {
+                        $riesgo["evaluado"] = $cantidad["total_evaluaciones"] > 0;
+                    }else{
+                        $riesgo["evaluado"] = false;
+                    }
+                }
             }
         }
         return $resultado;
