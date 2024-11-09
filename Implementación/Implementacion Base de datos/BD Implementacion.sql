@@ -4,12 +4,12 @@ use bdvestariskmanager;
 
 create table if not exists permiso (
 	id_permiso int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(30) not null,
     primary key (id_permiso)
 );
 create table if not exists perfil (
 	id_perfil int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(30) not null,
     primary key (id_perfil)
 );
 create table if not exists perfil_permiso (
@@ -21,8 +21,8 @@ create table if not exists perfil_permiso (
 );
 create table if not exists usuario (
 	id_usuario int not null auto_increment,
-    nombre varchar(255) not null,
-    email varchar(255) not null,
+    nombre varchar(30) not null,
+    email varchar(64) not null,
     primary key (id_usuario),
     unique key UN_USUARIO (nombre, email)
 );
@@ -37,14 +37,14 @@ create table if not exists usuario_perfil (
 
 create table if not exists categoria (
 	id_categoria int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(40) not null,
     descripcion varchar(255) not null,
     primary key (id_categoria)
 );
 
 create table if not exists proyecto (
 	id_proyecto int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(30) not null,
     descripcion text not null,
     estado enum ("activo", "inactivo") not null,
     fecha_inicio date, 
@@ -107,7 +107,7 @@ create table if not exists plan (
 
 create table if not exists tarea (
 	id_tarea int not null auto_increment,
-    nombre varchar(255) not null,
+    nombre varchar(80) not null,
     descripcion text not null,
     estado enum ("1", "0") not null comment "1: completada, 0: no completada",
     id_plan int not null,
@@ -120,7 +120,7 @@ create table if not exists tarea (
 create table if not exists iteracion_evaluacion (
 	id_iteracion int not null,
     id_evaluacion int not null,
-    primary key (id_iteracion),
+    primary key (id_iteracion, id_evaluacion),
     constraint fk_ie_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action,
     constraint fk_ie_evaluacion foreign key (id_evaluacion) references evaluacion (id_evaluacion) on delete no action on update no action
 );
@@ -128,7 +128,7 @@ create table if not exists iteracion_evaluacion (
 create table if not exists proyecto_riesgo(
 	id_proyecto int not null,
     id_riesgo int not null,
-    primary key (id_proyecto),
+    primary key (id_proyecto, id_riesgo),
     constraint fk_pr_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete no action on update no action,
     constraint fk_pr_riesgo foreign key (id_riesgo) references riesgo (id_riesgo) on delete no action on update no action
 );
@@ -136,7 +136,7 @@ create table if not exists proyecto_riesgo(
 create table if not exists iteracion_plan (
 	id_iteracion int not null,
     id_plan int not null,
-    primary key (id_iteracion),
+    primary key (id_iteracion, id_plan),
     constraint fk_ip_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action,
     constraint fk_ip_plan foreign key (id_plan) references plan (id_plan) on delete no action on update no action
 );

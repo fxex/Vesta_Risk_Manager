@@ -1,0 +1,36 @@
+
+.boton_1, .boton_proyecto{
+    background:rgba(155,77,253,1);
+    background: linear-gradient(90deg, rgba(155,77,253,1) 0%, rgba(153,93,182,1) 100%);
+    font-size: 18px;
+    border: none ;
+}
+
+.boton_proyecto{
+    cursor: default !important;
+}
+
+.boton_2{
+    background: rgb(77,105,253);
+    background: linear-gradient(90deg, rgba(77,105,253,1) 0%, rgba(93,155,182,1) 100%);
+    font-size: 18px;
+    border: none !important;
+}
+
+.boton_1:hover{
+    background: linear-gradient(90deg, rgba(120,60,195,1) 0%, rgba(116,72,136,1) 100%) ;
+}
+.boton_2:hover{
+    background: rgb(65,91,230);
+    background: linear-gradient(90deg, rgba(65,91,230,1) 0%, rgba(56,119,147,1) 100%) ;  
+}
+
+.icono{
+    cursor: pointer;
+    /* transition: all .5ms; */
+    color: white;
+}
+
+.icono:hover{
+    color: #dddddd;
+}
