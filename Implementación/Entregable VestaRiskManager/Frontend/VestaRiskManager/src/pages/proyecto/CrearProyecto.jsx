@@ -747,6 +747,12 @@ export default function CrearProyecto() {
               </Form.Label>
               <Form.Control
                 type="date"
+                min={
+                  formData.iteraciones.length > 0
+                    ? formData.iteraciones[formData.iteraciones.length - 1]
+                        .fecha_fin
+                    : null
+                }
                 name="fecha_inicio"
                 className="w-75"
                 value={formDataIteracion.fecha_inicio}
@@ -774,6 +780,12 @@ export default function CrearProyecto() {
               </Form.Label>
               <Form.Control
                 type="date"
+                min={
+                  formData.iteraciones.length > 0
+                    ? formData.iteraciones[formData.iteraciones.length - 1]
+                        .fecha_fin
+                    : null
+                }
                 name="fecha_fin"
                 className="w-75"
                 value={formDataIteracion.fecha_fin}

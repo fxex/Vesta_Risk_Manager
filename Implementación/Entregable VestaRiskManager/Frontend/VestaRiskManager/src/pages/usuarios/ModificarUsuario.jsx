@@ -130,7 +130,7 @@ export default function ModificarUsuario() {
                   {formData.nombre.length === 0
                     ? "no este vacio"
                     : formData.nombre.length > 30
-                    ? "no supere la cantidad maxima"
+                    ? "supera la longitud maxima (30 caracteres)"
                     : error.nombreIgual
                     ? "no sea igual al de otro usuario"
                     : null}
@@ -157,7 +157,7 @@ export default function ModificarUsuario() {
                     : !verificarCorreo(formData.correo)
                     ? "sea valido"
                     : formData.correo.length > 64
-                    ? "no supere la cantidad maxima"
+                    ? "supera la longitud maxima (64 caracteres)"
                     : error.correoIgual
                     ? "no sea igual al de otro usuario"
                     : null}

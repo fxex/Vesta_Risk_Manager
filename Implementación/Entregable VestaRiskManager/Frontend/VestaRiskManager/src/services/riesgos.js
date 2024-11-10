@@ -70,3 +70,21 @@ export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo) => {
 
   return json;
 };
+
+export const crearPlan = async (id_proyecto, id_riesgo, data) => {
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/plan`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();
+
+  return json.creacion;
+};

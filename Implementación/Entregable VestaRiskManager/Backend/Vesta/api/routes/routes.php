@@ -403,6 +403,25 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion", fun
     }
 });
 
+$router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan", function($id_proyecto, $id_riesgo) use ($controladorRiesgo, $controladorUsuario){
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $body = file_get_contents('php://input');          
+        if (!empty($body)) {
+            $data = json_decode($body, true);
+            $resultado = $controladorRiesgo->crearPlan($id_riesgo, $data);
+            echo json_encode(["creacion"=>$resultado]);
+        } else {
+            echo json_encode(["creacion"=>false]);
+        }
+    } else {
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantidad", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo);
     echo json_encode($resultado);

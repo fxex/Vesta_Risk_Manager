@@ -31,6 +31,8 @@ import escudoGris from "../../assets/img/escudo gris.png";
 import escudoAzul from "../../assets/img/Escudo azul.png";
 import escudoRojo from "../../assets/img/escudo rojo.png";
 import escudoCritico from "../../assets/img/Escudo critico.png";
+import escudoVerde from "../../assets/img/escudo verde.png";
+import { formatearFecha } from "../../utils/fecha";
 
 export const riesgoLoader = async ({ params }) => {
   const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
@@ -46,6 +48,7 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
+  console.log(riesgos);
 
   const location = useLocation();
 
@@ -59,7 +62,17 @@ export default function ListaRiesgos() {
       <Contenedor>
         <>
           <h3>{proyecto.nombre}</h3>
-          {iteracion.nombre ? <h4>{iteracion.nombre}</h4> : null}
+          {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
         </>
         <>
           <Button
@@ -100,7 +113,7 @@ export default function ListaRiesgos() {
                         placement="top"
                         overlay={
                           <Tooltip id="tooltip-edit">
-                            Se deberá realizar una evaluación.
+                            Evaluación pendiente.
                           </Tooltip>
                         }
                       >
@@ -122,35 +135,61 @@ export default function ListaRiesgos() {
                         placement="top"
                         overlay={
                           <Tooltip id="tooltip-edit">
-                            Se deberá reevaluar en la siguiente iteración.
+                            Será reevaluado en la siguiente iteración.
                           </Tooltip>
                         }
                       >
                         <Figure.Image src={escudoAzul} />
                       </OverlayTrigger>
                     ) : riesgo.factor_riesgo < 64 ? (
+                      riesgo.planes_realizado.total_minimizacion == 0 &&
+                      riesgo.planes_realizado.total_mitigacion == 0 ? (
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip id="tooltip-edit">
+                              Estrategia de mitigación o minimización necesaria.
+                            </Tooltip>
+                          }
+                        >
+                          <Figure.Image src={escudoRojo} />
+                        </OverlayTrigger>
+                      ) : (
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip id="tooltip-edit">
+                              No necesita realizarse ninguna acción.
+                            </Tooltip>
+                          }
+                        >
+                          <Figure.Image src={escudoVerde} />
+                        </OverlayTrigger>
+                      )
+                    ) : riesgo.planes_realizado.total_contingencia == 0 ||
+                      (riesgo.planes_realizado.total_minimizacion == 0 &&
+                        riesgo.planes_realizado.total_mitigacion == 0) ? (
                       <OverlayTrigger
                         placement="top"
                         overlay={
                           <Tooltip id="tooltip-edit">
-                            Se deberá planificar una estrategia de mitigación o
-                            minimización.
+                            Estrategia de contingencia y de
+                            mitigación/minimización necesaria.
                           </Tooltip>
                         }
                       >
-                        <Figure.Image src={escudoRojo} />
+                        <Figure.Image src={escudoCritico} />
                       </OverlayTrigger>
                     ) : (
                       <OverlayTrigger
                         placement="top"
                         overlay={
                           <Tooltip id="tooltip-edit">
-                            Se deberá planificar una estrategia de contingencia
-                            y de mitigación/minimización.
+                            No necesita realizarse ninguna acción.
                           </Tooltip>
                         }
                       >
-                        <Figure.Image src={escudoCritico} />
+                        <Figure.Image src={escudoVerde} />
                       </OverlayTrigger>
                     )}
                   </td>
