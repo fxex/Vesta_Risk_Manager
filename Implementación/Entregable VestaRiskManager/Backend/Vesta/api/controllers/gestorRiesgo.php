@@ -2,17 +2,22 @@
 require_once __DIR__ . "/../models/categoria.php";
 require_once __DIR__ . "/../models/riesgo.php";
 require_once __DIR__ . "/../models/evaluacion.php";
+require_once __DIR__ . "/../models/plan.php";
+require_once __DIR__ . "/../models/tarea.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
 class GestorRiesgo {
-    private $conexion, $riesgo, $categoria, $evaluacion;
+    private $conexion;
+    private $riesgo, $categoria, $evaluacion, $plan, $tarea;
 
     function __construct() {
         $this->conexion = BDConexion::getInstancia();
         $this->categoria = new Categoria($this->conexion);
         $this->riesgo = new Riesgo($this->conexion);
         $this->evaluacion = new Evaluacion($this->conexion);
+        $this->plan = new Plan($this->conexion);
+        $this->tarea = new Tarea($this->conexion);
         $this->conexion->set_charset("utf8");
     }
 
@@ -37,6 +42,7 @@ class GestorRiesgo {
                 }else{
                     $riesgo["evaluado"] = true;
                 }
+                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"]);
             }
         }
         return $resultado;
@@ -106,13 +112,34 @@ class GestorRiesgo {
             if (!empty($resultado)) {
                 return $resultado;
             }else{
-                return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>0, "total_mitigacion"=>0, "total_contigencia"=>0];
+                return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>0, "total_mitigacion"=>0, "total_contingencia"=>0];
             }
         }else{
-            return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>1, "total_mitigacion"=>1, "total_contigencia"=>1];
+            return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>1, "total_mitigacion"=>1, "total_contingencia"=>1];
         }
 
     }
     
+
+    public function crearPlan($id_riesgo, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["tipo"]) && !empty($data["tareas"]) && !empty($data["id_iteracion"]);
+        if ($comprobar) {
+            $this->plan->setTipo($data["tipo"]);
+            $this->plan->setDescripcion($data["descripcion"]);
+            $id_plan = $this->plan->crearPlan($id_riesgo);
+            vincularTabla::crearVinculo($this->conexion, "iteracion_plan", "id_iteracion", "id_plan",$data["id_iteracion"], $id_plan);
+            foreach ($data["tareas"] as $tarea) {
+                $this->tarea->setNombre($tarea["nombre"]);
+                $this->tarea->setDescripcion($tarea["descripcion"]);
+                $this->tarea->setEstado($tarea["estado"]);
+                $this->tarea->setFechaInicio($tarea["fecha_inicio"]);
+                $this->tarea->setFechaFin($tarea["fecha_fin"]);
+                $this->tarea->crearTarea($id_plan);
+            }
+            return $id_plan > 0;
+        }else{
+            return false;
+        }
+    }
 
 }
