@@ -110,6 +110,22 @@ class Riesgo {
          $stmt->execute();
          $resultado = $stmt->get_result()->fetch_assoc(); 
          return $resultado;
-        
+    }
+
+    public function obtenerCantidadPlanes($id_riesgo, $id_iteracion){
+        $query = "SELECT r.id_riesgo,
+                SUM(CASE WHEN p.tipo = 'minimizacion' THEN 1 ELSE 0 END) AS total_minimizacion,
+                SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,
+                SUM(CASE WHEN p.tipo = 'contingencia' THEN 1 ELSE 0 END) AS total_contingencia
+                FROM riesgo r
+                LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo
+                INNER JOIN iteracion_plan ip ON p.id_plan = ip.id_plan
+                where ip.id_iteracion = ? and r.id_riesgo = ?
+                GROUP BY r.id_riesgo"; 
+         $stmt = $this->conexion->prepare($query);
+         $stmt->bind_param("ii",$id_iteracion, $id_riesgo);
+         $stmt->execute();
+         $resultado = $stmt->get_result()->fetch_assoc(); 
+         return $resultado;
     }
 }

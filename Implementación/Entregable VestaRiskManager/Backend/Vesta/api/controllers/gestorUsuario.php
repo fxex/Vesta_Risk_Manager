@@ -3,6 +3,7 @@ require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/perfil.php";
 require_once __DIR__ . "/../models/permiso.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
+require_once __DIR__ . "/../models/bloquearModificacion.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
 class GestorUsuario {
@@ -46,10 +47,21 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerUsuarioId($id){
+    public function bloquearModificacion($nombre, $id_nombre, $token){
+        $resultado = Bloquear::bloquearModificacion($nombre, $id_nombre, $token);
+        return $resultado;
+    }
+    public function desbloquearModificacionUsuario($id_nombre){
+        $resultado = Bloquear::bloquearModificacion("usuario", $id_nombre);
+        return $resultado;
+    }
+
+    public function obtenerUsuarioId($id, $token){
         if (is_numeric($id)) {
+            $bloqueado = $this->bloquearModificacion("usuario",$id, $token);
             $resultado = $this->usuario->obtenerUsuarioId($id);
             $this->perfil->setNombre($resultado["nombre_perfil"]);
+            $resultado["bloqueado"] = $bloqueado["bloqueado"];
             return $resultado;
         } else {
             return null;

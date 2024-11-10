@@ -33,7 +33,7 @@ class Iteracion{
     public function crearIteracion($id_proyecto){
         $query = "INSERT INTO iteracion (nombre, fecha_inicio, fecha_fin, id_proyecto) VALUES (?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("ssss", $this->nombre, $this->fecha_inicio, $this->fecha_fin, $id_proyecto);
+        $stmt->bind_param("sssi", $this->nombre, $this->fecha_inicio, $this->fecha_fin, $id_proyecto);
         if ($stmt->execute()) {
             return $this->conexion->insert_id;
         } else {
@@ -41,4 +41,30 @@ class Iteracion{
             return -1;
         }
     }
+
+    public function actualizarIteracion($id_iteracion, $id_proyecto){
+        $query = "UPDATE iteracion SET nombre = ?, fecha_inicio = ?, fecha_fin = ? WHERE id_iteracion = ? and id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("sssii", $this->nombre, $this->fecha_inicio, $this->fecha_fin, $id_iteracion, $id_proyecto);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            return false;
+        }
+    }
+
+    public function eliminarIteracion($id_iteracion) {
+        $query = "DELETE FROM iteracion WHERE id_iteracion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_iteracion);
+
+        if ($stmt->execute()) {
+            return true;
+        }else{
+            throw new Exception("Error al eliminar el usuario: " . $stmt->error);
+            return false;
+        }
+    }
+
 }

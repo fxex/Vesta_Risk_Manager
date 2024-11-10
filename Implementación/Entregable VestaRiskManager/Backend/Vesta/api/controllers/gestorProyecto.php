@@ -122,8 +122,6 @@ class GestorProyecto {
         $comprobar = !empty($data["nombre"] && !empty($data["descripcion"])) && !empty($data["estado"]);
         if ($comprobar) {
             vincularTabla::eliminarVinculo($this->conexion,"proyecto_participante", "id_proyecto", $id_proyecto);
-            vincularTabla::eliminarVinculo($this->conexion,"iteracion", "id_proyecto", $id_proyecto);
-            
             $this->proyecto->setNombre($data["nombre"]);
             $this->proyecto->setDescripcion($data["descripcion"]);
             $this->proyecto->setEstado($data["estado"]);
@@ -140,12 +138,23 @@ class GestorProyecto {
                 }
             }
 
+            if (!empty($data["iteraciones_eliminadas"])) {
+                foreach ($data["iteraciones_eliminadas"] as $iteracion) {
+                    $this->iteracion->eliminarIteracion($iteracion["id_iteracion"]);
+                }
+            }
+
             if (!empty($data["iteraciones"])) {
                 foreach ($data["iteraciones"] as $iteracion) {
                     $this->iteracion->setNombre($iteracion["nombre"]);
                     $this->iteracion->setFechaInicio($iteracion["fecha_inicio"]);
                     $this->iteracion->setFechaFin($iteracion["fecha_fin"]);
-                    $this->iteracion->crearIteracion($id_proyecto);
+                    if (!empty($iteracion["id_iteracion"])) {
+                        $this->iteracion->actualizarIteracion($iteracion["id_iteracion"],$id_proyecto);
+                    }else{
+                        $this->iteracion->crearIteracion($id_proyecto);
+                        
+                    }
                 }
             }
             return $resultado;

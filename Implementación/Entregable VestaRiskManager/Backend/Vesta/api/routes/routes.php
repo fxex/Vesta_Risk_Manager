@@ -12,17 +12,108 @@ $controladorProyecto = new GestorProyecto();
 $controladorRiesgo = new GestorRiesgo();
 
 
+function getAuthorizationHeader() {
+    // Comprobamos si la cabecera HTTP_AUTHORIZATION está presente
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        return trim($_SERVER['HTTP_AUTHORIZATION']);
+    }
+    // Si no está presente, verificamos otras posibles formas de obtenerla
+    if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        return trim($_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+    }
+    return null;
+}
+
+function decodeJWT($jwt) {
+    // Divide el JWT en sus partes: header, payload y signature
+    list($headerEncoded, $payloadEncoded, $signatureEncoded) = explode('.', $jwt);
+    
+    // Decodifica el header y el payload
+    $header = json_decode(base64_decode(strtr($headerEncoded, '-_', '+/')), true);
+    $payload = json_decode(base64_decode(strtr($payloadEncoded, '-_', '+/')), true);
+    
+    // Retorna el header y el payload
+    return ['header' => $header, 'payload' => $payload];
+}
+
+function extractToken($authorizationHeader) {
+    // Comprobamos si el token tiene el prefijo "Bearer "
+    if (preg_match('/Bearer\s(\S+)/', $authorizationHeader, $matches)) {
+        return $matches[1];  // El token será el primer grupo capturado
+    }
+    return null;
+}
+
+function obtenerClavePublicaGoogle() {
+    $url = "https://www.googleapis.com/oauth2/v3/certs";
+    $certificados = json_decode(file_get_contents($url), true);
+
+    return $certificados['keys'];
+}
+
+function validarJWT($controladorUsuario){
+    $autorizacion = getAuthorizationHeader();
+    
+    if (empty($autorizacion)) {
+        return false;
+    }
+    
+    $JWT = extractToken($autorizacion);
+    if (empty($JWT)) {
+        return false;
+    }
+
+    $resultado = decodeJWT($JWT);
+    if (empty($resultado["header"]) || empty($resultado["payload"])) {
+        return false;
+    }
+
+    if (empty($resultado["header"]["typ"]) || $resultado["header"]["typ"] != "JWT") {
+        return false;
+    }
+
+    if (empty($resultado["header"]["kid"])) {
+        return false;
+    }
+
+    if (empty($resultado["payload"]["email"])) {
+        return false;
+    }
+
+    $usuario = $controladorUsuario->obtenerUsuarioCorreo($resultado["payload"]["email"]);
+
+    if (empty($usuario)) {
+        return false;
+    }
+
+    return true;
+
+}
+
 // Rutas para el Gestor de usuarios
 // Usuarios
 $router->add("GET", "usuarios", function() use ($controladorUsuario){
-    $resultado = $controladorUsuario->obtenerTodosUsuarios(); 
-    echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->obtenerTodosUsuarios(); 
+        echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
 });
+
 
 $router->add("GET","usuario/{parametro}", function($parametro) use($controladorUsuario){
     $resultado = null;
     if (is_numeric($parametro)) {
-        $resultado = $controladorUsuario->obtenerUsuarioId($parametro);
+        $validado = validarJWT($controladorUsuario);
+        if ($validado) {
+            $autorizacion = getAuthorizationHeader();
+            $resultado = $controladorUsuario->obtenerUsuarioId($parametro, $autorizacion);
+        }
     }elseif (filter_var($parametro, FILTER_VALIDATE_EMAIL)) {
         $resultado = $controladorUsuario->obtenerUsuarioCorreo($parametro);
     }else{
@@ -33,79 +124,161 @@ $router->add("GET","usuario/{parametro}", function($parametro) use($controladorU
 });
 
 $router->add("POST","usuario", function() use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->crearUsuario($data);
-        echo json_encode(["creacion"=>$resultado]); 
-    } else {
-        echo json_encode(["creacion"=>false]);
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+        if (!empty($body)) {
+            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+            $resultado = $controladorUsuario->crearUsuario($data);
+            echo json_encode(["creacion"=>$resultado]); 
+        } else {
+            echo json_encode(["creacion"=>false]);
+        }
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
     }
 });
 
 $router->add("PUT", "usuario/{id}",function($id) use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->actualizarUsuario($id, $data);
-        echo json_encode(["modificacion"=>$resultado]); 
-    } else {
-        echo json_encode(["modificacion"=>false]);
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+        if (!empty($body)) {
+            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+            $resultado = $controladorUsuario->actualizarUsuario($id, $data);
+            echo json_encode(["modificacion"=>$resultado]); 
+        } else {
+            echo json_encode(["modificacion"=>false]);
+        }
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
     }
 });
 
 $router->add("DELETE", "usuario/{id}",function($id) use($controladorUsuario){
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
         $resultado = $controladorUsuario->eliminarUsuario($id);
         echo json_encode(["eliminado"=>$resultado]); 
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
 });
 
 
 $router->add("GET", "perfiles", function() use ($controladorUsuario){
-    $resultado = $controladorUsuario->obtenerTodosPerfiles(); 
-    echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->obtenerTodosPerfiles(); 
+        echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
 });
 
 $router->add("POST","perfil", function() use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->crearPerfil($data);
-        echo json_encode(["creacion"=>$resultado]); 
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+        if (!empty($body)) {
+            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+            $resultado = $controladorUsuario->crearPerfil($data);
+            echo json_encode(["creacion"=>$resultado]); 
+        } else {
+            echo json_encode(["creacion"=>false]);
+        }
     } else {
-        echo json_encode(["creacion"=>false]);
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
     }
 });
 
 $router->add("PUT", "perfil/{id}",function($id) use($controladorUsuario){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-    if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-        $resultado = $controladorUsuario->actualizarPerfil($id, $data);
-        echo json_encode(["modificacion"=>$resultado]); 
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+        if (!empty($body)) {
+            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+            $resultado = $controladorUsuario->actualizarPerfil($id, $data);
+            echo json_encode(["modificacion"=>$resultado]); 
+        } else {
+            echo json_encode(["modificacion"=>false]);
+        }
     } else {
-        echo json_encode(["modificacion"=>false]);
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
     }
 });
 
 $router->add("DELETE", "perfil/{id}",function($id) use($controladorUsuario){
-    $resultado = $controladorUsuario->eliminarPerfil($id);
-    echo json_encode(["eliminado"=>$resultado]); 
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->eliminarPerfil($id);
+        echo json_encode(["eliminado"=>$resultado]); 
+    } else {
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
+    
 });
 
 
 $router->add("GET", "perfil/{id}", function($id) use($controladorUsuario) {
-    $resultado = $controladorUsuario->obtenerPerfilId($id);
-    echo json_encode($resultado);
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->obtenerPerfilId($id);
+        echo json_encode($resultado);
+    } else {
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
+    
 });
 
 $router->add("GET","perfil/comprobar/{nombre}", function($nombre) use($controladorUsuario){
-    $resultado = $controladorUsuario->obtenerPerfilNombre(urldecode($nombre));
-    echo json_encode($resultado); 
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->obtenerPerfilNombre(urldecode($nombre));
+        echo json_encode($resultado); 
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
 });
 
 $router->add("GET", "permisos", function() use ($controladorUsuario){
-    $resultado = $controladorUsuario->obtenerTodosPermisos(); 
-    echo json_encode($resultado); 
+    $validado = validarJWT($controladorUsuario);
+    if ($validado) {
+        $resultado = $controladorUsuario->obtenerTodosPermisos(); 
+        echo json_encode($resultado); 
+    }else{
+        header('HTTP/1.1 403 Forbidden');
+        echo json_encode([
+            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+        ]);
+    }
 });
 
 
@@ -230,6 +403,10 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion", fun
     }
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantidad", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo);
+    echo json_encode($resultado);
+});
 
 
 
