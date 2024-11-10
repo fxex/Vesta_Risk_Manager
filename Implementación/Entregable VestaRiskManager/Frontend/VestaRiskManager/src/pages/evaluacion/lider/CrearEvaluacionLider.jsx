@@ -11,6 +11,7 @@ import { crearEvaluacion, obtenerRiesgoId } from "../../../services/riesgos";
 import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 import BotonSalir from "../../../components/BotonSalir";
+import { formatearFecha } from "../../../utils/fecha";
 
 export const evaluacionCreacionLoader = async ({ params }) => {
   const id_riesgo_real = params.id_riesgo.split("-")[0];
@@ -81,9 +82,22 @@ export default function CrearEvaluacionLider() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local}
-          </h3>
+          <>
+            <h3>
+              {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local}
+            </h3>
+            {iteracion ? (
+              <>
+                <h4>
+                  {iteracion.nombre}
+                  {" - "}
+                  {formatearFecha(iteracion.fecha_inicio)}
+                  {" al "}
+                  {formatearFecha(iteracion.fecha_fin)}
+                </h4>
+              </>
+            ) : null}
+          </>
           <Form>
             <Form.Group>
               <Form.Label>Id del riesgo</Form.Label>
@@ -109,7 +123,12 @@ export default function CrearEvaluacionLider() {
             </Form.Group>
             <Form.Group>
               <Form.Label>Iteración</Form.Label>
-              <Form.Control disabled value={iteracion.nombre} />
+              <Form.Control
+                disabled
+                value={`${iteracion.nombre} - ${formatearFecha(
+                  iteracion.fecha_inicio
+                )} al ${formatearFecha(iteracion.fecha_fin)}`}
+              />
             </Form.Group>
 
             <Form.Group>

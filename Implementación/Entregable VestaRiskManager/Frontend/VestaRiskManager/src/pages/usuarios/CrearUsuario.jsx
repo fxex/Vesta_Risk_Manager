@@ -113,7 +113,7 @@ export default function CrearUsuario() {
                   {formData.nombre.length === 0
                     ? "no este vacío"
                     : formData.nombre.length > 30
-                    ? "no supere la cantidad maxima"
+                    ? "supera la longitud maxima (30 caracteres)"
                     : error.nombreIgual
                     ? "no sea igual al de otro usuario"
                     : null}
@@ -139,7 +139,7 @@ export default function CrearUsuario() {
                     : !verificarCorreo(formData.correo)
                     ? "sea valido"
                     : formData.correo.length > 64
-                    ? "no supere la cantidad maxima"
+                    ? "supera la longitud maxima (64 caracteres)"
                     : error.correoIgual
                     ? "no sea igual al de otro usuario"
                     : null}

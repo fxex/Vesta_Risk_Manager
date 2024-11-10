@@ -3,25 +3,26 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
+  crearPlan,
   obtenerCantidadPlanTipo,
   obtenerRiesgoId,
 } from "../../../services/riesgos";
-import {
-  obtenerIteracionActual,
-  obtenerParticipanteNombre,
-} from "../../../services/proyectos";
+import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { useUsuario } from "../../../context/usuarioContext";
-import { Button, Form, Table } from "react-bootstrap";
+import { Alert, Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
-  faMagnifyingGlass,
   faPlus,
+  faTrashCan,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
+import { verificarError } from "../../../utils/verificarErrores";
+import { formatearFecha } from "../../../utils/fecha";
+import BotonSalir from "../../../components/BotonSalir";
 
 export const planCreacionLoader = async ({ params }) => {
   const id_riesgo_real = params.id_riesgo.split("-")[0];
@@ -39,6 +40,8 @@ export default function CrearPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   const { riesgo, iteracion, planes } = useLoaderData();
+  console.log(planes);
+
   const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
@@ -47,6 +50,7 @@ export default function CrearPlanLider() {
   const { usuario } = useUsuario();
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
+  const [creado, setCreado] = useState(null);
 
   const [formData, setFormData] = useState({
     tipo: "",
@@ -58,7 +62,7 @@ export default function CrearPlanLider() {
     nombre: "",
     descripcion: "",
     fecha_inicio: "",
-    buscar: "",
+    fecha_fin: "",
     responsables: [],
   });
 
@@ -66,6 +70,18 @@ export default function CrearPlanLider() {
     tipo: false,
     descripcion: false,
     tareas: false,
+  });
+
+  const [errorTarea, setErrorTarea] = useState({
+    nombre: false,
+    descripcion: false,
+    fecha_inicio: false,
+    fecha_fin: false,
+    responsables: false,
+    fecha_fin_antes: false,
+    fecha_inicio_antes_iteracion: false,
+    fecha_fin_despues_iteracion: false,
+    nombre_igual: false,
   });
 
   const handleChangeSelect = (e) => {
@@ -83,208 +99,441 @@ export default function CrearPlanLider() {
   const handleChangeControlTarea = (e) => {
     const { name, value } = e.target;
     setFormDataTarea({ ...formDataTarea, [name]: value });
-    // setErrorPrincipal({ ...errorPrincipal, [name]: false });
+    setErrorTarea({ ...errorTarea, [name]: false });
   };
 
-  const handleMostrarParticipante = () => {
+  const handleChangeCheckTarea = (e) => {
+    const { name, value, checked } = e.target;
+    const value_json = JSON.parse(value);
+    setFormDataTarea((prevFormData) => {
+      if (checked) {
+        return {
+          ...prevFormData,
+          [name]: [...prevFormData.responsables, value_json],
+        };
+      } else {
+        return {
+          ...prevFormData,
+          [name]: prevFormData.responsables.filter(
+            (responsable) => responsable.id_usuario !== value_json.id_usuario
+          ),
+        };
+      }
+    });
+    setErrorTarea({ ...errorTarea, [name]: false });
+  };
+
+  const handleMostrarTarea = () => {
     setMostrarTarea(!mostrarTarea);
     setFormDataTarea({
       nombre: "",
       descripcion: "",
       fecha_inicio: "",
-      fecha_finalizacion: "",
-      buscar: "",
+      fecha_fin: "",
       responsables: [],
     });
-    // setFormDataParticipante({
-    //   nombre: "",
-    //   rol: "",
-    // });
-    // setParticipantesTotal([]);
-    // setParticipantesMostrado([]);
-    // setErrorParticipante(false);
+
+    setErrorTarea({
+      nombre: false,
+      descripcion: false,
+      fecha_inicio: false,
+      fecha_fin: false,
+      responsables: false,
+      fecha_fin_antes: false,
+      fecha_inicio_antes_iteracion: false,
+      fecha_fin_despues_iteracion: false,
+      nombre_igual: false,
+    });
   };
 
-  return (
-    <>
-      <NavegadorLider />
-      <Contenedor>
-        <h3>
-          {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
-        </h3>
-        <Form>
-          <Form.Group>
-            <Form.Label>Id del riesgo</Form.Label>
-            <Form.Control
-              disabled
-              value={`RK${
-                id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
-              }`}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Descripción del riesgo</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              disabled
-              value={riesgo.descripcion}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Categoría del riesgo</Form.Label>
-            <Form.Control disabled value={riesgo.nombre_categoria} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Iteración</Form.Label>
-            <Form.Control disabled value={iteracion.nombre} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Tipo</Form.Label>
-            <Form.Select
-              name="tipo"
-              value={formData.tipo}
-              onChange={handleChangeSelect}
+  const handleClickPrincipal = async () => {
+    const comprobacionError = {
+      tipo: formData.tipo.length === 0,
+      descripcion: formData.descripcion.length === 0,
+      tareas: formData.tareas.length === 0,
+    };
+    setErrorPrincipal(comprobacionError);
+
+    const resultado = verificarError(comprobacionError);
+    if (!resultado) {
+      formData.id_iteracion = iteracion.id_iteracion;
+      const creacion = await crearPlan(id_proyecto, id_riesgo_real, formData);
+      setCreado(creacion);
+    }
+  };
+
+  const comprobarDosFechas = (fecha1, fecha2) => {
+    return new Date(fecha1) < new Date(fecha2);
+  };
+
+  const handleClickTarea = () => {
+    const nombre_igual =
+      formData.tareas.length > 0
+        ? formData.tareas.some((tarea) => tarea.nombre === formDataTarea.nombre)
+        : false;
+    const comprobacionError = {
+      nombre:
+        formDataTarea.nombre.length === 0 || formDataTarea.nombre.length > 80,
+      descripcion: formDataTarea.descripcion.length === 0,
+      fecha_inicio: formDataTarea.fecha_inicio.length === 0,
+      fecha_fin: formDataTarea.fecha_fin.length === 0,
+      responsables: formDataTarea.responsables.length === 0,
+      fecha_fin_antes: comprobarDosFechas(
+        formDataTarea.fecha_fin,
+        formDataTarea.fecha_inicio
+      ),
+      fecha_inicio_antes_iteracion: comprobarDosFechas(
+        formDataTarea.fecha_inicio,
+        iteracion.fecha_inicio
+      ),
+      fecha_fin_despues_iteracion: false,
+      nombre_igual: nombre_igual,
+    };
+
+    setErrorTarea(comprobacionError);
+
+    const resultado = verificarError(comprobacionError);
+    if (!resultado) {
+      formDataTarea.estado = 0;
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          tareas: [...prevFormData.tareas, formDataTarea],
+        };
+      });
+      handleMostrarTarea();
+      errorPrincipal.tareas = false;
+    }
+  };
+  if (creado === null) {
+    return (
+      <>
+        <NavegadorLider />
+        <Contenedor>
+          <h3>
+            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+          </h3>
+          <Form>
+            <Form.Group>
+              <Form.Label>Id del riesgo</Form.Label>
+              <Form.Control
+                disabled
+                value={`RK${
+                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
+                }`}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Descripción del riesgo</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                disabled
+                value={riesgo.descripcion}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Categoría del riesgo</Form.Label>
+              <Form.Control disabled value={riesgo.nombre_categoria} />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Iteración</Form.Label>
+              <Form.Control
+                disabled
+                value={`${iteracion.nombre} - ${formatearFecha(
+                  iteracion.fecha_inicio
+                )} al ${formatearFecha(iteracion.fecha_fin)}`}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Tipo</Form.Label>
+              <Form.Select
+                name="tipo"
+                value={formData.tipo}
+                onChange={handleChangeSelect}
+                isInvalid={errorPrincipal.tipo}
+              >
+                <option value={""}>Seleccione el tipo de plan</option>
+                {planes.total_minimizacion == 0 ? (
+                  <option value={"minimizacion"}>Minimización</option>
+                ) : null}
+                {planes.total_mitigacion == 0 ? (
+                  <option value={"mitigacion"}>Mitigación</option>
+                ) : null}
+                {planes.total_contingencia == 0 ? (
+                  <option value={"contingencia"}>Contingencia</option>
+                ) : null}
+              </Form.Select>
+              {errorPrincipal.tipo && (
+                <Form.Text className="text-danger">
+                  Seleccione el tipo de plan.
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Descripción</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Ingrese la descripción del plan"
+                name="descripcion"
+                onChange={handleChangeControl}
+                value={formData.descripcion}
+                isInvalid={errorPrincipal.descripcion}
+              />
+              {errorPrincipal.descripcion && (
+                <Form.Text className="text-danger">
+                  Revise que la descripción no este vacía.
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Tareas</Form.Label>
+              <br></br>
+              <Button variant="success" onClick={handleMostrarTarea}>
+                <FontAwesomeIcon icon={faPlus} className="mx-1" />
+                Agregar Tarea
+              </Button>
+              <Table size="sm" hover className="mt-2">
+                <thead className="table-info">
+                  <tr className="th">
+                    <th>Tarea</th>
+                    <th>Responsable</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de finalización</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.tareas && formData.tareas.length > 0
+                    ? formData.tareas.map((tarea, key) => (
+                        <tr key={key} className="td">
+                          <td>{tarea.nombre}</td>
+                          <td>
+                            {tarea.responsables.map((responsable) => (
+                              <>
+                                {responsable.nombre} <br />
+                              </>
+                            ))}
+                          </td>
+                          <td>{formatearFecha(tarea.fecha_inicio)}</td>
+                          <td>{formatearFecha(tarea.fecha_fin)}</td>
+                          <td>
+                            <Button
+                              variant="outline-danger"
+                              className="mx-1"
+                              onClick={() => {
+                                setFormData((prevFormData) => {
+                                  return {
+                                    ...prevFormData,
+                                    tareas: prevFormData.tareas.filter(
+                                      (tareaForm) =>
+                                        tareaForm.nombre !== tarea.nombre
+                                    ),
+                                  };
+                                });
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    : null}
+                </tbody>
+              </Table>
+              {errorPrincipal.tareas && (
+                <Form.Text className="text-danger">
+                  El plan debe tener al menos una tarea.
+                </Form.Text>
+              )}
+            </Form.Group>
+          </Form>
+          <>
+            <Button
+              variant="outline-success"
+              className="mx-1"
+              onClick={handleClickPrincipal}
             >
-              <option value={""}>Seleccione el tipo de plan</option>
-              {planes.total_minimizacion === 0 ? (
-                <option value={"minimizacion"}>Minimización</option>
-              ) : null}
-              {planes.total_mitigacion === 0 ? (
-                <option value={"mitigacion"}>Mitigación</option>
-              ) : null}
-              {planes.total_contigencia === 0 ? (
-                <option value={"contingencia"}>Contingencia</option>
-              ) : null}
-            </Form.Select>
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Descripción</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Ingrese la descripción del plan"
-              name="descripcion"
-              onChange={handleChangeControl}
-              value={formData.descripcion}
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Tareas</Form.Label>
-            <br></br>
-            <Button variant="success" onClick={handleMostrarParticipante}>
-              <FontAwesomeIcon icon={faPlus} className="mx-1" />
-              Agregar Tarea
+              <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
+              Confirmar
             </Button>
-            <Table size="sm" hover className="mt-2">
-              <thead className="table-info">
-                <tr className="th">
-                  <th>Tarea</th>
-                  <th>Responsable</th>
-                  <th>Fecha de inicio</th>
-                  <th>Fecha de finalización</th>
-                  <th>Opciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {formData.tareas && formData.tareas.length > 0
-                  ? formData.tareas.map((item, key) => (
-                      <tr key={key} className="td"></tr>
-                    ))
-                  : null}
-              </tbody>
-            </Table>
-          </Form.Group>
-        </Form>
-        <>
-          <Button variant="outline-success" className="mx-1" onClick={() => {}}>
-            <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
-            Confirmar
-          </Button>
-          <Button
-            variant="outline-danger"
-            className="mx-1"
-            onClick={() => {
-              navigate(
-                `/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`
-              );
-            }}
-          >
-            <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
-            Cancelar
-          </Button>
-        </>
-      </Contenedor>
-      <ModalPersonalizado
-        title={"Añadir Tarea"}
-        datosDefecto={() => {
-          setFormDataTarea({
-            nombre: "",
-            descripcion: "",
-            fecha_inicio: "",
-            responsables: [],
-          });
-        }}
-        onConfirm={() => {}}
-        setShow={setMostrarTarea}
-        show={mostrarTarea}
-      >
-        <Form>
-          <Form.Group>
-            <Form.Label>Nombre</Form.Label>
-            <Form.Control
-              name="nombre"
-              placeholder="Ingrese el nombre de la tarea"
-              value={formDataTarea.nombre}
-              onChange={handleChangeControlTarea}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Descripción</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="descripcion"
-              placeholder="Ingrese la descripción de la tarea"
-              value={formDataTarea.descripcion}
-              onChange={handleChangeControlTarea}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Fecha de inicio</Form.Label>
-            <Form.Control
-              type="date"
-              name="fecha_inicio"
-              value={formDataTarea.fecha_inicio}
-              onChange={handleChangeControlTarea}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Fecha de finalización</Form.Label>
-            <Form.Control
-              type="date"
-              name="fecha_finalizacion"
-              value={formDataTarea.fecha_finalizacion}
-              onChange={handleChangeControlTarea}
-            />
-          </Form.Group>
+            <Button
+              variant="outline-danger"
+              className="mx-1"
+              onClick={() => {
+                navigate(
+                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`
+                );
+              }}
+            >
+              <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
+              Cancelar
+            </Button>
+          </>
+        </Contenedor>
+        <ModalPersonalizado
+          title={"Añadir Tarea"}
+          datosDefecto={() => {
+            setFormDataTarea({
+              nombre: "",
+              descripcion: "",
+              fecha_inicio: "",
+              fecha_fin: "",
+              responsables: [],
+            });
+          }}
+          onConfirm={handleClickTarea}
+          setShow={setMostrarTarea}
+          show={mostrarTarea}
+        >
+          <Form>
+            <Form.Group>
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                name="nombre"
+                placeholder="Ingrese el nombre de la tarea"
+                value={formDataTarea.nombre}
+                onChange={handleChangeControlTarea}
+                isInvalid={errorTarea.nombre}
+              />
+              {errorTarea.nombre || errorTarea.nombre_igual ? (
+                <Form.Text className="text-danger">
+                  Revise que el nombre{" "}
+                  {formDataTarea.nombre.length === 0
+                    ? "no este vacío"
+                    : formDataTarea.nombre.length > 80
+                    ? "supera la longitud maxima (80 caracteres)"
+                    : "no sea igual al de otra tarea"}
+                  .
+                </Form.Text>
+              ) : null}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Descripción</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="descripcion"
+                placeholder="Ingrese la descripción de la tarea"
+                value={formDataTarea.descripcion}
+                onChange={handleChangeControlTarea}
+                isInvalid={errorTarea.descripcion}
+              />
+              {errorTarea.descripcion && (
+                <Form.Text className="text-danger">
+                  Revise que la descripción no este vacía.
+                </Form.Text>
+              )}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Fecha de inicio</Form.Label>
+              <Form.Control
+                type="date"
+                name="fecha_inicio"
+                min={iteracion.fecha_inicio}
+                max={iteracion.fecha_fin}
+                value={formDataTarea.fecha_inicio}
+                onChange={handleChangeControlTarea}
+                isInvalid={
+                  errorTarea.fecha_inicio ||
+                  errorTarea.fecha_inicio_antes_iteracion
+                }
+              />
+              {errorTarea.fecha_inicio ||
+              errorTarea.fecha_inicio_antes_iteracion ? (
+                <Form.Text className="text-danger">
+                  Revise que la fecha{" "}
+                  {errorTarea.fecha_inicio
+                    ? "no este vacía"
+                    : "no este antes que la fecha de iteración"}
+                  .
+                </Form.Text>
+              ) : null}
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Fecha de finalización</Form.Label>
+              <Form.Control
+                type="date"
+                name="fecha_fin"
+                min={iteracion.fecha_inicio}
+                max={iteracion.fecha_fin}
+                value={formDataTarea.fecha_fin}
+                onChange={handleChangeControlTarea}
+                isInvalid={
+                  errorTarea.fecha_fin ||
+                  errorTarea.fecha_fin_antes ||
+                  errorTarea.fecha_fin_despues_iteracion
+                }
+              />
 
-          <Form.Group>
-            <Form.Label>Responsables</Form.Label>
-            {proyecto.participantes && proyecto.participantes.length > 0
-              ? proyecto.participantes.map((participante, key) => (
-                  <Form.Check
-                    key={key}
-                    label={`${participante.nombre} - ${participante.email}`}
-                  />
-                ))
-              : null}
-          </Form.Group>
-        </Form>
-      </ModalPersonalizado>
-      <Footer />
-    </>
-  );
+              {errorTarea.fecha_fin ||
+              errorTarea.fecha_fin_antes ||
+              errorTarea.fecha_fin_despues_iteracion ? (
+                <Form.Text className="text-danger">
+                  Revise que la fecha{" "}
+                  {errorTarea.fecha_fin
+                    ? "no este vacía"
+                    : errorTarea.fecha_fin_antes
+                    ? "no este antes que la fecha de inicio"
+                    : "no este despues que la fecha de iteración"}
+                  .
+                </Form.Text>
+              ) : null}
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Responsables</Form.Label>
+              {proyecto.participantes && proyecto.participantes.length > 0
+                ? proyecto.participantes.map((participante, key) => (
+                    <Form.Check
+                      key={key}
+                      label={`${participante.nombre} - ${participante.email}`}
+                      value={JSON.stringify({
+                        id_usuario: participante.id_usuario,
+                        nombre: participante.nombre,
+                      })}
+                      name="responsables"
+                      onChange={handleChangeCheckTarea}
+                      isInvalid={errorTarea.responsables}
+                    />
+                  ))
+                : null}
+              {errorTarea.responsables && (
+                <Form.Text className="text-danger">
+                  Seleccione al menos un responsable.
+                </Form.Text>
+              )}
+            </Form.Group>
+          </Form>
+        </ModalPersonalizado>
+        <Footer />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <NavegadorLider />
+        <Contenedor>
+          <h3>
+            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+          </h3>
+          <>
+            {creado ? (
+              <Alert variant="success">Operación realizada con éxito.</Alert>
+            ) : (
+              <Alert variant="danger">Ha ocurrido un error.</Alert>
+            )}
+            <hr />
+            <h5>Opciones</h5>
+            <BotonSalir
+              ruta={`/inicio/proyecto/"lider"/${proyecto.id_proyecto}/riesgos`}
+            />
+          </>
+        </Contenedor>
+      </>
+    );
+  }
 }
