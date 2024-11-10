@@ -96,15 +96,62 @@ export default function ListaRiesgos() {
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
                     {riesgo.factor_riesgo === null ? (
-                      <Figure.Image src={escudoAmarillo}></Figure.Image>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip-edit">
+                            Se deberá realizar una evaluación.
+                          </Tooltip>
+                        }
+                      >
+                        <Figure.Image src={escudoAmarillo} />
+                      </OverlayTrigger>
                     ) : riesgo.factor_riesgo < 9 ? (
-                      <Figure.Image src={escudoGris}></Figure.Image>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip-edit">
+                            No necesita realizarse ninguna acción.
+                          </Tooltip>
+                        }
+                      >
+                        <Figure.Image src={escudoGris} />
+                      </OverlayTrigger>
                     ) : riesgo.factor_riesgo < 36 ? (
-                      <Figure.Image src={escudoAzul}></Figure.Image>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip-edit">
+                            Se deberá reevaluar en la siguiente iteración.
+                          </Tooltip>
+                        }
+                      >
+                        <Figure.Image src={escudoAzul} />
+                      </OverlayTrigger>
                     ) : riesgo.factor_riesgo < 64 ? (
-                      <Figure.Image src={escudoRojo}></Figure.Image>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip-edit">
+                            Se deberá planificar una estrategia de mitigación o
+                            minimización.
+                          </Tooltip>
+                        }
+                      >
+                        <Figure.Image src={escudoRojo} />
+                      </OverlayTrigger>
                     ) : (
-                      <Figure.Image src={escudoCritico}></Figure.Image>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id="tooltip-edit">
+                            Se deberá planificar una estrategia de contingencia
+                            y de mitigación/minimización.
+                          </Tooltip>
+                        }
+                      >
+                        <Figure.Image src={escudoCritico} />
+                      </OverlayTrigger>
                     )}
                   </td>
                   <td className="td">
