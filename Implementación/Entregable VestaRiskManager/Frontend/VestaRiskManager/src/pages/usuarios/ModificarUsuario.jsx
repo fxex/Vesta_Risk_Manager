@@ -28,6 +28,8 @@ export async function cargarModificarUsuario({ params }) {
 export default function ModificarUsuario() {
   const { usuario } = useUsuario();
   const { usuarioLoader, perfiles } = useLoaderData();
+  console.log(usuarioLoader);
+
   const { id_usuario } = useParams();
 
   const navigate = useNavigate();

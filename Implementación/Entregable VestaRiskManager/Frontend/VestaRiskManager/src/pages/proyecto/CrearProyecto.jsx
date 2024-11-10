@@ -26,7 +26,7 @@ import ModalPersonalizado from "../../components/ModalPersonalizado";
 import { verificarError } from "../../utils/verificarErrores";
 
 export default function CrearProyecto() {
-  // Solicita las categorias por defecto.
+  // Solicita las categorías por defecto.
   const categorias = useLoaderData();
   const navigate = useNavigate();
 
@@ -467,7 +467,7 @@ export default function CrearProyecto() {
 
             <Form.Group>
               <Form.Label>
-                <b>Categorias</b>
+                <b>Categorías</b>
               </Form.Label>
               <br></br>
               {/* <Button variant="success" onClick={() => {}}>
@@ -680,7 +680,7 @@ export default function CrearProyecto() {
               <Form.Check
                 type="radio"
                 name="rol"
-                label="Lider del proyecto"
+                label="Líder del proyecto"
                 value="Lider del proyecto"
                 onChange={handleChangeParticipante}
                 isInvalid={errorParticipante.rol}

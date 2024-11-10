@@ -63,6 +63,7 @@ export default function ModificarProyecto() {
     participantes: proyecto.participantes,
     iteraciones: proyecto.iteraciones,
     categorias: proyecto.categorias,
+    iteraciones_eliminadas: [],
   });
 
   const [formDataParticipante, setFormDataParticipante] = useState({
@@ -291,6 +292,8 @@ export default function ModificarProyecto() {
       });
       handleMostrarIteracion();
     }
+    console.log(formData);
+
     setBotonPresionado(false);
   };
 
@@ -444,6 +447,17 @@ export default function ModificarProyecto() {
                                 variant="outline-danger"
                                 className="mx-1"
                                 onClick={() => {
+                                  if (item.id_iteracion) {
+                                    setFormData((prevFormData) => {
+                                      return {
+                                        ...prevFormData,
+                                        iteraciones_eliminadas: [
+                                          ...prevFormData.iteraciones_eliminadas,
+                                          item,
+                                        ],
+                                      };
+                                    });
+                                  }
                                   setFormData((prevFormData) => {
                                     return {
                                       ...prevFormData,
@@ -455,6 +469,9 @@ export default function ModificarProyecto() {
                                     };
                                   });
                                 }}
+                                disabled={
+                                  new Date() > new Date(item.fecha_inicio)
+                                }
                               >
                                 <FontAwesomeIcon icon={faTrashCan} />
                               </Button>
@@ -707,112 +724,6 @@ export default function ModificarProyecto() {
             </Form.Group>
           </Form>
         </ModalPersonalizado>
-        {/* <Modal
-          show={mostrarParticipante}
-          onHide={handleMostrarParticipante}
-          size="xl"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Añadir Participante</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <h5>Buscar Participante</h5>
-              <Form.Group className="d-flex align-items-center mb-2">
-                <Form.Control
-                  type="text"
-                  placeholder="Ingrese el nombre del participante"
-                  className="w-75"
-                  name="nombre"
-                  onChange={(e) => {
-                    handleChangeParticipante(e);
-                    setParticipantes([]);
-                  }}
-                />
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{
-                    marginLeft: "10px",
-                    fontSize: "20px",
-                    cursor: "pointer",
-                  }}
-                  onClick={async () => {
-                    const data = await obtenerParticipanteNombre(
-                      formDataParticipante.nombre
-                    );
-                    const json = JSON.parse(data);
-                    // Crear un conjunto con los nombres en formData.participantes
-                    const nombresFormData = new Set(
-                      formData.participantes.map((item) => item.nombre)
-                    );
-
-                    const participantesFiltrados = json.filter(
-                      (item) => !nombresFormData.has(item.nombre_usuario)
-                    );
-
-                    setParticipantes(participantesFiltrados);
-                  }}
-                />
-              </Form.Group>
-              <Form.Group>
-                <h5>Participantes</h5>
-                {participantes && participantes.length > 0 ? (
-                  participantes.map((item, key) => (
-                    <Form.Check
-                      key={key}
-                      label={item.nombre_usuario}
-                      value={item.nombre_usuario}
-                      name="nombre"
-                      type="radio"
-                      onChange={handleChangeParticipante}
-                    />
-                  ))
-                ) : (
-                  <p>No hay participantes disponibles.</p>
-                )}
-              </Form.Group>
-              <Form.Group>
-                <h5>Rol</h5>
-                <Form.Check
-                  type="radio"
-                  name="rol"
-                  label="Lider del proyecto"
-                  value="Lider del proyecto"
-                  onChange={handleChangeParticipante}
-                />
-                <Form.Check
-                  type="radio"
-                  name="rol"
-                  label="Desarrollador"
-                  value="Desarrollador"
-                  onChange={handleChangeParticipante}
-                />
-              </Form.Group>
-              {errorParticipante && (
-                <Alert variant="danger" className="mt-4">
-                  Revise los campos ingresados
-                </Alert>
-              )}
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="outline-success"
-              onClick={handleClickParticipante}
-              disabled={botonPresionado}
-            >
-              <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
-              Añadir
-            </Button>
-            <Button
-              variant="outline-danger"
-              onClick={handleMostrarParticipante}
-            >
-              <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
-              Cancelar
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
 
         <ModalPersonalizado
           title={"Añadir Iteración"}
@@ -907,76 +818,6 @@ export default function ModificarProyecto() {
             </Form.Group>
           </Form>
         </ModalPersonalizado>
-
-        {/* <Modal
-          show={mostrarIteracion}
-          onHide={handleMostrarIteracion}
-          size="xl"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Añadir Iteracion</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group>
-                <Form.Label>
-                  <b>Nombre</b>
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="nombre"
-                  placeholder="Ingrese el nombre de la iteración"
-                  className="w-75"
-                  value={formDataIteracion.nombre}
-                  onChange={handleChangeIteracion}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>
-                  <b>Fecha de inicio</b>
-                </Form.Label>
-                <Form.Control
-                  type="date"
-                  name="fecha_inicio"
-                  className="w-75"
-                  value={formDataIteracion.fecha_inicio}
-                  onChange={handleChangeIteracion}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>
-                  <b>Fecha de finalización</b>
-                </Form.Label>
-                <Form.Control
-                  type="date"
-                  name="fecha_fin"
-                  className="w-75"
-                  value={formDataIteracion.fecha_fin}
-                  onChange={handleChangeIteracion}
-                />
-              </Form.Group>
-              {errorIteracion.validacion && (
-                <Alert variant="danger" className="mt-4">
-                  {errorIteracion.mensaje}
-                </Alert>
-              )}
-            </Form>
-          </Modal.Body>
-          <Modal.Footer as={"div"} className="justify-content-start">
-            <Button
-              variant="outline-success"
-              onClick={handleClickIteracion}
-              disabled={botonPresionado}
-            >
-              <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
-              Añadir
-            </Button>
-            <Button variant="outline-danger" onClick={handleMostrarIteracion}>
-              <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
-              Cancelar
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
       </>
     );
   } else {

@@ -15,7 +15,6 @@ export async function obtenerParticipanteNombre(nombre) {
 export async function obtenerProyectosId(id) {
   const respuesta = await fetch(`${URL}/proyecto/${id}`);
   const json = await respuesta.json();
-  console.log(json);
   return json;
 }
 
@@ -46,7 +45,8 @@ export async function actualizarProyecto(id, formData) {
     },
     body: JSON.stringify(formData),
   });
-  const json = await respuesta.json();
+  const json = await respuesta.text();
+  console.log(json);
 
   return json;
 }

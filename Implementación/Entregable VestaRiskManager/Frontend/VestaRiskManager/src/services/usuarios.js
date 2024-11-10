@@ -1,7 +1,14 @@
 import { URL } from "../utils/URL";
 
 export async function obtenerUsuarios() {
-  const respuesta = await fetch(`${URL}/usuarios`);
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(`${URL}/usuarios`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
@@ -13,16 +20,27 @@ export async function obtenerUsuariosCorreo(correo) {
 }
 
 export async function obtenerUsuariosId(id) {
-  const respuesta = await fetch(`${URL}/usuario/${id}`);
+  const token = localStorage.getItem("jwt");
+
+  const respuesta = await fetch(`${URL}/usuario/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
 
 export async function obtenerUsuarioNombre(nombre) {
+  const token = localStorage.getItem("jwt");
+
   const respuesta = await fetch(`${URL}/usuario/comprobar/${nombre}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();
@@ -31,10 +49,12 @@ export async function obtenerUsuarioNombre(nombre) {
 }
 
 export async function crearUsuario(formData) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/usuario`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(formData),
   });
@@ -44,10 +64,12 @@ export async function crearUsuario(formData) {
 }
 
 export async function actualizarUsuario(id, formData) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/usuario/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(formData),
   });
@@ -57,10 +79,13 @@ export async function actualizarUsuario(id, formData) {
 }
 
 export async function eliminarUsuario(id) {
+  const token = localStorage.getItem("jwt");
+
   const respuesta = await fetch(`${URL}/usuario/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();
@@ -69,22 +94,38 @@ export async function eliminarUsuario(id) {
 }
 
 export async function obtenerPerfiles() {
-  const respuesta = await fetch(`${URL}/perfiles`);
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(`${URL}/perfiles`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
 
 export async function obtenerPermisos() {
-  const respuesta = await fetch(`${URL}/permisos`);
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(`${URL}/permisos`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
 
 export async function crearPerfil(formData) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/perfil`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(formData),
   });
@@ -94,10 +135,12 @@ export async function crearPerfil(formData) {
 }
 
 export async function obtenerPerfilId(id) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/perfil/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();
@@ -105,10 +148,12 @@ export async function obtenerPerfilId(id) {
 }
 
 export async function actualizarPerfil(id, formData) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/perfil/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(formData),
   });
@@ -118,10 +163,12 @@ export async function actualizarPerfil(id, formData) {
 }
 
 export async function eliminarPerfil(id) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/perfil/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();
@@ -130,10 +177,12 @@ export async function eliminarPerfil(id) {
 }
 
 export async function obtenerPerfilNombre(nombre) {
+  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/perfil/comprobar/${nombre}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();

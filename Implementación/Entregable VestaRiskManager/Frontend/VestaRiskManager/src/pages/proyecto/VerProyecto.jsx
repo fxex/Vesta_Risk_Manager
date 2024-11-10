@@ -14,7 +14,6 @@ export async function cargarProyecto({ params }) {
 
 export default function VerProyecto() {
   const { proyecto } = useLoaderData();
-  console.log(proyecto);
 
   return (
     <>
