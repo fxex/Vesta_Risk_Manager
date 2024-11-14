@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navegador from "../../../components/Navegador";
 import Footer from "../../../components/Footer";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Contenedor from "../../../components/Contenedor";
 import "./../../../styles/Home.css";
 import { Button } from "react-bootstrap";
@@ -12,16 +12,18 @@ import {
   obtenerProyectosUsuarioDesarrollador,
 } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
+export const obtenerListaProyectoDesarrollador = async () => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const proyectos = await obtenerProyectosUsuarioDesarrollador(usuario.email);
+  return { proyectos };
+};
 
 export default function ListaProyectoDesarrollador() {
   const navigate = useNavigate();
   const { usuario } = useUsuario();
-  const [proyectos, setProyectos] = useState([]);
-  useEffect(() => {
-    obtenerProyectosUsuarioDesarrollador(usuario.email).then((item) => {
-      setProyectos(item);
-    });
-  }, []);
+  const { proyectos } = useLoaderData();
 
   return (
     <>
@@ -36,7 +38,7 @@ export default function ListaProyectoDesarrollador() {
             >
               {item.nombre}
               <FontAwesomeIcon
-                icon={faEye}
+                icon={faSearch}
                 className="fw-bold fs-3 me-2 icono"
                 onClick={async () => {
                   const proyecto = await obtenerProyectosId(item.id_proyecto);

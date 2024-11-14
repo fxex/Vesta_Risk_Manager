@@ -6,8 +6,7 @@ import Contenedor from "../../components/Contenedor";
 import "./../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-regular-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function ListaProyecto() {
   const navigate = useNavigate();
@@ -34,7 +33,7 @@ export default function ListaProyecto() {
                   }}
                 />
                 <FontAwesomeIcon
-                  icon={faEye}
+                  icon={faSearch}
                   className="fw-bold fs-3 me-2 icono"
                   onClick={() => {
                     navigate(`/inicio/proyecto/${item.id_proyecto}`);

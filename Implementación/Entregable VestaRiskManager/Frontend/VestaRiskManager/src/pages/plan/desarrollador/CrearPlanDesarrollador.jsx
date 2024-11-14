@@ -24,19 +24,7 @@ import { verificarError } from "../../../utils/verificarErrores";
 import { formatearFecha } from "../../../utils/fecha";
 import BotonSalir from "../../../components/BotonSalir";
 
-export const planCreacionLoader = async ({ params }) => {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
-
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  const planes = await obtenerCantidadPlanTipo(
-    params.id_proyecto,
-    id_riesgo_real
-  );
-  return { riesgo, iteracion, planes };
-};
-
-export default function CrearPlanLider() {
+export default function CrearPlanDesarrollador() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   const { riesgo, iteracion, planes } = useLoaderData();
@@ -363,7 +351,7 @@ export default function CrearPlanLider() {
               className="mx-1"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`
+                  `/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`
                 );
               }}
             >

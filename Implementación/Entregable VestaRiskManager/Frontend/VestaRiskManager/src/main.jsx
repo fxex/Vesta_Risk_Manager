@@ -41,9 +41,13 @@ import {
 } from "./services/proyectos.js";
 import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
 import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
-import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
+import ListaProyectoLider, {
+  obtenerListaProyectoLider,
+} from "./pages/proyecto/client/ListaProyectoLider.jsx";
 import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
-import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
+import ListaProyectoDesarrollador, {
+  obtenerListaProyectoDesarrollador,
+} from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
 import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
 import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
 import CrearEvaluacionLider, {
@@ -54,6 +58,7 @@ import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/Crear
 import CrearPlanLider, {
   planCreacionLoader,
 } from "./pages/plan/lider/crearPlanLider.jsx";
+import CrearPlanDesarrollador from "./pages/plan/desarrollador/CrearPlanDesarrollador.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -139,10 +144,12 @@ const App = () => {
     {
       path: "/inicio/proyectos/lider",
       element: <RutaProtegida element={<ListaProyectoLider />} />,
+      loader: obtenerListaProyectoLider,
     },
     {
       path: "/inicio/proyectos/desarrollador",
       element: <RutaProtegida element={<ListaProyectoDesarrollador />} />,
+      loader: obtenerListaProyectoDesarrollador,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto",
@@ -182,6 +189,11 @@ const App = () => {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionDesarrollador />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+      element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
+      loader: planCreacionLoader,
     },
     {
       path: "/salir",

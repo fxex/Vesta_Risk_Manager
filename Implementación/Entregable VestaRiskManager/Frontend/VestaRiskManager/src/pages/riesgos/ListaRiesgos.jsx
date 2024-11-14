@@ -3,6 +3,7 @@ import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import {
+  Alert,
   Button,
   Figure,
   OverlayTrigger,
@@ -59,6 +60,12 @@ export default function ListaRiesgos() {
   return (
     <>
       <NavegadorLider />
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
         <>
           <h3>{proyecto.nombre}</h3>
@@ -84,6 +91,7 @@ export default function ListaRiesgos() {
                 }/${id_proyecto}/riesgo/crear`
               );
             }}
+            disabled={iteracion === null}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo Riesgo
@@ -108,7 +116,7 @@ export default function ListaRiesgos() {
               {riesgos.map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
-                    {riesgo.factor_riesgo === null ? (
+                    {riesgo.factor_riesgo === null || !riesgo.evaluado ? (
                       <OverlayTrigger
                         placement="top"
                         overlay={
@@ -213,7 +221,9 @@ export default function ListaRiesgos() {
                       </>
                     ))}
                   </td>
-                  <td className="td">{riesgo.factor_riesgo}</td>
+                  <td className="td">
+                    {riesgo.evaluado ? riesgo.factor_riesgo : null}
+                  </td>
                   <td className="td">
                     <div className={`${comprobacionLider ? "" : "d-none"}`}>
                       <OverlayTrigger

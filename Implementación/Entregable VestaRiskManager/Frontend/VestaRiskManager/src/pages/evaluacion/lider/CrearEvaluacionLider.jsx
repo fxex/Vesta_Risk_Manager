@@ -169,16 +169,16 @@ export default function CrearEvaluacionLider() {
                 <option value={0}>
                   Ingrese la probabilidad de que el riesgo ocurra
                 </option>
-                <option value={1}>1 - 0 a 10%</option>
-                <option value={2}>2 - 10% a 20%</option>
-                <option value={3}>3 - 20% a 30%</option>
-                <option value={4}>4 - 30% a 40%</option>
-                <option value={5}>5 - 40% a 50%</option>
-                <option value={6}>6 - 50% a 60%</option>
-                <option value={7}>7 - 60% a 70%</option>
-                <option value={8}>8 - 70% a 80%</option>
-                <option value={9}>9 - 80% a 90%</option>
-                <option value={10}>10 - 90% a 100%</option>
+                <option value={1}>0 ~ 10%</option>
+                <option value={2}>10% ~ 20%</option>
+                <option value={3}>20% ~ 30%</option>
+                <option value={4}>30% ~ 40%</option>
+                <option value={5}>40% ~ 50%</option>
+                <option value={6}>50% ~ 60%</option>
+                <option value={7}>60% ~ 70%</option>
+                <option value={8}>70% ~ 80%</option>
+                <option value={9}>80% ~ 90%</option>
+                <option value={10}>90% ~ 100%</option>
               </Form.Select>
               {error.probabilidad && (
                 <Form.Text className="text-danger">

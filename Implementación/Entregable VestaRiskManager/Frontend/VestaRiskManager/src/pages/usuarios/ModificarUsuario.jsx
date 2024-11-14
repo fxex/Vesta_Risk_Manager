@@ -177,6 +177,7 @@ export default function ModificarUsuario() {
                   value={item.id_perfil}
                   checked={item.id_perfil == formData.perfil}
                   disabled={usuario.email == usuarioLoader.email}
+                  onChange={handleChange}
                 />
               ))}
             </Form.Group>

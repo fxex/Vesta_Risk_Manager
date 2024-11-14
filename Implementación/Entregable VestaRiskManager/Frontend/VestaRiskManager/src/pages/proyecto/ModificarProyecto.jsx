@@ -314,7 +314,7 @@ export default function ModificarProyecto() {
         <Navegador />
         <Contenedor>
           <>
-            <h3>Actualizar Proyecto - {proyecto.nombre}</h3>
+            <h3>Editar Proyecto - {proyecto.nombre}</h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />
@@ -470,7 +470,9 @@ export default function ModificarProyecto() {
                                   });
                                 }}
                                 disabled={
-                                  new Date() > new Date(item.fecha_inicio)
+                                  item.id_iteracion
+                                    ? new Date() > new Date(item.fecha_inicio)
+                                    : false
                                 }
                               >
                                 <FontAwesomeIcon icon={faTrashCan} />
@@ -772,6 +774,12 @@ export default function ModificarProyecto() {
                 type="date"
                 name="fecha_inicio"
                 className="w-75"
+                min={
+                  formData.iteraciones.length > 0
+                    ? formData.iteraciones[formData.iteraciones.length - 1]
+                        .fecha_fin
+                    : null
+                }
                 value={formDataIteracion.fecha_inicio}
                 onChange={handleChangeIteracion}
                 isInvalid={
@@ -798,6 +806,12 @@ export default function ModificarProyecto() {
               <Form.Control
                 type="date"
                 name="fecha_fin"
+                min={
+                  formData.iteraciones.length > 0
+                    ? formData.iteraciones[formData.iteraciones.length - 1]
+                        .fecha_fin
+                    : null
+                }
                 className="w-75"
                 value={formDataIteracion.fecha_fin}
                 onChange={handleChangeIteracion}
