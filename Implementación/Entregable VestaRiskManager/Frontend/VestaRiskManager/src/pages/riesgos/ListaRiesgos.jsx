@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
@@ -6,16 +6,19 @@ import {
   Alert,
   Button,
   Figure,
+  Modal,
   OverlayTrigger,
   Table,
   Tooltip,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCheck,
   faNetworkWired,
   faPenToSquare,
   faPlus,
   faTrashCan,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
@@ -49,13 +52,16 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
-  console.log(riesgos);
 
   const location = useLocation();
 
   const navigate = useNavigate();
   const comprobacionLider = location.pathname.includes("lider");
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const [confirmarEdicion, setConfirmarEdicion] = useState({
+    confirmar: false,
+    riesgo: null,
+  });
 
   return (
     <>
@@ -125,7 +131,21 @@ export default function ListaRiesgos() {
                           </Tooltip>
                         }
                       >
-                        <Figure.Image src={escudoAmarillo} />
+                        <Figure.Image
+                          src={escudoAmarillo}
+                          style={iteracion ? { cursor: "pointer" } : null}
+                          onClick={() => {
+                            if (iteracion) {
+                              navigate(
+                                `/inicio/proyecto/${
+                                  comprobacionLider ? "lider" : "desarrollador"
+                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                  riesgo.id_riesgo_local
+                                }/evaluacion/crear`
+                              );
+                            }
+                          }}
+                        />
                       </OverlayTrigger>
                     ) : riesgo.factor_riesgo < 9 ? (
                       <OverlayTrigger
@@ -186,7 +206,21 @@ export default function ListaRiesgos() {
                           </Tooltip>
                         }
                       >
-                        <Figure.Image src={escudoCritico} />
+                        <Figure.Image
+                          src={escudoCritico}
+                          style={iteracion ? { cursor: "pointer" } : null}
+                          onClick={() => {
+                            if (iteracion) {
+                              navigate(
+                                `/inicio/proyecto/${
+                                  comprobacionLider ? "lider" : "desarrollador"
+                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                  riesgo.id_riesgo_local
+                                }/plan/crear`
+                              );
+                            }
+                          }}
+                        />
                       </OverlayTrigger>
                     ) : (
                       <OverlayTrigger
@@ -234,9 +268,13 @@ export default function ListaRiesgos() {
                           variant="outline-warning"
                           disabled={iteracion === null}
                           onClick={() => {
-                            navigate(
-                              `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}-${riesgo.id_riesgo_local}`
-                            );
+                            if (riesgo.factor_riesgo) {
+                              setConfirmarEdicion({ confirmar: true, riesgo });
+                            } else {
+                              navigate(
+                                `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}-${riesgo.id_riesgo_local}`
+                              );
+                            }
                           }}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
@@ -306,6 +344,50 @@ export default function ListaRiesgos() {
               ))}
             </tbody>
           </Table>
+          <Modal
+            show={confirmarEdicion.confirmar}
+            onHide={() => {
+              setConfirmarEdicion({ confirmar: false, riesgo: null });
+            }}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>¿Está seguro?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                El riesgo posee evaluaciones y/o planes asociados. Si se realiza
+                alguna modificación podría generarse una inconsistencia.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-success"
+                onClick={() => {
+                  navigate(
+                    `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${confirmarEdicion.riesgo.id_riesgo}-${confirmarEdicion.riesgo.id_riesgo_local}`
+                  );
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ marginRight: "5px" }}
+                />
+                Editar de todos modos
+              </Button>
+              <Button
+                variant="outline-danger"
+                onClick={() => {
+                  setConfirmarEdicion({ confirmar: false, riesgo: null });
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ marginRight: "5px" }}
+                />
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
       </Contenedor>
       <Footer />
