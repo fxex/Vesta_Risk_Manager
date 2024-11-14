@@ -25,6 +25,22 @@ export const crearRiesgo = async (id_proyecto, data) => {
   return json;
 };
 
+export const modificarRiesgo = async (id_proyecto, id_riesgo, data) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();
+
+  return json.modificado;
+};
+
 export const obtenerRiesgoId = async (id_proyecto, id_riesgo) => {
   const respuesta = await fetch(
     `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}`,

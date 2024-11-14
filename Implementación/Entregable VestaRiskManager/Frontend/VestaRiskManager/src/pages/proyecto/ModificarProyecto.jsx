@@ -27,6 +27,8 @@ import { verificarError } from "../../utils/verificarErrores";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
+  console.log(proyecto);
+
   const { id_proyecto } = useParams();
   const navigate = useNavigate();
 
@@ -292,7 +294,6 @@ export default function ModificarProyecto() {
       });
       handleMostrarIteracion();
     }
-    console.log(formData);
 
     setBotonPresionado(false);
   };
@@ -776,8 +777,21 @@ export default function ModificarProyecto() {
                 className="w-75"
                 min={
                   formData.iteraciones.length > 0
-                    ? formData.iteraciones[formData.iteraciones.length - 1]
-                        .fecha_fin
+                    ? new Date(
+                        new Date(
+                          formData.iteraciones[
+                            formData.iteraciones.length - 1
+                          ].fecha_fin
+                        ).setDate(
+                          new Date(
+                            formData.iteraciones[
+                              formData.iteraciones.length - 1
+                            ].fecha_fin
+                          ).getDate() + 1
+                        )
+                      )
+                        .toISOString()
+                        .split("T")[0]
                     : null
                 }
                 value={formDataIteracion.fecha_inicio}
@@ -808,8 +822,21 @@ export default function ModificarProyecto() {
                 name="fecha_fin"
                 min={
                   formData.iteraciones.length > 0
-                    ? formData.iteraciones[formData.iteraciones.length - 1]
-                        .fecha_fin
+                    ? new Date(
+                        new Date(
+                          formData.iteraciones[
+                            formData.iteraciones.length - 1
+                          ].fecha_fin
+                        ).setDate(
+                          new Date(
+                            formData.iteraciones[
+                              formData.iteraciones.length - 1
+                            ].fecha_fin
+                          ).getDate() + 1
+                        )
+                      )
+                        .toISOString()
+                        .split("T")[0]
                     : null
                 }
                 className="w-75"

@@ -197,7 +197,9 @@ export default function CrearPlanDesarrollador() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Planificar Riesgo{" "}
+            {id_riesgo_local < 10 ? "0" : ""}
+            {id_riesgo_local}
           </h3>
           <Form>
             <Form.Group>
@@ -515,7 +517,7 @@ export default function CrearPlanDesarrollador() {
             <hr />
             <h5>Opciones</h5>
             <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
+              ruta={`/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`}
             />
           </>
         </Contenedor>

@@ -209,7 +209,9 @@ export default function CrearPlanLider() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Planificar Riesgo{" "}
+            {id_riesgo_local < 10 ? "0" : ""}
+            {id_riesgo_local}
           </h3>
           <Form>
             <Form.Group>

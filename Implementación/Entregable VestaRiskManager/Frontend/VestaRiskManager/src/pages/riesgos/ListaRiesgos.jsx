@@ -233,6 +233,11 @@ export default function ListaRiesgos() {
                         <Button
                           variant="outline-warning"
                           disabled={iteracion === null}
+                          onClick={() => {
+                            navigate(
+                              `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}-${riesgo.id_riesgo_local}`
+                            );
+                          }}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </Button>

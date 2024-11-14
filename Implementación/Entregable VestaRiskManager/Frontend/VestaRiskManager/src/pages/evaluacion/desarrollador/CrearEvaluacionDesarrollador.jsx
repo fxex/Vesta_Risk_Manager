@@ -74,7 +74,8 @@ export default function CrearEvaluacionDesarrollador() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local < 10 ? "0" : ""}
+            {id_riesgo_local}
           </h3>
           <Form>
             <Form.Group>

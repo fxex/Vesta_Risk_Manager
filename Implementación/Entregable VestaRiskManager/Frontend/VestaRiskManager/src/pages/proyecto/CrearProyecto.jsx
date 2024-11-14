@@ -191,7 +191,7 @@ export default function CrearProyecto() {
           formData.iteraciones[formData.iteraciones.length - 1];
         formData.fecha_inicio = primeraIteracion.fecha_inicio;
         formData.fecha_fin = ultimaIteracion.fecha_fin;
-        const estado = comprobarEstado(primeraIteracion);
+        const estado = comprobarEstado(primeraIteracion.fecha_inicio);
         formData.estado = estado;
       }
 
@@ -395,7 +395,8 @@ export default function CrearProyecto() {
                                     participantes:
                                       prevFormData.participantes.filter(
                                         (participante) =>
-                                          participante.nombre !== item.nombre
+                                          participante.nombre_usuario !==
+                                          item.nombre_usuario
                                       ),
                                   };
                                 });
@@ -602,7 +603,6 @@ export default function CrearProyecto() {
                     const participantesFiltrados = json.filter(
                       (item) => !nombresFormData.has(item.nombre_usuario)
                     );
-                    console.log(participantesFiltrados);
 
                     setParticipantesTotal(participantesFiltrados);
                     setParticipantesMostrado(
@@ -749,8 +749,21 @@ export default function CrearProyecto() {
                 type="date"
                 min={
                   formData.iteraciones.length > 0
-                    ? formData.iteraciones[formData.iteraciones.length - 1]
-                        .fecha_fin
+                    ? new Date(
+                        new Date(
+                          formData.iteraciones[
+                            formData.iteraciones.length - 1
+                          ].fecha_fin
+                        ).setDate(
+                          new Date(
+                            formData.iteraciones[
+                              formData.iteraciones.length - 1
+                            ].fecha_fin
+                          ).getDate() + 1
+                        )
+                      )
+                        .toISOString()
+                        .split("T")[0]
                     : null
                 }
                 name="fecha_inicio"
@@ -782,8 +795,21 @@ export default function CrearProyecto() {
                 type="date"
                 min={
                   formData.iteraciones.length > 0
-                    ? formData.iteraciones[formData.iteraciones.length - 1]
-                        .fecha_fin
+                    ? new Date(
+                        new Date(
+                          formData.iteraciones[
+                            formData.iteraciones.length - 1
+                          ].fecha_fin
+                        ).setDate(
+                          new Date(
+                            formData.iteraciones[
+                              formData.iteraciones.length - 1
+                            ].fecha_fin
+                          ).getDate() + 1
+                        )
+                      )
+                        .toISOString()
+                        .split("T")[0]
                     : null
                 }
                 name="fecha_fin"
