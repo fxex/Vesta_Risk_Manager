@@ -76,6 +76,18 @@ class Riesgo {
             return -1;
         }
     }
+
+    public function actualizarRiesgo($id_riesgo, $id_categoria){
+        $query = "UPDATE riesgo set descripcion = ?, id_categoria = ? where id_riesgo = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("sii", $this->descripcion, $id_categoria, $id_riesgo);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            return false;
+        }
+    }
     public function obtenerRiesgoId($id_riesgo){
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 

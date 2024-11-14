@@ -82,8 +82,29 @@ class GestorRiesgo {
         }
     }
 
+    public function actualizarRiesgo($id_riesgo, $data){
+        $comprobar = !empty($data["descripcion"] && !empty($data["categoria"])) && !empty($data["responsables"]);
+        if ($comprobar) {
+            vincularTabla::eliminarVinculo($this->conexion,"participante_riesgo", "id_riesgo", $id_riesgo);
+            $this->riesgo->setDescripcion($data["descripcion"]);
+            $resultado = $this->riesgo->actualizarRiesgo($id_riesgo, $data["categoria"]);
+            foreach ($data["responsables"] as $id_usuario) {
+                vincularTabla::crearVinculo($this->conexion, "participante_riesgo", "id_usuario", "id_riesgo",$id_usuario, $id_riesgo);
+            }
+            return $resultado;
+        }
+        else {
+            return false;
+        }
+    }
+
     public function obtenerRiesgoId($id_riesgo){
         $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo);
+        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_riesgo);
+        foreach ($responsables as $responsable) {
+            $resultado["responsables"][] = $responsable["id_usuario"];
+        }
+        
         return $resultado;
     }
 

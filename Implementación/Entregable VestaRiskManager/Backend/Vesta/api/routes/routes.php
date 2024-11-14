@@ -387,6 +387,17 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use
     }
 });
 
+$router->add("PUT", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){
+    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->actualizarRiesgo($id_riesgo, $data);
+        echo json_encode(["modificado"=>$resultado]);
+    } else {
+        echo json_encode(["modificado"=>false]);
+    }
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerRiesgoId($id_riesgo);
     echo json_encode($resultado);
