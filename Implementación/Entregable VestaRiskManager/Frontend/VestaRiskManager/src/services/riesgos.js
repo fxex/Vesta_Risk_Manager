@@ -116,3 +116,34 @@ export const obtenerPlanesProyecto = async (id_proyecto) => {
 
   return json;
 };
+
+export const obtenerPlanId = async (id_proyecto, id_plan) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/plan/${id_plan}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const modificarPlan = async (id_proyecto, id_plan, data) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/plan/${id_plan}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();
+
+  return json.modificado;
+};

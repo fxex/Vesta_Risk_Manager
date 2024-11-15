@@ -396,7 +396,7 @@ export default function CrearPlanLider() {
                 placeholder="Ingrese el nombre de la tarea"
                 value={formDataTarea.nombre}
                 onChange={handleChangeControlTarea}
-                isInvalid={errorTarea.nombre}
+                isInvalid={errorTarea.nombre || errorTarea.nombre_igual}
               />
               {errorTarea.nombre || errorTarea.nombre_igual ? (
                 <Form.Text className="text-danger">

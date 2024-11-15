@@ -64,6 +64,10 @@ import MonitoreoLider from "./pages/monitoreo/lider/MonitoreoLider.jsx";
 import VerPlanesActuales, {
   planesLoader,
 } from "./pages/plan/lider/VerPlanesActuales.jsx";
+import EditarPlanLider, {
+  planLoader,
+} from "./pages/plan/lider/EditarPlanLider.jsx";
+import NoEncontrada from "./pages/NoEncontrada.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -180,6 +184,11 @@ const App = () => {
       loader: planesLoader,
     },
     {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",
+      element: <RutaProtegida element={<EditarPlanLider />} />,
+      loader: planLoader,
+    },
+    {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
       element: <RutaProtegida element={<CrearRiesgo />} />,
       loader: cargarProyecto,
@@ -217,6 +226,10 @@ const App = () => {
     {
       path: "/salir",
       element: <RutaProtegida element={<Salir />} />,
+    },
+    {
+      path: "*",
+      element: <NoEncontrada />,
     },
   ]);
 

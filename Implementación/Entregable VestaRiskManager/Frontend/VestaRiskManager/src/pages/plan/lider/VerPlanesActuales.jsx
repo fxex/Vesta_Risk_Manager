@@ -4,7 +4,7 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { obtenerPlanesProyecto } from "../../../services/riesgos";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,6 +19,7 @@ export const planesLoader = async ({ params }) => {
 export default function VerPlanesActuales() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const mapId = JSON.parse(localStorage.getItem("mapId"));
+  const navigate = useNavigate();
 
   const { planes } = useLoaderData();
 
@@ -78,7 +79,14 @@ export default function VerPlanesActuales() {
                           placement="top"
                           overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                         >
-                          <Button variant="outline-warning" onClick={() => {}}>
+                          <Button
+                            variant="outline-warning"
+                            onClick={() => {
+                              navigate(
+                                `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}-${plan.id_plan_local}`
+                              );
+                            }}
+                          >
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </Button>
                         </OverlayTrigger>

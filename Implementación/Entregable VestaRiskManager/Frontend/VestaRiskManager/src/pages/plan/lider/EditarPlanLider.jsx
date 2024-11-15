@@ -4,7 +4,9 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
   crearPlan,
+  modificarPlan,
   obtenerCantidadPlanTipo,
+  obtenerPlanId,
   obtenerRiesgoId,
 } from "../../../services/riesgos";
 import { obtenerIteracionActual } from "../../../services/proyectos";
@@ -24,35 +26,34 @@ import { verificarError } from "../../../utils/verificarErrores";
 import { formatearFecha } from "../../../utils/fecha";
 import BotonSalir from "../../../components/BotonSalir";
 
-export const planCreacionLoader = async ({ params }) => {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
-
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
+export const planLoader = async ({ params }) => {
+  const id_plan_real = params.id_plan.split("-")[0];
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  const planes = await obtenerCantidadPlanTipo(
-    params.id_proyecto,
-    id_riesgo_real
-  );
-  return { riesgo, iteracion, planes };
+  const plan = await obtenerPlanId(params.id_proyecto, id_plan_real);
+
+  return { iteracion, plan };
 };
 
 export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const mapId = JSON.parse(localStorage.getItem("mapId"));
 
-  const { riesgo, iteracion, planes } = useLoaderData();
+  const { iteracion, plan } = useLoaderData();
+  console.log(proyecto.participantes);
 
   const navigate = useNavigate();
 
-  const { id_proyecto, id_riesgo } = useParams();
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
+  const { id_proyecto, id_plan } = useParams();
+  const [id_plan_real, id_plan_local] = id_plan.split("-");
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
-  const [creado, setCreado] = useState(null);
+  const [modificado, setModificado] = useState(null);
 
   const [formData, setFormData] = useState({
-    tipo: "",
-    descripcion: "",
-    tareas: [],
+    tipo: plan.tipo,
+    descripcion: plan.descripcion,
+    tareas: plan.tareas,
+    tareas_eliminadas: [],
   });
 
   const [formDataTarea, setFormDataTarea] = useState({
@@ -153,9 +154,12 @@ export default function EditarPlanLider() {
 
     const resultado = verificarError(comprobacionError);
     if (!resultado) {
-      formData.id_iteracion = iteracion.id_iteracion;
-      const creacion = await crearPlan(id_proyecto, id_riesgo_real, formData);
-      setCreado(creacion);
+      const modificacion = await modificarPlan(
+        id_proyecto,
+        id_plan_real,
+        formData
+      );
+      setModificado(modificacion);
     }
   };
 
@@ -202,15 +206,14 @@ export default function EditarPlanLider() {
       errorPrincipal.tareas = false;
     }
   };
-  if (creado === null) {
+  if (modificado === null) {
     return (
       <>
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo{" "}
-            {id_riesgo_local < 10 ? "0" : ""}
-            {id_riesgo_local}
+            {proyecto.nombre} - Editar Plan {id_plan_local < 10 ? "0" : ""}
+            {id_plan_local}
           </h3>
           <Form>
             <Form.Group>
@@ -218,8 +221,15 @@ export default function EditarPlanLider() {
               <Form.Control
                 disabled
                 value={`RK${
-                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
-                }`}
+                  mapId.find((item) => item.id_riesgo_real === plan.id_riesgo)
+                    .id_riesgo_local < 10
+                    ? "0"
+                    : ""
+                }${
+                  mapId.find((item) => item.id_riesgo_real === plan.id_riesgo)
+                    .id_riesgo_local
+                }
+                `}
               />
             </Form.Group>
             <Form.Group>
@@ -228,12 +238,12 @@ export default function EditarPlanLider() {
                 as="textarea"
                 rows={3}
                 disabled
-                value={riesgo.descripcion}
+                value={plan.riesgo.descripcion}
               />
             </Form.Group>
             <Form.Group>
               <Form.Label>Categoría del riesgo</Form.Label>
-              <Form.Control disabled value={riesgo.nombre_categoria} />
+              <Form.Control disabled value={plan.riesgo.nombre_categoria} />
             </Form.Group>
             <Form.Group>
               <Form.Label>Iteración</Form.Label>
@@ -253,13 +263,16 @@ export default function EditarPlanLider() {
                 isInvalid={errorPrincipal.tipo}
               >
                 <option value={""}>Seleccione el tipo de plan</option>
-                {planes.total_minimizacion == 0 ? (
+                {plan.planes_realizado.total_minimizacion == 0 ||
+                plan.tipo == "minimizacion" ? (
                   <option value={"minimizacion"}>Minimización</option>
                 ) : null}
-                {planes.total_mitigacion == 0 ? (
+                {plan.planes_realizado.total_mitigacion == 0 ||
+                plan.tipo == "mitigacion" ? (
                   <option value={"mitigacion"}>Mitigación</option>
                 ) : null}
-                {planes.total_contingencia == 0 ? (
+                {plan.planes_realizado.total_contingencia == 0 ||
+                plan.tipo == "contingencia" ? (
                   <option value={"contingencia"}>Contingencia</option>
                 ) : null}
               </Form.Select>
@@ -324,6 +337,17 @@ export default function EditarPlanLider() {
                               variant="outline-danger"
                               className="mx-1"
                               onClick={() => {
+                                if (tarea.id_tarea) {
+                                  setFormData((prevFormData) => {
+                                    return {
+                                      ...prevFormData,
+                                      tareas_eliminadas: [
+                                        ...prevFormData.tareas_eliminadas,
+                                        tarea,
+                                      ],
+                                    };
+                                  });
+                                }
                                 setFormData((prevFormData) => {
                                   return {
                                     ...prevFormData,
@@ -364,7 +388,7 @@ export default function EditarPlanLider() {
               className="mx-1"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`
+                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/planes`
                 );
               }}
             >
@@ -396,7 +420,7 @@ export default function EditarPlanLider() {
                 placeholder="Ingrese el nombre de la tarea"
                 value={formDataTarea.nombre}
                 onChange={handleChangeControlTarea}
-                isInvalid={errorTarea.nombre}
+                isInvalid={errorTarea.nombre || errorTarea.nombre_igual}
               />
               {errorTarea.nombre || errorTarea.nombre_igual ? (
                 <Form.Text className="text-danger">
@@ -517,10 +541,10 @@ export default function EditarPlanLider() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Planificar Riesgo {id_plan_local}
           </h3>
           <>
-            {creado ? (
+            {modificado ? (
               <Alert variant="success">Operación realizada con éxito.</Alert>
             ) : (
               <Alert variant="danger">Ha ocurrido un error.</Alert>
@@ -528,7 +552,7 @@ export default function EditarPlanLider() {
             <hr />
             <h5>Opciones</h5>
             <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
+              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/planes`}
             />
           </>
         </Contenedor>

@@ -117,7 +117,7 @@ export default function ListaRiesgos() {
               <tr>
                 <th style={{ minWidth: "4em" }} className="th"></th>
                 <th className="th">ID</th>
-                <th className="th">Categoria</th>
+                <th className="th">Categoría</th>
                 <th className="th">Descripción</th>
                 <th style={{ maxWidth: "2em" }} className="th">
                   Responsable
