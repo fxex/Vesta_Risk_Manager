@@ -153,7 +153,6 @@ class GestorProyecto {
                         $this->iteracion->actualizarIteracion($iteracion["id_iteracion"],$id_proyecto);
                     }else{
                         $this->iteracion->crearIteracion($id_proyecto);
-                        
                     }
                 }
             }

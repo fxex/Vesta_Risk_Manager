@@ -439,5 +439,27 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantida
 });
 
 
+$router->add("GET", "proyecto/{id_proyecto}/planes", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerPlanesIteracion($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyecto, $id_plan) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerPlanId($id_plan, $id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyecto, $id_plan) use ($controladorRiesgo){ 
+    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->actualizarPlan($id_plan, $data);
+        echo json_encode(["modificado"=>$resultado]);
+    } else {
+        echo json_encode(["modificado"=>false]);
+    }
+});
+
+
 
 $router->run();

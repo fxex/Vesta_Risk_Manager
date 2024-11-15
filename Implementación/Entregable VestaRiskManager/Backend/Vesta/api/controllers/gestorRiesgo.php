@@ -155,7 +155,64 @@ class GestorRiesgo {
                 $this->tarea->setEstado($tarea["estado"]);
                 $this->tarea->setFechaInicio($tarea["fecha_inicio"]);
                 $this->tarea->setFechaFin($tarea["fecha_fin"]);
-                $this->tarea->crearTarea($id_plan);
+                $id_tarea = $this->tarea->crearTarea($id_plan);
+                foreach ($tarea["responsables"] as $responsable) {
+                    vincularTabla::crearVinculo($this->conexion, "participante_tarea", "id_usuario", "id_tarea",$responsable["id_usuario"], $id_tarea);
+                }
+            }
+            return $id_plan > 0;
+        }else{
+            return false;
+        }
+    }
+
+    public function obtenerPlanesIteracion ($id_proyecto) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $planes = $this->plan->obtenerPlanesIteracion($iteracion["id_iteracion"]);
+            return $planes;
+        }else{
+            return [];
+        }
+    }
+
+    public function obtenerPlanId ($id_plan, $id_proyecto) {
+        $resultado = $this->plan->obtenerPlanId($id_plan);
+        $resultado["riesgo"] = $this->obtenerRiesgoId($resultado["id_riesgo"]);
+        $resultado["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $resultado["id_riesgo"]);
+        $resultado["tareas"] = $this->plan->obtenerTareasPlan($id_plan);
+        foreach ($resultado["tareas"] as &$tarea) {
+            $tarea["responsables"] = $this->tarea->obtenerResponsablesTarea($tarea["id_tarea"]);
+        }
+        return $resultado;
+    }
+
+    public function actualizarPlan($id_plan, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["tipo"]) && !empty($data["tareas"]);
+        if ($comprobar) {
+            $this->plan->setTipo($data["tipo"]);
+            $this->plan->setDescripcion($data["descripcion"]);
+            $this->plan->actualizarPlan($id_plan);
+            if (!empty($data["tareas_eliminadas"])) {
+                foreach ($data["tareas_eliminadas"] as $tarea) {
+                    vincularTabla::eliminarVinculo($this->conexion,"participante_tarea", "id_tarea", $tarea["id_tarea"]);
+                    $this->tarea->eliminarTarea($tarea["id_tarea"]);
+                }
+            }
+            foreach ($data["tareas"] as $tarea) {
+                if (!empty($tarea["id_tarea"])) {
+                    //TODO debera permitir editar tarea en un futuro
+                }else{
+                    $this->tarea->setNombre($tarea["nombre"]);
+                    $this->tarea->setDescripcion($tarea["descripcion"]);
+                    $this->tarea->setEstado($tarea["estado"]);
+                    $this->tarea->setFechaInicio($tarea["fecha_inicio"]);
+                    $this->tarea->setFechaFin($tarea["fecha_fin"]);
+                    $id_tarea = $this->tarea->crearTarea($id_plan);
+                    foreach ($tarea["responsables"] as $responsable) {
+                        vincularTabla::crearVinculo($this->conexion, "participante_tarea", "id_usuario", "id_tarea",$responsable["id_usuario"], $id_tarea);
+                    }
+                }
             }
             return $id_plan > 0;
         }else{

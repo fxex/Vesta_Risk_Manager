@@ -66,4 +66,34 @@ class Tarea{
         }
     }
 
+    public function eliminarTarea($id_tarea) {
+        $query = "DELETE FROM tarea WHERE id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_tarea);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Error al eliminar el usuario: " . $stmt->error);
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function obtenerResponsablesTarea($id_tarea) {
+        $query = "SELECT u.* FROM tarea t 
+                    inner join participante_tarea pr on pr.id_tarea = t.id_tarea 
+                    inner join usuario u on pr.id_usuario = u.id_usuario
+                    where t.id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_tarea);
+        $stmt->execute();
+        $participantes   = $stmt->get_result();
+        
+        $resultado = [];
+        while ($fila = $participantes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
 }
