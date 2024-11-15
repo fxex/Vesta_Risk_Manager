@@ -27,7 +27,6 @@ import { verificarError } from "../../utils/verificarErrores";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
-  console.log(proyecto);
 
   const { id_proyecto } = useParams();
   const navigate = useNavigate();
@@ -194,7 +193,7 @@ export default function ModificarProyecto() {
           formData.iteraciones[formData.iteraciones.length - 1];
         formData.fecha_inicio = primeraIteracion.fecha_inicio;
         formData.fecha_fin = ultimaIteracion.fecha_fin;
-        const estado = comprobarEstado(primeraIteracion);
+        const estado = comprobarEstado(primeraIteracion.fecha_inicio);
         formData.estado = estado;
       }
 

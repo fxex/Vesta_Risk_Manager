@@ -53,6 +53,16 @@ export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
 
+  const mapId =
+    riesgos && riesgos.length > 0
+      ? riesgos.map((riesgo) => ({
+          id_riesgo_real: riesgo.id_riesgo,
+          id_riesgo_local: riesgo.id_riesgo_local,
+        }))
+      : [];
+
+  localStorage.setItem("mapId", JSON.stringify(mapId));
+
   const location = useLocation();
 
   const navigate = useNavigate();

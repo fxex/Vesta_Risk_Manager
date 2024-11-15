@@ -36,7 +36,7 @@ export const planCreacionLoader = async ({ params }) => {
   return { riesgo, iteracion, planes };
 };
 
-export default function CrearPlanLider() {
+export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   const { riesgo, iteracion, planes } = useLoaderData();

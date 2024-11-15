@@ -61,6 +61,9 @@ import CrearPlanLider, {
 import CrearPlanDesarrollador from "./pages/plan/desarrollador/CrearPlanDesarrollador.jsx";
 import EditarRiesgo, { cargarRiesgo } from "./pages/riesgos/EditarRiesgo.jsx";
 import MonitoreoLider from "./pages/monitoreo/lider/MonitoreoLider.jsx";
+import VerPlanesActuales, {
+  planesLoader,
+} from "./pages/plan/lider/VerPlanesActuales.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -170,6 +173,11 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo",
       element: <RutaProtegida element={<MonitoreoLider />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
+      element: <RutaProtegida element={<VerPlanesActuales />} />,
+      loader: planesLoader,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
