@@ -19,7 +19,7 @@ export default function NoEncontrada() {
           <a href="http://localhost:5173/inicio">Presione aqui</a>
         </p>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
