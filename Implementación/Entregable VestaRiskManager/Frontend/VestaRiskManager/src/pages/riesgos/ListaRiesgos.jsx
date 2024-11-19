@@ -334,7 +334,11 @@ export default function ListaRiesgos() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-success"
-                          disabled={iteracion === null}
+                          disabled={
+                            iteracion === null ||
+                            riesgo.factor_riesgo < 9 ||
+                            !riesgo.evaluado
+                          }
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${
