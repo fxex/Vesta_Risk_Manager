@@ -132,7 +132,7 @@ export default function ListaRiesgos() {
               {riesgos.map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
-                    {riesgo.factor_riesgo === null || !riesgo.evaluado ? (
+                    {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
                       <OverlayTrigger
                         placement="top"
                         overlay={
@@ -258,15 +258,11 @@ export default function ListaRiesgos() {
                   >
                     {riesgo.descripcion}
                   </td>
-                  <td className="td">
-                    {riesgo.responsables.map((riesgo) => (
-                      <>
-                        {riesgo.nombre} <br />
-                      </>
-                    ))}
+                  <td className="td" style={{ maxWidth: "8em" }}>
+                    {riesgo.responsables}
                   </td>
                   <td className="td">
-                    {riesgo.evaluado ? riesgo.factor_riesgo : null}
+                    {riesgo.evaluado > 0 ? riesgo.factor_riesgo : null}
                   </td>
                   <td className="td">
                     <div className={`${comprobacionLider ? "" : "d-none"}`}>
@@ -311,7 +307,7 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-primary"
-                          disabled={iteracion === null || riesgo.evaluado}
+                          disabled={iteracion === null || riesgo.evaluado > 0}
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${
@@ -337,7 +333,7 @@ export default function ListaRiesgos() {
                           disabled={
                             iteracion === null ||
                             riesgo.factor_riesgo < 9 ||
-                            !riesgo.evaluado
+                            riesgo.evaluado <= 0
                           }
                           onClick={() => {
                             navigate(
