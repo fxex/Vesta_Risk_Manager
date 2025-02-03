@@ -51,7 +51,7 @@ export async function crearProyecto(formData) {
   });
   const json = await respuesta.json();
 
-  return json;
+  return json.creacion;
 }
 
 export async function actualizarProyecto(id, formData) {
@@ -62,10 +62,9 @@ export async function actualizarProyecto(id, formData) {
     },
     body: JSON.stringify(formData),
   });
-  const json = await respuesta.text();
-  console.log(json);
+  const json = await respuesta.json();
 
-  return json;
+  return json.modificacion;
 }
 
 export async function obtenerProyectosUsuarioLider(correo) {

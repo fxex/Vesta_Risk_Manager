@@ -26,6 +26,7 @@ export default function ModalPersonalizado({
   setShow,
   onConfirm,
   datosDefecto,
+  modificado,
 }) {
   // Estado para controlar si el botón de confirmación ha sido presionado
   const [botonPresionado, setBotonPresionado] = useState(false);
@@ -56,7 +57,7 @@ export default function ModalPersonalizado({
           disabled={botonPresionado}
         >
           <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
-          Añadir
+          {modificado ? "Modificar" : "Añadir"}
         </Button>
         <Button variant="outline-danger" onClick={handleShow}>
           <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
