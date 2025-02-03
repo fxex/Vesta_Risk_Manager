@@ -4,6 +4,15 @@ import { useUsuario } from "./../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
+/**
+ * Componente Footer
+ *
+ * Este componente renderiza un pie de pagina general.
+ * Si el usuario inicio sesion, se modifica el pie de pagina.
+ *
+ * @returns {JSX.Element} - Pie de pagina dependiendo si el usuario inicio sesion o no.
+ */
+
 export default function Footer() {
   const location = useLocation();
   const { usuario } = useUsuario();

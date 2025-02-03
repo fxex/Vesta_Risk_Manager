@@ -10,6 +10,14 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
 
+/**
+ * Componente NavegadorLider
+ *
+ * Este componente renderiza una barra de navegación específica para líderes y desarrolladores de proyectos.
+ * Incluye opciones para navegar al dashboard, lista de riesgos, monitoreo y cerrar sesión.
+ *
+ * @returns {JSX.Element} - Barra de navegación personalizada para líderes y desarrolladores.
+ */
 export default function NavegadorLider() {
   const navigate = useNavigate();
   const location = useLocation();

@@ -11,6 +11,7 @@ import { faPenToSquare, faSearch } from "@fortawesome/free-solid-svg-icons";
 export default function ListaProyecto() {
   const navigate = useNavigate();
   const proyectos = useLoaderData();
+  console.log(proyectos);
 
   return (
     <>

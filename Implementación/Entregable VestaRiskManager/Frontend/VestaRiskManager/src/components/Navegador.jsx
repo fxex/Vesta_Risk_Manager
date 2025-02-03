@@ -12,6 +12,15 @@ import {
 import { useLocation } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
 
+/**
+ * Componente Navegador
+ *
+ * Este componente renderiza una barra de navegación para usuarios que iniciaron sesion y los que no.
+ * Incluye opciones para navegar a la página de inicio, administrar usuarios y perfiles (solo para administradores),
+ * y cerrar sesión.
+ *
+ * @returns {JSX.Element} - Barra de navegación personalizada.
+ */
 export default function Navegador() {
   const location = useLocation();
   const { usuario } = useUsuario();

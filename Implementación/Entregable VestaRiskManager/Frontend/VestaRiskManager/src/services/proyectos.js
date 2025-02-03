@@ -1,17 +1,34 @@
 import { URL } from "../utils/URL";
 
+/**
+ * Obtiene la lista de todos los proyectos.
+ *
+ * @returns {Promise<JSON>} - Una promesa que resuelve en un objeto JSON con la lista de proyectos. El objeto sigue el siguiente formato [{id_proyecto, nombre, descripcion, estado, fecha_inicio, fecha_fin}]
+ */
 export async function obtenerProyectos() {
   const respuesta = await fetch(`${URL}/proyectos`);
   const json = await respuesta.json();
   return json;
 }
 
+/**
+ * Obtiene los datos de un participante por su nombre.
+ *
+ * @param {string} nombre - El nombre del participante a buscar.
+ * @returns {Promise<JSON>} - Una promesa que resuelve en un objeto JSON con los datos del participante. El objeto sigue el siguiente formato [{id_usuario, nombre_usuario, email, id_perfil, nombre_perfil}]
+ */
 export async function obtenerParticipanteNombre(nombre) {
   const respuesta = await fetch(`${URL}/proyecto/participante/${nombre}`);
   const json = await respuesta.json();
   return json;
 }
 
+/**
+ * Obtiene los datos de un proyecto por su ID.
+ *
+ * @param {string} id - El ID del proyecto a buscar.
+ * @returns {Promise<Object>} - Una promesa que resuelve en un objeto JSON con los datos del proyecto. El objeto sigue el siguiente formato {id_proyecto, nombre, descripcion, estado, fecha_inicio, fecha_fin}
+ */
 export async function obtenerProyectosId(id) {
   const respuesta = await fetch(`${URL}/proyecto/${id}`);
   const json = await respuesta.json();
