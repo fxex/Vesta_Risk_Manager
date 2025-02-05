@@ -169,11 +169,13 @@ export default function ModificarProyecto() {
     }
   };
 
-  const comprobarEstado = (iteracion_inicio) => {
+  const comprobarEstado = (iteracion_inicio, iteracion_fin) => {
     const fecha_actual = new Date();
-    const fecha_iteracion = new Date(iteracion_inicio);
-    const resultado = fecha_actual - fecha_iteracion;
-    return resultado > 0 ? "Activo" : "Inactivo";
+    const fecha_iteracion_inicio = new Date(iteracion_inicio);
+    const fecha_iteracion_fin = new Date(iteracion_fin);
+    const resultado_inicio = fecha_actual - fecha_iteracion_inicio;
+    const resultado_fin = fecha_actual - fecha_iteracion_fin;
+    return resultado_inicio > 0 && resultado_fin < 0 ? "Activo" : "Inactivo";
   };
 
   const handleClick = async () => {
@@ -194,7 +196,10 @@ export default function ModificarProyecto() {
           formData.iteraciones[formData.iteraciones.length - 1];
         formData.fecha_inicio = primeraIteracion.fecha_inicio;
         formData.fecha_fin = ultimaIteracion.fecha_fin;
-        const estado = comprobarEstado(primeraIteracion.fecha_inicio);
+        const estado = comprobarEstado(
+          primeraIteracion.fecha_inicio,
+          ultimaIteracion.fecha_fin
+        );
         formData.estado = estado;
       }
 

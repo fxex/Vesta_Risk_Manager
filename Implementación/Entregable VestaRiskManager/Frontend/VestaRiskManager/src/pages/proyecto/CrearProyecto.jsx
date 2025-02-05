@@ -86,7 +86,6 @@ export default function CrearProyecto() {
   const [totalPaginas, setTotalPaginas] = useState();
   const ITEMSPORPAGINA = 5; // Número de elementos por página
 
-  const [creado, setCreado] = useState(null);
   const [botonPresionado, setBotonPresionado] = useState(false);
 
   // Manejar cambios en los inputs
@@ -254,7 +253,6 @@ export default function CrearProyecto() {
       }
 
       const resultado = await crearProyecto(formData);
-      setCreado(resultado);
       if (resultado) {
         setFormData({
           nombre: "",
@@ -263,6 +261,9 @@ export default function CrearProyecto() {
           participantes: [],
           iteraciones: [],
           categorias: JSON.parse(categorias),
+        });
+        navigate("/inicio/proyectos", {
+          state: { mensaje: "Proyecto creado con éxito" },
         });
       }
     }
@@ -499,16 +500,6 @@ export default function CrearProyecto() {
   return (
     <>
       <Navegador />
-      {creado ? (
-        <Alert
-          variant={creado == true ? "success" : "danger"}
-          className="text-center"
-        >
-          {creado == true
-            ? "Se modifico correctamente el proyecto"
-            : "Ha ocurrido un error"}
-        </Alert>
-      ) : null}
       <Contenedor>
         <>
           <h3>Crear Proyecto</h3>
