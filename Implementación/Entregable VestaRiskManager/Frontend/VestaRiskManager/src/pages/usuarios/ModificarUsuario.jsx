@@ -66,7 +66,8 @@ export default function ModificarUsuario() {
     setBotonPresionado(true);
     const comprobarNombre =
       usuarioLoader.nombre_usuario == formData.nombre ||
-      formData.nombre.length === 0
+      formData.nombre.length === 0 ||
+      formData.nombre.length > 30
         ? false
         : await obtenerUsuarioNombre(formData.nombre);
 
