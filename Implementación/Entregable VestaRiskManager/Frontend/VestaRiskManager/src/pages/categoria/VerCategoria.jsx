@@ -1,0 +1,37 @@
+import React from "react";
+import Navegador from "../../components/Navegador";
+import Footer from "../../components/Footer";
+import Contenedor from "../../components/Contenedor";
+import BotonSalir from "../../components/BotonSalir";
+import { useLoaderData } from "react-router-dom";
+
+export async function cargarUsuario({ params }) {
+  const categoria = await obtenerCategoriaId(params.id_categoria);
+  return { categoria };
+}
+
+export default function VerCategoria() {
+  const { categoria } = useLoaderData();
+
+  return (
+    <>
+      <Navegador />
+      <Contenedor>
+        <h3>Propiedades de la Categor&iacute;a</h3>
+        <>
+          <h4>Nombre</h4>
+          <p>{categoria.nombre_categoria}</p>
+          <hr />
+          <h4>Descripc&iacute;a</h4>
+          <p>{categoria.descripcion}</p>
+          <hr />
+
+          <hr />
+          <h5>Opciones</h5>
+          <BotonSalir ruta={"/inicio/categorias"} />
+        </>
+      </Contenedor>
+      <Footer />
+    </>
+  );
+}
