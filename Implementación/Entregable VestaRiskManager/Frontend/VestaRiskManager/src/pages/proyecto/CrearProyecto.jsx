@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Alert, Button, Form, Modal, Pagination, Table } from "react-bootstrap";
+import { Button, Form, Modal, Pagination, Table } from "react-bootstrap";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -184,7 +183,30 @@ export default function CrearProyecto() {
     }
   };
 
-  //TODO: Se debe partir en dos metodos
+  const comprobarIteracionAnterior = (fecha_inicio, identificador) => {
+    const iteracionAnterior = formData.iteraciones[identificador - 1];
+    if (iteracionAnterior !== undefined) {
+      const fechaFinAnterior = new Date(iteracionAnterior.fecha_fin);
+
+      if (fecha_inicio <= fechaFinAnterior) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const comprobarIteracionSiguiente = (fecha_fin, identificador) => {
+    const iteracionSiguiente = formData.iteraciones[identificador + 1];
+    if (iteracionSiguiente !== undefined) {
+      const fechaInicioSiguiente = new Date(iteracionSiguiente.fecha_inicio);
+
+      if (fecha_fin >= fechaInicioSiguiente) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const comprobarModificacionIteracion = (
     fecha_inicio,
     fecha_fin,
@@ -196,26 +218,17 @@ export default function CrearProyecto() {
     const fechaInicioModificada = new Date(fecha_inicio);
     const fechaFinModificada = new Date(fecha_fin);
 
-    const iteracionAnterior = formData.iteraciones[identificador - 1];
-    if (iteracionAnterior !== undefined) {
-      const fechaFinAnterior = new Date(iteracionAnterior.fecha_fin);
+    const anterior = comprobarIteracionAnterior(
+      fechaInicioModificada,
+      identificador
+    );
 
-      if (fechaInicioModificada <= fechaFinAnterior) {
-        return false;
-      }
-    }
+    const siguiente = comprobarIteracionSiguiente(
+      fechaFinModificada,
+      identificador
+    );
 
-    const iteracionSiguiente = formData.iteraciones[identificador + 1];
-    if (iteracionSiguiente !== undefined) {
-      const fechaInicioSiguiente = new Date(iteracionSiguiente.fecha_inicio);
-      console.log(fechaFinModificada >= fechaInicioSiguiente);
-
-      if (fechaFinModificada >= fechaInicioSiguiente) {
-        return false;
-      }
-    }
-
-    return true;
+    return anterior && siguiente;
   };
 
   const comprobarEstado = (iteracion_inicio, iteracion_fin) => {
@@ -428,53 +441,67 @@ export default function CrearProyecto() {
       // Modificar la iteración seleccionada
       nuevasIteraciones[key] = resto;
 
-      // Recalcular las fechas de las iteraciones anteriores
-      for (let i = key - 1; i >= 0; i--) {
-        const iteracionSiguiente = nuevasIteraciones[i + 1];
-        const iteracionActual = nuevasIteraciones[i];
+      const comprobacionAnterior = comprobarIteracionAnterior(
+        new Date(resto.fecha_inicio),
+        key
+      );
 
-        // Calcular la nueva fecha de fin (fecha de inicio de la siguiente iteración - 1 día)
-        const nuevaFechaFin = new Date(iteracionSiguiente.fecha_inicio);
-        nuevaFechaFin.setDate(nuevaFechaFin.getDate() - 1);
+      const comprobacionSiguiente = comprobarIteracionSiguiente(
+        new Date(resto.fecha_fin),
+        key
+      );
 
-        // Calcular la nueva fecha de inicio (mantener la misma duración)
-        const duracion =
-          new Date(iteracionActual.fecha_fin) -
-          new Date(iteracionActual.fecha_inicio);
-        const nuevaFechaInicio = new Date(nuevaFechaFin);
-        nuevaFechaInicio.setDate(
-          nuevaFechaInicio.getDate() - duracion / (1000 * 60 * 60 * 24)
-        );
+      if (!comprobacionAnterior) {
+        // Recalcular las fechas de las iteraciones anteriores
+        for (let i = key - 1; i >= 0; i--) {
+          const iteracionSiguiente = nuevasIteraciones[i + 1];
+          const iteracionActual = nuevasIteraciones[i];
 
-        // Actualizar la iteración actual
-        nuevasIteraciones[i] = {
-          ...iteracionActual,
-          fecha_inicio: nuevaFechaInicio.toISOString().split("T")[0],
-          fecha_fin: nuevaFechaFin.toISOString().split("T")[0],
-        };
+          // Calcular la nueva fecha de fin (fecha de inicio de la siguiente iteración - 1 día)
+          const nuevaFechaFin = new Date(iteracionSiguiente.fecha_inicio);
+          nuevaFechaFin.setDate(nuevaFechaFin.getDate() - 1);
+
+          // Calcular la nueva fecha de inicio (mantener la misma duración)
+          const duracion =
+            new Date(iteracionActual.fecha_fin) -
+            new Date(iteracionActual.fecha_inicio);
+          const nuevaFechaInicio = new Date(nuevaFechaFin);
+          nuevaFechaInicio.setDate(
+            nuevaFechaInicio.getDate() - duracion / (1000 * 60 * 60 * 24)
+          );
+
+          // Actualizar la iteración actual
+          nuevasIteraciones[i] = {
+            ...iteracionActual,
+            fecha_inicio: nuevaFechaInicio.toISOString().split("T")[0],
+            fecha_fin: nuevaFechaFin.toISOString().split("T")[0],
+          };
+        }
       }
 
-      // Recalcular las fechas de las iteraciones siguientes
-      for (let i = key + 1; i < nuevasIteraciones.length; i++) {
-        const iteracionAnterior = nuevasIteraciones[i - 1];
-        const iteracionActual = nuevasIteraciones[i];
+      if (!comprobacionSiguiente) {
+        // Recalcular las fechas de las iteraciones siguientes
+        for (let i = key + 1; i < nuevasIteraciones.length; i++) {
+          const iteracionAnterior = nuevasIteraciones[i - 1];
+          const iteracionActual = nuevasIteraciones[i];
 
-        const nuevaFechaInicio = new Date(iteracionAnterior.fecha_fin);
-        nuevaFechaInicio.setDate(nuevaFechaInicio.getDate() + 1);
+          const nuevaFechaInicio = new Date(iteracionAnterior.fecha_fin);
+          nuevaFechaInicio.setDate(nuevaFechaInicio.getDate() + 1);
 
-        const duracion =
-          new Date(iteracionActual.fecha_fin) -
-          new Date(iteracionActual.fecha_inicio);
-        const nuevaFechaFin = new Date(nuevaFechaInicio);
-        nuevaFechaFin.setDate(
-          nuevaFechaFin.getDate() + duracion / (1000 * 60 * 60 * 24)
-        );
+          const duracion =
+            new Date(iteracionActual.fecha_fin) -
+            new Date(iteracionActual.fecha_inicio);
+          const nuevaFechaFin = new Date(nuevaFechaInicio);
+          nuevaFechaFin.setDate(
+            nuevaFechaFin.getDate() + duracion / (1000 * 60 * 60 * 24)
+          );
 
-        nuevasIteraciones[i] = {
-          ...iteracionActual,
-          fecha_inicio: nuevaFechaInicio.toISOString().split("T")[0],
-          fecha_fin: nuevaFechaFin.toISOString().split("T")[0],
-        };
+          nuevasIteraciones[i] = {
+            ...iteracionActual,
+            fecha_inicio: nuevaFechaInicio.toISOString().split("T")[0],
+            fecha_fin: nuevaFechaFin.toISOString().split("T")[0],
+          };
+        }
       }
 
       return {
@@ -1132,7 +1159,8 @@ export default function CrearProyecto() {
             <h1>¿Estas seguro?</h1>
             <p>
               Se ha detectado un solapamiento en las fechas de las iteraciones,
-              lo que implicará que las iteraciones posteriores sean modificadas.
+              lo que implicará que las iteraciones anteriores y posteriores sean
+              modificadas.
             </p>
           </>
         </Modal.Body>

@@ -18,6 +18,7 @@ export default function ListaProyecto() {
 
   useEffect(() => {
     if (location.state?.mensaje) {
+      window.scrollTo(0, 0);
       setMensaje(location.state.mensaje);
 
       // Limpiar el mensaje después de unos segundos
