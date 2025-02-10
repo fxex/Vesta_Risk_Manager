@@ -27,7 +27,9 @@ export default function VerProyecto() {
           <h4>Descripción</h4>
           <p>{proyecto.descripcion}</p>
           <h4>Estado</h4>
-          <p>{proyecto.estado}</p>
+          <p>
+            {proyecto.estado.charAt(0).toUpperCase() + proyecto.estado.slice(1)}
+          </p>
           <h4>Duración</h4>
           <p>
             {proyecto.fecha_inicio
