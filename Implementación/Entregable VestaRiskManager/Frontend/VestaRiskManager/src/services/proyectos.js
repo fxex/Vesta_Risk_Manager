@@ -38,6 +38,7 @@ export async function obtenerProyectosId(id) {
 export async function obtenerCategoriaGeneral() {
   const respuesta = await fetch(`${URL}/proyecto/categorias`);
   const json = await respuesta.json();
+
   return json;
 }
 

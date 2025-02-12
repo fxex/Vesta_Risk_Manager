@@ -36,6 +36,14 @@ export default function Home() {
             >
               Crear Proyecto
             </Button>
+            <Button
+              className="px-4 py-3 me-2 boton_1"
+              onClick={() => {
+                navigate("/inicio/categorias");
+              }}
+            >
+              Ver Categorias
+            </Button>
           </div>
         ) : (
           <div style={{ minHeight: "40vh" }}>

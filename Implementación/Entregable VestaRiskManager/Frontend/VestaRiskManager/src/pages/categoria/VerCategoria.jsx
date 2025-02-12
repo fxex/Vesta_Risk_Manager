@@ -4,14 +4,16 @@ import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData } from "react-router-dom";
+import { obtenerCategoriaId } from "../../services/categorias";
 
-export async function cargarUsuario({ params }) {
+export async function cargarCategoria({ params }) {
   const categoria = await obtenerCategoriaId(params.id_categoria);
   return { categoria };
 }
 
 export default function VerCategoria() {
   const { categoria } = useLoaderData();
+  console.log(categoria);
 
   return (
     <>
@@ -20,11 +22,10 @@ export default function VerCategoria() {
         <h3>Propiedades de la Categor&iacute;a</h3>
         <>
           <h4>Nombre</h4>
-          <p>{categoria.nombre_categoria}</p>
+          <p>{categoria.nombre}</p>
           <hr />
           <h4>Descripc&iacute;a</h4>
           <p>{categoria.descripcion}</p>
-          <hr />
 
           <hr />
           <h5>Opciones</h5>

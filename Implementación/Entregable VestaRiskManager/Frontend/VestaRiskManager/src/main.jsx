@@ -68,6 +68,10 @@ import EditarPlanLider, {
   planLoader,
 } from "./pages/plan/lider/EditarPlanLider.jsx";
 import NoEncontrada from "./pages/NoEncontrada.jsx";
+import VerCategoria, {
+  cargarCategoria,
+} from "./pages/categoria/VerCategoria.jsx";
+import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -150,6 +154,17 @@ const App = () => {
       element: <RutaProtegida element={<ModificarProyecto />} isAdmin={true} />,
       loader: cargarProyecto,
     },
+    {
+      path: "/inicio/categorias",
+      element: <RutaProtegida element={<ListaCategorias />} isAdmin={true} />,
+      loader: obtenerCategoriaGeneral,
+    },
+    {
+      path: "/inicio/categoria/:id_categoria",
+      element: <RutaProtegida element={<VerCategoria />} isAdmin={true} />,
+      loader: cargarCategoria,
+    },
+
     {
       path: "/inicio/proyectos/lider",
       element: <RutaProtegida element={<ListaProyectoLider />} />,
