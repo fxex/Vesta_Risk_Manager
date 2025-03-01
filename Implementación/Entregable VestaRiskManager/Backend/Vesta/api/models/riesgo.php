@@ -34,14 +34,18 @@ class Riesgo {
         $this->fecha_creacion = $fecha_creacion;
     }
 
-    public function obtenerRiesgoProyecto($id_proyecto){
-        $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
+    public function obtenerRiesgoProyecto($id_proyecto, $id_iteracion){
+        $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre as nombre_categoria, 
+        (SELECT GROUP_CONCAT(u.nombre SEPARATOR ', ') from usuario u inner join participante_riesgo pr on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = r.id_riesgo) as responsables,
+        (SELECT COUNT(*) 
+        FROM evaluacion e inner join iteracion_evaluacion ie on ie.id_evaluacion = e.id_evaluacion WHERE e.id_riesgo = r.id_riesgo and id_iteracion = ?) as evaluado
+        FROM riesgo r 
         inner join proyecto_riesgo pr on pr.id_riesgo = r.id_riesgo 
         inner join proyecto p on pr.id_proyecto = p.id_proyecto
         inner join categoria c on r.id_categoria = c.id_categoria 
         where pr.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_proyecto);
+        $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmt->execute();
         $riesgos = $stmt->get_result(); 
         $resultado = [];

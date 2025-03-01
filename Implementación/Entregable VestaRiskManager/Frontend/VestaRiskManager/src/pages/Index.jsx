@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { obtenerUsuariosCorreo } from "../services/usuarios";
 import { useUsuario } from "../context/usuarioContext";
+import { PDFViewer } from "@react-pdf/renderer";
+import InformeIncidencia from "./informes/InformeIncidencia";
 
 export default function Index() {
   const [error, setError] = useState(false);
@@ -69,6 +71,10 @@ export default function Index() {
             }}
           />
         </>
+
+        <PDFViewer width={500} height={500}>
+          <InformeIncidencia></InformeIncidencia>
+        </PDFViewer>
       </Contenedor>
       {/* <Container className="pt-4 pb-5">
         <Card>

@@ -60,7 +60,7 @@ class Usuario {
     }
 
     public function obtenerUsuariosNombre() {
-        $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre like ?";
+        $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre like ? and p.nombre != 'Administrador'";
         $stmt = $this->conexion->prepare($query);
         $search = "%". $this->nombre ."%";
         $stmt->bind_param("s", $search);

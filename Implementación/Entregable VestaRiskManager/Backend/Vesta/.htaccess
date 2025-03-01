@@ -32,8 +32,8 @@ Header set Access-Control-Allow-Credentials "true"
     ExpiresByType image/svg+xml "now"
 </IfModule>
 
-<IfModule mod_headers.c>
-    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
-    Header set Pragma "no-cache"
-    Header set Expires "0"
-</IfModule>
+# <IfModule mod_headers.c>
+#     Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+#     Header set Pragma "no-cache"
+#     Header set Expires "0"
+# </IfModule>

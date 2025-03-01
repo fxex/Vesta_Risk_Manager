@@ -69,9 +69,9 @@ class GestorProyecto {
         $response = curl_exec($ch);
         
         if (curl_errno($ch)) {
-            return curl_error($ch);
+            return ['error' => curl_error($ch)];
         } else {
-            return $response;
+            return json_decode($response, true);
         }
         
         curl_close($ch);

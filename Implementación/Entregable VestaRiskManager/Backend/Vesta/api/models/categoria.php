@@ -1,20 +1,66 @@
 <?php
 class Categoria{
-    private $nombre, $descripcion;
+    private $nombre, $descripcion, $estado, $version;
     private $conexion;
 
-    function __construct($conexion, $nombre = null, $descripcion = null) {
+    function __construct($conexion, $nombre = null, $descripcion = null, $estado = null, $version = null) {
         $this->conexion = $conexion;
         $this->nombre = $nombre;
         $this->descripcion = $descripcion;
+        $this->estado = $estado;
+        $this->version = $version;
+    }
+
+    public function getNombre(){
+        return $this->nombre;
+    }
+
+    public function getDescripcion(){
+        return $this->descripcion;
+    }
+
+    public function getEstado(){
+        return $this->estado;
+    }
+
+    public function getVersion(){
+        return $this->version;
+    }
+
+    public function setNombre($nombre){
+        $this->nombre = $nombre;
+    }
+
+    public function setDescripcion($descripcion){
+        $this->descripcion = $descripcion;
+    }
+
+    public function setEstado($estado){
+        $this->estado = $estado;
+    }
+
+    public function setVersion($version){
+        $this->version = $version;
     }
 
     public function obtenerCategoriasGenerales(){
-        $categorias = $this->conexion->query("SELECT * FROM categoria where id_categoria < 11");
+        $categorias = $this->conexion->query("SELECT * FROM categoria where estado = 'activo'");
         $resultado = [];
         while ($fila = $categorias->fetch_assoc()) {
             $resultado[] = $fila;
         }
+        return $resultado;
+    }
+
+    public function obtenerCategoriaId($id) {
+        $query = "Select id_categoria, nombre, descripcion from categoria where id_categoria = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        $this->setNombre($resultado["nombre"]);
+        $this->setDescripcion($resultado["descripcion"]);
+
         return $resultado;
     }
 }

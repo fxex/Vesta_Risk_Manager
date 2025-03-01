@@ -26,22 +26,23 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerCategoriaId($id){
+        $resultado = $this->categoria->obtenerCategoriaId($id);
+        return $resultado;
+    }
+
+
     public function obtenerRiesgoProyecto($id_proyecto){
-        $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto);
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $resultado = null;
+        if (!empty($iteracion)) {
+            $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $iteracion["id_iteracion"]);
+        }else{
+            $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, 0);
+        }
+
         if (!empty($resultado)) {
             foreach ($resultado as &$riesgo) {
-                $riesgo["responsables"] = $this->riesgo->obtenerParticipantesRiesgo($riesgo["id_riesgo"]);
-                if (!empty($iteracion)) {
-                    $cantidad = $this->riesgo->obtenerCantidadEvaluaciones($riesgo["id_riesgo"], $iteracion["id_iteracion"]);
-                    if (!empty($cantidad)) {
-                        $riesgo["evaluado"] = $cantidad["total_evaluaciones"] > 0;
-                    }else{
-                        $riesgo["evaluado"] = false;
-                    }
-                }else{
-                    $riesgo["evaluado"] = true;
-                }
                 $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"]);
             }
         }

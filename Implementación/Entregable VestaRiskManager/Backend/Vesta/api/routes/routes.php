@@ -369,6 +369,11 @@ $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     echo json_encode($resultado); 
 });
 
+$router->add("GET", "categoria/{id}", function($id) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerCategoriaId($id); 
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use ($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerRiesgoProyecto($id_proyecto);
     echo json_encode($resultado);
