@@ -39,6 +39,8 @@ create table if not exists categoria (
 	id_categoria int not null auto_increment,
     nombre varchar(40) not null,
     descripcion varchar(255) not null,
+    estado enum("activo", "inactivo") not null default "activo",
+    version int not null default 1,
     primary key (id_categoria)
 );
 
