@@ -274,7 +274,7 @@ export default function CrearProyecto() {
           estado: "Inactivo",
           participantes: [],
           iteraciones: [],
-          categorias: JSON.parse(categorias),
+          categorias: categorias,
         });
         navigate("/inicio/proyectos", {
           state: { mensaje: "Proyecto creado con éxito" },

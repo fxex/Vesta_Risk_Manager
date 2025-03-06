@@ -72,6 +72,7 @@ import VerCategoria, {
   cargarCategoria,
 } from "./pages/categoria/VerCategoria.jsx";
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
+import ListaIncidencia from "./pages/Incidencia/ListaIncidencia.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -113,26 +114,26 @@ const App = () => {
       element: <RutaProtegida element={<ListaPerfiles />} isAdmin={true} />,
       loader: perfilLoader,
     },
-    {
-      path: "/inicio/perfil/crear",
-      element: <RutaProtegida element={<CrearPerfil />} isAdmin={true} />,
-      loader: permisoLoader,
-    },
-    {
-      path: "/inicio/perfil/:id_perfil",
-      element: <RutaProtegida element={<VerPerfil />} isAdmin={true} />,
-      loader: cargarPerfilId,
-    },
-    {
-      path: "/inicio/perfil/modificar/:id_perfil",
-      element: <RutaProtegida element={<ModificarPerfil />} isAdmin={true} />,
-      loader: cargarModificarPerfil,
-    },
-    {
-      path: "/inicio/perfil/eliminar/:id_perfil",
-      element: <RutaProtegida element={<EliminarPerfil />} isAdmin={true} />,
-      loader: cargarEliminarPerfil,
-    },
+    // {
+    //   path: "/inicio/perfil/crear",
+    //   element: <RutaProtegida element={<CrearPerfil />} isAdmin={true} />,
+    //   loader: permisoLoader,
+    // },
+    // {
+    //   path: "/inicio/perfil/:id_perfil",
+    //   element: <RutaProtegida element={<VerPerfil />} isAdmin={true} />,
+    //   loader: cargarPerfilId,
+    // },
+    // {
+    //   path: "/inicio/perfil/modificar/:id_perfil",
+    //   element: <RutaProtegida element={<ModificarPerfil />} isAdmin={true} />,
+    //   loader: cargarModificarPerfil,
+    // },
+    // {
+    //   path: "/inicio/perfil/eliminar/:id_perfil",
+    //   element: <RutaProtegida element={<EliminarPerfil />} isAdmin={true} />,
+    //   loader: cargarEliminarPerfil,
+    // },
     {
       path: "/inicio/proyectos",
       element: <RutaProtegida element={<ListaProyecto />} isAdmin={true} />,

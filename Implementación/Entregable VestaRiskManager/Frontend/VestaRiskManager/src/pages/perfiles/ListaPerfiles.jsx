@@ -24,7 +24,7 @@ export default function ListaPerfiles() {
       <Contenedor>
         <h3>Perfiles</h3>
         <>
-          <Button
+          {/* <Button
             variant="success"
             onClick={() => {
               navigate("/inicio/perfil/crear");
@@ -32,19 +32,19 @@ export default function ListaPerfiles() {
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo perfil
-          </Button>
+          </Button> */}
           <Table size="sm" hover className="mt-2">
             <thead className="table-info">
               <tr>
                 <th>Perfiles</th>
-                <th>Opciones</th>
+                {/* <th>Opciones</th> */}
               </tr>
             </thead>
             <tbody>
               {perfiles.map((item, key) => (
                 <tr key={key}>
                   <td>{item.nombre}</td>
-                  <td>
+                  {/* <td>
                     <Button
                       variant="outline-primary"
                       className="mx-1"
@@ -77,7 +77,7 @@ export default function ListaPerfiles() {
                     >
                       <FontAwesomeIcon icon={faTrashCan} />
                     </Button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

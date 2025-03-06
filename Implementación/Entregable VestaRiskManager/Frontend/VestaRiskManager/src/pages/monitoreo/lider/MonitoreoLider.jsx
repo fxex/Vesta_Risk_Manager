@@ -32,6 +32,13 @@ export default function MonitoreoLider() {
             <Button className="boton_2">Evaluaciones actuales</Button>
             <Button className="boton_2">Evaluaciones anteriores</Button>
           </div>
+          <hr ></hr>
+          <p>Informes:</p>
+          <div className="d-flex gap-3" style={{ minHeight: "10vh" }}>
+            <Button className="boton_2">Incidencias</Button>
+            <Button className="boton_2">Evaluaciones actuales</Button>
+            <Button className="boton_2">Evaluaciones anteriores</Button>
+          </div>
         </div>
       </Contenedor>
       <Footer />

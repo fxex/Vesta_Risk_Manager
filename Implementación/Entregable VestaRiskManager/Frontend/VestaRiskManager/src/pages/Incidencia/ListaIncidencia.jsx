@@ -38,19 +38,20 @@ import escudoCritico from "../../assets/img/Escudo critico.png";
 import escudoVerde from "../../assets/img/escudo verde.png";
 import { formatearFecha } from "../../utils/fecha";
 
-export const riesgoLoader = async ({ params }) => {
-  const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+// export const riesgoLoader = async ({ params }) => {
+//   const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
+//   riesgos.map((item, key) => {
+//     item.id_riesgo_local = key + 1;
+//   });
 
-  return { riesgos, iteracion };
-};
+//   const iteracion = await obtenerIteracionActual(params.id_proyecto);
 
-export default function ListaRiesgos() {
+//   return { riesgos, iteracion };
+// };
+
+export default function ListaIncidencia() {
   const { id_proyecto } = useParams();
-  const { riesgos, iteracion } = useLoaderData();
-  console.log(riesgos);
-  
-
+  // const { riesgos, iteracion } = useLoaderData();
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -64,16 +65,16 @@ export default function ListaRiesgos() {
   return (
     <>
       <NavegadorLider />
-      {iteracion === null ? (
+      {/* {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
           visualizar.
         </Alert>
-      ) : null}
+      ) : null} */}
       <Contenedor>
         <>
           <h3>{proyecto.nombre}</h3>
-          {iteracion ? (
+          {/* {iteracion ? (
             <>
               <h4>
                 {iteracion.nombre}
@@ -83,7 +84,7 @@ export default function ListaRiesgos() {
                 {formatearFecha(iteracion.fecha_fin)}
               </h4>
             </>
-          ) : null}
+          ) : null} */}
         </>
         <>
           <Button
@@ -92,32 +93,31 @@ export default function ListaRiesgos() {
               navigate(
                 `/inicio/proyecto/${
                   comprobacionLider ? "lider" : "desarrollador"
-                }/${id_proyecto}/riesgo/crear`
+                }/${id_proyecto}/incidencia/crear`
               );
             }}
-            disabled={iteracion === null}
+            // disabled={iteracion === null}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
-            Nuevo Riesgo
+            Nueva incidencia
           </Button>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
                 <th style={{ minWidth: "4em" }} className="th"></th>
                 <th className="th">ID</th>
-                <th className="th">Categoría</th>
                 <th className="th">Descripción</th>
-                <th style={{ maxWidth: "2em" }} className="th">
+                <th style={{ maxWidth: "6em" }} className="th">
                   Responsable
                 </th>
                 <th style={{ maxWidth: "5em" }} className="th">
-                  Factor de riesgo
+                  Identificador del riesgo
                 </th>
                 <th className="th">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {riesgos.map((riesgo, key) => (
+              {[].map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
                     {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
@@ -131,13 +131,15 @@ export default function ListaRiesgos() {
                       >
                         <Figure.Image
                           src={escudoAmarillo}
-                          style={iteracion ? { cursor: "pointer" } : null}
+                          style={false ? { cursor: "pointer" } : null}
                           onClick={() => {
-                            if (iteracion) {
+                            if (false) {
                               navigate(
                                 `/inicio/proyecto/${
                                   comprobacionLider ? "lider" : "desarrollador"
-                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}/evaluacion/crear`
+                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                  riesgo.id_riesgo_local
+                                }/evaluacion/crear`
                               );
                             }
                           }}
@@ -204,13 +206,15 @@ export default function ListaRiesgos() {
                       >
                         <Figure.Image
                           src={escudoCritico}
-                          style={iteracion ? { cursor: "pointer" } : null}
+                          style={false ? { cursor: "pointer" } : null}
                           onClick={() => {
-                            if (iteracion) {
+                            if (false) {
                               navigate(
                                 `/inicio/proyecto/${
                                   comprobacionLider ? "lider" : "desarrollador"
-                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}/plan/crear`
+                                }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
+                                  riesgo.id_riesgo_local
+                                }/plan/crear`
                               );
                             }
                           }}
@@ -231,9 +235,9 @@ export default function ListaRiesgos() {
                   </td>
                   <td className="td">
                     RK
-                    {riesgo.id_riesgo < 10
-                      ? `0${riesgo.id_riesgo}`
-                      : riesgo.id_riesgo}
+                    {riesgo.id_riesgo_local < 10
+                      ? `0${riesgo.id_riesgo_local}`
+                      : riesgo.id_riesgo_local}
                   </td>
                   <td className="td">{riesgo.nombre_categoria}</td>
                   <td
@@ -256,7 +260,7 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-warning"
-                          disabled={iteracion === null}
+                          disabled={false === null}
                           onClick={() => {
                             if (riesgo.factor_riesgo) {
                               setConfirmarEdicion({ confirmar: true, riesgo });
@@ -277,7 +281,7 @@ export default function ListaRiesgos() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-danger"
-                          disabled={iteracion === null}
+                          disabled={false === null}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </Button>
