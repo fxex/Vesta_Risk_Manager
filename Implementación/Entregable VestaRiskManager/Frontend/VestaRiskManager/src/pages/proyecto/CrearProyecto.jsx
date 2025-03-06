@@ -28,6 +28,7 @@ import { verificarError } from "../../utils/verificarErrores";
 export default function CrearProyecto() {
   // Solicita las categorías por defecto.
   const categorias = useLoaderData();
+  
   const navigate = useNavigate();
 
   //Estados relacionados a mostrar el modal.
@@ -64,7 +65,7 @@ export default function CrearProyecto() {
     estado: "Inactivo",
     participantes: [],
     iteraciones: [],
-    categorias: JSON.parse(categorias),
+    categorias: categorias,
   });
 
   const [formDataParticipante, setFormDataParticipante] = useState({

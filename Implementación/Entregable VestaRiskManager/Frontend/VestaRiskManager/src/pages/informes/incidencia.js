@@ -1,23 +1,7 @@
-import React, { useState } from "react";
-import { Alert } from "react-bootstrap";
-import { GoogleLogin } from "@react-oauth/google";
-import Contenedor from "../components/Contenedor";
-import Navegador from "../components/Navegador";
-import Footer from "../components/Footer";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { obtenerUsuariosCorreo } from "../services/usuarios";
-import { useUsuario } from "../context/usuarioContext";
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 
-
-export default function Index() {
-  const [error, setError] = useState(false);
-  const { iniciarSesion } = useUsuario();
-  const navigation = useNavigate();
-
-  const prueba = () => {
+export const informeIncidencia = () => {
     pdfMake.tableLayouts = {
       customLayout: {
         hLineWidth: function (i, node) {
@@ -75,7 +59,25 @@ export default function Index() {
             { image:"logoRight", width:50, height:80, alignment:"rigth"}
           ],
           margin:[0,0,0,20]
-        }, 
+        },  
+        {
+          layout: 'customLayout', // optional
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths: [ '*', '*', "*", '*' ],
+            heights: ['*', 20, 20],
+    
+            body: [
+              [ {text: '1. Datos del usuario', colSpan:4, fillColor:"#00B0F0", color:"#FFF", bold:true}, '','',''],
+              [ {text: "Nombre", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '', {text:"Correo", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '' ],
+              [ { text: 'Rol', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:'', colSpan:3}, '', '' ]
+            ]
+          },
+          margin:[0,0,0,20]
+        },
+
         {
           layout: 'customLayout', // optional
           table: {
@@ -86,7 +88,7 @@ export default function Index() {
             heights: ['*', 20, 20,20],
     
             body: [
-              [ {text: '1. Datos del proyecto', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
+              [ {text: '2. Datos del proyecto', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
               [ {text: "Nombre del proyecto", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  ''],
               [ { text: 'Lider del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, ''],
               [ { text: 'Desarrolladores del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '']
@@ -163,106 +165,3 @@ export default function Index() {
     }
     pdfMake.createPdf(docDefinition, tableLayouts).open();
   }
-
-  return (
-    <>
-      <Navegador />
-      <Contenedor>
-        <h3>Vesta Risk Manager - Login</h3>
-        <>
-          <h5>Bienvenido</h5>
-          <p>
-            Estimado usuario: Bienvenido a la aplicaci&oacute;n Vesta Risk
-            Manager, una aplicaci&oacute;n desarrollada en la UARG - UNPA.
-          </p>
-          <Alert variant="danger">
-            <strong>Importante:</strong> Para acceder al sistema es necesario
-            disponer de un correo de{" "}
-            <a href="http://www.gmail.com" target="_blank">
-              Gmail
-            </a>
-          </Alert>
-          <hr />
-          <h5 onClick={prueba}>Ingreso al Sistema</h5>
-          <p>
-            Ud. puede ingresar el sistema si est&aacute; conectado a su e-mail.
-            Por favor haga click en el bot&oacute;n a continuaci&oacute;n y
-            elija su cuenta o realice el login.
-          </p>
-          {error && (
-            <Alert variant="danger">
-              Usuario ingresado no registrado. Solicite ser registrado por un
-              administrador del sistema e intentelo de nuevo.
-            </Alert>
-          )}
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              const decode = jwtDecode(credentialResponse.credential);
-              obtenerUsuariosCorreo(decode.email).then((item) => {
-                if (item) {
-                  localStorage.setItem("jwt", credentialResponse.credential);
-                  iniciarSesion(
-                    item.id_usuario,
-                    item.nombre_usuario,
-                    item.email,
-                    item.nombre_perfil
-                  );
-                  navigation("/inicio");
-                  setError(false);
-                } else {
-                  setError(true);
-                }
-              });
-            }}
-            onError={() => {
-              setError(true);
-            }}
-          />
-        </>
-      </Contenedor>
-      {/* <Container className="pt-4 pb-5">
-        <Card>
-          <Card.Header>
-            <h3>Vesta Risk Manager - Login</h3>
-          </Card.Header>
-          <Card.Body>
-            <h5>Bienvenido</h5>
-            <p>
-              Estimado usuario: Bienvenido a la aplicaci&oacute;n Vesta Risk
-              Manager, una aplicaci&oacute;n desarrollada en la UARG - UNPA.
-            </p>
-            <Alert variant="danger">
-              <strong>Importante:</strong> Para acceder al sistema es necesario
-              disponer de un correo de{" "}
-              <a href="http://www.gmail.com" target="_blank">
-                Gmail
-              </a>
-            </Alert>
-            <hr />
-            <h5>Ingreso al Sistema</h5>
-            <p>
-              Ud. puede ingresar el sistema si est&aacute; conectado a su
-              e-mail. Por favor haga click en el bot&oacute;n a
-              continuaci&oacute;n y elija su cuenta o realice el login.
-            </p>
-            {error && (
-              <Alert variant="danger">
-                Usuario ingresado no registrado. Solicite ser registrado por un
-                administrador del sistema e intentelo de nuevo.
-              </Alert>
-            )}
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                console.log(credentialResponse);
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-            />
-          </Card.Body>
-        </Card>
-      </Container> */}
-      <Footer></Footer>
-    </>
-  );
-}
