@@ -23,10 +23,10 @@ class Plan{
     }
 
 
-    public function crearPlan($id_riesgo){
-        $query = "INSERT INTO plan (descripcion, tipo, id_riesgo) values (?, ?, ?)";
+    public function crearPlan($id_proyecto, $id_riesgo, $id_iteracion){
+        $query = "INSERT INTO plan (descripcion, tipo, id_riesgo, id_proyecto, id_iteracion) values (?, ?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("ssi", $this->descripcion, $this->tipo, $id_riesgo);
+        $stmt->bind_param("ssiii", $this->descripcion, $this->tipo, $id_riesgo, $id_proyecto, $id_iteracion);
         if ($stmt->execute()) {
             return $this->conexion->insert_id;
         } else {
@@ -38,8 +38,7 @@ class Plan{
     public function obtenerPlanesIteracion($id_iteracion){
         $query = "SELECT p.*, r.id_riesgo, r.factor_riesgo FROM plan p 
                 inner join riesgo r on p.id_riesgo = r.id_riesgo 
-                inner join proyecto_riesgo pr on pr.id_riesgo = r.id_riesgo
-                inner join iteracion i on i.id_proyecto = pr.id_proyecto
+                inner join iteracion i on i.id_proyecto = r.id_proyecto
                 where i.id_iteracion = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i",$id_iteracion);

@@ -48,7 +48,6 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
-  console.log(riesgos);
   
 
   const location = useLocation();
@@ -262,7 +261,7 @@ export default function ListaRiesgos() {
                               setConfirmarEdicion({ confirmar: true, riesgo });
                             } else {
                               navigate(
-                                `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}-${riesgo.id_riesgo_local}`
+                                `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}`
                               );
                             }
                           }}
@@ -296,9 +295,7 @@ export default function ListaRiesgos() {
                             navigate(
                               `/inicio/proyecto/${
                                 comprobacionLider ? "lider" : "desarrollador"
-                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
-                                riesgo.id_riesgo_local
-                              }/evaluacion/crear`
+                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}/evaluacion/crear`
                             );
                           }}
                         >
@@ -323,9 +320,7 @@ export default function ListaRiesgos() {
                             navigate(
                               `/inicio/proyecto/${
                                 comprobacionLider ? "lider" : "desarrollador"
-                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}-${
-                                riesgo.id_riesgo_local
-                              }/plan/crear`
+                              }/${id_proyecto}/riesgo/${riesgo.id_riesgo}/plan/crear`
                             );
                           }}
                         >
@@ -358,7 +353,7 @@ export default function ListaRiesgos() {
                 variant="outline-success"
                 onClick={() => {
                   navigate(
-                    `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${confirmarEdicion.riesgo.id_riesgo}-${confirmarEdicion.riesgo.id_riesgo_local}`
+                    `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${confirmarEdicion.riesgo.id_riesgo}`
                   );
                 }}
               >

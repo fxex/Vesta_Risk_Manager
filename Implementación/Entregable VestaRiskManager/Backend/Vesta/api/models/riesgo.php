@@ -35,15 +35,10 @@ class Riesgo {
     }
 
     public function obtenerRiesgoProyecto($id_proyecto, $id_iteracion){
-        $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre as nombre_categoria, 
+        $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre AS nombre_categoria,
         (SELECT GROUP_CONCAT(u.nombre SEPARATOR ', ') from usuario u inner join participante_riesgo pr on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = r.id_riesgo) as responsables,
-        (SELECT COUNT(*) 
-        FROM evaluacion e inner join iteracion_evaluacion ie on ie.id_evaluacion = e.id_evaluacion WHERE e.id_riesgo = r.id_riesgo and id_iteracion = ?) as evaluado
-        FROM riesgo r 
-        inner join proyecto_riesgo pr on pr.id_riesgo = r.id_riesgo 
-        inner join proyecto p on pr.id_proyecto = p.id_proyecto
-        inner join categoria c on r.id_categoria = c.id_categoria 
-        where pr.id_proyecto = ?";
+    (SELECT COUNT(*) FROM evaluacion e WHERE e.id_riesgo = r.id_riesgo AND e.id_iteracion = ?) AS evaluado FROM riesgo r INNER JOIN categoria c ON r.id_categoria = c.id_categoria
+    WHERE r.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmt->execute();
@@ -69,22 +64,29 @@ class Riesgo {
         return $resultado;
     }
 
-    public function crearRiesgo($id_categoria){
-        $query = "INSERT INTO riesgo (descripcion, id_categoria) VALUES (?, ?)";
+    public function crearRiesgo($id_proyecto, $id_categoria){
+        $query = "INSERT INTO riesgo (descripcion, id_categoria, id_proyecto) VALUES (?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("si", $this->descripcion, $id_categoria);
+        $stmt->bind_param("sii", $this->descripcion, $id_categoria, $id_proyecto);
         if ($stmt->execute()) {
-            return $this->conexion->insert_id;
+            $query_max = "SELECT MAX(id_riesgo) FROM riesgo WHERE id_proyecto = ?";
+            $stmt_max = $this->conexion->prepare($query_max);
+            $stmt_max->bind_param("i", $id_proyecto);
+            $stmt_max->execute();
+            $stmt_max->bind_result($id_riesgo);
+            $stmt_max->fetch();
+            $stmt_max->close();
+            return $id_riesgo;
         } else {
             throw new Exception("Error al crear el usuario: " . $stmt->error);
             return -1;
         }
     }
 
-    public function actualizarRiesgo($id_riesgo, $id_categoria){
-        $query = "UPDATE riesgo set descripcion = ?, id_categoria = ? where id_riesgo = ?";
+    public function actualizarRiesgo($id_riesgo, $id_categoria, $id_proyecto){
+        $query = "UPDATE riesgo set descripcion = ?, id_categoria = ? where id_riesgo = ? and id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("sii", $this->descripcion, $id_categoria, $id_riesgo);
+        $stmt->bind_param("siii", $this->descripcion, $id_categoria, $id_riesgo, $id_proyecto);
         if ($stmt->execute()) {
             return true;
         } else {
@@ -128,18 +130,17 @@ class Riesgo {
          return $resultado;
     }
 
-    public function obtenerCantidadPlanes($id_riesgo, $id_iteracion){
+    public function obtenerCantidadPlanes($id_proyecto,$id_riesgo, $id_iteracion){
         $query = "SELECT r.id_riesgo,
                 SUM(CASE WHEN p.tipo = 'minimizacion' THEN 1 ELSE 0 END) AS total_minimizacion,
                 SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,
                 SUM(CASE WHEN p.tipo = 'contingencia' THEN 1 ELSE 0 END) AS total_contingencia
                 FROM riesgo r
                 LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo
-                INNER JOIN iteracion_plan ip ON p.id_plan = ip.id_plan
-                where ip.id_iteracion = ? and r.id_riesgo = ?
+                where p.id_iteracion = ? and r.id_riesgo = ? and r.id_proyecto = ?
                 GROUP BY r.id_riesgo"; 
          $stmt = $this->conexion->prepare($query);
-         $stmt->bind_param("ii",$id_iteracion, $id_riesgo);
+         $stmt->bind_param("iii",$id_iteracion, $id_riesgo, $id_proyecto);
          $stmt->execute();
          $resultado = $stmt->get_result()->fetch_assoc(); 
          return $resultado;

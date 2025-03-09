@@ -27,24 +27,20 @@ import { formatearFecha } from "../../../utils/fecha";
 import BotonSalir from "../../../components/BotonSalir";
 
 export const planLoader = async ({ params }) => {
-  const id_plan_real = params.id_plan.split("-")[0];
+  const id_plan= params.id_plan;
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  const plan = await obtenerPlanId(params.id_proyecto, id_plan_real);
+  const plan = await obtenerPlanId(params.id_proyecto, id_plan);
 
   return { iteracion, plan };
 };
 
 export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
-  const mapId = JSON.parse(localStorage.getItem("mapId"));
-
   const { iteracion, plan } = useLoaderData();
-  console.log(proyecto.participantes);
 
   const navigate = useNavigate();
 
-  const { id_proyecto, id_plan } = useParams();
-  const [id_plan_real, id_plan_local] = id_plan.split("-");
+  const { id_proyecto, id_plan} = useParams();
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
   const [modificado, setModificado] = useState(null);
@@ -156,7 +152,7 @@ export default function EditarPlanLider() {
     if (!resultado) {
       const modificacion = await modificarPlan(
         id_proyecto,
-        id_plan_real,
+        id_plan,
         formData
       );
       setModificado(modificacion);
@@ -212,23 +208,15 @@ export default function EditarPlanLider() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Editar Plan {id_plan_local < 10 ? "0" : ""}
-            {id_plan_local}
+            {proyecto.nombre} - Editar Plan del Riesgo RK{plan.id_riesgo < 10 ? "0" : ""}
+            {plan.id_riesgo}
           </h3>
           <Form>
             <Form.Group>
               <Form.Label>Id del riesgo</Form.Label>
               <Form.Control
                 disabled
-                value={`RK${
-                  mapId.find((item) => item.id_riesgo_real === plan.id_riesgo)
-                    .id_riesgo_local < 10
-                    ? "0"
-                    : ""
-                }${
-                  mapId.find((item) => item.id_riesgo_real === plan.id_riesgo)
-                    .id_riesgo_local
-                }
+                value={`RK${ plan.id_riesgo < 10 ? "0" : ""}${plan.id_riesgo}
                 `}
               />
             </Form.Group>
@@ -540,8 +528,9 @@ export default function EditarPlanLider() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_plan_local}
+        <h3>
+            {proyecto.nombre} - Editar Plan del Riesgo RK{plan.id_riesgo < 10 ? "0" : ""}
+            {plan.id_riesgo}
           </h3>
           <>
             {modificado ? (

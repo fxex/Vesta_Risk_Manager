@@ -28,12 +28,10 @@ export default function CrearPlanDesarrollador() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   const { riesgo, iteracion, planes } = useLoaderData();
-  console.log(planes);
 
   const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
   const [creado, setCreado] = useState(null);
@@ -143,7 +141,7 @@ export default function CrearPlanDesarrollador() {
     const resultado = verificarError(comprobacionError);
     if (!resultado) {
       formData.id_iteracion = iteracion.id_iteracion;
-      const creacion = await crearPlan(id_proyecto, id_riesgo_real, formData);
+      const creacion = await crearPlan(id_proyecto, id_riesgo, formData);
       setCreado(creacion);
     }
   };
@@ -198,8 +196,8 @@ export default function CrearPlanDesarrollador() {
         <Contenedor>
           <h3>
             {proyecto.nombre} - Planificar Riesgo{" "}
-            {id_riesgo_local < 10 ? "0" : ""}
-            {id_riesgo_local}
+            {id_riesgo < 10 ? "0" : ""}
+            {id_riesgo}
           </h3>
           <Form>
             <Form.Group>
@@ -207,7 +205,7 @@ export default function CrearPlanDesarrollador() {
               <Form.Control
                 disabled
                 value={`RK${
-                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
+                  id_riesgo < 10 ? "0" + id_riesgo : id_riesgo
                 }`}
               />
             </Form.Group>
@@ -385,7 +383,7 @@ export default function CrearPlanDesarrollador() {
                 placeholder="Ingrese el nombre de la tarea"
                 value={formDataTarea.nombre}
                 onChange={handleChangeControlTarea}
-                isInvalid={errorTarea.nombre}
+                isInvalid={errorTarea.nombre || errorTarea.nombre_igual}
               />
               {errorTarea.nombre || errorTarea.nombre_igual ? (
                 <Form.Text className="text-danger">
@@ -506,7 +504,7 @@ export default function CrearPlanDesarrollador() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Planificar Riesgo {id_riesgo}
           </h3>
           <>
             {creado ? (

@@ -188,72 +188,72 @@ $router->add("GET", "perfiles", function() use ($controladorUsuario){
     }
 });
 
-$router->add("POST","perfil", function() use($controladorUsuario){
-    $validado = validarJWT($controladorUsuario);
-    if ($validado) {
-        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-        if (!empty($body)) {
-            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-            $resultado = $controladorUsuario->crearPerfil($data);
-            echo json_encode(["creacion"=>$resultado]); 
-        } else {
-            echo json_encode(["creacion"=>false]);
-        }
-    } else {
-        header('HTTP/1.1 403 Forbidden');
-        echo json_encode([
-            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
-        ]);
-    }
-});
+// $router->add("POST","perfil", function() use($controladorUsuario){
+//     $validado = validarJWT($controladorUsuario);
+//     if ($validado) {
+//         $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+//         if (!empty($body)) {
+//             $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+//             $resultado = $controladorUsuario->crearPerfil($data);
+//             echo json_encode(["creacion"=>$resultado]); 
+//         } else {
+//             echo json_encode(["creacion"=>false]);
+//         }
+//     } else {
+//         header('HTTP/1.1 403 Forbidden');
+//         echo json_encode([
+//             "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+//         ]);
+//     }
+// });
 
-$router->add("PUT", "perfil/{id}",function($id) use($controladorUsuario){
-    $validado = validarJWT($controladorUsuario);
-    if ($validado) {
-        $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
-        if (!empty($body)) {
-            $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
-            $resultado = $controladorUsuario->actualizarPerfil($id, $data);
-            echo json_encode(["modificacion"=>$resultado]); 
-        } else {
-            echo json_encode(["modificacion"=>false]);
-        }
-    } else {
-        header('HTTP/1.1 403 Forbidden');
-        echo json_encode([
-            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
-        ]);
-    }
-});
+// $router->add("PUT", "perfil/{id}",function($id) use($controladorUsuario){
+//     $validado = validarJWT($controladorUsuario);
+//     if ($validado) {
+//         $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+//         if (!empty($body)) {
+//             $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+//             $resultado = $controladorUsuario->actualizarPerfil($id, $data);
+//             echo json_encode(["modificacion"=>$resultado]); 
+//         } else {
+//             echo json_encode(["modificacion"=>false]);
+//         }
+//     } else {
+//         header('HTTP/1.1 403 Forbidden');
+//         echo json_encode([
+//             "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+//         ]);
+//     }
+// });
 
-$router->add("DELETE", "perfil/{id}",function($id) use($controladorUsuario){
-    $validado = validarJWT($controladorUsuario);
-    if ($validado) {
-        $resultado = $controladorUsuario->eliminarPerfil($id);
-        echo json_encode(["eliminado"=>$resultado]); 
-    } else {
-        header('HTTP/1.1 403 Forbidden');
-        echo json_encode([
-            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
-        ]);
-    }
+// $router->add("DELETE", "perfil/{id}",function($id) use($controladorUsuario){
+//     $validado = validarJWT($controladorUsuario);
+//     if ($validado) {
+//         $resultado = $controladorUsuario->eliminarPerfil($id);
+//         echo json_encode(["eliminado"=>$resultado]); 
+//     } else {
+//         header('HTTP/1.1 403 Forbidden');
+//         echo json_encode([
+//             "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+//         ]);
+//     }
     
-});
+// });
 
 
-$router->add("GET", "perfil/{id}", function($id) use($controladorUsuario) {
-    $validado = validarJWT($controladorUsuario);
-    if ($validado) {
-        $resultado = $controladorUsuario->obtenerPerfilId($id);
-        echo json_encode($resultado);
-    } else {
-        header('HTTP/1.1 403 Forbidden');
-        echo json_encode([
-            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
-        ]);
-    }
+// $router->add("GET", "perfil/{id}", function($id) use($controladorUsuario) {
+//     $validado = validarJWT($controladorUsuario);
+//     if ($validado) {
+//         $resultado = $controladorUsuario->obtenerPerfilId($id);
+//         echo json_encode($resultado);
+//     } else {
+//         header('HTTP/1.1 403 Forbidden');
+//         echo json_encode([
+//             "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+//         ]);
+//     }
     
-});
+// });
 
 $router->add("GET","perfil/comprobar/{nombre}", function($nombre) use($controladorUsuario){
     $validado = validarJWT($controladorUsuario);
@@ -268,18 +268,18 @@ $router->add("GET","perfil/comprobar/{nombre}", function($nombre) use($controlad
     }
 });
 
-$router->add("GET", "permisos", function() use ($controladorUsuario){
-    $validado = validarJWT($controladorUsuario);
-    if ($validado) {
-        $resultado = $controladorUsuario->obtenerTodosPermisos(); 
-        echo json_encode($resultado); 
-    }else{
-        header('HTTP/1.1 403 Forbidden');
-        echo json_encode([
-            "error" => "No tienes permisos para realizar esta acción o el token es inválido."
-        ]);
-    }
-});
+// $router->add("GET", "permisos", function() use ($controladorUsuario){
+//     $validado = validarJWT($controladorUsuario);
+//     if ($validado) {
+//         $resultado = $controladorUsuario->obtenerTodosPermisos(); 
+//         echo json_encode($resultado); 
+//     }else{
+//         header('HTTP/1.1 403 Forbidden');
+//         echo json_encode([
+//             "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+//         ]);
+//     }
+// });
 
 
 $router->add("GET","participante/{nombre}", function($nombre) use($controladorUsuario){
@@ -332,9 +332,9 @@ $router->add("POST","proyectos/desarrollador", function() use($controladorProyec
 });
 
 $router->add("POST","proyecto", function() use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                 
     if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $data = json_decode($body, true); 
         $resultado = $controladorProyecto->crearProyecto($data);
         echo json_encode(["creacion"=>$resultado]);
     } else {
@@ -353,7 +353,7 @@ $router->add("GET", "proyecto/{id}/iteracion", function($id) use ($controladorPr
 });
 
 $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                 
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
         $resultado = $controladorProyecto->actualizarProyecto($id, $data);
@@ -381,7 +381,7 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use
 
 
 $router->add("POST", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use ($controladorRiesgo){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                 
     if (!empty($body)) {
         $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
         
@@ -393,10 +393,10 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use
 });
 
 $router->add("PUT", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                 
     if (!empty($body)) {
         $data = json_decode($body, true);
-        $resultado = $controladorRiesgo->actualizarRiesgo($id_riesgo, $data);
+        $resultado = $controladorRiesgo->actualizarRiesgo($id_riesgo, $data, $id_proyecto);
         echo json_encode(["modificado"=>$resultado]);
     } else {
         echo json_encode(["modificado"=>false]);
@@ -412,7 +412,7 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion", fun
     $body = file_get_contents('php://input');          
     if (!empty($body)) {
         $data = json_decode($body, true);
-        $resultado = $controladorRiesgo->crearEvaluacion($id_riesgo, $data);
+        $resultado = $controladorRiesgo->crearEvaluacion($id_proyecto, $id_riesgo, $data);
         echo json_encode(["creacion"=>$resultado]);
     } else {
         echo json_encode(["creacion"=>false]);
@@ -425,7 +425,7 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan", function(
         $body = file_get_contents('php://input');          
         if (!empty($body)) {
             $data = json_decode($body, true);
-            $resultado = $controladorRiesgo->crearPlan($id_riesgo, $data);
+            $resultado = $controladorRiesgo->crearPlan($id_proyecto, $id_riesgo, $data);
             echo json_encode(["creacion"=>$resultado]);
         } else {
             echo json_encode(["creacion"=>false]);
@@ -455,7 +455,7 @@ $router->add("GET", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyec
 });
 
 $router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyecto, $id_plan) use ($controladorRiesgo){ 
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                 
     if (!empty($body)) {
         $data = json_decode($body, true);
         $resultado = $controladorRiesgo->actualizarPlan($id_plan, $data);

@@ -10,9 +10,6 @@ import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 export const planesLoader = async ({ params }) => {
   const planes = await obtenerPlanesProyecto(params.id_proyecto);
-  planes.map((item, key) => {
-    item.id_plan_local = key + 1;
-  });
   return { planes };
 };
 
@@ -31,9 +28,6 @@ export default function VerPlanesActuales() {
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
             <tr>
-              <th className="th" style={{ width: "6em" }}>
-                Id
-              </th>
               <th className="th" style={{ width: "6em" }}>
                 Riesgo
               </th>
@@ -54,20 +48,12 @@ export default function VerPlanesActuales() {
               ? planes.map((plan, key) => (
                   <tr key={key}>
                     <td className="td">
-                      PL{plan.id_plan_local < 10 ? "0" : ""}
-                      {plan.id_plan_local}
-                    </td>
-                    <td className="td">
                       RK
-                      {mapId.find(
-                        (item) => item.id_riesgo_real === plan.id_riesgo
-                      ).id_riesgo_local < 10
+                      {plan.id_riesgo < 10
                         ? "0"
                         : ""}
                       {
-                        mapId.find(
-                          (item) => item.id_riesgo_real === plan.id_riesgo
-                        ).id_riesgo_local
+                        plan.id_riesgo
                       }
                     </td>
                     <td className="td">{plan.factor_riesgo}</td>
@@ -83,7 +69,7 @@ export default function VerPlanesActuales() {
                             variant="outline-warning"
                             onClick={() => {
                               navigate(
-                                `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}-${plan.id_plan_local}`
+                                `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}`
                               );
                             }}
                           >

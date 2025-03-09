@@ -21,9 +21,9 @@ import { verificarError } from "../../utils/verificarErrores";
 import { obtenerProyectosId } from "../../services/proyectos";
 
 export async function cargarRiesgo({ params }) {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
+  const id_riesgo= params.id_riesgo
   const proyecto = await obtenerProyectosId(params.id_proyecto);
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
+  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
   return { proyecto, riesgo };
 }
 
@@ -31,8 +31,6 @@ export default function EditarRiesgo() {
   const { proyecto, riesgo } = useLoaderData();
 
   const { id_proyecto, id_riesgo } = useParams();
-
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
 
   const navigate = useNavigate();
   const [modificado, setModificado] = useState(null);
@@ -87,8 +85,8 @@ export default function EditarRiesgo() {
     if (!comprobacion) {
       setError({ descripcion: false, categoria: false, responsables: false });
       const resultado = await modificarRiesgo(
-        proyecto.id_proyecto,
-        id_riesgo_real,
+        id_proyecto,
+        id_riesgo,
         formData
       );
       setModificado(resultado);
@@ -103,8 +101,8 @@ export default function EditarRiesgo() {
           <>
             <h3>
               {proyecto.nombre} - Editar Riesgo{" "}
-              {id_riesgo_local < 10 ? "0" : ""}
-              {id_riesgo_local}
+              {id_riesgo < 10 ? "0" : ""}
+              {id_riesgo}
             </h3>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
@@ -222,8 +220,8 @@ export default function EditarRiesgo() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Editar Riesgo{id_riesgo_local < 10 ? "0" : ""}
-            {id_riesgo_local}
+            {proyecto.nombre} - Editar Riesgo{id_riesgo < 10 ? "0" : ""}
+            {id_riesgo}
           </h3>
           <>
             {modificado ? (

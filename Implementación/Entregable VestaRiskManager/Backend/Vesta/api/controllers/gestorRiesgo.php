@@ -40,7 +40,6 @@ class GestorRiesgo {
         }else{
             $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, 0);
         }
-
         if (!empty($resultado)) {
             foreach ($resultado as &$riesgo) {
                 $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"]);
@@ -54,10 +53,9 @@ class GestorRiesgo {
         if ($comprobar) {
             $this->riesgo->setFactorRiesgo(null);
             $this->riesgo->setDescripcion($data["descripcion"]);
-            $id_riesgo = $this->riesgo->crearRiesgo($data["categoria"]);
-            vincularTabla::crearVinculo($this->conexion, "proyecto_riesgo", "id_proyecto", "id_riesgo",$id_proyecto, $id_riesgo);
+            $id_riesgo = $this->riesgo->crearRiesgo($id_proyecto, $data["categoria"]);
             foreach ($data["responsables"] as $id_usuario) {
-                vincularTabla::crearVinculo($this->conexion, "participante_riesgo", "id_usuario", "id_riesgo",$id_usuario, $id_riesgo);
+                vincularTabla::crearVinculoRiesgo($this->conexion, "participante_riesgo", "id_usuario", "id_riesgo", "id_proyecto", $id_usuario, $id_riesgo, $id_proyecto);
             }
             return $id_riesgo > 0;
         }else{
@@ -65,15 +63,14 @@ class GestorRiesgo {
         }
     }
 
-    public function crearEvaluacion($id_riesgo, $data){
+    public function crearEvaluacion($id_proyecto, $id_riesgo, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable") && !empty($data["id_iteracion"]);
         if ($comprobar) {
             $this->evaluacion->setDescripcion($data["descripcion"]);
             $this->evaluacion->setImpacto($data["impacto"]);
             $this->evaluacion->setProbabilidad($data["probabilidad"]);
             $this->evaluacion->setFechaRealizacion(date("Y-m-d H:i:s"));
-            $id_evaluacion = $this->evaluacion->crearEvaluacion($data["responsable"], $id_riesgo);
-            vincularTabla::crearVinculo($this->conexion, "iteracion_evaluacion", "id_iteracion", "id_evaluacion",$data["id_iteracion"], $id_evaluacion);
+            $id_evaluacion = $this->evaluacion->crearEvaluacion($data["responsable"], $id_riesgo, $id_proyecto, $data["id_iteracion"]);
             $factorRiesgo = $data["impacto"] * $data["probabilidad"];
             $this->riesgo->setFactorRiesgo($factorRiesgo);
             $this->riesgo->actualizarFactorRiesgo($id_riesgo);
@@ -83,14 +80,14 @@ class GestorRiesgo {
         }
     }
 
-    public function actualizarRiesgo($id_riesgo, $data){
+    public function actualizarRiesgo($id_riesgo, $data, $id_proyecto){
         $comprobar = !empty($data["descripcion"] && !empty($data["categoria"])) && !empty($data["responsables"]);
         if ($comprobar) {
-            vincularTabla::eliminarVinculo($this->conexion,"participante_riesgo", "id_riesgo", $id_riesgo);
+            vincularTabla::eliminarVinculoRiesgo($this->conexion,"participante_riesgo", "id_proyecto","id_riesgo", $id_proyecto, $id_riesgo);
             $this->riesgo->setDescripcion($data["descripcion"]);
-            $resultado = $this->riesgo->actualizarRiesgo($id_riesgo, $data["categoria"]);
+            $resultado = $this->riesgo->actualizarRiesgo($id_riesgo, $data["categoria"], $id_proyecto);
             foreach ($data["responsables"] as $id_usuario) {
-                vincularTabla::crearVinculo($this->conexion, "participante_riesgo", "id_usuario", "id_riesgo",$id_usuario, $id_riesgo);
+                vincularTabla::crearVinculoRiesgo($this->conexion, "participante_riesgo", "id_usuario", "id_riesgo", "id_proyecto", $id_usuario, $id_riesgo, $id_proyecto);
             }
             return $resultado;
         }
@@ -130,7 +127,7 @@ class GestorRiesgo {
     public function obtenerCantidadPlanes($id_proyecto,$id_riesgo) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         if (!empty($iteracion)) {
-            $resultado = $this->riesgo->obtenerCantidadPlanes($id_riesgo, $iteracion["id_iteracion"]);
+            $resultado = $this->riesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo, $iteracion["id_iteracion"]);
             if (!empty($resultado)) {
                 return $resultado;
             }else{
@@ -143,13 +140,12 @@ class GestorRiesgo {
     }
     
 
-    public function crearPlan($id_riesgo, $data){
+    public function crearPlan($id_proyecto, $id_riesgo, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["tipo"]) && !empty($data["tareas"]) && !empty($data["id_iteracion"]);
         if ($comprobar) {
             $this->plan->setTipo($data["tipo"]);
             $this->plan->setDescripcion($data["descripcion"]);
-            $id_plan = $this->plan->crearPlan($id_riesgo);
-            vincularTabla::crearVinculo($this->conexion, "iteracion_plan", "id_iteracion", "id_plan",$data["id_iteracion"], $id_plan);
+            $id_plan = $this->plan->crearPlan($id_proyecto, $id_riesgo, $data["id_iteracion"]);
             foreach ($data["tareas"] as $tarea) {
                 $this->tarea->setNombre($tarea["nombre"]);
                 $this->tarea->setDescripcion($tarea["descripcion"]);

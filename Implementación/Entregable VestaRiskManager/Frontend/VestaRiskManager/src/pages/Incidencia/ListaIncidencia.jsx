@@ -50,7 +50,7 @@ import { formatearFecha } from "../../utils/fecha";
 // };
 
 export default function ListaIncidencia() {
-  const { id_proyecto } = useParams();
+  // const { id_proyecto } = useParams();
   // const { riesgos, iteracion } = useLoaderData();
   const location = useLocation();
 
@@ -64,7 +64,7 @@ export default function ListaIncidencia() {
 
   return (
     <>
-      <NavegadorLider />
+      {/* <NavegadorLider /> */}
       {/* {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -73,7 +73,7 @@ export default function ListaIncidencia() {
       ) : null} */}
       <Contenedor>
         <>
-          <h3>{proyecto.nombre}</h3>
+          {/* <h3>{proyecto.nombre}</h3> */}
           {/* {iteracion ? (
             <>
               <h4>
@@ -90,11 +90,11 @@ export default function ListaIncidencia() {
           <Button
             variant="success"
             onClick={() => {
-              navigate(
-                `/inicio/proyecto/${
-                  comprobacionLider ? "lider" : "desarrollador"
-                }/${id_proyecto}/incidencia/crear`
-              );
+              // navigate(
+              //   `/inicio/proyecto/${
+              //     comprobacionLider ? "lider" : "desarrollador"
+              //   }/${id_proyecto}/incidencia/crear`
+              // );
             }}
             // disabled={iteracion === null}
           >
@@ -117,7 +117,7 @@ export default function ListaIncidencia() {
               </tr>
             </thead>
             <tbody>
-              {[].map((riesgo, key) => (
+              {/* {[].map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
                     {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
@@ -339,7 +339,7 @@ export default function ListaIncidencia() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </Table>
           <Modal
@@ -361,9 +361,9 @@ export default function ListaIncidencia() {
               <Button
                 variant="outline-success"
                 onClick={() => {
-                  navigate(
-                    `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${confirmarEdicion.riesgo.id_riesgo}-${confirmarEdicion.riesgo.id_riesgo_local}`
-                  );
+                  // navigate(
+                  //   `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${confirmarEdicion.riesgo.id_riesgo}-${confirmarEdicion.riesgo.id_riesgo_local}`
+                  // );
                 }}
               >
                 <FontAwesomeIcon

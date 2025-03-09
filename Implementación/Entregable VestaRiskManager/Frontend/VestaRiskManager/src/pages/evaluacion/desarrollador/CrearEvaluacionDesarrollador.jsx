@@ -8,15 +8,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../../utils/verificarErrores";
 import { crearEvaluacion, obtenerRiesgoId } from "../../../services/riesgos";
+import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useUsuario } from "../../../context/usuarioContext";
 import BotonSalir from "../../../components/BotonSalir";
+import { formatearFecha } from "../../../utils/fecha";
 
 export default function CrearEvaluacionDesarrollador() {
   const { riesgo, iteracion } = useLoaderData();
+  
   const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
 
   const { usuario } = useUsuario();
 
@@ -62,7 +64,7 @@ export default function CrearEvaluacionDesarrollador() {
       formData.responsable = usuario.id_usuario;
       const resultado = await crearEvaluacion(
         id_proyecto,
-        id_riesgo_real,
+        id_riesgo,
         formData
       );
       setCreado(resultado);
@@ -73,17 +75,31 @@ export default function CrearEvaluacionDesarrollador() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local < 10 ? "0" : ""}
-            {id_riesgo_local}
-          </h3>
+          <>
+            <h3>
+              {proyecto.nombre} - Evaluar Riesgo{" "}
+              {id_riesgo < 10 ? "0" : ""}
+              {id_riesgo}
+            </h3>
+            {iteracion ? (
+              <>
+                <h4>
+                  {iteracion.nombre}
+                  {" - "}
+                  {formatearFecha(iteracion.fecha_inicio)}
+                  {" al "}
+                  {formatearFecha(iteracion.fecha_fin)}
+                </h4>
+              </>
+            ) : null}
+          </>
           <Form>
             <Form.Group>
               <Form.Label>Id del riesgo</Form.Label>
               <Form.Control
                 disabled
                 value={`RK${
-                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
+                  id_riesgo < 10 ? "0" + id_riesgo : id_riesgo
                 }`}
               />
             </Form.Group>
@@ -102,7 +118,12 @@ export default function CrearEvaluacionDesarrollador() {
             </Form.Group>
             <Form.Group>
               <Form.Label>Iteración</Form.Label>
-              <Form.Control disabled value={iteracion.nombre} />
+              <Form.Control
+                disabled
+                value={`${iteracion.nombre} - ${formatearFecha(
+                  iteracion.fecha_inicio
+                )} al ${formatearFecha(iteracion.fecha_fin)}`}
+              />
             </Form.Group>
 
             <Form.Group>
@@ -213,7 +234,7 @@ export default function CrearEvaluacionDesarrollador() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Evaluar Riesgo {id_riesgo}
           </h3>
           <>
             {creado ? (

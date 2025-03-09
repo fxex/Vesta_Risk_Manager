@@ -25,13 +25,13 @@ import { formatearFecha } from "../../../utils/fecha";
 import BotonSalir from "../../../components/BotonSalir";
 
 export const planCreacionLoader = async ({ params }) => {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
+  const id_riesgo = params.id_riesgo;
 
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
+  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   const planes = await obtenerCantidadPlanTipo(
     params.id_proyecto,
-    id_riesgo_real
+    id_riesgo
   );
   return { riesgo, iteracion, planes };
 };
@@ -44,7 +44,6 @@ export default function CrearPlanLider() {
   const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
   const [creado, setCreado] = useState(null);
@@ -154,7 +153,7 @@ export default function CrearPlanLider() {
     const resultado = verificarError(comprobacionError);
     if (!resultado) {
       formData.id_iteracion = iteracion.id_iteracion;
-      const creacion = await crearPlan(id_proyecto, id_riesgo_real, formData);
+      const creacion = await crearPlan(id_proyecto, id_riesgo, formData);
       setCreado(creacion);
     }
   };
@@ -209,8 +208,8 @@ export default function CrearPlanLider() {
         <Contenedor>
           <h3>
             {proyecto.nombre} - Planificar Riesgo{" "}
-            {id_riesgo_local < 10 ? "0" : ""}
-            {id_riesgo_local}
+            {id_riesgo < 10 ? "0" : ""}
+            {id_riesgo}
           </h3>
           <Form>
             <Form.Group>
@@ -218,7 +217,7 @@ export default function CrearPlanLider() {
               <Form.Control
                 disabled
                 value={`RK${
-                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
+                  id_riesgo < 10 ? "0" + id_riesgo : id_riesgo
                 }`}
               />
             </Form.Group>
@@ -517,7 +516,7 @@ export default function CrearPlanLider() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Planificar Riesgo {id_riesgo}
           </h3>
           <>
             {creado ? (

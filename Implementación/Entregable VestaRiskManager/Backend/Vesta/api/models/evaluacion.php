@@ -43,10 +43,10 @@ class Evaluacion {
         $this->fecha_realizacion = $fecha_realizacion;
     }
 
-    public function crearEvaluacion($id_usuario, $id_riesgo){
-        $query = "INSERT INTO evaluacion (descripcion, impacto, probabilidad, fecha_realizacion, id_usuario, id_riesgo) VALUES (?, ?, ?, ?, ?, ?)";
+    public function crearEvaluacion($id_usuario, $id_riesgo, $id_proyecto, $id_iteracion){
+        $query = "INSERT INTO evaluacion (descripcion, impacto, probabilidad, fecha_realizacion, id_usuario, id_riesgo, id_proyecto, id_iteracion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("siisii", $this->descripcion, $this->impacto, $this->probabilidad, $this->fecha_realizacion, $id_usuario, $id_riesgo);
+        $stmt->bind_param("siisiiii", $this->descripcion, $this->impacto, $this->probabilidad, $this->fecha_realizacion, $id_usuario, $id_riesgo, $id_proyecto, $id_iteracion);
         if ($stmt->execute()) {
             return $this->conexion->insert_id;
         } else {

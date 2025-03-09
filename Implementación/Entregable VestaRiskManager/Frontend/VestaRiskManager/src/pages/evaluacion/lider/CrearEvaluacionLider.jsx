@@ -14,18 +14,19 @@ import BotonSalir from "../../../components/BotonSalir";
 import { formatearFecha } from "../../../utils/fecha";
 
 export const evaluacionCreacionLoader = async ({ params }) => {
-  const id_riesgo_real = params.id_riesgo.split("-")[0];
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo_real);
+  const id_riesgo= params.id_riesgo
+  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { riesgo, iteracion };
 };
 
 export default function CrearEvaluacionLider() {
   const { riesgo, iteracion } = useLoaderData();
+  console.log(iteracion.id_iteracion);
+  
   const navigate = useNavigate();
 
   const { id_proyecto, id_riesgo } = useParams();
-  const [id_riesgo_real, id_riesgo_local] = id_riesgo.split("-");
 
   const { usuario } = useUsuario();
 
@@ -71,7 +72,7 @@ export default function CrearEvaluacionLider() {
       formData.responsable = usuario.id_usuario;
       const resultado = await crearEvaluacion(
         id_proyecto,
-        id_riesgo_real,
+        id_riesgo,
         formData
       );
       setCreado(resultado);
@@ -85,8 +86,8 @@ export default function CrearEvaluacionLider() {
           <>
             <h3>
               {proyecto.nombre} - Evaluar Riesgo{" "}
-              {id_riesgo_local < 10 ? "0" : ""}
-              {id_riesgo_local}
+              {id_riesgo < 10 ? "0" : ""}
+              {id_riesgo}
             </h3>
             {iteracion ? (
               <>
@@ -106,7 +107,7 @@ export default function CrearEvaluacionLider() {
               <Form.Control
                 disabled
                 value={`RK${
-                  id_riesgo_local < 10 ? "0" + id_riesgo_local : id_riesgo_local
+                  id_riesgo < 10 ? "0" + id_riesgo : id_riesgo
                 }`}
               />
             </Form.Group>
@@ -241,7 +242,7 @@ export default function CrearEvaluacionLider() {
         <NavegadorLider />
         <Contenedor>
           <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo_local}
+            {proyecto.nombre} - Evaluar Riesgo {id_riesgo}
           </h3>
           <>
             {creado ? (

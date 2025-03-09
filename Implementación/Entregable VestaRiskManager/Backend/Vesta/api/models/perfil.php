@@ -26,10 +26,10 @@ class Perfil {
     }
     
     public function obtenerTodosPerfiles(){
-        $perfiles = $this->conexion->query("SELECT p.id_perfil, p.nombre, COUNT(up.id_usuario) AS total_usuarios FROM perfil p left JOIN usuario_perfil up ON p.id_perfil = up.id_perfil GROUP BY p.nombre");
+        $perfiles = $this->conexion->query("SELECT p.id_perfil, p.nombre, COUNT(up.id_usuario) AS total_usuarios FROM perfil p left JOIN usuario_perfil up ON p.id_perfil = up.id_perfil GROUP BY p.id_perfil, p.nombre");
         $resultado = [];
         while ($fila = $perfiles->fetch_assoc()) {
-            $resultado[] = $fila;
+            $resultado[] = $fila; 
         }
         return $resultado;
     }
