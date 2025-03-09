@@ -147,3 +147,15 @@ export const modificarPlan = async (id_proyecto, id_plan, data) => {
 
   return json.modificado;
 };
+
+export const obtenerIncidenciasProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencias`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};

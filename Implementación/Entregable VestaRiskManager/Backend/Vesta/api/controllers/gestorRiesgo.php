@@ -4,12 +4,13 @@ require_once __DIR__ . "/../models/riesgo.php";
 require_once __DIR__ . "/../models/evaluacion.php";
 require_once __DIR__ . "/../models/plan.php";
 require_once __DIR__ . "/../models/tarea.php";
+require_once __DIR__ . "/../models/incidencia.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
 class GestorRiesgo {
     private $conexion;
-    private $riesgo, $categoria, $evaluacion, $plan, $tarea;
+    private $riesgo, $categoria, $evaluacion, $plan, $tarea, $incidencia;
 
     function __construct() {
         $this->conexion = BDConexion::getInstancia();
@@ -18,6 +19,7 @@ class GestorRiesgo {
         $this->evaluacion = new Evaluacion($this->conexion);
         $this->plan = new Plan($this->conexion);
         $this->tarea = new Tarea($this->conexion);
+        $this->incidencia = new Incidencia($this->conexion);
         $this->conexion->set_charset("utf8");
     }
 
@@ -215,6 +217,11 @@ class GestorRiesgo {
         }else{
             return false;
         }
+    }
+
+    public function obtenerIncidenciasProyecto($id_proyecto){
+        $resultado = $this->incidencia->obtenerTodasIncidencia($id_proyecto);
+        return $resultado;
     }
 
 }

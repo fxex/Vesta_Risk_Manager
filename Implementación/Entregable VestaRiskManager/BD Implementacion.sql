@@ -67,6 +67,7 @@ create table if not exists riesgo (
 create table if not exists incidencia (
 	id_incidencia int not null auto_increment,
     descripcion text not null,
+    gravedad enum ("Alta","Media","Baja") not null,
     fecha_ocurrencia datetime not null default current_timestamp,
     id_riesgo int not null,
     id_usuario int not null,

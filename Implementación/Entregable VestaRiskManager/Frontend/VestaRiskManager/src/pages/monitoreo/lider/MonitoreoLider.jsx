@@ -35,9 +35,14 @@ export default function MonitoreoLider() {
           <hr ></hr>
           <p>Informes:</p>
           <div className="d-flex gap-3" style={{ minHeight: "10vh" }}>
-            <Button className="boton_2">Incidencias</Button>
-            <Button className="boton_2">Evaluaciones actuales</Button>
-            <Button className="boton_2">Evaluaciones anteriores</Button>
+            <Button className="boton_2" onClick={() =>{
+              navigate(
+                `/inicio/proyecto/lider/${id_proyecto}/monitoreo/incidencias`
+              );
+            }
+            }>Incidencias</Button>
+            <Button className="boton_2">Seguimiento de riesgo</Button>
+            <Button className="boton_2">Tareas a realizar</Button>
           </div>
         </div>
       </Contenedor>

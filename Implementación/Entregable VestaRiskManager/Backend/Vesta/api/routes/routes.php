@@ -465,6 +465,11 @@ $router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyec
     }
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/incidencias", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerIncidenciasProyecto($id_proyecto);
+    echo json_encode($resultado);
+});
+
 
 
 $router->run();
