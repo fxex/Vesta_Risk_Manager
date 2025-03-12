@@ -88,9 +88,9 @@ create table if not exists evaluacion (
     id_proyecto int not null,
     id_iteracion int not null,
     primary key (id_evaluacion),
-    constraint fk_evaluacion_usuario foreign key (id_usuario) references usuario (id_usuario) on delete no action on update no action,
-    constraint fk_evaluacion_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete no action on update no action,
-    constraint fk_evaluacion_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action
+    constraint fk_evaluacion_usuario foreign key (id_usuario) references usuario (id_usuario) on delete no action on update cascade,
+    constraint fk_evaluacion_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete cascade on update cascade,
+    constraint fk_evaluacion_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete cascade on update cascade
 );
 
 create table if not exists plan (
@@ -101,8 +101,8 @@ create table if not exists plan (
     id_proyecto int not null,
     id_iteracion int not null,
     primary key (id_plan),
-    constraint fk_plan_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete no action on update no action,
-    constraint fk_plan_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete no action on update no action
+    constraint fk_plan_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete cascade on update cascade,
+    constraint fk_plan_iteracion foreign key (id_iteracion) references iteracion (id_iteracion) on delete cascade on update cascade
 );
 
 create table if not exists tarea (
@@ -115,7 +115,7 @@ create table if not exists tarea (
     fecha_fin date not null,
     fecha_fin_real date,
     primary key (id_tarea),
-    constraint fk_tarea_plan foreign key (id_plan) references plan (id_plan) on delete no action on update no action
+    constraint fk_tarea_plan foreign key (id_plan) references plan (id_plan) on delete cascade on update cascade
 );
 
 create table if not exists proyecto_participante(
@@ -123,7 +123,7 @@ create table if not exists proyecto_participante(
     id_usuario int,
     rol enum ("Lider del proyecto", "Desarrollador") not null,
     primary key (id_proyecto, id_usuario),
-    constraint fk_pp_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete no action on update no action,
+    constraint fk_pp_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete cascade on update cascade,
     constraint fk_pp_participante foreign key (id_usuario) references usuario (id_usuario) on delete cascade on update cascade
 );
 
@@ -133,7 +133,7 @@ create table if not exists participante_riesgo(
     id_proyecto int not null,
     primary key (id_usuario, id_riesgo, id_proyecto),
     constraint fk_pt_usuario foreign key (id_usuario) references usuario (id_usuario) on delete cascade on update cascade,
-    constraint fk_pt_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete no action on update no action
+    constraint fk_pt_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete cascade on update cascade
 );
 
 create table if not exists participante_tarea(
@@ -141,15 +141,15 @@ create table if not exists participante_tarea(
     id_tarea int not null,
     primary key (id_usuario, id_tarea),
     constraint fk_pt_participante foreign key (id_usuario) references usuario (id_usuario) on delete cascade on update cascade,
-    constraint fk_pt_tarea foreign key (id_tarea) references tarea (id_tarea) on delete no action on update no action
+    constraint fk_pt_tarea foreign key (id_tarea) references tarea (id_tarea) on delete cascade on update cascade
 );
 
 create table if not exists proyecto_categoria(
 	id_proyecto int not null,
     id_categoria int not null,
     primary key (id_proyecto, id_categoria),
-    constraint fk_pc_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete no action on update no action,
-    constraint fk_pc_categoria foreign key (id_categoria) references categoria (id_categoria) on delete no action on update no action
+    constraint fk_pc_proyecto foreign key (id_proyecto) references proyecto (id_proyecto) on delete cascade on update cascade,
+    constraint fk_pc_categoria foreign key (id_categoria) references categoria (id_categoria) on delete cascade on update cascade
 );
 DELIMITER //
 
