@@ -27,14 +27,19 @@ import {
 import { obtenerIncidenciasProyecto } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { formatearFecha, formatearFechaHora } from "../../utils/fecha";
+import { obtenerIteracionActual } from "../../services/proyectos";
+import { informeIncidencia } from "../informes/incidencia";
+import { useUsuario } from "../../context/usuarioContext";
+import { obtenerIncidenciaId } from "../../services/informes";
 
 export const incidenciaLoader = async ({ params }) => {
   const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
-  return { incidencias };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { incidencias, iteracion};
 };
 
 export default function ListaIncidencia() {
-  const { incidencias } = useLoaderData();
+  const { incidencias, iteracion } = useLoaderData();
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
@@ -99,7 +104,7 @@ export default function ListaIncidencia() {
                     {incidencia.id_riesgo < 10
                       ? `0${incidencia.id_riesgo}`: incidencia.id_riesgo}</td>
                   <td>{incidencia.descripcion}</td>
-                  <td>{incidencia.responsable}</td>
+                  <td>{incidencia.responsable_nombre}</td>
                   <td style={{color: incidencia.gravedad === "Alta" ? "red" : incidencia.gravedad === "Media" ? "yellow":"gray", fontWeight:"bold"}}>{incidencia.gravedad}</td>
                   <td>{formatearFechaHora(new Date(incidencia.fecha_ocurrencia))}</td>
                   <td className="td">
@@ -123,8 +128,23 @@ export default function ListaIncidencia() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-dark"
-                          onClick={() => {
-                            
+                          onClick={async() => {
+                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia)                            
+                            const datos = {
+                              id_riesgo: `RK${incidencia.id_riesgo < 10 ? '0':''}${incidencia.id_riesgo}`,
+                              iteracion_nombre: iteracion.nombre,
+                              responsable: incidencia.responsable_nombre,
+                              responsable_correo: respuesta.responsable_email,
+                              responsable_rol: respuesta.responsable_rol,
+                              nombre_proyecto: proyecto.nombre,
+                              descripcion_riesgo: respuesta.descripcion_riesgo,
+                              responsable_riesgo: respuesta.responsable_riesgo,
+                              tipo_riesgo: respuesta.tipo_riesgo,
+                              fecha_incidencia: formatearFechaHora(new Date(incidencia.fecha_ocurrencia)),
+                              descripcion_incidencia: incidencia.descripcion,
+                              observaciones_incidencia: incidencia.gravedad
+                            }
+                            informeIncidencia(datos)
                           }}
                         >
                           <FontAwesomeIcon icon={faFilePdf} />

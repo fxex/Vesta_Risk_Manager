@@ -224,4 +224,9 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerIncidenciaId($id_incidencia){
+        $resultado = $this->incidencia->obtenerDatosIncidencia($id_incidencia);
+        return $resultado;
+    }
+
 }

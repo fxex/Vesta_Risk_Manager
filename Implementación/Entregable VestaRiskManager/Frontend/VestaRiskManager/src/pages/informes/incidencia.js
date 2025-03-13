@@ -1,7 +1,8 @@
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
+import { formatearFechaHora } from "../../utils/fecha";
 
-export const informeIncidencia = () => {
+export const informeIncidencia = (datos) => {
     pdfMake.tableLayouts = {
       customLayout: {
         hLineWidth: function (i, node) {
@@ -31,11 +32,11 @@ export const informeIncidencia = () => {
       header: {
         columns:[
           {
-            text: "Fecha y hora:",
+            text: "Fecha y hora: " + formatearFechaHora(new Date()),
             alignment: "left",
           },
           {
-            text: "Iteración:",
+            text: "Iteración: " + datos.iteracion_nombre,
             alignment:"right"
           }
         ],
@@ -55,7 +56,7 @@ export const informeIncidencia = () => {
         {
           columns:[
             { image: "logoLeft", width:80, height:80},
-            { text: "Informe de incidencia \nRiesgo N° X", style: "principalTitle", alignment:"center", margin:[10,10,10,10] },
+            { text: "Informe de incidencia \nRiesgo " + datos.id_riesgo, style: "principalTitle", alignment:"center", margin:[10,10,10,10] },
             { image:"logoRight", width:50, height:80, alignment:"rigth"}
           ],
           margin:[0,0,0,20]
@@ -66,13 +67,13 @@ export const informeIncidencia = () => {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: [ '*', '*', "*", '*' ],
+            widths: [ '*', 'auto', "*", 'auto' ],
             heights: ['*', 20, 20],
     
             body: [
-              [ {text: '1. Datos del usuario', colSpan:4, fillColor:"#00B0F0", color:"#FFF", bold:true}, '','',''],
-              [ {text: "Nombre", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '', {text:"Correo", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '' ],
-              [ { text: 'Rol', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:'', colSpan:3}, '', '' ]
+              [ {text: '1. Datos del usuario', colSpan:4, fillColor:"#8DB3E2", color:"#FFF", bold:true}, '','',''],
+              [ {text: "Nombre", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.responsable, alignment:"center", margin:[0,3,0,0]}, {text:"Correo", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.responsable_correo, alignment:"center", margin:[0,3,0,0]} ],
+              [ { text: 'Rol', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.responsable_rol, alignment:"center", margin:[0,3,0,0], colSpan:3}, '', '' ]
             ]
           },
           margin:[0,0,0,20]
@@ -88,8 +89,8 @@ export const informeIncidencia = () => {
             heights: ['*', 20, 20,20],
     
             body: [
-              [ {text: '2. Datos del proyecto', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
-              [ {text: "Nombre del proyecto", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  ''],
+              [ {text: '2. Datos del proyecto', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, ''],
+              [ {text: "Nombre del proyecto", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text:datos.nombre_proyecto, alignment:"center", margin:[0,3,0,0]}],
               [ { text: 'Lider del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, ''],
               [ { text: 'Desarrolladores del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '']
             ]
@@ -106,11 +107,11 @@ export const informeIncidencia = () => {
             heights: ['*', 20, 20,20,20],
     
             body: [
-              [ {text: '3. Datos del riesgo', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
-              [ {text: "Identificador del riesgo", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  ''],
-              [ { text: 'Descripción', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, ''],
-              [ { text: 'Tipo', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, ''],
-              [ { text: 'Responsable', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '']
+              [ {text: '3. Datos del riesgo', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, ''],
+              [ {text: "Identificador del riesgo", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text: datos.id_riesgo, alignment:"center", margin:[0,3,0,0]}],
+              [ { text: 'Descripción', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.descripcion_riesgo, alignment:"center", margin:[0,3,0,0]}],
+              [ { text: 'Tipo', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.tipo_riesgo, alignment:"center", margin:[0,3,0,0]}],
+              [ { text: 'Responsable', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.responsable_riesgo, alignment:"center", margin:[0,3,0,0]}]
 
             ]
           },
@@ -126,10 +127,10 @@ export const informeIncidencia = () => {
             heights: ['*', 20, 20,20],
     
             body: [
-              [ {text: '4. Datos de la incidencia', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
-              [ {text: "Fecha de ocurrencia", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  ''],
-              [ { text: 'Descripción de la incidencia', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, ''],
-              [ { text: 'Observaciones', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, '']
+              [ {text: '4. Datos de la incidencia', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, ''],
+              [ {text: "Fecha de ocurrencia", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text: datos.fecha_incidencia, alignment:"center", margin:[0,3,0,0]}],
+              [ { text: 'Descripción de la incidencia', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.descripcion_incidencia, alignment:"center", margin:[0,3,0,0]}],
+              [ { text: 'Gravedad', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text: datos.observaciones_incidencia, alignment:"center", margin:[0,3,0,0]}]
             ]
           },
           margin:[0,0,0,20]
@@ -144,7 +145,7 @@ export const informeIncidencia = () => {
             heights: ['*', '*', 50],
     
             body: [
-              [ {text: '5. Equipo a cargo de la incidencia', colSpan:2, fillColor:"#00B0F0", color:"#FFF", bold:true}, ''],
+              [ {text: '5. Equipo a cargo de la incidencia', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, ''],
               [ {text: "Nombre responsable", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text: "Firma", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}],
               [ '', ''],
             ]
