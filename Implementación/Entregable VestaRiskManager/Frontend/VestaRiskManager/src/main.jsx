@@ -73,6 +73,7 @@ import VerCategoria, {
 } from "./pages/categoria/VerCategoria.jsx";
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
 import ListaIncidencia, { incidenciaLoader } from "./pages/Incidencia/ListaIncidencia.jsx";
+import ListaTarea from "./pages/tarea/ListaTarea.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -202,6 +203,11 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencias",
       element: <RutaProtegida element={<ListaIncidencia />} />,
+      loader: incidenciaLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tareas",
+      element: <RutaProtegida element={<ListaTarea />} />,
       loader: incidenciaLoader
     },
     {

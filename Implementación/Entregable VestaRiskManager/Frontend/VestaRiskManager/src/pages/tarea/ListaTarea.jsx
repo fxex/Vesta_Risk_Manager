@@ -32,13 +32,13 @@ import { informeIncidencia } from "../informes/incidencia";
 import { useUsuario } from "../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../services/informes";
 
-export const incidenciaLoader = async ({ params }) => {
-  const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
+export const TareaLoader = async ({ params }) => {
+  const tarea = await obtenerIncidenciasProyecto(params.id_proyecto);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { incidencias, iteracion};
+  return { tarea, iteracion};
 };
 
-export default function ListaIncidencia() {
+export default function ListaTarea() {
   const { incidencias, iteracion } = useLoaderData();
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -61,7 +61,7 @@ export default function ListaIncidencia() {
       ) : null} */}
       <Contenedor>
         <>
-          <h3>{proyecto.nombre} - Incidencias ocurridas</h3>
+          <h3>{proyecto.nombre} - Tareas a Realizar</h3>
           {/* {iteracion ? (
             <>
               <h4>
@@ -86,8 +86,20 @@ export default function ListaIncidencia() {
             }}
             // disabled={iteracion === null}
           >
-            <FontAwesomeIcon icon={faPlus} className="mx-1" />
-            Nueva incidencia
+            Generar Informe
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              // navigate(
+              //   `/inicio/proyecto/${
+              //     comprobacionLider ? "lider" : "desarrollador"
+              //   }/${id_proyecto}/incidencia/crear`
+              // );
+            }}
+            // disabled={iteracion === null}
+          >
+            Generar Informe completo
           </Button>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">

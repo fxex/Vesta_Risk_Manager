@@ -4,11 +4,14 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { informeTarea } from "../../informes/tareas";
+import { useUsuario } from "../../../context/usuarioContext";
 
 export default function MonitoreoLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
   const { id_proyecto } = useParams();
+  const { usuario } = useUsuario();  
 
   return (
     <>
@@ -41,8 +44,13 @@ export default function MonitoreoLider() {
               );
             }
             }>Incidencias</Button>
+            <Button className="boton_2" onClick={()=>{
+              navigate(
+                `/inicio/proyecto/lider/${id_proyecto}/monitoreo/${usuario.id_usuario}/tareas`
+              );
+            }
+            }>Tareas a realizar</Button>
             <Button className="boton_2">Seguimiento de riesgo</Button>
-            <Button className="boton_2">Tareas a realizar</Button>
           </div>
         </div>
       </Contenedor>
