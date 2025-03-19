@@ -13,7 +13,6 @@ export async function cargarCategoria({ params }) {
 
 export default function VerCategoria() {
   const { categoria } = useLoaderData();
-  console.log(categoria);
 
   return (
     <>

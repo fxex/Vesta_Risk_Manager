@@ -8,6 +8,7 @@ import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../utils/verificarErrores";
+import { crearCategoria, obtenerCategoriaNombre } from "../../services/categorias";
 
 export default function CrearCategoria() {
   const navigate = useNavigate();
@@ -33,11 +34,12 @@ export default function CrearCategoria() {
     setError({
       ...error,
       [name]: false,
+      nombreIgual: false
     });
   };
 
   const handleClick = async () => {
-    setBotonPresionado(true);
+    setBotonPresionado(true);    
     const comprobarNombre =
       formData.nombre.length === 0 || formData.nombre.length > 30
         ? false
@@ -54,12 +56,15 @@ export default function CrearCategoria() {
 
     if (!comprobacion) {
       const resultado = await crearCategoria(formData);
-      setCreado(resultado);
+      if (resultado) {
+        navigate("/inicio/categorias", {
+          state: { mensaje: "Categoria creada con éxito" },
+        });
+      }
     }
     setBotonPresionado(false);
   };
 
-  if (creado === null) {
     return (
       <>
         <Navegador />
@@ -101,9 +106,9 @@ export default function CrearCategoria() {
             <Form.Group>
               <Form.Label>Descripción</Form.Label>
               <Form.Control
-                type="descripción"
+                type="text"
                 placeholder="Ingrese la descripción de la categoría"
-                name="descripción"
+                name="descripcion"
                 onChange={handleChange}
                 value={formData.descripcion}
                 isInvalid={error.descripcion || error.descripcionIgual}
@@ -113,8 +118,6 @@ export default function CrearCategoria() {
                   Revise que la descripción{" "}
                   {formData.descripcion.length === 0
                     ? "no este vacio"
-                    : !verificarDescripción(formData.descripcion)
-                    ? "sea valido"
                     : null}
                   .
                 </Form.Text>
@@ -146,24 +149,4 @@ export default function CrearCategoria() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <Navegador />
-        <Contenedor>
-          <h3>Crear Categoría</h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir ruta={"/inicio/categorias"} />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
 }

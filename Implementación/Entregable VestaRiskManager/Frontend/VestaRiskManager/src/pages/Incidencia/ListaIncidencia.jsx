@@ -136,10 +136,10 @@ export default function ListaIncidencia() {
                           style={{ marginLeft: "5px" }}
                           variant="outline-dark"
                           onClick={async() => {
-                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia)                                                        
+                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia)                                          
                             const datos = {
                               id_riesgo: `RK${incidencia.id_riesgo < 10 ? '0':''}${incidencia.id_riesgo}`,
-                              iteracion_nombre: iteracion.nombre,
+                              iteracion_nombre: iteracion.nombre ? iteracion.nombre : null,
                               responsable: incidencia.responsable_nombre,
                               responsable_correo: respuesta.responsable_email,
                               responsable_rol: respuesta.responsable_rol,

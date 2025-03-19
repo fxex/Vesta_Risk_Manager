@@ -9,19 +9,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../utils/verificarErrores";
 
-export async function cargarModificarCategoria({ params }) {
-  const categoria = await obtenerCategoriaId(params.id_usuario);
-  return { categoria };
-}
-
 export default function ModificarCategoria() {
-  const { categoria } = useCategoria();
-
+  const { categoria } = useLoaderData();  
   const { id_categoria } = useParams();
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nombre: categoria.nombre_categoria,
+    nombre: categoria.nombre,
     descripcion: categoria.descripcion,
   });
   const [error, setError] = useState({

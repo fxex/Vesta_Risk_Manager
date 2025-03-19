@@ -74,6 +74,8 @@ import VerCategoria, {
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
 import ListaIncidencia, { incidenciaLoader } from "./pages/Incidencia/ListaIncidencia.jsx";
 import ListaTarea from "./pages/tarea/ListaTarea.jsx";
+import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
+import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -162,9 +164,18 @@ const App = () => {
       loader: obtenerCategoriaGeneral,
     },
     {
+      path: "/inicio/categoria/crear",
+      element: <RutaProtegida element={<CrearCategoria />} isAdmin={true} />,
+    },
+    {
+      path: "/inicio/categoria/modificar/:id_categoria",
+      element: <RutaProtegida element={<ModificarCategoria />} isAdmin={true} />,
+      loader:cargarCategoria
+    },
+    {
       path: "/inicio/categoria/:id_categoria",
       element: <RutaProtegida element={<VerCategoria />} isAdmin={true} />,
-      loader: cargarCategoria,
+      loader: cargarCategoria
     },
 
     {
