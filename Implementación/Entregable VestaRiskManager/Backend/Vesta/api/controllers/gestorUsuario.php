@@ -31,8 +31,8 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerTodosUsuarios(){
-        $resultado = $this->usuario->obtenerTodosUsuarios();
+    public function obtenerTodosUsuarios($pagina){
+        $resultado = $this->usuario->obtenerTodosUsuarios($pagina);
         return $resultado;
     }
 

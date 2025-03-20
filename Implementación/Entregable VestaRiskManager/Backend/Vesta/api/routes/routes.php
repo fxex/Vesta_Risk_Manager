@@ -92,10 +92,10 @@ function validarJWT($controladorUsuario){
 
 // Rutas para el Gestor de usuarios
 // Usuarios
-$router->add("GET", "usuarios", function() use ($controladorUsuario){
+$router->add("GET", "usuarios/{pagina}", function($pagina) use ($controladorUsuario){
     $validado = validarJWT($controladorUsuario);
     if ($validado) {
-        $resultado = $controladorUsuario->obtenerTodosUsuarios(); 
+        $resultado = $controladorUsuario->obtenerTodosUsuarios((int)$pagina); 
         echo json_encode($resultado); // Retorna un json con todos los usuarios que tenga la base de datos.
     }else{
         header('HTTP/1.1 403 Forbidden');
@@ -366,6 +366,11 @@ $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
 
 $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
+    echo json_encode($resultado); 
+});
+
+$router->add("GET","categoria/generales/{pagina}", function($pagina) use($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerCategorias((int)$pagina);
     echo json_encode($resultado); 
 });
 $router->add("POST","categoria", function() use($controladorRiesgo){
