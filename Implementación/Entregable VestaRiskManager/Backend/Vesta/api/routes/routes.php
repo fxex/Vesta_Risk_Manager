@@ -368,11 +368,44 @@ $router->add("GET","categoria/generales", function() use($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerCategoriasGenerales();
     echo json_encode($resultado); 
 });
+$router->add("POST","categoria", function() use($controladorRiesgo){
+    $body = file_get_contents('php://input');                 
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->crearCategoria($data);
+        echo json_encode(["creacion"=>$resultado]); 
+    } else {
+        echo json_encode(["creacion"=>false]);
+    }
+});
+
+$router->add("GET", "categoria/comprobar/{nombre}", function($nombre) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerCategoriaNombre(urldecode($nombre)); 
+    echo json_encode($resultado);
+});
 
 $router->add("GET", "categoria/{id}", function($id) use ($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerCategoriaId($id); 
     echo json_encode($resultado);
 });
+
+$router->add("PUT", "categoria/{id}", function($id) use ($controladorRiesgo){
+    $body = file_get_contents('php://input');
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->actualizarCategoria($id, $data);
+        echo json_encode(["modificacion"=>$resultado]); 
+    } else {
+        echo json_encode(["modificacion"=>false]);
+    }
+});
+
+$router->add("PUT", "categoria/{id}/eliminar", function($id) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->eliminarCategoria($id); 
+    echo json_encode($resultado);
+});
+
+
 
 $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use ($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerRiesgoProyecto($id_proyecto);

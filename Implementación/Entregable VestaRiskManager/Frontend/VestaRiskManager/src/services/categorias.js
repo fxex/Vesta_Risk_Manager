@@ -19,6 +19,19 @@ export const crearCategoria = async (data) => {
   return json;
 };
 
+export const actualizarCategoria = async (id_categoria, data) => {
+  const respuesta = await fetch(`${URL}/categoria/${id_categoria}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
 export const eliminarCategoria = async (id_categoria) => {
   const respuesta = await fetch(
     `${URL}/categoria/${id_categoria}/eliminar`,

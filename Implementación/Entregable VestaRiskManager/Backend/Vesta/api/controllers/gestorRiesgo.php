@@ -229,4 +229,42 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function crearCategoria($data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["nombre"]);
+        if ($comprobar) {
+            $this->categoria->setNombre($data["nombre"]);
+            $this->categoria->setDescripcion($data["descripcion"]);
+            $id_categoria = $this->categoria->crearCategoria();
+            return $id_categoria > 0;
+        } else {
+            return false;
+        }
+    }
+
+    public function obtenerCategoriaNombre($nombre){
+        $resultado = $this->categoria->obtenerCategoriaNombre($nombre);
+        return $resultado;
+    }
+
+    public function eliminarCategoria($id_categoria){
+        $this->categoria->setEstado("inactivo");
+        $resultado = $this->categoria->eliminarCategoria($id_categoria);
+        return $resultado;
+    }
+
+    public function actualizarCategoria($id_categoria, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["nombre"]) && !empty($data["version"]);
+        if ($comprobar) {
+            $this->categoria->setEstado("inactivo");
+            $this->categoria->eliminarCategoria($id_categoria);
+            $this->categoria->setNombre($data["nombre"]);
+            $this->categoria->setDescripcion($data["descripcion"]);
+            $this->categoria->setVersion($data["version"] + 1);
+            $id_categoria = $this->categoria->actualizarCategoria();
+            return $id_categoria > 0;
+        } else {
+            return false;
+        }
+    }
+
 }

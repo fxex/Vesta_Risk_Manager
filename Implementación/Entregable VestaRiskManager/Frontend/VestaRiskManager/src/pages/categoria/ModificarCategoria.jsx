@@ -8,9 +8,10 @@ import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../utils/verificarErrores";
+import { actualizarCategoria, obtenerCategoriaNombre } from "../../services/categorias";
 
 export default function ModificarCategoria() {
-  const { categoria } = useLoaderData();  
+  const { categoria } = useLoaderData();    
   const { id_categoria } = useParams();
 
   const navigate = useNavigate();
@@ -24,8 +25,6 @@ export default function ModificarCategoria() {
   });
   const [botonPresionado, setBotonPresionado] = useState(false);
 
-  const [modificado, setModificado] = useState(null);
-
   // Manejar cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,23 +35,17 @@ export default function ModificarCategoria() {
     setError({
       ...error,
       [name]: false,
+      nombreIgual: false
     });
   };
 
   const handleClick = async () => {
     setBotonPresionado(true);
     const comprobarNombre =
-      categoria.nombre_categoria == formData.nombre ||
+      categoria.nombre == formData.nombre ||
       formData.nombre.length === 0
         ? false
         : await obtenerCategoriaNombre(formData.nombre);
-
-    const comprobarDescripcion =
-      categoria.descripcion == formData.categoria ||
-      formData.categoria.length === 0 
-        ? false
-        : await obtenerCategoriaDescripcion(formData.descripcion);
-
     const comprobacionError = {
       nombre: formData.nombre.length === 0 || formData.nombre.length > 30,
       descripcion: formData.descripcion.length === 0,
@@ -63,13 +56,16 @@ export default function ModificarCategoria() {
     const comprobacion = verificarError(comprobacionError);
 
     if (!comprobacion) {
+      formData.version = categoria.version
       const resultado = await actualizarCategoria(id_categoria, formData);
-      setModificado(resultado);
+      if (resultado) {
+        navigate("/inicio/categorias", {
+          state: { mensaje: "Categoria modificada con éxito" },
+        });
+      }
     }
     setBotonPresionado(false);
   };
-
-  if (modificado === null) {
     return (
       <>
         <Navegador />
@@ -111,10 +107,10 @@ export default function ModificarCategoria() {
             <Form.Group>
               <Form.Label>Descripci&oacute;n</Form.Label>
               <Form.Control
-                type="descripción"
+                type="text"
                 onChange={handleChange}
                 placeholder="Ingrese la descripción de la categoría"
-                name="descripción"
+                name="descripcion"
                 value={formData.descripcion}
                 isInvalid={error.descripcion || error.descripcionIgual}
               />
@@ -154,24 +150,5 @@ export default function ModificarCategoria() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <Navegador />
-        <Contenedor>
-          <h3>Actualizar Categor&iacute;a</h3>
-          <>
-            {modificado ? (
-              <Alert variant="success">Operaci&oacute;n realizada con &eacute;xito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir ruta={"/inicio/categorias"} />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }
