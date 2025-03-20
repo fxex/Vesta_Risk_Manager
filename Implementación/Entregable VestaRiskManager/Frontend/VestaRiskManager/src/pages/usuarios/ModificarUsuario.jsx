@@ -28,8 +28,6 @@ export async function cargarModificarUsuario({ params }) {
 export default function ModificarUsuario() {
   const { usuario } = useUsuario();
   const { usuarioLoader, perfiles } = useLoaderData();
-  console.log(usuarioLoader);
-
   const { id_usuario } = useParams();
 
   const navigate = useNavigate();
@@ -46,9 +44,6 @@ export default function ModificarUsuario() {
     correoIgual: false,
   });
   const [botonPresionado, setBotonPresionado] = useState(false);
-
-  const [modificado, setModificado] = useState(null);
-
   // Manejar cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,12 +90,14 @@ export default function ModificarUsuario() {
 
     if (!comprobacion) {
       const resultado = await actualizarUsuario(id_usuario, formData);
-      setModificado(resultado);
+      if (resultado) {
+        navigate("/inicio/usuarios", {
+          state: { mensaje: "Usuario actualizado con éxito" },
+        });
+      }
     }
     setBotonPresionado(false);
   };
-
-  if (modificado === null) {
     return (
       <>
         <Navegador />
@@ -208,24 +205,5 @@ export default function ModificarUsuario() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <Navegador />
-        <Contenedor>
-          <h3>Actualizar Usuario</h3>
-          <>
-            {modificado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir ruta={"/inicio/usuarios"} />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

@@ -1,8 +1,9 @@
 import { URL } from "../utils/URL";
 
-export async function obtenerUsuarios() {
+export async function obtenerUsuarios(pagina) {
+  let paginaUsada = pagina ? pagina : 1;
   const token = localStorage.getItem("jwt");
-  const respuesta = await fetch(`${URL}/usuarios`, {
+  const respuesta = await fetch(`${URL}/usuarios/${paginaUsada}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -10,6 +11,7 @@ export async function obtenerUsuarios() {
     },
   });
   const json = await respuesta.json();
+  
   return json;
 }
 

@@ -3,7 +3,7 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { Table, Button, Modal, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Alert, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -14,32 +14,38 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { eliminarCategoria } from "../../services/categorias";
+import { eliminarCategoria, obtenerCategorias } from "../../services/categorias";
 
 export default function ListaCategorias() {
-  const categorias = useLoaderData();
+  const {categorias, totalPaginas} = useLoaderData();
+  const navigate = useNavigate();
   const location = useLocation();
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
+  const [eliminar, setEliminar] = useState(false)
   const [mensaje, setMensaje] = useState("")
+  const [categoriasCargadas, setCategoriasCargadas] = useState(categorias);
+  const [paginaActual, setPaginaActual] = useState(1)
+
+  useEffect(() => {
+      obtenerCategorias(paginaActual).then((data)=>{
+        const {categorias, _} = data;
+        setCategoriasCargadas(categorias)
+      })
+  
+    }, [paginaActual])
 
   useEffect(() => {
       if (location.state?.mensaje) {
         window.scrollTo(0, 0);
         setMensaje(location.state.mensaje);
   
-        // Limpiar el mensaje después de unos segundos
         const timeoutId = setTimeout(() => {
           setMensaje("");
-        }, 3000); // Mostrar el mensaje durante 3 segundos
+        }, 3000); 
   
-        // Limpiar el timeout si el componente se desmonta
         return () => clearTimeout(timeoutId);
       }
     }, [location.state]);
-
-
-  const navigate = useNavigate();
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState(0);
-  const [eliminar, setEliminar] = useState(false)
 
   return (
     <>
@@ -72,7 +78,7 @@ export default function ListaCategorias() {
               </tr>
             </thead>
             <tbody>
-              {categorias.map((item, key) => (
+              {categoriasCargadas.map((item, key) => (
                 <tr key={key}>
                   <td>{item.nombre}</td>
                   <td>{item.descripcion}</td>
@@ -113,6 +119,21 @@ export default function ListaCategorias() {
               ))}
             </tbody>
           </Table>
+          <Pagination>
+            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
+            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
+            {[...Array(totalPaginas)].map((_, index) => (
+              <Pagination.Item 
+                key={index + 1} 
+                active={index + 1 === paginaActual}
+                onClick={() => {setPaginaActual(index + 1)}}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
+            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
+          </Pagination>
         </>
       </Contenedor>
       <Footer />
