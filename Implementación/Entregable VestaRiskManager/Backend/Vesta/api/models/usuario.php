@@ -37,14 +37,30 @@ class Usuario {
         
     }
 
-    public function obtenerTodosUsuarios(){
-        $usuarios = $this->conexion->query("select * from usuario");
+    public function obtenerTodosUsuarios($pagina){
+        $usuariosPorPagina = 10;
+        $offset = 0;
+        if ($pagina > 1) {
+            $offset = ($pagina - 1) * $usuariosPorPagina;
+        }
+
+        $usuarios = $this->conexion->query("select * from usuario LIMIT $usuariosPorPagina OFFSET $offset");
         $resultado = [];
         while ($fila = $usuarios->fetch_assoc()) {
             $resultado[] = $fila;
         }
-        return $resultado;
+        $totalPaginas = $this->obtenerCantidadUsuario($usuariosPorPagina);
+        return ["usuarios"=>$resultado, "totalPaginas"=> $totalPaginas];
     }
+
+    private function obtenerCantidadUsuario($usuariosPorPagina){
+        $totalQuery = $this->conexion->query("select count(*) as total from usuario");
+        $totalUsuarios = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalUsuarios / $usuariosPorPagina);
+
+        return $totalPaginas;
+    }
+
 
     // Obtener usuario por ID
     public function obtenerUsuarioId($id) {

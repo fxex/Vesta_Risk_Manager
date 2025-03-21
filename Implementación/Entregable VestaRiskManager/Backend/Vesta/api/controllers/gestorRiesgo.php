@@ -28,6 +28,11 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerCategorias($pagina){
+        $resultado = $this->categoria->obtenerCategorias($pagina);
+        return $resultado;
+    }
+
     public function obtenerCategoriaId($id){
         $resultado = $this->categoria->obtenerCategoriaId($id);
         return $resultado;
