@@ -169,3 +169,8 @@ END;
 //
 
 DELIMITER ;
+CREATE INDEX idx_riesgo_proyecto ON riesgo (id_proyecto);
+CREATE INDEX idx_riesgo_categoria ON riesgo (id_categoria);
+CREATE INDEX idx_participante_riesgo ON participante_riesgo (id_riesgo, id_usuario);
+CREATE INDEX idx_evaluacion ON evaluacion (id_riesgo, id_iteracion);
+CREATE INDEX idx_plan ON plan (id_riesgo, id_iteracion, tipo);
