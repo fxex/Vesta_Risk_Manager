@@ -72,9 +72,9 @@ export const crearEvaluacion = async (id_proyecto, id_riesgo, data) => {
   return json;
 };
 
-export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo) => {
+export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo, id_iteracion) => {
   const respuesta = await fetch(
-    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/plan/tipo/cantidad`,
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/plan/tipo/cantidad/${id_iteracion}`,
     {
       method: "GET",
       headers: {
@@ -82,7 +82,9 @@ export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo) => {
       },
     }
   );
-  const json = await respuesta.json();
+  const json = await respuesta.json();  
+  console.log(json);
+  
 
   return json;
 };

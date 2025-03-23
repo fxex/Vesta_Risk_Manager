@@ -31,7 +31,8 @@ export const planCreacionLoader = async ({ params }) => {
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   const planes = await obtenerCantidadPlanTipo(
     params.id_proyecto,
-    id_riesgo
+    id_riesgo,
+    iteracion.id_iteracion
   );
   return { riesgo, iteracion, planes };
 };
