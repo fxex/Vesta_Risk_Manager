@@ -78,11 +78,7 @@ export default function ListaIncidencia() {
           <Button
             variant="success"
             onClick={() => {
-              // navigate(
-              //   `/inicio/proyecto/${
-              //     comprobacionLider ? "lider" : "desarrollador"
-              //   }/${id_proyecto}/incidencia/crear`
-              // );
+              navigate(`/inicio/proyecto/lider/${proyecto.id}/monitoreo/incidencia/crear`);
             }}
             // disabled={iteracion === null}
           >

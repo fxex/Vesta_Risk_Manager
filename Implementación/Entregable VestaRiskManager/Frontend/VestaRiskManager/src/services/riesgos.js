@@ -142,6 +142,39 @@ export const modificarPlan = async (id_proyecto, id_plan, data) => {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data), 
+    }
+  );
+  const json = await respuesta.json();
+
+  return json.modificado;
+};
+
+export const crearIncidencia = async (id_proyecto, data) => {
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencia`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  const json = await respuesta.json();
+
+  return json.creacion;
+};
+
+export const modificarIncidencia = async (id_proyecto, id_incidencia, data) => {
+  const token = localStorage.getItem("jwt");
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/incidencia/${id_incidencia}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     }
   );

@@ -9,6 +9,7 @@ import Home from "./pages/Home.jsx";
 import ListaUsuarios from "./pages/usuarios/ListaUsuarios.jsx";
 import CrearUsuario from "./pages/usuarios/CrearUsuario.jsx";
 import Salir from "./pages/Salir.jsx";
+import CrearIncidencia from "./pages/Incidencia/CrearIncidencia.jsx";
 
 import {
   obtenerUsuarios as userLoader,
@@ -226,6 +227,10 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",
       element: <RutaProtegida element={<EditarPlanLider />} />,
       loader: planLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencia/crear",
+      element: <RutaProtegida element={<CrearIncidencia />} />,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
