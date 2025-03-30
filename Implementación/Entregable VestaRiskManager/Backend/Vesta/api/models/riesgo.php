@@ -35,10 +35,21 @@ class Riesgo {
     }
 
     public function obtenerRiesgoProyecto($id_proyecto, $id_iteracion){
-        $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre AS nombre_categoria,
-        (SELECT GROUP_CONCAT(u.nombre SEPARATOR ', ') from usuario u inner join participante_riesgo pr on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = r.id_riesgo) as responsables,
-    (SELECT COUNT(*) FROM evaluacion e WHERE e.id_riesgo = r.id_riesgo AND e.id_iteracion = ?) AS evaluado FROM riesgo r INNER JOIN categoria c ON r.id_categoria = c.id_categoria
-    WHERE r.id_proyecto = ?";
+        $query = "SELECT 
+                        r.id_riesgo, 
+                        r.descripcion, 
+                        r.factor_riesgo, 
+                        c.nombre AS nombre_categoria,
+                        GROUP_CONCAT(DISTINCT u.nombre ORDER BY u.nombre SEPARATOR ', ') AS responsables,
+                        COUNT(DISTINCT e.id_evaluacion) AS evaluado
+                    FROM riesgo r
+                    INNER JOIN categoria c ON r.id_categoria = c.id_categoria
+                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo
+                    LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
+                    LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
+                    WHERE r.id_proyecto = ?
+                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre;
+                    ";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmt->execute();
@@ -130,7 +141,7 @@ class Riesgo {
          return $resultado;
     }
 
-    public function obtenerCantidadPlanes($id_proyecto,$id_riesgo, $id_iteracion){
+    public function obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion){
         $query = "SELECT r.id_riesgo,
                 SUM(CASE WHEN p.tipo = 'minimizacion' THEN 1 ELSE 0 END) AS total_minimizacion,
                 SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,

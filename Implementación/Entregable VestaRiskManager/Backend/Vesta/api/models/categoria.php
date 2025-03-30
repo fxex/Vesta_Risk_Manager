@@ -69,7 +69,7 @@ class Categoria{
     }
 
     private function obtenerCantidadCategoria($categoriaPorPagina){
-        $totalQuery = $this->conexion->query("select count(*) as total from categoria");
+        $totalQuery = $this->conexion->query("select count(*) as total from categoria where estado = 'activo'");
         $totalCategoria = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalCategoria / $categoriaPorPagina);
 
@@ -89,7 +89,7 @@ class Categoria{
     }
 
     public function obtenerCategoriaNombre($nombre) {
-        $query = "Select id_categoria from categoria where nombre = ?";
+        $query = "Select id_categoria from categoria where nombre = ? and estado = 'activo'";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $nombre);
         $stmt->execute();
@@ -110,15 +110,29 @@ class Categoria{
     }
 
     public function eliminarCategoria($id_categoria){
-        $query = "UPDATE categoria SET estado = ? where id_categoria = ?";
-        $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("si", $this->estado, $id_categoria);
+        $stmt = NULL;
+        $cantidadProyectos = $this->obtenerCantidadProyectosCategoria($id_categoria);
+        if ($cantidadProyectos < 1) {
+            $query = "DELETE FROM categoria where id_categoria = ?";
+            $stmt = $this->conexion->prepare($query);
+            $stmt->bind_param("i", $id_categoria);
+        }else{
+            $query = "UPDATE categoria SET estado = ? where id_categoria = ?";
+            $stmt = $this->conexion->prepare($query);
+            $stmt->bind_param("si", $this->estado, $id_categoria);
+        }
         if ($stmt->execute()) {
             return true;
         } else {
-            throw new Exception("Error al crear el plan: " . $stmt->error);
+            throw new Exception("Error al eliminar una categoria: " . $stmt->error);
             return false;
         }
+    }
+
+    private function obtenerCantidadProyectosCategoria($id_categoria){
+        $totalQuery = $this->conexion->query("SELECT count(DISTINCT pc.id_proyecto) as total from categoria c inner join proyecto_categoria pc on c.id_categoria = pc.id_categoria where c.id_categoria = {$id_categoria}");
+        $totalProyectos = $totalQuery->fetch_assoc()['total'];
+        return $totalProyectos;
     }
 
     public function actualizarCategoria(){

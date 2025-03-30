@@ -476,8 +476,8 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan", function(
     }
 });
 
-$router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantidad", function($id_proyecto, $id_riesgo) use ($controladorRiesgo){ 
-    $resultado = $controladorRiesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo);
+$router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantidad/{id_iteracion}", function($id_proyecto, $id_riesgo, $id_iteracion) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion);
     echo json_encode($resultado);
 });
 

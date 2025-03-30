@@ -48,8 +48,9 @@ class GestorRiesgo {
             $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, 0);
         }
         if (!empty($resultado)) {
+            $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : 0;
             foreach ($resultado as &$riesgo) {
-                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"]);
+                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"], $id_iteracion);
             }
         }
         return $resultado;
@@ -131,19 +132,13 @@ class GestorRiesgo {
         curl_close($ch);
     }
 
-    public function obtenerCantidadPlanes($id_proyecto,$id_riesgo) {
-        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        if (!empty($iteracion)) {
-            $resultado = $this->riesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo, $iteracion["id_iteracion"]);
+    public function obtenerCantidadPlanes($id_proyecto,$id_riesgo, $id_iteracion) {
+            $resultado = $this->riesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion);
             if (!empty($resultado)) {
                 return $resultado;
             }else{
                 return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>0, "total_mitigacion"=>0, "total_contingencia"=>0];
             }
-        }else{
-            return ["id_riesgo"=>$id_riesgo, "total_minimizacion"=>1, "total_mitigacion"=>1, "total_contingencia"=>1];
-        }
-
     }
     
 

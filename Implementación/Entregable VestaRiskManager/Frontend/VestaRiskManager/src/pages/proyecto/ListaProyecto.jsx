@@ -6,7 +6,7 @@ import Contenedor from "../../components/Contenedor";
 import "./../../styles/Home.css";
 import { Alert, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 
 export default function ListaProyecto() {
@@ -42,6 +42,16 @@ export default function ListaProyecto() {
       <Contenedor>
         <h3>Proyectos</h3>
         <div style={{ minHeight: "40vh" }}>
+        <Button
+          variant="success"
+          className="mb-3"
+          onClick={() => {
+            navigate("/inicio/proyecto/crear");
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} className="mx-1" />
+          Nuevo Proyecto
+        </Button>
           {proyectos.map((item, key) => (
             <Button
               key={key}
