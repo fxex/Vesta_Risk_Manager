@@ -128,18 +128,6 @@ class Riesgo {
         }   
     }
 
-    public function obtenerCantidadEvaluaciones($id_riesgo, $id_iteracion){
-        $query = "SELECT r.id_riesgo, count(e.id_evaluacion) as total_evaluaciones from riesgo r 
-                    left join evaluacion e on r.id_riesgo = e.id_riesgo 
-                    inner join iteracion_evaluacion ie on e.id_evaluacion = ie.id_evaluacion
-                    where ie.id_iteracion = ? and r.id_riesgo = ?
-                    group by r.id_riesgo"; 
-         $stmt = $this->conexion->prepare($query);
-         $stmt->bind_param("ii",$id_iteracion, $id_riesgo);
-         $stmt->execute();
-         $resultado = $stmt->get_result()->fetch_assoc(); 
-         return $resultado;
-    }
 
     public function obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion){
         $query = "SELECT r.id_riesgo,
@@ -155,5 +143,55 @@ class Riesgo {
          $stmt->execute();
          $resultado = $stmt->get_result()->fetch_assoc(); 
          return $resultado;
+    }
+
+    public function obtenerDatosRiesgo($id_proyecto, $id_iteracion){
+        $consultas = [
+            // "total_riesgos"=>[
+            //     "query" => "Select count(DISTINCT id_riesgo) from riesgo where id_proyecto = ?",
+            //     "params"=>["i", $id_proyecto]
+            // ], 
+            "riesgos_activos" =>[
+                "query" => "Select count(Distinct e.id_evaluacion) from evaluacion e inner join riesgo r on r.id_riesgo = e.id_riesgo where e.id_proyecto = ? and e.id_iteracion = ? and r.factor_riesgo > 9",
+                "params"=>["ii", $id_proyecto, $id_iteracion]
+            ],
+            "evaluaciones_pendientes" =>[
+                "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r LEFT join evaluacion e on r.id_riesgo = e.id_riesgo and e.id_iteracion = ? where r.id_proyecto = ? and e.id_evaluacion is null",
+                "params" =>["ii", $id_iteracion, $id_proyecto]
+            ],
+            "planes_accion" =>[
+                "query" => "select count(DISTINCT p.id_plan) from riesgo r inner join plan p on p.id_riesgo = r.id_riesgo and p.id_iteracion = ? where r.id_proyecto = ?",
+                "params" =>["ii", $id_iteracion, $id_proyecto]
+            ],
+            "riesgos_atencion"=>[
+                "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r
+                            INNER JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
+                            WHERE r.factor_riesgo > 35 and r.id_proyecto = ?
+                            AND NOT EXISTS (
+                                SELECT 1 
+                                FROM plan p 
+                                WHERE p.id_riesgo = r.id_riesgo 
+                                AND p.id_iteracion = ?
+                            )",
+                "params" =>["iii", $id_iteracion, $id_proyecto, $id_iteracion]
+            ]
+        ];
+
+        $resultados = [];
+        foreach ($consultas as $clave => $consulta) {
+            $stmt = $this->conexion->prepare($consulta["query"]);
+        
+            // Si hay parámetros, los vinculamos
+            if (!empty($consulta["params"])) {
+                $stmt->bind_param(...$consulta["params"]);
+            }
+        
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+            $resultados[$clave] = $total;
+            $stmt->close();
+        }
+        return $resultados;
     }
 }

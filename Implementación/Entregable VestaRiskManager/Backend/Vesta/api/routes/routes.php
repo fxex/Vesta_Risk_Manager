@@ -342,6 +342,11 @@ $router->add("POST","proyecto", function() use($controladorProyecto){
     }
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/riesgo", function($id_proyecto) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerDatosRiesgo($id_proyecto);
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerProyectoId($id); 
     echo json_encode($resultado);
@@ -506,6 +511,17 @@ $router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyec
 $router->add("GET", "proyecto/{id_proyecto}/incidencias", function($id_proyecto) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerIncidenciasProyecto($id_proyecto);
     echo json_encode($resultado);
+});
+
+$router->add("POST", "proyecto/{id_proyecto}/incidencia", function($id_proyecto) use ($controladorRiesgo){ 
+    $body = file_get_contents('php://input');          
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->crearIncidencia($id_proyecto, $data);
+        echo json_encode(["creacion"=>$resultado]);
+    } else {
+        echo json_encode(["creacion"=>false]);
+    }
 });
 
 $router->add("GET", "incidencia/{id_incidencia}", function($id_incidencia) use ($controladorRiesgo){ 

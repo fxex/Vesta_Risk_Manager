@@ -78,7 +78,7 @@ export default function ListaIncidencia() {
           <Button
             variant="success"
             onClick={() => {
-              navigate(`/inicio/proyecto/lider/${proyecto.id}/monitoreo/incidencia/crear`);
+              navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/incidencia/crear`);
             }}
             // disabled={iteracion === null}
           >
@@ -132,10 +132,11 @@ export default function ListaIncidencia() {
                           style={{ marginLeft: "5px" }}
                           variant="outline-dark"
                           onClick={async() => {
-                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia)                                          
+                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia) 
+                            const iteracionExiste = iteracion ? iteracion : {}                                          
                             const datos = {
                               id_riesgo: `RK${incidencia.id_riesgo < 10 ? '0':''}${incidencia.id_riesgo}`,
-                              iteracion_nombre: iteracion.nombre ? iteracion.nombre : null,
+                              iteracion_nombre: iteracionExiste.nombre ? iteracionExiste.nombre : null,
                               responsable: incidencia.responsable_nombre,
                               responsable_correo: respuesta.responsable_email,
                               responsable_rol: respuesta.responsable_rol,

@@ -151,12 +151,10 @@ export const modificarPlan = async (id_proyecto, id_plan, data) => {
 };
 
 export const crearIncidencia = async (id_proyecto, data) => {
-  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencia`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
@@ -166,14 +164,12 @@ export const crearIncidencia = async (id_proyecto, data) => {
 };
 
 export const modificarIncidencia = async (id_proyecto, id_incidencia, data) => {
-  const token = localStorage.getItem("jwt");
   const respuesta = await fetch(
     `${URL}/proyecto/${id_proyecto}/incidencia/${id_incidencia}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     }
@@ -185,6 +181,18 @@ export const modificarIncidencia = async (id_proyecto, id_incidencia, data) => {
 
 export const obtenerIncidenciasProyecto = async (id_proyecto) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencias`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerDatosRiesgos = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgo`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

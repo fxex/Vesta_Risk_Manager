@@ -267,4 +267,14 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerDatosRiesgo($id_proyecto){
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion["id_iteracion"]);
+            return $resultado;
+        }else{
+            return ["total_riesgos" => 20];
+        }
+    }
+
 }

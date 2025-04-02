@@ -45,7 +45,7 @@ import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
 import ListaProyectoLider, {
   obtenerListaProyectoLider,
 } from "./pages/proyecto/client/ListaProyectoLider.jsx";
-import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
+import VerProyectoLider, { dashboardLoader } from "./pages/proyecto/client/verProyectoLider.jsx";
 import ListaProyectoDesarrollador, {
   obtenerListaProyectoDesarrollador,
 } from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
@@ -193,6 +193,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto",
       element: <RutaProtegida element={<VerProyectoLider />} />,
+      loader: dashboardLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
