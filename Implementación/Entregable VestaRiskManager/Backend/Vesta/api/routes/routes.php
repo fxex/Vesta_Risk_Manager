@@ -530,5 +530,17 @@ $router->add("GET", "incidencia/{id_incidencia}", function($id_incidencia) use (
 });
 
 
+$router->add("GET", "proyecto/{id_proyecto}/tareas", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerTareas($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("PUT", "tarea/{id_tarea}", function($id_tarea) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->completarTarea($id_tarea);
+    echo json_encode(["modificado"=>$resultado]);
+});
+
+
+
 
 $router->run();

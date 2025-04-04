@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Contenedor from "../../components/Contenedor";
-import NavegadorLider from "../../components/NavegadorLider";
-import Footer from "../../components/Footer";
+import Contenedor from "../../../components/Contenedor";
+import NavegadorLider from "../../../components/NavegadorLider";
+import Footer from "../../../components/Footer";
 import {
   Alert,
   Button,
@@ -24,13 +24,13 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { obtenerIncidenciasProyecto } from "../../services/riesgos";
-import "./../../styles/ListaRiesgo.css";
-import { formatearFecha, formatearFechaHora } from "../../utils/fecha";
-import { obtenerIteracionActual } from "../../services/proyectos";
-import { informeIncidencia } from "../informes/incidencia";
-import { useUsuario } from "../../context/usuarioContext";
-import { obtenerIncidenciaId } from "../../services/informes";
+import { obtenerIncidenciasProyecto } from "../../../services/riesgos";
+import "./../../../styles/ListaRiesgo.css";
+import { formatearFecha, formatearFechaHora } from "../../../utils/fecha";
+import { obtenerIteracionActual } from "../../../services/proyectos";
+import { informeIncidencia } from "../../informes/incidencia";
+import { useUsuario } from "../../../context/usuarioContext";
+import { obtenerIncidenciaId } from "../../../services/informes";
 
 export const incidenciaLoader = async ({ params }) => {
   const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
@@ -53,16 +53,16 @@ export default function ListaIncidencia() {
   return (
     <>
       <NavegadorLider />
-      {/* {iteracion === null ? (
+      {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
           visualizar.
         </Alert>
-      ) : null} */}
+      ) : null}
       <Contenedor>
         <>
           <h3>{proyecto.nombre} - Incidencias ocurridas</h3>
-          {/* {iteracion ? (
+          {iteracion ? (
             <>
               <h4>
                 {iteracion.nombre}
@@ -72,7 +72,7 @@ export default function ListaIncidencia() {
                 {formatearFecha(iteracion.fecha_fin)}
               </h4>
             </>
-          ) : null} */}
+          ) : null}
         </>
         <>
           <Button

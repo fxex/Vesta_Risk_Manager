@@ -277,4 +277,21 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerTareas($id_proyecto){
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $resultado = NULL;
+        if (!empty($iteracion)) {
+            $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion["id_iteracion"]);
+        }else{
+            $resultado = $this->tarea->obtenerTareas($id_proyecto, 0);
+        }
+        return $resultado;
+    }
+
+    public function completarTarea($id_tarea){
+        $this->tarea->setEstado(1);
+        $this->tarea->setFechaFinReal(date("Y-m-d"));
+        $resultado = $this->tarea->completarTarea($id_tarea);
+        return $resultado;
+    }
 }

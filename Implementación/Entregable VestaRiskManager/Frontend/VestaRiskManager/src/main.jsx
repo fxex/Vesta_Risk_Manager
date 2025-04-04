@@ -73,8 +73,8 @@ import VerCategoria, {
   cargarCategoria,
 } from "./pages/categoria/VerCategoria.jsx";
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
-import ListaIncidencia, { incidenciaLoader } from "./pages/Incidencia/ListaIncidencia.jsx";
-import ListaTarea from "./pages/tarea/ListaTarea.jsx";
+import ListaIncidencia, { incidenciaLoader } from "./pages/Incidencia/lider/ListaIncidencia.jsx";
+import ListaTarea, { TareaLoader } from "./pages/tarea/ListaTarea.jsx";
 import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
 import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
@@ -222,7 +222,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tareas",
       element: <RutaProtegida element={<ListaTarea />} />,
-      loader: incidenciaLoader
+      loader: TareaLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",

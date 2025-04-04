@@ -96,4 +96,30 @@ class Tarea{
         return $resultado;
     }
 
+
+    public function obtenerTareas($id_proyecto, $id_iteracion){
+        $query = "select t.* from tarea t inner join plan p on t.id_plan = p.id_plan where p.id_proyecto = ? and p.id_iteracion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii", $id_proyecto, $id_iteracion);
+        $stmt->execute();
+        $tareas = $stmt->get_result();
+        $resultados = [];
+        while ($fila = $tareas->fetch_assoc()) {
+            $resultados[] = $fila;
+        }
+        return $resultados;
+    }
+
+    public function completarTarea($id_tarea){
+        $query="UPDATE tarea set estado = ?, fecha_fin_real = ? where id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ssi", $this->estado, $this->fecha_fin_real, $id_tarea);
+        if (!$stmt->execute()) {
+            throw new Exception("Error al eliminar el usuario: " . $stmt->error);
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }

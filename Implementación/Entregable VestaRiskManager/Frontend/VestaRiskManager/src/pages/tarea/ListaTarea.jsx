@@ -16,7 +16,9 @@ import {
   faSearch,
   faPlus,
   faTrashCan,
-  faFilePdf
+  faFilePdf,
+  faCheck,
+  faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
@@ -24,45 +26,43 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { obtenerIncidenciasProyecto } from "../../services/riesgos";
+import { obtenerTareasProyecto } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { formatearFecha, formatearFechaHora } from "../../utils/fecha";
 import { obtenerIteracionActual } from "../../services/proyectos";
 import { informeIncidencia } from "../informes/incidencia";
 import { useUsuario } from "../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../services/informes";
+import { completarTarea } from "../../services/planes";
 
 export const TareaLoader = async ({ params }) => {
-  const tarea = await obtenerIncidenciasProyecto(params.id_proyecto);
+  const tareas = await obtenerTareasProyecto(params.id_proyecto);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { tarea, iteracion};
+  return { tareas, iteracion};
 };
 
 export default function ListaTarea() {
-  const { incidencias, iteracion } = useLoaderData();
+  const { tareas, iteracion } = useLoaderData();
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const { usuario } = useUsuario();  
 
-  function filtrarYFormatear(usuarios, rolBuscado) {
-    return usuarios
-      .filter(user => user.rol === rolBuscado)
-      .map(user => `${user.nombre} - ${user.email}`)
-      .join('\n');
-}
+  const [completar, setCompletar] = useState(false)
+  const [tareaSeleccionada, setTareaSeleccionada] = useState(0)
 
   return (
     <>
       <NavegadorLider />
-      {/* {iteracion === null ? (
+      {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
           visualizar.
         </Alert>
-      ) : null} */}
+      ) : null}
       <Contenedor>
         <>
           <h3>{proyecto.nombre} - Tareas a Realizar</h3>
-          {/* {iteracion ? (
+          {iteracion ? (
             <>
               <h4>
                 {iteracion.nombre}
@@ -72,10 +72,10 @@ export default function ListaTarea() {
                 {formatearFecha(iteracion.fecha_fin)}
               </h4>
             </>
-          ) : null} */}
+          ) : null}
         </>
         <>
-          <Button
+          {/* <Button
             variant="success"
             onClick={() => {
               // navigate(
@@ -100,33 +100,47 @@ export default function ListaTarea() {
             // disabled={iteracion === null}
           >
             Generar Informe completo
-          </Button>
+          </Button> */}
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
-                <th style={{ maxWidth: "5em" }} className="th">Identificador del riesgo</th>
-                <th className="th">Descripcion</th>
-                <th className="th">Responsable</th>
-                <th style={{ maxWidth: "4em" }} className="th">
-                  Gravedad
+                <th style={{ maxWidth: "5em" }} className="th">Nombre</th>
+                <th style={{ width: "20em" }} className="th">Descripcion</th>
+                <th style={{ width: "10em" }} className="th">
+                  Fecha de inicio
                 </th>
-                <th style={{ maxWidth: "4em" }} className="th">
-                  Fecha
+                <th style={{ width: "10em" }} className="th">
+                  Fecha de fin
                 </th>
+                <th style={{ maxWidth: "5em" }} className="th">Estado</th>
                 <th className="th">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {incidencias.map((incidencia, key) => (
+              {tareas.map((tarea, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
-                  <td>RK
-                    {incidencia.id_riesgo < 10
-                      ? `0${incidencia.id_riesgo}`: incidencia.id_riesgo}</td>
-                  <td>{incidencia.descripcion}</td>
-                  <td>{incidencia.responsable_nombre}</td>
-                  <td style={{color: incidencia.gravedad === "Alta" ? "red" : incidencia.gravedad === "Media" ? "yellow":"gray", fontWeight:"bold"}}>{incidencia.gravedad}</td>
-                  <td>{formatearFechaHora(new Date(incidencia.fecha_ocurrencia))}</td>
+                  <td>{tarea.nombre}</td>
+                  <td style={{textWrap:"wrap"}}>{tarea.descripcion}</td>
+                  <td>{formatearFecha(tarea.fecha_inicio)}</td>
+                  <td>{formatearFecha(tarea.estado == '0' ? tarea.fecha_fin : tarea.fecha_fin_real)}</td>
+                  <td>{tarea.estado == '0' ? "Pendiente" : "Completado"}</td>
                   <td className="td">
+                    <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip id="tooltip-edit">Completar</Tooltip>}
+                      >
+                        <Button
+                          style={{ marginRight: "5px" }}
+                          variant="outline-success"
+                          onClick={()=>{
+                            setCompletar(true)
+                            setTareaSeleccionada(tarea.id_tarea)
+                          }}
+                          className={tarea.estado == '1'? "d-none":""}
+                        >
+                          <FontAwesomeIcon icon={faCheck} />
+                        </Button>
+                      </OverlayTrigger>
                       <OverlayTrigger
                         placement="top"
                         overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
@@ -134,60 +148,65 @@ export default function ListaTarea() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            
+                            navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
                           }}
                         >
                           <FontAwesomeIcon icon={faSearch} />
                         </Button>
                       </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip id="tooltip-edit">Descargar</Tooltip>}
-                      >
-                        <Button
-                          style={{ marginLeft: "5px" }}
-                          variant="outline-dark"
-                          onClick={async() => {
-                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia)                                                        
-                            const datos = {
-                              id_riesgo: `RK${incidencia.id_riesgo < 10 ? '0':''}${incidencia.id_riesgo}`,
-                              iteracion_nombre: iteracion.nombre,
-                              responsable: incidencia.responsable_nombre,
-                              responsable_correo: respuesta.responsable_email,
-                              responsable_rol: respuesta.responsable_rol,
-                              nombre_proyecto: proyecto.nombre,
-                              descripcion_riesgo: respuesta.descripcion_riesgo,
-                              responsable_riesgo: respuesta.responsable_riesgo,
-                              tipo_riesgo: respuesta.tipo_riesgo,
-                              fecha_incidencia: formatearFechaHora(new Date(incidencia.fecha_ocurrencia)),
-                              descripcion_incidencia: incidencia.descripcion,
-                              observaciones_incidencia: incidencia.gravedad,
-                              lideres_proyecto: filtrarYFormatear(proyecto.participantes, "Lider del proyecto"),
-                              desarrolladores_proyecto: filtrarYFormatear(proyecto.participantes, "Desarrollador")
-                            }
-                            informeIncidencia(datos)
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faFilePdf} />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
-                      >
-                        <Button
-                          style={{ marginLeft: "5px" }}
-                          variant="outline-danger"
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                        </Button>
-                      </OverlayTrigger>
+                      
                       
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+
+          <Modal
+            show={completar}
+            onHide={() => {
+              setCompletar(false);
+              setTareaSeleccionada(0)
+            }}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>¿Está seguro?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                La tarea sera marcada como completada y no se podra revertir la acción.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-success"
+                onClick={async () => {
+                  await completarTarea(tareaSeleccionada)
+                  setCompletar(false);
+                  window.location.reload()
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ marginRight: "5px" }}
+                />
+                Marcar como completado
+              </Button>
+              <Button
+                variant="outline-danger"
+                onClick={() => {
+                  setCompletar(false);
+                  setTareaSeleccionada(0)
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ marginRight: "5px" }}
+                />
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </>
       </Contenedor>
       <Footer />
