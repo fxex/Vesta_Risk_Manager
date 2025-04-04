@@ -52,6 +52,19 @@ class Categoria{
         return $resultado;
     }
 
+    public function obtenerCategoriasProyecto($id_proyecto){
+        $query="SELECT c.nombre FROM categoria c inner join proyecto_categoria pc on c.id_categoria=pc.id_categoria where pc.id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $categorias = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $categorias->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
     public function obtenerCategorias($pagina){
         $categoriaPorPagina = 10;
         $offset = 0;

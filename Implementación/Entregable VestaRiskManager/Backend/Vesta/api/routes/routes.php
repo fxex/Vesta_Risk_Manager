@@ -352,6 +352,11 @@ $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/iteracion/ultimas", function($id_proyecto) use ($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerUltimasIteraciones($id_proyecto); 
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id}/iteracion", function($id) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerIteracionActual($id); 
     echo json_encode($resultado);

@@ -174,7 +174,8 @@ class Riesgo {
                                 AND p.id_iteracion = ?
                             )",
                 "params" =>["iii", $id_iteracion, $id_proyecto, $id_iteracion]
-            ]
+            ],
+            
         ];
 
         $resultados = [];

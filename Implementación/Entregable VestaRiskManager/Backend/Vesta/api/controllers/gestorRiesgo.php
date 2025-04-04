@@ -269,11 +269,13 @@ class GestorRiesgo {
 
     public function obtenerDatosRiesgo($id_proyecto){
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $iteraciones = json_decode($this->obtenerUlitmasIteraciones($id_proyecto));
+        $categorias = $this->categoria->obtenerCategoriasProyecto($id_proyecto);
         if (!empty($iteracion)) {
             $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion["id_iteracion"]);
-            return $resultado;
+            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias];
         }else{
-            return ["total_riesgos" => 20];
+            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones];
         }
     }
 
@@ -293,5 +295,22 @@ class GestorRiesgo {
         $this->tarea->setFechaFinReal(date("Y-m-d"));
         $resultado = $this->tarea->completarTarea($id_tarea);
         return $resultado;
+    }
+
+    public function obtenerUlitmasIteraciones($id_proyecto){
+        $url = "http://localhost/Vesta/proyecto/". $id_proyecto . "/iteracion/ultimas";
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
+
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        } else {
+            return $response;
+        }
+        
+        curl_close($ch);
     }
 }

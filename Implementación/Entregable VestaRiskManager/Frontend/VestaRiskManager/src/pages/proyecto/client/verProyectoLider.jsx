@@ -8,15 +8,23 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Radar } from 'react-chartjs-2';
 import { obtenerDatosRiesgos } from "../../../services/riesgos";
 import { useLoaderData } from "react-router-dom";
 
 ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -32,7 +40,12 @@ export const dashboardLoader = async ({ params }) => {
 
 export default function VerProyectoLider() {
   const {datosRiesgos} = useLoaderData()
-  console.log(datosRiesgos);
+  const {datos_proyecto, iteraciones, categorias} = datosRiesgos;
+  const ultimasIteraciones = iteraciones.map(item=>item.nombre).reverse()
+  const categoriasProyecto = categorias.map(item=>item.nombre)
+  
+  
+
   
   return (
     <>
@@ -43,41 +56,111 @@ export default function VerProyectoLider() {
       >
         {/* <Figure.Image src={Construccion}></Figure.Image> */}
         <Container className="mt-2 mx-0 d-flex flex-column justify-content-around">
-        <Row className="d-flex flex-nowrap">
-          <Col xs={8}>
+        <Row className="d-flex flex-nowrap mb-5" style={{height:"50vh"}}>
+          <Col xs={9}>
             <Card style={{maxHeight:"50vh"}}>
               <Card.Header>
                 Evolución de cantidad de riesgo
               </Card.Header>
               <Card.Body >
-                <Bar data={{datasets:[
+                <Bar data={
                   {
-                    label:"Prueba",
-                    data:[{x:"11/10/2025",y:20}, {x:"15/10/2025", y:40}]
+                    labels:ultimasIteraciones,
+                    datasets:[
+                      {
+                        label:"Irrelevantes",
+                        data:[5,6],
+                        backgroundColor: '#2ecc71'
+                      },
+                      {
+                        label:"Necesitan reevaluación",
+                        data:[5,6],
+                        backgroundColor: '#f1c40f'
+                      },
+                      {
+                        label:"Necesitan planificación",
+                        data:[5,6],
+                        backgroundColor: '#f39c12'
+                      },
+                      {
+                        label:"Criticos",
+                        data:[5,6],
+                        backgroundColor: '#e74c3c'
+                      }
+                    ]
                   }
-                ]}} options={{
+                } 
+                options={{
                   barThickness:20,
-                  responsive:false
+                  responsive:false,
+                  plugins:{
+                    legend:{
+                      position:"right"
+                    }
+                  },
+                  scales:{
+                    x:{
+                      stacked:true,
+                      title:{
+                        display:true,
+                        text:"Iteraciones"
+                      }
+                    },
+                    y:{
+                      stacked:true,
+                      beginAtZero:true,
+                      title:{
+                        display:true,
+                        text:"Cantidad de riesgos"
+                      }
+                    }
+                  }
                 }}
-                width={650}
+                width={720}
                 height={200} 
                 />
               </Card.Body>
             </Card>
           </Col>
           <Col xs={5}>
-            <Card>
+            <Card style={{maxHeight:"55vh"}}>
               <Card.Header>
                 Resumen de riesgos
               </Card.Header>
               <Card.Body>
+                <Radar data={
+                  {
+                    labels: categoriasProyecto,
+                    datasets: [
+                      {
+                        data: [80, 90, 70, 85, 75, 95], // Valores en cada eje
+                        backgroundColor: "#2A6EBB ",
+                      },
+                    ]
+                  }
+                }
+                options={{
+                  responsive:false,
+                  plugins:{
+                    legend:{display:false},
+                    tooltip:{enabled:false}
+                  },
+                  scales:{
+                    r:{
+                      ticks:{
+                        display:false
+                      },
+                    }
+                  }
+                }} 
+                height={250} width={400} />
               </Card.Body>
             </Card>
           </Col>
         </Row>
         <Row className="d-flex flex-nowrap">
-          <Col xs={8}>
-            <h2 className="text-center fs-4 my-2">Sobre el proyecto</h2>
+          <Col xs={9}>
+            <h2 className="text-center fs-4" style={{position:"absolute", top:"66%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
             <Row className="mb-3">
               <Col xs={3}>
                 <Card>
@@ -85,7 +168,7 @@ export default function VerProyectoLider() {
                     Riesgos activos
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datosRiesgos.riesgos_activos}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto.riesgos_activos}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -95,7 +178,7 @@ export default function VerProyectoLider() {
                    Evaluaciones pendientes 
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datosRiesgos.evaluaciones_pendientes}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto.evaluaciones_pendientes}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -105,7 +188,7 @@ export default function VerProyectoLider() {
                     Planes de acción
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datosRiesgos.planes_accion}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto.planes_accion}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -115,7 +198,7 @@ export default function VerProyectoLider() {
                     Requiere atencion
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datosRiesgos.riesgos_atencion}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto.riesgos_atencion}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>

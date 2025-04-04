@@ -168,4 +168,8 @@ class GestorProyecto {
         $resultado = $this->proyecto->obtenerIteracionActual($id_proyecto, $fecha_actual);
         return $resultado;
     }
+    public function obtenerUltimasIteraciones($id_proyecto){
+        $resultado = $this->proyecto->obtenerUltimasIteraciones($id_proyecto);
+        return $resultado;
+    }
 }
