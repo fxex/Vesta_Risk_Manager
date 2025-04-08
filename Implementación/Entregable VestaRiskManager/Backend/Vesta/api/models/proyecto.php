@@ -203,7 +203,7 @@ class Proyecto{
     }
 
     public function obtenerUltimasIteraciones($id_proyecto){
-        $query = "select i.nombre from iteracion i where i.id_proyecto = ? order by i.fecha_fin desc limit 5";
+        $query = "select i.id_iteracion, i.nombre from iteracion i where i.id_proyecto = ? order by i.fecha_fin desc limit 5";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
