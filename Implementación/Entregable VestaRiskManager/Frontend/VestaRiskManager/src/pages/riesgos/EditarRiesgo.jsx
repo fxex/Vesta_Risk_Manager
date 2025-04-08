@@ -33,7 +33,6 @@ export default function EditarRiesgo() {
   const { id_proyecto, id_riesgo } = useParams();
 
   const navigate = useNavigate();
-  const [modificado, setModificado] = useState(null);
   const [error, setError] = useState({
     descripcion: false,
     categoria: false,
@@ -89,11 +88,15 @@ export default function EditarRiesgo() {
         id_riesgo,
         formData
       );
-      setModificado(resultado);
+      if (resultado) {
+        navigate(`/inicio/proyecto/lider/${id_proyecto}/riesgos`, {
+          state: { mensaje: "Riesgo modificado con éxito" },
+        });
+      }
+      // setModificado(resultado);
     }
   };
 
-  if (modificado === null) {
     return (
       <>
         <NavegadorLider />
@@ -214,29 +217,5 @@ export default function EditarRiesgo() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-          <h3>
-            {proyecto.nombre} - Editar Riesgo{id_riesgo < 10 ? "0" : ""}
-            {id_riesgo}
-          </h3>
-          <>
-            {modificado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

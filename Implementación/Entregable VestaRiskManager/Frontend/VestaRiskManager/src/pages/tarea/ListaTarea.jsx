@@ -34,6 +34,7 @@ import { informeIncidencia } from "../informes/incidencia";
 import { useUsuario } from "../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../services/informes";
 import { completarTarea } from "../../services/planes";
+import { informeTarea } from "../informes/tareas";
 
 export const TareaLoader = async ({ params }) => {
   const tareas = await obtenerTareasProyecto(params.id_proyecto);
@@ -75,20 +76,20 @@ export default function ListaTarea() {
           ) : null}
         </>
         <>
-          {/* <Button
+          <Button
             variant="success"
             onClick={() => {
-              // navigate(
-              //   `/inicio/proyecto/${
-              //     comprobacionLider ? "lider" : "desarrollador"
-              //   }/${id_proyecto}/incidencia/crear`
-              // );
+              const datos = {
+                nombre_proyecto: proyecto.nombre,
+                riesgos: [{id_riesgo:"RK01"}, {id_riesgo:"RK02"},{id_riesgo:"RK03"},{id_riesgo:"RK04"},{id_riesgo:"RK05"}, {id_riesgo:"RK06"}, {id_riesgo:"RK07"}]
+              }
+              informeTarea(datos)
             }}
             // disabled={iteracion === null}
           >
             Generar Informe
           </Button>
-          <Button
+          {/* <Button
             variant="success"
             onClick={() => {
               // navigate(
