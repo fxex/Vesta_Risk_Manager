@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
@@ -60,6 +60,24 @@ export default function ListaRiesgos() {
     riesgo: null,
   });
 
+
+  const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    if (location.state?.mensaje) {
+      window.scrollTo(0, 0);
+      setMensaje(location.state.mensaje);
+
+      // Limpiar el mensaje después de unos segundos
+      const timeoutId = setTimeout(() => {
+        setMensaje("");
+      }, 3000); // Mostrar el mensaje durante 3 segundos
+
+      // Limpiar el timeout si el componente se desmonta
+      return () => clearTimeout(timeoutId);
+    }
+  }, [location.state]);
+
   return (
     <>
       <NavegadorLider />
@@ -67,6 +85,11 @@ export default function ListaRiesgos() {
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
           visualizar.
+        </Alert>
+      ) : null}
+      {mensaje ? (
+        <Alert variant="success" className="text-center fs-4">
+          {mensaje}
         </Alert>
       ) : null}
       <Contenedor>
@@ -175,7 +198,19 @@ export default function ListaRiesgos() {
                             </Tooltip>
                           }
                         >
-                          <Figure.Image src={escudoRojo} />
+                          <Figure.Image 
+                            src={escudoRojo}
+                            style={iteracion ? { cursor: "pointer" } : null} 
+                            onClick={() => {
+                              if (iteracion) {
+                                navigate(
+                                  `/inicio/proyecto/${
+                                    comprobacionLider ? "lider" : "desarrollador"
+                                  }/${id_proyecto}/riesgo/${riesgo.id_riesgo}/plan/crear`
+                                );
+                              }
+                            }}
+                          />
                         </OverlayTrigger>
                       ) : (
                         <OverlayTrigger
@@ -186,7 +221,9 @@ export default function ListaRiesgos() {
                             </Tooltip>
                           }
                         >
-                          <Figure.Image src={escudoVerde} />
+                          <Figure.Image 
+                            src={escudoVerde} 
+                          />
                         </OverlayTrigger>
                       )
                     ) : riesgo.planes_realizado.total_contingencia == 0 ||

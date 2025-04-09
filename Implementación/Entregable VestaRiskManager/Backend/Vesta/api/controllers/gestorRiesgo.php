@@ -268,14 +268,19 @@ class GestorRiesgo {
     }
 
     public function obtenerDatosRiesgo($id_proyecto){
-        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $iteraciones = json_decode($this->obtenerUlitmasIteraciones($id_proyecto));
         $categorias = $this->categoria->obtenerCategoriasProyecto($id_proyecto);
+        $evaluaciones = [];
+        foreach ($iteraciones as $iteracion) {
+            $cantidad_riesgo = $this->evaluacion->obtenerCantidadRiesgoFactor($id_proyecto, $iteracion->id_iteracion);
+            array_push($evaluaciones, $cantidad_riesgo);
+        }
         if (!empty($iteracion)) {
-            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion["id_iteracion"]);
-            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias];
+            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion_actual["id_iteracion"]);
+            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones];
         }else{
-            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones];
+            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones, "categorias"=>$categorias];
         }
     }
 

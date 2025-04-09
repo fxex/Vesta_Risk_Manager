@@ -40,12 +40,25 @@ export const dashboardLoader = async ({ params }) => {
 
 export default function VerProyectoLider() {
   const {datosRiesgos} = useLoaderData()
-  const {datos_proyecto, iteraciones, categorias} = datosRiesgos;
+  const {datos_proyecto, iteraciones, categorias, datos_evaluacion} = datosRiesgos;
   const ultimasIteraciones = iteraciones.map(item=>item.nombre).reverse()
   const categoriasProyecto = categorias.map(item=>item.nombre)
-  
-  
+  const datos_evaluacion_reversa = [...datos_evaluacion].reverse()
+  const datos_bajo = datos_evaluacion_reversa.map(item=>{
+    return item[0].cantidad 
+  })
 
+  const datos_medio = datos_evaluacion_reversa.map(item=>{
+    return item[1].cantidad 
+  })
+
+  const datos_alto = datos_evaluacion_reversa.map(item=>{
+    return item[2].cantidad 
+  })
+
+  const datos_critico = datos_evaluacion_reversa.map(item=>{
+    return item[3].cantidad 
+  })
   
   return (
     <>
@@ -69,22 +82,22 @@ export default function VerProyectoLider() {
                     datasets:[
                       {
                         label:"Irrelevantes",
-                        data:[5,6],
+                        data:datos_bajo,
                         backgroundColor: '#2ecc71'
                       },
                       {
                         label:"Necesitan reevaluación",
-                        data:[5,6],
+                        data:datos_medio,
                         backgroundColor: '#f1c40f'
                       },
                       {
                         label:"Necesitan planificación",
-                        data:[5,6],
+                        data:datos_alto,
                         backgroundColor: '#f39c12'
                       },
                       {
                         label:"Criticos",
-                        data:[5,6],
+                        data:datos_critico,
                         backgroundColor: '#e74c3c'
                       }
                     ]
@@ -95,7 +108,8 @@ export default function VerProyectoLider() {
                   responsive:false,
                   plugins:{
                     legend:{
-                      position:"right"
+                      position:"right",
+                      reverse:true
                     }
                   },
                   scales:{
