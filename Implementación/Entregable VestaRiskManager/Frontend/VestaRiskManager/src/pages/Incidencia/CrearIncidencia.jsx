@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, Row, Col, Card, Table, Pagination } from "react-bootstrap";
+import { Button, Form, Row, Col, Card, Table, Pagination, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,11 +8,12 @@ import {
   faPlus,
   faTrashCan,
   faXmark,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import Contenedor from "../../components/Contenedor";
 import Footer from "../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { crearIncidencia } from "../../services/riesgos";
+import { crearIncidencia, obtenerRiesgosProyecto } from "../../services/riesgos";
 import NavegadorLider from "../../components/NavegadorLider";
 import { useUsuario } from "../../context/usuarioContext";
 
@@ -31,6 +32,9 @@ export default function CrearIncidencia() {
     gravedad: false,
     responsable: false,
   });
+  const [riesgos, setRiesgos] = useState([]);
+  const [busquedaRiesgo, setBusquedaRiesgo] = useState("");
+  const [riesgosFiltrados, setRiesgosFiltrados] = useState([]);
 
   // Manejar cambios en los inputs
   const handleChange = (e) => {
@@ -93,6 +97,55 @@ export default function CrearIncidencia() {
       console.error("Error creating incident:", err);
     }
   };
+
+// Obtener los riesgos al cargar el componente
+useEffect(() => {
+  const cargarRiesgos = async () => {
+    try {
+      const riesgosData = await obtenerRiesgosProyecto(id_proyecto);
+      setRiesgos(riesgosData);
+      setRiesgosFiltrados(riesgosData);
+    } catch (err) {
+      console.error("Error al cargar los riesgos:", err);
+    }
+  };
+  
+  cargarRiesgos();
+}, [id_proyecto]);
+
+// Filtrar riesgos según búsqueda
+useEffect(() => {
+  if (busquedaRiesgo.trim() === "") {
+    setRiesgosFiltrados(riesgos);
+  } else {
+    const filtrados = riesgos.filter(riesgo => 
+      riesgo.nombre.toLowerCase().includes(busquedaRiesgo.toLowerCase())
+    );
+    setRiesgosFiltrados(filtrados);
+  }
+}, [busquedaRiesgo, riesgos]);
+
+// Manejar selección de riesgos
+const handleRiesgoSelection = (id_riesgo) => {
+  setFormData(prev => {
+    const riesgosActualizados = prev.riesgos.includes(id_riesgo)
+      ? prev.riesgos.filter(id => id !== id_riesgo)
+      : [...prev.riesgos, id_riesgo];
+    
+    return {
+      ...prev,
+      riesgos: riesgosActualizados
+    };
+  });
+};
+
+// Eliminar riesgo de la selección
+const eliminarRiesgoSeleccionado = (id_riesgo) => {
+  setFormData(prev => ({
+    ...prev,
+    riesgos: prev.riesgos.filter(id => id !== id_riesgo)
+  }));
+};
 
   return (
     <>
@@ -174,6 +227,81 @@ export default function CrearIncidencia() {
               </Form.Text>
             )}
           </Form.Group>
+
+          <Form.Group className="mb-3">
+          <Form.Label>Riesgos Relacionados</Form.Label>
+          <InputGroup className="mb-3">
+            <Form.Control
+              placeholder="Buscar riesgos por nombre..."
+              value={busquedaRiesgo}
+              onChange={(e) => setBusquedaRiesgo(e.target.value)}
+            />
+            <Button variant="outline-secondary">
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </Button>
+          </InputGroup>
+
+          <Card className="mb-3">
+            <Card.Header className="d-flex justify-content-between align-items-center">
+              <div>Riesgos disponibles</div>
+              <div className="badge bg-primary">{formData.riesgos.length} seleccionados</div>
+            </Card.Header>
+            <Card.Body>
+              {riesgosFiltrados.map(riesgo => (
+                <div key={riesgo.id_riesgo} className="mb-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <Form.Check
+                      type="checkbox"
+                      id={`riesgo-${riesgo.id_riesgo}`}
+                      label={riesgo.nombre}
+                      checked={formData.riesgos.includes(riesgo.id_riesgo)}
+                      onChange={() => handleRiesgoSelection(riesgo.id_riesgo)}
+                    />
+                  </div>
+                  <div>
+                    <span className={`badge bg-${getColorEstado(riesgo.estado)} me-2`}>
+                      {riesgo.estado}
+                    </span>
+                    <span className={`badge bg-${getColorNivel(riesgo.nivel)}`}>
+                      {riesgo.nivel}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              {riesgosFiltrados.length === 0 && (
+                <div className="text-center text-muted">
+                  No se encontraron riesgos
+                </div>
+              )}
+            </Card.Body>
+          </Card>
+
+          {formData.riesgos.length > 0 && (
+            <div>
+              <label className="form-label">Riesgos seleccionados:</label>
+              <div className="d-flex flex-wrap gap-2">
+                {formData.riesgos.map(id_riesgo => {
+                  const riesgo = getRiesgoPorId(id_riesgo);
+                  return riesgo ? (
+                    <div 
+                      key={id_riesgo} 
+                      className="badge bg-secondary d-flex align-items-center p-2"
+                    >
+                      {riesgo.nombre}
+                      <button 
+                        type="button" 
+                        className="btn-close btn-close-white ms-2" 
+                        aria-label="Close"
+                        onClick={() => eliminarRiesgoSeleccionado(id_riesgo)}
+                        style={{ fontSize: '0.5rem' }}
+                      ></button>
+                    </div>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          )}
+        </Form.Group>
 
           <div>
             <Button
