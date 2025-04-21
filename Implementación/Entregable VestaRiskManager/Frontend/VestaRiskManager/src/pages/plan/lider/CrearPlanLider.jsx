@@ -47,7 +47,6 @@ export default function CrearPlanLider() {
   const { id_proyecto, id_riesgo } = useParams();
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
-  const [creado, setCreado] = useState(null);
 
   const [formData, setFormData] = useState({
     tipo: "",
@@ -155,7 +154,13 @@ export default function CrearPlanLider() {
     if (!resultado) {
       formData.id_iteracion = iteracion.id_iteracion;
       const creacion = await crearPlan(id_proyecto, id_riesgo, formData);
-      setCreado(creacion);
+      if(creacion){
+        navigate(
+          `/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`, {
+            state: { mensaje: "Plan creado con éxito" },
+          }
+        );
+      }
     }
   };
 
@@ -202,7 +207,6 @@ export default function CrearPlanLider() {
       errorPrincipal.tareas = false;
     }
   };
-  if (creado === null) {
     return (
       <>
         <NavegadorLider />
@@ -511,28 +515,5 @@ export default function CrearPlanLider() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-          <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo}
-          </h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

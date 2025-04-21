@@ -42,7 +42,6 @@ export default function CrearEvaluacionLider() {
     descripcion: false,
   });
 
-  const [creado, setCreado] = useState(null);
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   const handleChangeControl = (e) => {
@@ -75,10 +74,13 @@ export default function CrearEvaluacionLider() {
         id_riesgo,
         formData
       );
-      setCreado(resultado);
+      if(resultado){
+        navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`, {
+          state: { mensaje: "Evaluacion creada con éxito" },
+        });
+      }
     }
   };
-  if (creado === null) {
     return (
       <>
         <NavegadorLider />
@@ -236,28 +238,5 @@ export default function CrearEvaluacionLider() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-          <h3>
-            {proyecto.nombre} - Evaluar Riesgo {id_riesgo}
-          </h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/riesgos`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

@@ -14,7 +14,6 @@ export default function CrearRiesgo() {
   const { proyecto } = useLoaderData();
 
   const navigate = useNavigate();
-  const [creado, setCreado] = useState(null);
   const [error, setError] = useState({
     descripcion: false,
     categoria: false,
@@ -71,14 +70,21 @@ export default function CrearRiesgo() {
     if (!comprobacion) {
       setError({ descripcion: false, categoria: false, responsables: false });
       const resultado = await crearRiesgo(proyecto.id_proyecto, formData);
-      setCreado(resultado);
+      if (resultado) {
+        navigate(
+          `/inicio/proyecto/${
+            comprobacionLider ? "lider" : "desarrollador"
+          }/${proyecto.id_proyecto}/riesgos`, {
+            state: { mensaje: "Riesgo creado con éxito" },
+          }
+        );
+      }
     }
   };
 
   const location = useLocation();
   const comprobacionLider = location.pathname.includes("lider");
 
-  if (creado === null) {
     return (
       <>
         <NavegadorLider />
@@ -190,28 +196,5 @@ export default function CrearRiesgo() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-          <h3>{proyecto.nombre} - Crear Riesgo</h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/${
-                comprobacionLider ? "lider" : "desarrollador"
-              }/${proyecto.id_proyecto}/riesgos`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

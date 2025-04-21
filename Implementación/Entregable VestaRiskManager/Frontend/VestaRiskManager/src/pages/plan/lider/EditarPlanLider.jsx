@@ -43,7 +43,6 @@ export default function EditarPlanLider() {
   const { id_proyecto, id_plan} = useParams();
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
-  const [modificado, setModificado] = useState(null);
 
   const [formData, setFormData] = useState({
     tipo: plan.tipo,
@@ -155,7 +154,11 @@ export default function EditarPlanLider() {
         id_plan,
         formData
       );
-      setModificado(modificacion);
+      if (modificacion) {
+        navigate(`/inicio/proyecto/lider/${id_proyecto}/monitoreo/planes`, {
+          state: { mensaje: "Plan modificado con éxito" },
+        });
+      }
     }
   };
 
@@ -202,7 +205,6 @@ export default function EditarPlanLider() {
       errorPrincipal.tareas = false;
     }
   };
-  if (modificado === null) {
     return (
       <>
         <NavegadorLider />
@@ -523,29 +525,5 @@ export default function EditarPlanLider() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-        <h3>
-            {proyecto.nombre} - Editar Plan del Riesgo RK{plan.id_riesgo < 10 ? "0" : ""}
-            {plan.id_riesgo}
-          </h3>
-          <>
-            {modificado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/planes`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

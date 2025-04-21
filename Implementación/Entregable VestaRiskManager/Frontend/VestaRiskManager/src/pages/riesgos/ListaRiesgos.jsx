@@ -26,7 +26,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { obtenerRiesgosProyecto } from "../../services/riesgos";
+import { eliminarRiesgo, obtenerRiesgosProyecto } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardList";
 import { obtenerIteracionActual } from "../../services/proyectos";
@@ -48,6 +48,8 @@ export const riesgoLoader = async ({ params }) => {
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
   const { riesgos, iteracion } = useLoaderData();
+  const [eliminar, setEliminar] = useState(false)
+  const [riesgoSeleccionado, setRiesgoSeleccionado] = useState(0)
   
 
   const location = useLocation();
@@ -314,6 +316,10 @@ export default function ListaRiesgos() {
                           style={{ marginLeft: "5px" }}
                           variant="outline-danger"
                           disabled={iteracion === null}
+                          onClick={()=>{
+                            setEliminar(true)
+                            setRiesgoSeleccionado(riesgo.id_riesgo)
+                          }}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </Button>
@@ -404,6 +410,55 @@ export default function ListaRiesgos() {
                 variant="outline-danger"
                 onClick={() => {
                   setConfirmarEdicion({ confirmar: false, riesgo: null });
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ marginRight: "5px" }}
+                />
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal
+            show={eliminar}
+            onHide={() => {
+              setEliminar(false)
+              setRiesgoSeleccionado(0)
+            }}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>¿Está seguro?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                Una vez eliminado el riesgo, se eliminaran las evaluaciones, las planificaciones e incidencias.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-success"
+                onClick={async() => {
+                  await eliminarRiesgo(id_proyecto, riesgoSeleccionado)
+                  navigate(
+                    `/inicio/proyecto/lider/${id_proyecto}/riesgos`
+                  );
+                  setEliminar(false)
+                  setRiesgoSeleccionado(0)
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ marginRight: "5px" }}
+                />
+                Eliminar
+              </Button>
+              <Button
+                variant="outline-danger"
+                onClick={() => {
+                  setEliminar(false)
+                  setRiesgoSeleccionado(0)
                 }}
               >
                 <FontAwesomeIcon

@@ -73,7 +73,7 @@ create table if not exists incidencia (
     id_usuario int not null,
     id_proyecto int not null, 
     primary key (id_incidencia),
-    constraint fk_incidencia_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete no action on update no action,
+    constraint fk_incidencia_riesgo foreign key (id_proyecto, id_riesgo) references riesgo (id_proyecto, id_riesgo) on delete CASCADE on update no action,
     constraint fk_incidencia_usuario foreign key (id_usuario) references usuario (id_usuario) on delete no action on update no action
 );
 

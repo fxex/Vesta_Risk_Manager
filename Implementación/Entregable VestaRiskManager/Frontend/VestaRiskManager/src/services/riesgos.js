@@ -41,6 +41,18 @@ export const modificarRiesgo = async (id_proyecto, id_riesgo, data) => {
   return json.modificado;
 };
 
+export const eliminarRiesgo = async (id_proyecto, id_riesgo) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
 export const obtenerRiesgoId = async (id_proyecto, id_riesgo) => {
   const respuesta = await fetch(
     `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}`,
