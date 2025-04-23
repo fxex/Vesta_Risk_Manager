@@ -78,6 +78,8 @@ import ListaTarea, { TareaLoader } from "./pages/tarea/ListaTarea.jsx";
 import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
 import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
+import VerEvaluacionesActuLider from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
+import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacionesPasadasLider.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -242,6 +244,14 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionLider />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",
+      element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",
+      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",

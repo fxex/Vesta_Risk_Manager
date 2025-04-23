@@ -31,9 +31,28 @@ export default function MonitoreoLider() {
             >
               Planes actuales
             </Button>
+
             <Button className="boton_2">Planes pasados</Button>
-            <Button className="boton_2">Evaluaciones actuales</Button>
-            <Button className="boton_2">Evaluaciones anteriores</Button>
+            <Button 
+              className="boton_2"
+              onClick={() => {
+                navigate(
+                  `/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual`
+                );
+              }}
+            >
+              Evaluaciones actuales
+            </Button>
+            <Button 
+              className="boton_2"
+              onClick={() => {
+                navigate(
+                  `/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada`
+                );
+              }}
+            >
+              Evaluaciones anteriores
+            </Button>
           </div>
           <hr ></hr>
           <p>Informes:</p>
