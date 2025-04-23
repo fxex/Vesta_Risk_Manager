@@ -244,6 +244,12 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
             </Button>
           </InputGroup>
 
+          {error.gravedad && (
+            <Form.Text className="text-danger">
+              Debe seleccionar un riesgo.
+            </Form.Text>
+          )}
+
           <Card className="mb-3">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <div>Riesgos disponibles</div>
