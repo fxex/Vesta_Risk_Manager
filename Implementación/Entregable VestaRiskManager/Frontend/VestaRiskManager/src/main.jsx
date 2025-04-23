@@ -80,6 +80,7 @@ import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
 import VerEvaluacionesActuLider from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
 import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacionesPasadasLider.jsx";
+import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -277,6 +278,10 @@ const App = () => {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
       element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
       loader: planCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
+      element: <RutaProtegida element={<MonitoreoDesarrollador />} />,
     },
     {
       path: "/salir",

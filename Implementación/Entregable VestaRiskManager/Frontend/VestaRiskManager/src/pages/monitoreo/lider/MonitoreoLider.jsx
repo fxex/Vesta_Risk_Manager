@@ -4,7 +4,6 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { informeTarea } from "../../informes/tareas";
 import { useUsuario } from "../../../context/usuarioContext";
 
 export default function MonitoreoLider() {
