@@ -26,6 +26,7 @@ export default function CrearIncidencia() {
     descripcion: "",
     gravedad: "",
     responsable: usuario.id_usuario,
+    riesgo: null,
   });
   const [error, setError] = useState({
     descripcion: false,
@@ -80,11 +81,11 @@ export default function CrearIncidencia() {
     }
 
     try {
-      // Implement your API call to create incident
       const resultado = await crearIncidencia({
         descripcion: formData.descripcion,
         gravedad: formData.gravedad,
-        responsable: formData.responsable
+        responsable: formData.responsable,
+        riesgo: formData.riesgo
       });
 
       if (resultado) {
@@ -93,7 +94,6 @@ export default function CrearIncidencia() {
         });
       }
     } catch (err) {
-      // Handle error (you might want to add more robust error handling)
       console.error("Error creating incident:", err);
     }
   };
@@ -127,16 +127,19 @@ useEffect(() => {
 
 // Manejar selección de riesgos
 const handleRiesgoSelection = (id_riesgo) => {
-  setFormData(prev => {
-    const riesgosActualizados = prev.riesgos.includes(id_riesgo)
-      ? prev.riesgos.filter(id => id !== id_riesgo)
-      : [...prev.riesgos, id_riesgo];
-    
-    return {
+  // Si ya estaba seleccionado, lo quita
+  if (formData.riesgo === id_riesgo) {
+    setFormData(prev => ({
       ...prev,
-      riesgos: riesgosActualizados
-    };
-  });
+      riesgo: null
+    }));
+  } else {
+    // Si no estaba seleccionado o había otro, lo establece
+    setFormData(prev => ({
+      ...prev,
+      riesgo: id_riesgo
+    }));
+  }
 };
 
 // Eliminar riesgo de la selección
@@ -229,10 +232,10 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-          <Form.Label>Riesgos Relacionados</Form.Label>
+          <Form.Label>Riesgo Relacionado</Form.Label>
           <InputGroup className="mb-3">
             <Form.Control
-              placeholder="Buscar riesgos por nombre..."
+              placeholder="Buscar riesgo por nombre..."
               value={busquedaRiesgo}
               onChange={(e) => setBusquedaRiesgo(e.target.value)}
             />
@@ -244,17 +247,19 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
           <Card className="mb-3">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <div>Riesgos disponibles</div>
-              <div className="badge bg-primary">{formData.riesgos.length} seleccionados</div>
+              <div className="badge bg-primary">
+                {formData.riesgo ? "1 seleccionado" : "0 seleccionados"}
+              </div>
             </Card.Header>
             <Card.Body>
               {riesgosFiltrados.map(riesgo => (
                 <div key={riesgo.id_riesgo} className="mb-2 d-flex justify-content-between align-items-center">
                   <div>
                     <Form.Check
-                      type="checkbox"
+                      type="radio"
                       id={`riesgo-${riesgo.id_riesgo}`}
                       label={riesgo.nombre}
-                      checked={formData.riesgos.includes(riesgo.id_riesgo)}
+                      checked={formData.riesgo === riesgo.id_riesgo}
                       onChange={() => handleRiesgoSelection(riesgo.id_riesgo)}
                     />
                   </div>
@@ -276,15 +281,15 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
             </Card.Body>
           </Card>
 
-          {formData.riesgos.length > 0 && (
+          {formData.riesgo && (
             <div>
-              <label className="form-label">Riesgos seleccionados:</label>
+              <label className="form-label">Riesgo seleccionado:</label>
               <div className="d-flex flex-wrap gap-2">
-                {formData.riesgos.map(id_riesgo => {
-                  const riesgo = getRiesgoPorId(id_riesgo);
+                {(() => {
+                  const riesgo = getRiesgoPorId(formData.riesgo);
                   return riesgo ? (
                     <div 
-                      key={id_riesgo} 
+                      key={formData.riesgo} 
                       className="badge bg-secondary d-flex align-items-center p-2"
                     >
                       {riesgo.nombre}
@@ -292,15 +297,15 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
                         type="button" 
                         className="btn-close btn-close-white ms-2" 
                         aria-label="Close"
-                        onClick={() => eliminarRiesgoSeleccionado(id_riesgo)}
+                        onClick={() => setFormData(prev => ({ ...prev, riesgo: null }))}
                         style={{ fontSize: '0.5rem' }}
                       ></button>
                     </div>
                   ) : null;
-                })}
+                })()}
               </div>
             </div>
-          )}
+        )}
         </Form.Group>
 
           <div>
