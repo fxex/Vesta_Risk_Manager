@@ -36,7 +36,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual`
+                  `/inicio/proyecto/lider/${id_proyecto}/evaluaciones/actual`
                 );
               }}
             >
@@ -46,7 +46,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada`
+                  `/inicio/proyecto/lider/${id_proyecto}/evaluaciones/pasada`
                 );
               }}
             >
