@@ -25,7 +25,7 @@ export default function MonitoreoDesarrollador() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/actual`
+                  `/inicio/proyecto/desarrollador/${id_proyecto}/evaluaciones/actual`
                 );
               }}
             >
@@ -35,7 +35,7 @@ export default function MonitoreoDesarrollador() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/pasada`
+                  `/inicio/proyecto/desarrollador/${id_proyecto}/evaluaciones/pasada`
                 );
               }}
             >

@@ -81,6 +81,8 @@ import { obtenerCategorias } from "./services/categorias.js";
 import VerEvaluacionesActuLider from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
 import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacionesPasadasLider.jsx";
 import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
+import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
+import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -273,6 +275,14 @@ const App = () => {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionDesarrollador />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/actual",
+      element: <RutaProtegida element={<VerEvaluacionesActualesDesarrollador />} />,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/pasada",
+      element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
