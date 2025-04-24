@@ -40,7 +40,6 @@ export default function VerEvaluacionesActuLider() {
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
             <tr>
-              <th style={{ maxWidth: "5em" }} className="th">Id</th>
               <th style={{ width: "5em" }} className="th">Riesgo</th>
               <th style={{ width: "5em" }} className="th">Impacto</th>
               <th style={{ width: "5em" }} className="th">Probabilidad</th>
@@ -51,7 +50,6 @@ export default function VerEvaluacionesActuLider() {
           <tbody>
             {/*tareas.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
-                <td>{evaluacion.id}</td>
                 <td style={{ textWrap: "wrap" }}>{evaluacion.riesgo}</td>
                 <td>{evaluacion.impacto}</td>
                 <td>{evaluacion.probailidad}</td>
