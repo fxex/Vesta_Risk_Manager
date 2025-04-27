@@ -13,10 +13,10 @@ export default function NoEncontrada() {
         className="d-flex justify-content-center align-items-center flex-column"
       >
         <Figure.Image src={LogoVesta} style={{ height: "200px" }} />
-        <h3>Pagina no encontrada</h3>
+        <h3>Página no encontrada</h3>
         <p>
-          Por favor compruebe la <b>URL</b> o acceda desde aca{" "}
-          <a href="http://localhost:5173/inicio">Presione aqui</a>
+          Por favor, compruebe la <b>URL</b> o acceda desde aquí{" "}
+          <a href="http://localhost:5173/inicio">Presione aquí</a>
         </p>
       </div>
       {/* <Footer /> */}

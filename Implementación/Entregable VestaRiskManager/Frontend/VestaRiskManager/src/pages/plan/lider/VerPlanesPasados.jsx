@@ -13,7 +13,7 @@ export const planesLoader = async ({ params }) => {
   return { planes };
 };
 
-export default function VerPlanesActuales() {
+export default function VerPlanesPasados() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export default function VerPlanesActuales() {
         </Alert>
       ) : null}
       <Contenedor>
-        <h3>{proyecto.nombre} - Planes actuales</h3>
+        <h3>{proyecto.nombre} - Planes pasados</h3>
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
             <tr>

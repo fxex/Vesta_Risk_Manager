@@ -175,7 +175,7 @@ export default function ListaTarea() {
             </Modal.Header>
             <Modal.Body>
               <p>
-                La tarea sera marcada como completada y no se podra revertir la acción.
+                La tarea será marcada como completada y no se podrá revertir la acción.
               </p>
             </Modal.Body>
             <Modal.Footer>

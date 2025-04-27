@@ -124,14 +124,14 @@ export default function CrearRiesgo() {
               )}
             </Form.Group>
             <Form.Group>
-              <Form.Label>Categoria</Form.Label>
+              <Form.Label>Categoría</Form.Label>
               <Form.Select
                 value={formData.categoria}
                 onChange={handleChangeSelect}
                 name="categoria"
                 isInvalid={error.categoria}
               >
-                <option value={0}>Elija una categoria</option>
+                <option value={0}>Elija una categoría</option>
                 {proyecto.categorias.map((item, key) => (
                   <option
                     key={key}
@@ -144,7 +144,7 @@ export default function CrearRiesgo() {
               </Form.Select>
               {error.categoria && (
                 <Form.Text className="text-danger">
-                  Seleccione una categoria valida.
+                  Seleccione una categoría válida.
                 </Form.Text>
               )}
             </Form.Group>
