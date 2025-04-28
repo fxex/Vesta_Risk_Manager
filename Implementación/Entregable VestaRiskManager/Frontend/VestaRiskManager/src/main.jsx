@@ -83,6 +83,7 @@ import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacione
 import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
+import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -217,6 +218,11 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
       element: <RutaProtegida element={<VerPlanesActuales />} />,
+      loader: planesLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/pasados",
+      element: <RutaProtegida element={<VerPlanesPasados />} />,
       loader: planesLoader,
     },
     {

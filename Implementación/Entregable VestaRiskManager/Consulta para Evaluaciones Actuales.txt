@@ -1,0 +1,11 @@
+SELECT 
+  e.id_evaluacion,
+  r.descripcion AS riesgo,
+  e.impacto,
+  e.probabilidad,
+  e.descripcion AS justificacion
+FROM evaluacion e
+INNER JOIN riesgo r ON e.id_riesgo = r.id_riesgo AND e.id_proyecto = r.id_proyecto
+INNER JOIN proyecto p ON e.id_proyecto = p.id_proyecto
+WHERE p.estado = 'activo'
+ORDER BY e.fecha_realizacion DESC;

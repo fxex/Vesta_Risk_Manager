@@ -209,7 +209,7 @@ export default function VerProyectoLider() {
               <Col>
                 <Card>
                   <Card.Header className="d-flex justify-content-center align-items-center" style={{minHeight:65}}>
-                    Requiere atencion
+                    Requiere atención
                   </Card.Header>
                   <Card.Body>
                     <Card.Text className="text-center fs-1">{datos_proyecto.riesgos_atencion}</Card.Text>

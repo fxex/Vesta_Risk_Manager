@@ -30,8 +30,16 @@ export default function MonitoreoLider() {
             >
               Planes actuales
             </Button>
-
-            <Button className="boton_2">Planes pasados</Button>
+            <Button 
+              className="boton_2"
+              onClick={() => {
+                navigate(
+                  `/inicio/proyecto/lider/${id_proyecto}/monitoreo/planes/pasados`
+                );
+              }}
+            >
+              Planes pasados
+            </Button>
             <Button 
               className="boton_2"
               onClick={() => {

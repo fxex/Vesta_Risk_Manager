@@ -109,7 +109,7 @@ export default function ListaTarea() {
             <thead className="cabecera">
               <tr>
                 <th style={{ maxWidth: "5em" }} className="th">Nombre</th>
-                <th style={{ width: "20em" }} className="th">Descripcion</th>
+                <th style={{ width: "20em" }} className="th">Descripción</th>
                 <th style={{ width: "10em" }} className="th">
                   Fecha de inicio
                 </th>
@@ -178,7 +178,7 @@ export default function ListaTarea() {
             </Modal.Header>
             <Modal.Body>
               <p>
-                La tarea sera marcada como completada y no se podra revertir la acción.
+                La tarea será marcada como completada y no se podrá revertir la acción.
               </p>
             </Modal.Body>
             <Modal.Footer>

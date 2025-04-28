@@ -1164,7 +1164,7 @@ export default function CrearProyecto() {
       <Modal show={seguro} onHide={handleSeguro}>
         <Modal.Body>
           <>
-            <h1>¿Estas seguro?</h1>
+            <h1>¿Está seguro?</h1>
             <p>
               Se ha detectado un solapamiento en las fechas de las iteraciones,
               lo que implicará que las iteraciones anteriores y posteriores sean
