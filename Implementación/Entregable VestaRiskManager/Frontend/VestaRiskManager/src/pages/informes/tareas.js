@@ -71,7 +71,7 @@ export const informeTarea = (datos) => {
             heights: ['*', 20, 20,20],
     
             body: [
-              [ {text: 'Datos del proyecto', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, datos.nombre_proyecto],
+              [ {text: 'Datos del proyecto', colSpan:2, fillColor:"#8DB3E2", color:"#FFF", bold:true}, ""],
               [ {text: "Nombre del proyecto", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text:datos.nombre_proyecto, alignment:"center", margin:[0,3,0,0]}],
               [ { text: 'Lider del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.lideres_proyecto, alignment:"center", margin:[0,3,0,0]}],
               [ { text: 'Desarrolladores del proyecto', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.desarrolladores_proyecto, alignment:"center", margin:[0,3,0,0]}]
@@ -79,18 +79,49 @@ export const informeTarea = (datos) => {
           },
           margin:[0,0,0,20]
         },
-        datos.riesgos.flatMap(item => [
+        datos.riesgos.flatMap(riesgo => [
           {
-            text:item.id_riesgo
+            text:(riesgo.id_riesgo > 9 ? "RK"+riesgo.id_riesgo : "RK0"+riesgo.id_riesgo) + " - " + riesgo.descripcion  
           }, 
-          {
-            ul: [
-              "Mitigación", 
-              "Minimización", 
-              "Contigencia"
-            ],
-            margin:[0,0,0,20]
-          }
+          riesgo.planes.flatMap(plan =>[
+            {
+              layout: 'customLayout', // optional
+              table: {
+                // headers are automatically repeated if the table spans over multiple pages
+                // you can declare how many rows should be treated as headers
+                headerRows: 1,
+                widths: [ 140, 80, 80, 130, 10],
+                heights: ['*', 20, 20,20],
+        
+                body: [
+                  [ {text: 'Plan de '+ plan.tipo , colSpan:5, fillColor:"#8DB3E2", color:"#FFF", bold:true}, "","","",""], 
+                  [ {text: "Tarea", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  {text: "Inicio", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},{text: "Fin", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},{text: "Responsables", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},{text: "", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}],
+                  ...(plan.tareas?.length > 0 ?
+                    [
+                      
+                      [ {text:"1", alignment:"center", margin:[0,3,0,0]}, {text:"1", alignment:"center", margin:[0,3,0,0]}, {text:"1", alignment:"center", margin:[0,3,0,0]}, {text:"1", alignment:"center", margin:[0,3,0,0]},{text:"", alignment:"center", margin:[0,3,0,0]}],
+                      plan.tareas.flatMap(tarea => [
+                        [
+                          {text:tarea.nombre, alignment:"center", margin:[0,3,0,0]}, 
+                          {text:tarea.fecha_inicio, alignment:"center", margin:[0,3,0,0]},
+                          {text:tarea.fecha_fin_real ? tarea.fecha_fin_real : tarea.fecha_fin, alignment:"center", margin:[0,3,0,0]},
+                          {text:tarea.responsables, alignment:"center", margin:[0,3,0,0]},
+                          ""
+
+                        ],
+                      ])
+                    ]
+                    :
+                    [
+                      [{text: "Este plan no tiene tareas asignadas", colSpan: 5, italics: true, alignment: "center", margin: [0, 6, 0, 6] },
+                      "", "", "", ""]
+                    ]
+                  )
+                ]
+              },
+              margin:[0,0,0,20]
+            },
+          ])
         ]),
         
         // {

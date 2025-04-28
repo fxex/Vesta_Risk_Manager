@@ -33,7 +33,7 @@ import { obtenerIteracionActual } from "../../services/proyectos";
 import { informeIncidencia } from "../informes/incidencia";
 import { useUsuario } from "../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../services/informes";
-import { completarTarea } from "../../services/planes";
+import { completarTarea, obtenerDatosTareasInforme } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
 
 export const TareaLoader = async ({ params }) => {
@@ -78,10 +78,13 @@ export default function ListaTarea() {
         <>
           <Button
             variant="success"
-            onClick={() => {
+            onClick={async () => {
+              const resultado = await obtenerDatosTareasInforme(proyecto.id_proyecto)
+              console.log(resultado);
+              
               const datos = {
                 nombre_proyecto: proyecto.nombre,
-                riesgos: [{id_riesgo:"RK01"}, {id_riesgo:"RK02"},{id_riesgo:"RK03"},{id_riesgo:"RK04"},{id_riesgo:"RK05"}, {id_riesgo:"RK06"}, {id_riesgo:"RK07"}]
+                riesgos: resultado
               }
               informeTarea(datos)
             }}

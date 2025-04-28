@@ -14,3 +14,18 @@ export const completarTarea = async (id_tarea) => {
 
   return json;
 };
+
+export const obtenerDatosTareasInforme = async (id_proyecto) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/tareas/informe`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const json = await respuesta.json();
+
+  return json;
+};
