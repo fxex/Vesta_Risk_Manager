@@ -35,6 +35,7 @@ import { useUsuario } from "../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../services/informes";
 import { completarTarea, obtenerDatosTareasInforme } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
+import { filtrarYFormatear } from "../../utils/filtrarUsuario";
 
 export const TareaLoader = async ({ params }) => {
   const tareas = await obtenerTareasProyecto(params.id_proyecto);
@@ -80,10 +81,13 @@ export default function ListaTarea() {
             variant="success"
             onClick={async () => {
               const resultado = await obtenerDatosTareasInforme(proyecto.id_proyecto)
-              console.log(resultado);
+              const iteracionExiste = iteracion ? iteracion : {}
               
               const datos = {
                 nombre_proyecto: proyecto.nombre,
+                iteracion_nombre: iteracionExiste.nombre ? iteracionExiste.nombre : null,
+                lideres_proyecto: filtrarYFormatear(proyecto.participantes, "Lider del proyecto"),
+                desarrolladores_proyecto: filtrarYFormatear(proyecto.participantes, "Desarrollador"),
                 riesgos: resultado
               }
               informeTarea(datos)

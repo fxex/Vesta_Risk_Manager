@@ -31,6 +31,7 @@ import { obtenerIteracionActual } from "../../../services/proyectos";
 import { informeIncidencia } from "../../informes/incidencia";
 import { useUsuario } from "../../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../../services/informes";
+import { filtrarYFormatear } from "../../../utils/filtrarUsuario";
 
 export const incidenciaLoader = async ({ params }) => {
   const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
@@ -42,13 +43,6 @@ export default function ListaIncidencia() {
   const { incidencias, iteracion } = useLoaderData();
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
-
-  function filtrarYFormatear(usuarios, rolBuscado) {
-    return usuarios
-      .filter(user => user.rol === rolBuscado)
-      .map(user => `${user.nombre} - ${user.email}`)
-      .join('\n');
-}
 
   return (
     <>

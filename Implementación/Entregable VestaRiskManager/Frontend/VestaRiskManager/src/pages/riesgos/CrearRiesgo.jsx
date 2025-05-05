@@ -58,7 +58,15 @@ export default function CrearRiesgo() {
     setError({ ...error, [name]: false });
   };
 
-  const handleClick = async () => {
+  const volverTablaRiesgo = () => {
+    navigate(
+      `/inicio/proyecto/${
+        location.pathname.includes("lider") ? "lider" : "desarrollador"
+      }/${proyecto.id_proyecto}/riesgos`
+    );
+  }
+
+  const clickBotonCrear = async () => {
     const comprobacionError = {
       descripcion: formData.descripcion.length === 0,
       categoria: formData.categoria <= 0,
@@ -66,19 +74,14 @@ export default function CrearRiesgo() {
     };
     setError(comprobacionError);
 
-    const comprobacion = verificarError(comprobacionError);
-    if (!comprobacion) {
-      setError({ descripcion: false, categoria: false, responsables: false });
-      const resultado = await crearRiesgo(proyecto.id_proyecto, formData);
-      if (resultado) {
-        navigate(
-          `/inicio/proyecto/${
-            comprobacionLider ? "lider" : "desarrollador"
-          }/${proyecto.id_proyecto}/riesgos`, {
-            state: { mensaje: "Riesgo creado con éxito" },
-          }
-        );
-      }
+    if (verificarError(comprobacionError)) {
+      return;
+    }
+    
+    const resultado = await crearRiesgo(proyecto.id_proyecto, formData);
+
+    if (resultado) {
+      volverTablaRiesgo();
     }
   };
 
@@ -172,7 +175,7 @@ export default function CrearRiesgo() {
             <Button
               variant="outline-success"
               className="mx-1"
-              onClick={handleClick}
+              onClick={clickBotonCrear}
             >
               <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
               Confirmar
