@@ -68,6 +68,7 @@ export default function CrearIncidencia() {
     const comprobacionError = {
       descripcion: !formData.descripcion.trim(),
       gravedad: !formData.gravedad,
+      riesgo: !formData.riesgo,
     };
 
     // Set errors
@@ -81,15 +82,10 @@ export default function CrearIncidencia() {
     }
 
     try {
-      const resultado = await crearIncidencia({
-        descripcion: formData.descripcion,
-        gravedad: formData.gravedad,
-        responsable: formData.responsable,
-        riesgo: formData.riesgo
-      });
+      const resultado = await crearIncidencia(id_proyecto, formData);
 
       if (resultado) {
-        navigate("/inicio/categorias", {
+        navigate(`/inicio/proyecto/lider/${id_proyecto}/monitoreo/incidencias`, {
           state: { mensaje: "Incidencia creada con éxito" },
         });
       }
@@ -244,7 +240,7 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
             </Button>
           </InputGroup>
 
-          {error.gravedad && (
+          {error.riesgo && (
             <Form.Text className="text-danger">
               Debe seleccionar un riesgo.
             </Form.Text>
@@ -263,19 +259,11 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
                   <div>
                     <Form.Check
                       type="radio"
-                      id={`riesgo-${riesgo.id_riesgo}`}
-                      label={riesgo.nombre}
+                      value={riesgo.id_riesgo}
+                      label={riesgo.descripcion}
                       checked={formData.riesgo === riesgo.id_riesgo}
                       onChange={() => handleRiesgoSelection(riesgo.id_riesgo)}
                     />
-                  </div>
-                  <div>
-                    <span className={`badge bg-${getColorEstado(riesgo.estado)} me-2`}>
-                      {riesgo.estado}
-                    </span>
-                    <span className={`badge bg-${getColorNivel(riesgo.nivel)}`}>
-                      {riesgo.nivel}
-                    </span>
                   </div>
                 </div>
               ))}
@@ -286,32 +274,6 @@ const eliminarRiesgoSeleccionado = (id_riesgo) => {
               )}
             </Card.Body>
           </Card>
-
-          {formData.riesgo && (
-            <div>
-              <label className="form-label">Riesgo seleccionado:</label>
-              <div className="d-flex flex-wrap gap-2">
-                {(() => {
-                  const riesgo = getRiesgoPorId(formData.riesgo);
-                  return riesgo ? (
-                    <div 
-                      key={formData.riesgo} 
-                      className="badge bg-secondary d-flex align-items-center p-2"
-                    >
-                      {riesgo.nombre}
-                      <button 
-                        type="button" 
-                        className="btn-close btn-close-white ms-2" 
-                        aria-label="Close"
-                        onClick={() => setFormData(prev => ({ ...prev, riesgo: null }))}
-                        style={{ fontSize: '0.5rem' }}
-                      ></button>
-                    </div>
-                  ) : null;
-                })()}
-              </div>
-            </div>
-        )}
         </Form.Group>
 
           <div>
