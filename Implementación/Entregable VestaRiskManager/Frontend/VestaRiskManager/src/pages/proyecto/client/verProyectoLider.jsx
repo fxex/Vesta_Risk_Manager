@@ -19,6 +19,7 @@ import {
 import { Bar, Radar } from 'react-chartjs-2';
 import { obtenerDatosRiesgos } from "../../../services/riesgos";
 import { useLoaderData } from "react-router-dom";
+import MantrizTonji from "../../../components/MatrizTonji";
 
 ChartJS.register(
   RadialLinearScale,
@@ -219,11 +220,12 @@ export default function VerProyectoLider() {
             </Row>
           </Col>
           <Col xs={5}>
-            <Card>
+            <Card style={{maxHeight:"65vh"}}>
               <Card.Header>
                 Matriz tongji
               </Card.Header>
               <Card.Body>
+                <MantrizTonji />
               </Card.Body>
             </Card>
           </Col>
