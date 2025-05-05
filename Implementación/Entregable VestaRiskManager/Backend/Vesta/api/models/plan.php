@@ -35,11 +35,54 @@ class Plan{
         }
     }
 
-    public function obtenerPlanesIteracion($id_iteracion){
-        $query = "SELECT p.*, r.id_riesgo, r.factor_riesgo FROM plan p 
+    public function obtenerPlanesIteracionActual($id_iteracion){
+        $query = "SELECT p.id_plan, p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
                 inner join riesgo r on p.id_riesgo = r.id_riesgo 
-                inner join iteracion i on i.id_proyecto = r.id_proyecto
-                where i.id_iteracion = ?";
+                where p.id_iteracion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i",$id_iteracion);
+        $stmt->execute();
+        $planes = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $planes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
+
+    public function obtenerPlanesRiesgoProyecto($id_proyecto, $id_riesgo, $id_iteracion){
+        $query = "SELECT 
+        tipos.tipo,
+        p.id_plan
+    FROM (
+        SELECT 'Mitigación' AS tipo
+        UNION ALL
+        SELECT 'Minimización'
+        UNION ALL
+        SELECT 'Contigencia'
+    ) AS tipos
+    LEFT JOIN plan p 
+        ON p.tipo = tipos.tipo
+        AND p.id_proyecto = ?
+        AND p.id_riesgo = ?
+        AND p.id_iteracion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii",$id_proyecto, $id_riesgo, $id_iteracion);
+        $stmt->execute();
+        $planes = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $planes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
+
+    public function obtenerPlanesAnteriores($id_iteracion){
+        $query = "SELECT p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
+                inner join riesgo r on p.id_riesgo = r.id_riesgo 
+                where p.id_iteracion = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i",$id_iteracion);
         $stmt->execute();
@@ -62,6 +105,25 @@ class Plan{
 
     public function obtenerTareasPlan($id_plan) {
         $query = "SELECT * from tarea where id_plan = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_plan);
+        $stmt->execute();
+        $participantes   = $stmt->get_result();
+        
+        $resultado = [];
+        while ($fila = $participantes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
+    public function obtenerTareasPlanInforme($id_plan) {
+        $query = "SELECT t.*, GROUP_CONCAT(distinct u.nombre order by u.nombre separator ', ') as responsables from tarea t
+        inner join participante_tarea pt on t.id_tarea = pt.id_tarea
+        inner join usuario u on u.id_usuario = pt.id_usuario 
+        where id_plan = ?
+        GROUP BY t.id_tarea
+        ";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_plan);
         $stmt->execute();

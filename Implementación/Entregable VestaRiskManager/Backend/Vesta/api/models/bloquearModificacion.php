@@ -1,49 +1,37 @@
 <?php
 class Bloquear{
-    public static function bloquearModificacion($nombre, $id_nombre,$token){
-        $archivo = __DIR__ . "/../bloqueo/{$nombre}_{$id_nombre}_lock.tmp";
-    
-        // Verifica si el recurso ya está bloqueado
-        if (file_exists($archivo)) {
-            $timestampActual = time();
-            $lockInfo = json_decode(file_get_contents($archivo), true);
-            
-            if ($lockInfo["token"] === $token) {
-                return ['bloqueado' => false];
-            }
-            
-            if ($timestampActual - $lockInfo["timestamp"] >= 600) {
-                unlink($archivo);
-                file_put_contents($archivo, json_encode(['timestamp' => time(), "token" => $token]));
-                return ['bloqueado' => false];
-            }
-            return ['bloqueado' => true];
+    public static function bloquearModificacion($nombre_elemento, $id_elemento, $token){
+        $archivo = __DIR__ . "/../bloqueo/{$nombre_elemento}_{$id_elemento}_lock.tmp";
+        if (verificarBloqueo($archivo, $token)) {
+            return ['bloqueado' => true];   
         }
-        // Bloquea el recurso creando el archivo
         file_put_contents($archivo, json_encode(['timestamp' => time(), "token" => $token]));
-        return ['bloqueado' => false];
+        return ['bloqueado' => false];   
+    }
+
+    private function verificarBloqueo($archivo, $token){
+        if (!file_exists($archivo)) {
+            return false;
+        }
         
+        $lockInfo = json_decode(file_get_contents($archivo), true);
+        $timestampActual = time();
+
+        if ($lockInfo["token"] === $token || $timestampActual - $lockInfo["timestamp"] >= 600) {
+            return false;
+        }
+        
+        return true;
     }
 
     public static function desbloquearModificacion($nombre, $id_nombre, $token){
         $archivo = __DIR__ . "/../bloqueo/{$nombre}_{$id_nombre}_lock.tmp";
-    
-        if (file_exists($archivo)) {
-            $timestampActual = time();
-            $lockInfo = json_decode(file_get_contents($archivo), true);
-            
-            if ($lockInfo["token"] === $token) {
-                unlink($archivo); 
-                return ['desbloqueado' => true];
-            }
 
-            if ($timestampActual - $lockInfo["timestamp"] >= 600) {
-                unlink($archivo);
-                return ['desbloqueado' => true];
-            }
-
+        if (verificarBloqueo($archivo, $token)) {
             return ['desbloqueado' => false];
         }
-        return ['desbloqueado' => false];
+        unlink($archivo); 
+        return ['desbloqueado' => true];
+    
     }
 }

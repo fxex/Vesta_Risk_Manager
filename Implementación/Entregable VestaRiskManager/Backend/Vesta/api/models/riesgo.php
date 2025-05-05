@@ -101,10 +101,24 @@ class Riesgo {
         if ($stmt->execute()) {
             return true;
         } else {
-            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            throw new Exception("Error al actualizar el riesgo: " . $stmt->error);
             return false;
         }
     }
+
+    public function eliminarRiesgo($id_proyecto, $id_riesgo){
+        $query = "DELETE from riesgo where id_proyecto = ? and id_riesgo = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii", $id_proyecto, $id_riesgo);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al eliminar el riesgo: " . $stmt->error);
+            return false;
+        }
+    }
+
+
     public function obtenerRiesgoId($id_riesgo){
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 

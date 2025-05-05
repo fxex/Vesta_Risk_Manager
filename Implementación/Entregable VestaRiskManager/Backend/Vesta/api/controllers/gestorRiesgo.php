@@ -71,6 +71,15 @@ class GestorRiesgo {
         }
     }
 
+    public function eliminarRiesgo($id_proyecto, $id_riesgo){
+        vincularTabla::eliminarVinculoRiesgo($this->conexion,"participante_riesgo", "id_proyecto","id_riesgo", $id_proyecto, $id_riesgo);
+        vincularTabla::eliminarVinculoRiesgo($this->conexion,"evaluacion", "id_proyecto","id_riesgo", $id_proyecto, $id_riesgo);
+        vincularTabla::eliminarVinculoRiesgo($this->conexion,"plan", "id_proyecto","id_riesgo", $id_proyecto, $id_riesgo);
+        // $this->categoria->setEstado("inactivo");
+        $resultado = $this->riesgo->eliminarRiesgo($id_proyecto, $id_riesgo);
+        return $resultado;
+    }
+
     public function crearEvaluacion($id_proyecto, $id_riesgo, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable") && !empty($data["id_iteracion"]);
         if ($comprobar) {
@@ -165,10 +174,10 @@ class GestorRiesgo {
         }
     }
 
-    public function obtenerPlanesIteracion ($id_proyecto) {
+    public function obtenerPlanesIteracionActual ($id_proyecto) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         if (!empty($iteracion)) {
-            $planes = $this->plan->obtenerPlanesIteracion($iteracion["id_iteracion"]);
+            $planes = $this->plan->obtenerPlanesIteracionActual($iteracion["id_iteracion"]);
             return $planes;
         }else{
             return [];
@@ -178,7 +187,7 @@ class GestorRiesgo {
     public function obtenerPlanId ($id_plan, $id_proyecto) {
         $resultado = $this->plan->obtenerPlanId($id_plan);
         $resultado["riesgo"] = $this->obtenerRiesgoId($resultado["id_riesgo"]);
-        $resultado["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $resultado["id_riesgo"]);
+        $resultado["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $resultado["id_riesgo"], $resultado["id_iteracion"]);
         $resultado["tareas"] = $this->plan->obtenerTareasPlan($id_plan);
         foreach ($resultado["tareas"] as &$tarea) {
             $tarea["responsables"] = $this->tarea->obtenerResponsablesTarea($tarea["id_tarea"]);
@@ -317,5 +326,35 @@ class GestorRiesgo {
         }
         
         curl_close($ch);
+    }
+
+    public function obtenerDatosTareasInforme($id_proyecto){
+        $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $riesgos = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $iteracion_actual["id_iteracion"]);
+        foreach ($riesgos as &$riesgo) {
+            $planes = $this->plan->obtenerPlanesRiesgoProyecto($id_proyecto, $riesgo["id_riesgo"], $iteracion_actual["id_iteracion"]);
+            foreach ($planes as &$plan) { 
+                if(isset($plan["id_plan"])){
+                    $plan["tareas"] = $this->plan->obtenerTareasPlanInforme($plan["id_plan"]);
+                }else{
+                    $plan["tareas"] = [];
+                }
+            }
+            $riesgo["planes"] = $planes; 
+        }
+        return $riesgos;
+
+    }
+
+    public function crearIncidencia($id_proyecto, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["gravedad"]) && !empty($data["responsable"]) && !empty($data["riesgo"]) && is_numeric($data["riesgo"]);
+        if ($comprobar) {
+            $this->incidencia->setGravedad($data["gravedad"]);
+            $this->incidencia->setDescripcion($data["descripcion"]);
+            $id_incidencia = $this->incidencia->crearIncidencia($id_proyecto, $data["riesgo"], $data["responsable"]);
+            return $id_incidencia > 0;
+        }else{
+            return false;
+        }
     }
 }
