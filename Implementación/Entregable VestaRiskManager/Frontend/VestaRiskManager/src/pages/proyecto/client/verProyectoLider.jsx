@@ -17,7 +17,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar, Radar } from 'react-chartjs-2';
-
 import { obtenerDatosRiesgos } from "../../../services/riesgos";
 import { useLoaderData } from "react-router-dom";
 
@@ -34,85 +33,33 @@ ChartJS.register(
   Legend
 );
 
-// Datos de prueba
-const datosPrueba = {
-  datos_proyecto: {
-    riesgos_activos: 12,
-    evaluaciones_pendientes: 3,
-    planes_accion: 5,
-    riesgos_atencion: 7
-  },
-  iteraciones: [
-    { nombre: "Iteración 1" },
-    { nombre: "Iteración 2" },
-    { nombre: "Iteración 3" },
-    { nombre: "Iteración 4" }
-  ],
-  categorias: [
-    { nombre: "Técnico" },
-    { nombre: "Gestión" },
-    { nombre: "Comercial" },
-    { nombre: "Externo" },
-    { nombre: "Organizacional" },
-    { nombre: "Calidad" }
-  ],
-  datos_evaluacion: [
-    [
-      { nivel: "Bajo", cantidad: 5 },
-      { nivel: "Medio", cantidad: 8 },
-      { nivel: "Alto", cantidad: 3 },
-      { nivel: "Crítico", cantidad: 2 }
-    ],
-    [
-      { nivel: "Bajo", cantidad: 6 },
-      { nivel: "Medio", cantidad: 7 },
-      { nivel: "Alto", cantidad: 4 },
-      { nivel: "Crítico", cantidad: 3 }
-    ],
-    [
-      { nivel: "Bajo", cantidad: 8 },
-      { nivel: "Medio", cantidad: 6 },
-      { nivel: "Alto", cantidad: 3 },
-      { nivel: "Crítico", cantidad: 1 }
-    ],
-    [
-      { nivel: "Bajo", cantidad: 2 },
-      { nivel: "Medio", cantidad: 8 },
-      { nivel: "Alto", cantidad: 6 },
-      { nivel: "Crítico", cantidad: 4 }
-    ]
-  ]
-};
-
 export const dashboardLoader = async ({ params }) => {
-  //Para la funcionalidad descomentar esto -> const datosRiesgos = await obtenerDatosRiesgos(params.id_proyecto);
-  return { datosRiesgos: datosPrueba };
+  const datosRiesgos = await obtenerDatosRiesgos(params.id_proyecto);
+  return {datosRiesgos};
 };
 
 export default function VerProyectoLider() {
-  //Para la funcionalidad descomentar esto -> const {datosRiesgos} = useLoaderData();
-  const datosRiesgos = datosPrueba;
-  //A partir de acá no cmabie nada, solo agregué la matriz
+  const {datosRiesgos} = useLoaderData()
   const {datos_proyecto, iteraciones, categorias, datos_evaluacion} = datosRiesgos;
-  const ultimasIteraciones = iteraciones.map(item=>item.nombre).reverse();
-  const categoriasProyecto = categorias.map(item=>item.nombre);
-  const datos_evaluacion_reversa = [...datos_evaluacion].reverse();
+  const ultimasIteraciones = iteraciones.map(item=>item.nombre).reverse()
+  const categoriasProyecto = categorias.map(item=>item.nombre)
+  const datos_evaluacion_reversa = [...datos_evaluacion].reverse()
   const datos_bajo = datos_evaluacion_reversa.map(item=>{
     return item[0].cantidad 
-  });
+  })
 
   const datos_medio = datos_evaluacion_reversa.map(item=>{
     return item[1].cantidad 
-  });
+  })
 
   const datos_alto = datos_evaluacion_reversa.map(item=>{
     return item[2].cantidad 
-  });
+  })
 
   const datos_critico = datos_evaluacion_reversa.map(item=>{
     return item[3].cantidad 
-  });
-    
+  })
+  
   return (
     <>
       <NavegadorLider />
@@ -272,188 +219,13 @@ export default function VerProyectoLider() {
             </Row>
           </Col>
           <Col xs={5}>
-          <Card>
-            <Card.Header>
-              Matriz Tongji
-            </Card.Header>
-            <Card.Body className="p-2">
-              <div className="table-responsive">
-                <table className="table table-bordered text-center align-middle table-sm mb-0"
-                style={{ width: "100%", maxWidth: "300px", margin: "0 auto" }}>
-                  <thead>
-                    <tr>
-                      <th rowSpan="2" style={{ verticalAlign: "middle", width: "90px" }}>Probabilidad</th>
-                      <th colSpan="4" style={{ fontWeight: "bold" }}>Impacto</th>
-                    </tr>
-                    <tr>
-                      <th style={{ width: "100px" }}>Bajo</th>
-                      <th style={{ width: "100px" }}>Moderado</th>
-                      <th style={{ width: "100px" }}>Significante</th>
-                      <th style={{ width: "100px" }}>Alto</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th>Alto</th>
-                      <td style={{ 
-                          backgroundColor: "#ff9966", 
-                          width: "45px", 
-                          height: "45px",
-                          aspectRatio: "1",
-                          padding: 0,
-                          lineHeight: 1,
-                          verticalAlign: "middle"
-                      }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff5252", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff5252", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff5252", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                    </tr>
-                    <tr>
-                      <th>Significante</th>
-                      <td style={{ 
-                        backgroundColor: "#ffff66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff9966", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff9966", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff5252", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                    </tr>
-                    <tr>
-                      <th>Moderado</th>
-                      <td style={{ 
-                        backgroundColor: "#66cc66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ffff66", //amarillo
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ffff66",
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ff9966", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                    </tr>
-                    <tr>
-                      <th>Bajo</th>
-                      <td style={{ 
-                        backgroundColor: "#66cc66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#66cc66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#66cc66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                      <td style={{ 
-                        backgroundColor: "#ffff66", 
-                        width: "45px", 
-                        height: "45px",
-                        aspectRatio: "1",
-                        padding: 0,
-                        lineHeight: 1,
-                        verticalAlign: "middle"
-                        }}></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </Card.Body>
-          </Card>
+            <Card>
+              <Card.Header>
+                Matriz tongji
+              </Card.Header>
+              <Card.Body>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
         </Container>
