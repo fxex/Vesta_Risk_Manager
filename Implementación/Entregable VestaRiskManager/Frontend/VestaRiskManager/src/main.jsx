@@ -78,12 +78,12 @@ import ListaTarea, { TareaLoader } from "./pages/tarea/ListaTarea.jsx";
 import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
 import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
-import VerEvaluacionesActuLider from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
+import VerEvaluacionesActuLider, { evaluacionesLoader } from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
 import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacionesPasadasLider.jsx";
 import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
-import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
+import VerPlanesPasados, { planesAntiguosLoader } from "./pages/plan/lider/VerPlanesPasados.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -223,7 +223,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/pasados",
       element: <RutaProtegida element={<VerPlanesPasados />} />,
-      loader: planesLoader,
+      loader: planesAntiguosLoader,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencias",
@@ -257,6 +257,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",
       element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
+      loader: evaluacionesLoader,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",

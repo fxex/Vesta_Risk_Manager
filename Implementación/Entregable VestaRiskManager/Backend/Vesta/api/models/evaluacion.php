@@ -96,4 +96,34 @@ class Evaluacion {
         }
         return $resultado;
     }
+
+    public function obtenerEvaluacionesActualesProyecto($id_proyecto, $id_iteracion){
+        $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad FROM evaluacion e 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                where e.id_iteracion = ? and e.id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
+        $stmt->execute();
+        $evaluaciones = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $evaluaciones->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
+    public function obtenerEvaluacionesAnterioresProyecto($id_proyecto, $id_iteracion){
+        $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad FROM evaluacion e 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                where e.id_iteracion < ? and e.id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
+        $stmt->execute();
+        $evaluaciones = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $evaluaciones->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
 }

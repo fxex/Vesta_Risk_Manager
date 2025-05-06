@@ -42,9 +42,9 @@ export const dashboardLoader = async ({ params }) => {
 export default function VerProyectoLider() {
   const {datosRiesgos} = useLoaderData()
   const {datos_proyecto, iteraciones, categorias, datos_evaluacion} = datosRiesgos;
-  const ultimasIteraciones = iteraciones.map(item=>item.nombre).reverse()
-  const categoriasProyecto = categorias.map(item=>item.nombre)
-  const datos_evaluacion_reversa = [...datos_evaluacion].reverse()
+  const ultimasIteraciones = iteraciones??[].map(item=>item.nombre).reverse()
+  const categoriasProyecto = categorias??[].map(item=>item.nombre)
+  const datos_evaluacion_reversa = [...datos_evaluacion??[]].reverse()
   const datos_bajo = datos_evaluacion_reversa.map(item=>{
     return item[0].cantidad 
   })
@@ -183,7 +183,7 @@ export default function VerProyectoLider() {
                     Riesgos activos
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datos_proyecto.riesgos_activos}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto?.riesgos_activos??0}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -193,7 +193,7 @@ export default function VerProyectoLider() {
                    Evaluaciones pendientes 
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datos_proyecto.evaluaciones_pendientes}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto?.evaluaciones_pendientes??0}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -203,7 +203,7 @@ export default function VerProyectoLider() {
                     Planes de acción
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datos_proyecto.planes_accion}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto?.planes_accion??0}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -213,7 +213,7 @@ export default function VerProyectoLider() {
                     Requiere atención
                   </Card.Header>
                   <Card.Body>
-                    <Card.Text className="text-center fs-1">{datos_proyecto.riesgos_atencion}</Card.Text>
+                    <Card.Text className="text-center fs-1">{datos_proyecto?.riesgos_atencion??0}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>

@@ -35,12 +35,12 @@ class Plan{
         }
     }
 
-    public function obtenerPlanesIteracionActual($id_iteracion){
+    public function obtenerPlanesIteracionActual($id_proyecto, $id_iteracion){
         $query = "SELECT p.id_plan, p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
                 inner join riesgo r on p.id_riesgo = r.id_riesgo 
-                where p.id_iteracion = ?";
+                where p.id_iteracion = ? and p.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i",$id_iteracion);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
         $stmt->execute();
         $planes = $stmt->get_result(); 
         $resultado = [];
@@ -79,12 +79,12 @@ class Plan{
     }
 
 
-    public function obtenerPlanesAnteriores($id_iteracion){
+    public function obtenerPlanesAnteriores($id_proyecto, $id_iteracion){
         $query = "SELECT p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
                 inner join riesgo r on p.id_riesgo = r.id_riesgo 
-                where p.id_iteracion = ?";
+                where p.id_iteracion < ? and p.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i",$id_iteracion);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
         $stmt->execute();
         $planes = $stmt->get_result(); 
         $resultado = [];

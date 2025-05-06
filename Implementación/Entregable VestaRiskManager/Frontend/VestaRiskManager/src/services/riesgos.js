@@ -94,9 +94,7 @@ export const obtenerCantidadPlanTipo = async (id_proyecto, id_riesgo, id_iteraci
       },
     }
   );
-  const json = await respuesta.json();  
-  console.log(json);
-  
+  const json = await respuesta.json();    
 
   return json;
 };
@@ -121,6 +119,42 @@ export const crearPlan = async (id_proyecto, id_riesgo, data) => {
 
 export const obtenerPlanesProyecto = async (id_proyecto) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerPlanesAnterioresProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/antiguos`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerEvaluacionesActualesProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerEvaluacionesAnterioresProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/antiguos`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

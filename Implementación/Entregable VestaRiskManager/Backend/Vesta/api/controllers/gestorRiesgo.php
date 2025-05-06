@@ -177,8 +177,38 @@ class GestorRiesgo {
     public function obtenerPlanesIteracionActual ($id_proyecto) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         if (!empty($iteracion)) {
-            $planes = $this->plan->obtenerPlanesIteracionActual($iteracion["id_iteracion"]);
+            $planes = $this->plan->obtenerPlanesIteracionActual($id_proyecto, $iteracion["id_iteracion"]);
             return $planes;
+        }else{
+            return [];
+        }
+    }
+
+    public function obtenerPlanesIteracionAnteriores ($id_proyecto) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $planes = $this->plan->obtenerPlanesAnteriores($id_proyecto, $iteracion["id_iteracion"]);
+            return $planes;
+        }else{
+            return [];
+        }
+    }
+
+    public function obtenerEvaluacionesActuales ($id_proyecto) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $evaluaciones = $this->evaluacion->obtenerEvaluacionesActualesProyecto($id_proyecto, $iteracion["id_iteracion"]);
+            return $evaluaciones;
+        }else{
+            return [];
+        }
+    }
+
+    public function obtenerEvaluacionesAnteriores ($id_proyecto) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion["id_iteracion"]);
+            return $evaluaciones;
         }else{
             return [];
         }
@@ -285,11 +315,11 @@ class GestorRiesgo {
             $cantidad_riesgo = $this->evaluacion->obtenerCantidadRiesgoFactor($id_proyecto, $iteracion->id_iteracion);
             array_push($evaluaciones, $cantidad_riesgo);
         }
-        if (!empty($iteracion)) {
+        if (!empty($iteracion_actual)) {
             $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion_actual["id_iteracion"]);
             return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones];
         }else{
-            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones, "categorias"=>$categorias];
+            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>NULL];
         }
     }
 

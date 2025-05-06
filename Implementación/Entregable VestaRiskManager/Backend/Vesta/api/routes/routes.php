@@ -496,9 +496,25 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan/tipo/cantida
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/evaluaciones", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerEvaluacionesActuales($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/evaluaciones/antiguas", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerEvaluacionesAnteriores($id_proyecto);
+    echo json_encode($resultado);
+});
+
 
 $router->add("GET", "proyecto/{id_proyecto}/planes", function($id_proyecto) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerPlanesIteracionActual($id_proyecto);
+    echo json_encode($resultado);
+});
+
+
+$router->add("GET", "proyecto/{id_proyecto}/planes/antiguos", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerPlanesIteracionAnteriores($id_proyecto);
     echo json_encode($resultado);
 });
 
