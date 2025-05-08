@@ -249,8 +249,8 @@ export const obtenerDatosRiesgos = async (id_proyecto) => {
   return json;
 };
 
-export const obtenerTareasProyecto = async (id_proyecto) => {
-  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/tareas`, {
+export const obtenerTareasProyecto = async (id_proyecto, id_usuario) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/tareas/${id_usuario}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

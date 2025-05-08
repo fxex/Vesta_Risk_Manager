@@ -42,7 +42,8 @@ export const dashboardLoader = async ({ params }) => {
 export default function VerProyectoLider() {
   const {datosRiesgos} = useLoaderData()
   const {datos_proyecto, iteraciones, categorias, datos_evaluacion} = datosRiesgos;
-  const ultimasIteraciones = iteraciones??[].map(item=>item.nombre).reverse()
+  const ultimasIteraciones = (iteraciones??[]).map(item=>item.nombre).reverse()
+  
   const categoriasProyecto = categorias??[].map(item=>item.nombre)
   const datos_evaluacion_reversa = [...datos_evaluacion??[]].reverse()
   const datos_bajo = datos_evaluacion_reversa.map(item=>{

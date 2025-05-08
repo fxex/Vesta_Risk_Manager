@@ -38,7 +38,7 @@ import { informeTarea } from "../informes/tareas";
 import { filtrarYFormatear } from "../../utils/filtrarUsuario";
 
 export const TareaLoader = async ({ params }) => {
-  const tareas = await obtenerTareasProyecto(params.id_proyecto);
+  const tareas = await obtenerTareasProyecto(params.id_proyecto, params.id_usuario);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { tareas, iteracion};
 };
@@ -144,7 +144,7 @@ export default function ListaTarea() {
                             setCompletar(true)
                             setTareaSeleccionada(tarea.id_tarea)
                           }}
-                          className={tarea.estado == '1'? "d-none":""}
+                          className={tarea.estado == '1' || tarea.pertenece == 0 ? "d-none":""}
                         >
                           <FontAwesomeIcon icon={faCheck} />
                         </Button>
