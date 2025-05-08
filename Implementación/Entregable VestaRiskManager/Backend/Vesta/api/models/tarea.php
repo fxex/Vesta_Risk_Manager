@@ -97,10 +97,14 @@ class Tarea{
     }
 
 
-    public function obtenerTareas($id_proyecto, $id_iteracion){
-        $query = "select t.* from tarea t inner join plan p on t.id_plan = p.id_plan where p.id_proyecto = ? and p.id_iteracion = ?";
+    public function obtenerTareas($id_proyecto, $id_iteracion, $id_usuario){
+        $query = "select t.*, CASE WHEN pt.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS pertenece 
+        from tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        left join participante_tarea pt on t.id_tarea = pt.id_tarea and pt.id_usuario = ? 
+        where p.id_proyecto = ? and p.id_iteracion = ? order by pertenece desc";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("ii", $id_proyecto, $id_iteracion);
+        $stmt->bind_param("iii",$id_usuario, $id_proyecto, $id_iteracion);
         $stmt->execute();
         $tareas = $stmt->get_result();
         $resultados = [];

@@ -556,13 +556,13 @@ $router->add("GET", "incidencia/{id_incidencia}", function($id_incidencia) use (
 });
 
 
-$router->add("GET", "proyecto/{id_proyecto}/tareas", function($id_proyecto) use ($controladorRiesgo){ 
-    $resultado = $controladorRiesgo->obtenerTareas($id_proyecto);
+$router->add("GET", "proyecto/{id_proyecto}/tareas/informe", function($id_proyecto) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerDatosTareasInforme($id_proyecto);
     echo json_encode($resultado);
 });
 
-$router->add("GET", "proyecto/{id_proyecto}/tareas/informe", function($id_proyecto) use ($controladorRiesgo){ 
-    $resultado = $controladorRiesgo->obtenerDatosTareasInforme($id_proyecto);
+$router->add("GET", "proyecto/{id_proyecto}/tareas/{id_usuario}", function($id_proyecto, $id_usuario) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerTareas($id_proyecto, $id_usuario);
     echo json_encode($resultado);
 });
 

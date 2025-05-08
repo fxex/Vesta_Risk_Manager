@@ -323,11 +323,11 @@ class GestorRiesgo {
         }
     }
 
-    public function obtenerTareas($id_proyecto){
+    public function obtenerTareas($id_proyecto, $id_usuario){
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $resultado = NULL;
         if (!empty($iteracion)) {
-            $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion["id_iteracion"]);
+            $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion["id_iteracion"], $id_usuario);
         }else{
             $resultado = $this->tarea->obtenerTareas($id_proyecto, 0);
         }
