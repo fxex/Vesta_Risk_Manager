@@ -5,6 +5,7 @@ import Contenedor from "../../../components/Contenedor";
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUsuario } from "../../../context/usuarioContext";
+import { informeSeguimiento } from "../../informes/seguimiento";
 
 export default function MonitoreoLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -76,7 +77,7 @@ export default function MonitoreoLider() {
               );
             }
             }>Tareas a realizar</Button>
-            <Button className="boton_2">Seguimiento de riesgo</Button>
+            <Button className="boton_2" onClick={informeSeguimiento}>Seguimiento de riesgo</Button>
           </div>
         </div>
       </Contenedor>
