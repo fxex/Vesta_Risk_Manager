@@ -77,7 +77,12 @@ export default function MonitoreoLider() {
               );
             }
             }>Tareas a realizar</Button>
-            <Button className="boton_2" onClick={informeSeguimiento}>Seguimiento de riesgo</Button>
+            <Button className="boton_2" onClick={() => {
+                navigate(
+                  `/inicio/proyecto/lider/${id_proyecto}/monitoreo/seguimiento`
+                );
+              }
+            }>Seguimiento de riesgo</Button>
           </div>
         </div>
       </Contenedor>

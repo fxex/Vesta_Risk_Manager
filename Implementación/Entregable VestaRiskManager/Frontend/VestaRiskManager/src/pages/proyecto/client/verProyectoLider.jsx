@@ -65,11 +65,7 @@ export default function VerProyectoLider() {
   return (
     <>
       <NavegadorLider />
-      <div
-        style={{ minHeight: "70vh" }}
-        className=""
-      >
-        {/* <Figure.Image src={Construccion}></Figure.Image> */}
+      <>
         <Container className="mt-2 mx-0 d-flex flex-column justify-content-around">
         <Row className="d-flex flex-nowrap mb-5" style={{height:"50vh"}}>
           <Col xs={9}>
@@ -232,7 +228,7 @@ export default function VerProyectoLider() {
           </Col>
         </Row>
         </Container>
-      </div>
+      </>
       <Footer />
     </>
   );

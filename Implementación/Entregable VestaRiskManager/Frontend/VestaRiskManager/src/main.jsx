@@ -84,17 +84,136 @@ import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDes
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 import VerPlanesPasados, { planesAntiguosLoader } from "./pages/plan/lider/VerPlanesPasados.jsx";
+import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
+
 
 const App = () => {
-  const router = createBrowserRouter([
+  const routerDesarrollador = [
     {
-      path: "/",
-      element: <Index />,
+      path: "/inicio/proyectos/desarrollador",
+      element: <RutaProtegida element={<ListaProyectoDesarrollador />} />,
+      loader: obtenerListaProyectoDesarrollador,
     },
     {
-      path: "/inicio",
-      element: <RutaProtegida element={<Home />} />,
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoader,
     },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/crear",
+      element: <RutaProtegida element={<CrearRiesgo />} />,
+      loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
+      element: <RutaProtegida element={<CrearEvaluacionDesarrollador />} />,
+      loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/actual",
+      element: <RutaProtegida element={<VerEvaluacionesActualesDesarrollador />} />,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/pasada",
+      element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+      element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
+      loader: planCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
+      element: <RutaProtegida element={<MonitoreoDesarrollador />} />,
+    }
+  ]
+
+  const routerLider = [
+    {
+      path: "/inicio/proyectos/lider",
+      element: <RutaProtegida element={<ListaProyectoLider />} />,
+      loader: obtenerListaProyectoLider,
+    },
+    
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto",
+      element: <RutaProtegida element={<VerProyectoLider />} />,
+      loader: dashboardLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/modificar/:id_riesgo",
+      element: <RutaProtegida element={<EditarRiesgo />} />,
+      loader: cargarRiesgo,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo",
+      element: <RutaProtegida element={<MonitoreoLider />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
+      element: <RutaProtegida element={<VerPlanesActuales />} />,
+      loader: planesLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/pasados",
+      element: <RutaProtegida element={<VerPlanesPasados />} />,
+      loader: planesAntiguosLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencias",
+      element: <RutaProtegida element={<ListaIncidencia />} />,
+      loader: incidenciaLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tareas",
+      element: <RutaProtegida element={<ListaTarea />} />,
+      loader: TareaLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",
+      element: <RutaProtegida element={<EditarPlanLider />} />,
+      loader: planLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencia/crear",
+      element: <RutaProtegida element={<CrearIncidencia />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
+      element: <RutaProtegida element={<CrearRiesgo />} />,
+      loader: cargarProyecto,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
+      element: <RutaProtegida element={<CrearEvaluacionLider />} />,
+      loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",
+      element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
+      loader: evaluacionesLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",
+      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+      element: <RutaProtegida element={<CrearPlanLider />} />,
+      loader: planCreacionLoader,
+    },
+    {
+      path:"/inicio/proyecto/lider/:id_proyecto/monitoreo/seguimiento",
+      element: <RutaProtegida element={<SeguimientoRiesgo />} />
+    }
+  ]
+
+  const routerAdmin = [
     {
       path: "/inicio/usuarios",
       element: <RutaProtegida element={<ListaUsuarios />} isAdmin={true} />,
@@ -185,125 +304,28 @@ const App = () => {
       element: <RutaProtegida element={<VerCategoria />} isAdmin={true} />,
       loader: cargarCategoria
     },
+  ]
+  const routerEspectador = [
 
+  ]
+
+  const router = createBrowserRouter([
     {
-      path: "/inicio/proyectos/lider",
-      element: <RutaProtegida element={<ListaProyectoLider />} />,
-      loader: obtenerListaProyectoLider,
+      path: "/",
+      element: <Index />,
     },
     {
-      path: "/inicio/proyectos/desarrollador",
-      element: <RutaProtegida element={<ListaProyectoDesarrollador />} />,
-      loader: obtenerListaProyectoDesarrollador,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto",
-      element: <RutaProtegida element={<VerProyectoLider />} />,
-      loader: dashboardLoader
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
-      element: <RutaProtegida element={<ListaRiesgos />} />,
-      loader: riesgoLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/modificar/:id_riesgo",
-      element: <RutaProtegida element={<EditarRiesgo />} />,
-      loader: cargarRiesgo,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo",
-      element: <RutaProtegida element={<MonitoreoLider />} />,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
-      element: <RutaProtegida element={<VerPlanesActuales />} />,
-      loader: planesLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/pasados",
-      element: <RutaProtegida element={<VerPlanesPasados />} />,
-      loader: planesAntiguosLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencias",
-      element: <RutaProtegida element={<ListaIncidencia />} />,
-      loader: incidenciaLoader
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tareas",
-      element: <RutaProtegida element={<ListaTarea />} />,
-      loader: TareaLoader
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",
-      element: <RutaProtegida element={<EditarPlanLider />} />,
-      loader: planLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencia/crear",
-      element: <RutaProtegida element={<CrearIncidencia />} />,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",
-      element: <RutaProtegida element={<CrearRiesgo />} />,
-      loader: cargarProyecto,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
-      element: <RutaProtegida element={<CrearEvaluacionLider />} />,
-      loader: evaluacionCreacionLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",
-      element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
-      loader: evaluacionesLoader,
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",
-      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",
-      element: <RutaProtegida element={<CrearPlanLider />} />,
-      loader: planCreacionLoader,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
-      element: <RutaProtegida element={<ListaRiesgos />} />,
-      loader: riesgoLoader,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/crear",
-      element: <RutaProtegida element={<CrearRiesgo />} />,
-      loader: cargarProyecto,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
-      element: <RutaProtegida element={<CrearEvaluacionDesarrollador />} />,
-      loader: evaluacionCreacionLoader,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/actual",
-      element: <RutaProtegida element={<VerEvaluacionesActualesDesarrollador />} />,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/pasada",
-      element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
-      element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
-      loader: planCreacionLoader,
-    },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
-      element: <RutaProtegida element={<MonitoreoDesarrollador />} />,
+      path: "/inicio",
+      element: <RutaProtegida element={<Home />} />,
     },
     {
       path: "/salir",
       element: <RutaProtegida element={<Salir />} />,
     },
+    ...routerAdmin,
+    ...routerEspectador,
+    ...routerLider,
+    ...routerDesarrollador,
     {
       path: "*",
       element: <NoEncontrada />,
