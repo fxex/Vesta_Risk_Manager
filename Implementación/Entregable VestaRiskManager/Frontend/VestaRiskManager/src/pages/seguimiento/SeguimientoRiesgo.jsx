@@ -47,7 +47,7 @@ export default function SeguimientoRiesgo() {
                                     datasets:[
                                         {
                                             data:estado,
-                                            backgroundColor: ['#6c757d', '#6f42c1', '#dc3545'],
+                                            backgroundColor: ['#B0BEC5', '#5C6BC0', '#26A69A'],
                                             borderWidth:1
                                         }
                                     ]
@@ -78,7 +78,7 @@ export default function SeguimientoRiesgo() {
                                     datasets:[
                                         {
                                             data:prioridad,
-                                            backgroundColor: ['#6c757d', '#339af0', '#FFCE56','#FE5000','#aC0813'],
+                                            backgroundColor: ['#90A4AE', '#81D4FA', '#FFEB3B','#FF7043','#E53935'],
                                             borderWidth:1
                                         }
                                     ]
