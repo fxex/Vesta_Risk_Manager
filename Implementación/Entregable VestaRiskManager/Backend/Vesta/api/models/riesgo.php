@@ -209,4 +209,110 @@ class Riesgo {
         }
         return $resultados;
     }
+
+
+    public function obtenerDatosInformeSeguimiento($id_proyecto){
+        $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo,
+        CASE
+            WHEN r.factor_riesgo is null then 'No se ha iniciado'
+            WHEN r.factor_riesgo < 9 then 'Cerrado'
+            WHEN r.factor_riesgo >= 9 then 'En curso' 
+        END as estado,
+        CASE
+            WHEN r.factor_riesgo IS NULL THEN 'Desconocida'
+            WHEN r.factor_riesgo < 9 THEN 'Nula'
+            WHEN r.factor_riesgo >= 9 AND r.factor_riesgo < 36 THEN 'Media'
+            WHEN r.factor_riesgo >= 36 AND r.factor_riesgo < 64 THEN 'Alta'
+            WHEN r.factor_riesgo >= 64 THEN 'Crítica'
+        END as prioridad
+        from riesgo r
+        where r.id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+
+        $riesgos   = $stmt->get_result();
+
+        $resultado = ["riesgos"=>[]];
+        while ($fila = $riesgos->fetch_assoc()) {
+            $resultado["riesgos"][] = $fila;
+        }
+
+        $resultado["estado"] = $this->obtenerCantidadEstado($id_proyecto);
+        $resultado["prioridad"] = $this->obtenerCantidadPrioridad($id_proyecto);
+
+        return $resultado;
+    }
+
+    private function obtenerCantidadEstado($id_proyecto){
+        $query = "SELECT COUNT(r.id_riesgo) AS total
+        FROM (
+            SELECT 'No se ha iniciado' AS estado
+            UNION ALL
+            SELECT 'Cerrado'
+            UNION ALL
+            SELECT 'En curso'
+        ) AS e
+        LEFT JOIN (
+            SELECT 
+                CASE
+                    WHEN r.factor_riesgo IS NULL THEN 'No se ha iniciado'
+                    WHEN r.factor_riesgo < 9 THEN 'Cerrado'
+                    WHEN r.factor_riesgo >= 9 THEN 'En curso' 
+                END AS estado,
+                r.id_riesgo
+            FROM riesgo r
+            WHERE r.id_proyecto = ?
+        ) AS r ON r.estado = e.estado
+        GROUP BY e.estado
+        ORDER BY FIELD(e.estado, 'No se ha iniciado', 'En curso', 'Cerrado')";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $riesgos   = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $riesgos->fetch_assoc()) {
+            $resultado[] = $fila["total"];
+        }
+        return $resultado;
+    }
+
+    private function obtenerCantidadPrioridad($id_proyecto){
+        $query = "SELECT COUNT(r.id_riesgo) AS total
+        FROM (
+            SELECT 'Desconocida' AS prioridad
+            UNION ALL
+            SELECT 'Nula'
+            UNION ALL
+            SELECT 'Media'
+            UNION ALL
+            SELECT 'Alta'
+            UNION ALL
+            SELECT 'Critica'
+        ) AS p
+        LEFT JOIN (
+            SELECT 
+                CASE
+                    WHEN r.factor_riesgo IS NULL THEN 'Desconocida'
+                    WHEN r.factor_riesgo < 9 THEN 'Nula'
+                    WHEN r.factor_riesgo >= 9 AND r.factor_riesgo < 36 THEN 'Media'
+                    WHEN r.factor_riesgo >= 36 AND r.factor_riesgo < 64 THEN 'Alta'
+                    WHEN r.factor_riesgo >= 64 THEN 'Crítica'
+                END as prioridad,
+                r.id_riesgo
+            FROM riesgo r
+            WHERE r.id_proyecto = ?
+        ) AS r ON r.prioridad = p.prioridad
+        GROUP BY p.prioridad
+        ORDER BY FIELD(p.prioridad, 'Desconocida', 'Nula', 'Media', 'Alta', 'Critica')";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $riesgos   = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $riesgos->fetch_assoc()) {
+            $resultado[] = $fila["total"];
+        }
+        return $resultado;
+    }
 }

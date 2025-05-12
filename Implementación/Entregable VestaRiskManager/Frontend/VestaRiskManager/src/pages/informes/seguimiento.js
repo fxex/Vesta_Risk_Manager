@@ -1,6 +1,7 @@
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 import { formatearFechaHora } from "../../utils/fecha";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 export const informeSeguimiento = (datos) => {
     pdfMake.tableLayouts = {
@@ -104,22 +105,25 @@ export const informeSeguimiento = (datos) => {
                             ],
                             [ 
                                 {text: "No se ha iniciado", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  
-                                {text:datos.nombre_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                {text:datos.estados[0], alignment:"center", margin:[0,3,0,0]}
                             ],
                             [ 
                                 { text: 'En curso', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, 
-                                {text:datos.lideres_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                {text:datos.estados[1], alignment:"center", margin:[0,3,0,0]}
                             ],
                             [ 
-                                { text: 'Cerrado', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.desarrolladores_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                { text: 'Cerrado', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.estados[2], alignment:"center", margin:[0,3,0,0]}
                             ]
                         ]
                     },
                     margin:[0,0,0,20]
                 },
-                {
-                    text: "Ayuda", alignment:"center"
-                }
+                { 
+                  stack:[
+                    {image: datos.grafico_estado, width:200, height:120, alignment:"center"},
+                    {text: "Figura 01: Resumen de estado.", alignment:"center", italics: true, margin:[0,5,0,5]}
+                  ]
+                },
             ]
         },
         {
@@ -137,23 +141,33 @@ export const informeSeguimiento = (datos) => {
                                 {text: 'Resumen de prioridad', fillColor:"#8DB3E2", color:"#FFF", bold:true, alignment:"center"}
                             ],
                             [ 
-                                {text: "Baja", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  
-                                {text:datos.nombre_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                {text: "Desconocida", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  
+                                {text:datos.prioridades[0], alignment:"center", margin:[0,3,0,0]}
+                            ],
+                            [ 
+                                { text: 'Nula', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, 
+                                {text:datos.prioridades[1], alignment:"center", margin:[0,3,0,0]}
                             ],
                             [ 
                                 { text: 'Media', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, 
-                                {text:datos.lideres_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                {text:datos.prioridades[2], alignment:"center", margin:[0,3,0,0]}
                             ],
                             [ 
-                                { text: 'Alta', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.desarrolladores_proyecto, alignment:"center", margin:[0,3,0,0]}
+                                { text: 'Alta', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.prioridades[3], alignment:"center", margin:[0,3,0,0]}
+                            ],
+                            [ 
+                                { text: 'Critica', fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]}, {text:datos.prioridades[4], alignment:"center", margin:[0,3,0,0]}
                             ]
                         ]
                     },
                     margin:[0,0,0,20]
                 },
-                {
-                    text: "Ayuda", alignment:"center"
-                }
+                { 
+                  stack:[
+                    {image: datos.grafico_prioridad, width:200, height:120, alignment:"center"},
+                    {text: "Figura 02: Resumen de prioridad.", alignment:"center", italics: true, margin:[0,5,0,5]}
+                  ]
+                },
             ]
         },
         {
@@ -171,36 +185,36 @@ export const informeSeguimiento = (datos) => {
                     {text: 'Responsables', fillColor:"#8DB3E2", color:"#FFF", bold:true, alignment:"center"}, 
 
                 ],
-                [
-                    "A",
-                    "",
-                    "",
-                    ""
-                ],
-                [
-                    "A",
-                    "",
-                    "",
-                    ""
-                ],
-                [
-                    "A",
-                    "",
-                    "",
-                    ""
-                ],
-                [
-                    "A",
-                    "",
-                    "",
-                    ""
-                ],
-                [
-                    "A",
-                    "",
-                    "",
-                    ""
-                ]
+                ...(datos.riesgos?.length > 0 ? 
+                    datos.riesgos.flatMap(riesgo => [
+                      [
+
+                        {
+                          text: (riesgo.id_riesgo > 9 ? "RK"+riesgo.id_riesgo : "RK0"+riesgo.id_riesgo),
+                          alignment:"center", margin:[0,3,0,0]
+                        },
+                        {
+                          text: riesgo.descripcion,
+                          alignment:"center", margin:[0,3,0,0]
+                        },
+                        {
+                          text: riesgo.estado,
+                          alignment:"center", margin:[0,3,0,0]
+                        },
+                        {
+                          text: riesgo.prioridad,
+                          alignment:"center", margin:[0,3,0,0]
+                        }
+                      ]
+                    ])
+                  
+                  : 
+                  [
+                    [
+                      {text: "Este proyecto no cuenta con ningun riesgo por el momento", colSpan: 4, italics: true, alignment: "center", margin: [0, 6, 0, 6] },
+                      "", "", ""
+                    ]
+                  ]) 
             ]
           },
           margin:[0,0,0,20]
@@ -264,5 +278,5 @@ export const informeSeguimiento = (datos) => {
         sectionTitle: { fontSize: 14, bold: true},
       }
     }
-    pdfMake.createPdf(docDefinition, tableLayouts).open();
+    pdfMake.createPdf(docDefinition, tableLayouts).download("Informe de Seguimiento de Riesgos_" +datos.nombre_proyecto +"_Vesta Risk Manager.pdf");
   }

@@ -202,6 +202,15 @@ class Proyecto{
         return $resultado;
     }
 
+    public function obtenerUltimaIteracion($id_proyecto){
+        $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin from proyecto p inner join iteracion i on p.id_proyecto = i.id_proyecto where p.id_proyecto = ? order by i.id_iteracion desc limit 1";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
+    }
+
     public function obtenerUltimasIteraciones($id_proyecto){
         $query = "select i.id_iteracion, i.nombre from iteracion i where i.id_proyecto = ? order by i.fecha_fin desc limit 5";
         $stmt = $this->conexion->prepare($query);

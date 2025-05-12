@@ -352,6 +352,11 @@ $router->add("GET", "proyecto/{id}", function($id) use ($controladorProyecto){
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/iteracion/ultima", function($id_proyecto) use ($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerUltimaIteracion($id_proyecto); 
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/iteracion/ultimas", function($id_proyecto) use ($controladorProyecto){
     $resultado = $controladorProyecto->obtenerUltimasIteraciones($id_proyecto); 
     echo json_encode($resultado);
@@ -424,6 +429,11 @@ $router->add("PUT", "categoria/{id}/eliminar", function($id) use ($controladorRi
 
 $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use ($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerRiesgoProyecto($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/riesgos/informe", function($id_proyecto) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerDatosInformeSeguimiento($id_proyecto);
     echo json_encode($resultado);
 });
 

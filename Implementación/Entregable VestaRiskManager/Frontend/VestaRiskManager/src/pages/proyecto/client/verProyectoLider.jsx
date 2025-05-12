@@ -41,10 +41,12 @@ export const dashboardLoader = async ({ params }) => {
 
 export default function VerProyectoLider() {
   const {datosRiesgos} = useLoaderData()
-  const {datos_proyecto, iteraciones, categorias, datos_evaluacion} = datosRiesgos;
+  const {datos_proyecto, iteraciones, categorias, datos_evaluacion, evaluacion_tongji} = datosRiesgos;
+  
+  
   const ultimasIteraciones = (iteraciones??[]).map(item=>item.nombre).reverse()
   
-  const categoriasProyecto = categorias??[].map(item=>item.nombre)
+  const categoriasProyecto = (categorias??[]).map(item=>item.nombre)
   const datos_evaluacion_reversa = [...datos_evaluacion??[]].reverse()
   const datos_bajo = datos_evaluacion_reversa.map(item=>{
     return item[0].cantidad 
@@ -61,6 +63,11 @@ export default function VerProyectoLider() {
   const datos_critico = datos_evaluacion_reversa.map(item=>{
     return item[3].cantidad 
   })
+
+  const puntos = evaluacion_tongji.map(item => ({ x: parseInt(item.x), y: parseInt(item.y), label: item.label > 9 ? `RK${item.label}` : `RK0${item.label}`}));
+  
+
+  
   
   return (
     <>
@@ -222,7 +229,7 @@ export default function VerProyectoLider() {
                 Matriz tongji
               </Card.Header>
               <Card.Body>
-                <MantrizTonji />
+                <MantrizTonji puntos={puntos} />
               </Card.Body>
             </Card>
           </Col>

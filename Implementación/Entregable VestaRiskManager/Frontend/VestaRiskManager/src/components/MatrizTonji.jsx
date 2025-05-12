@@ -15,9 +15,9 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
   function getRiskColor(x, y) {
     const riesgo = x * y; // esto es solo un ejemplo, podés ajustar según lógica real
   
-    if (riesgo <= 9) return "#2ecc71"; // verde
-    if (riesgo <= 36) return "#f1c40f"; // amarillo
-    if (riesgo <= 64) return "#f39c12"; // naranja
+    if (riesgo < 9) return "#2ecc71"; // verde
+    if (riesgo < 36) return "#f1c40f"; // amarillo
+    if (riesgo < 64) return "#f39c12"; // naranja
     return "#e74c3c"; // rojo
   }
   
@@ -29,8 +29,8 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
       const xScale = chart.scales.x;
       const yScale = chart.scales.y;
   
-      for (let x = 1; x <= 9; x++) {
-        for (let y = 1; y <= 9; y++) {
+      for (let x = 1; x <= 10; x++) {
+        for (let y = 1; y <= 10; y++) {
           const color = getRiskColor(x, y);
   
           const xStart = xScale.getPixelForValue(x);
@@ -44,21 +44,6 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
       }
     },
   };
-
-  const data = {
-    datasets: [
-      {
-        label: 'Puntos',
-        data: [
-          { x: 4, y: 8 },
-          { x: 7, y: 5 },
-          { x: 9, y: 9 },
-        ],
-        backgroundColor: 'black',
-        pointRadius: 6,
-      },
-    ],
-  };
   
   
   const options = {
@@ -66,13 +51,13 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
     scales: {
       x: {
         min: 1,
-        max: 10,
+        max: 11,
         ticks: { stepSize: 1 },
         title: { display: true, text: 'Impacto' },
       },
       y: {
         min: 1,
-        max: 10,
+        max: 11,
         ticks: { stepSize: 1 },
         title: { display: true, text: 'Probabilidad' },
       },
@@ -81,15 +66,28 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: context =>
-            `(${context.parsed.x}, ${context.parsed.y})`,
+          label: (context) =>{
+            const punto = context.raw;
+            return `${punto.label}, Impacto: ${punto.x}, Probabilidad: ${punto.y}`;
+          }
         },
       },
     },
   };
   
-  export default function MantrizTonji() {
+  export default function MantrizTonji({puntos}) {
+    
     return (
-      <Scatter data={data} options={options} plugins={[backgroundPlugin]} height={250} width={400}/>
+      <Scatter data={
+        {
+          datasets: [
+            {
+              data: puntos,
+              backgroundColor: 'black',
+              pointRadius: 6,
+            },
+          ]
+        }
+      } options={options} plugins={[backgroundPlugin]} height={280} width={400}/>
     );
   }

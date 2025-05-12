@@ -84,7 +84,7 @@ import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDes
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 import VerPlanesPasados, { planesAntiguosLoader } from "./pages/plan/lider/VerPlanesPasados.jsx";
-import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
+import SeguimientoRiesgo, { seguimientoLoader } from "./pages/seguimiento/SeguimientoRiesgo.jsx";
 
 
 const App = () => {
@@ -209,7 +209,8 @@ const App = () => {
     },
     {
       path:"/inicio/proyecto/lider/:id_proyecto/monitoreo/seguimiento",
-      element: <RutaProtegida element={<SeguimientoRiesgo />} />
+      element: <RutaProtegida element={<SeguimientoRiesgo />} />,
+      loader: seguimientoLoader
     }
   ]
 

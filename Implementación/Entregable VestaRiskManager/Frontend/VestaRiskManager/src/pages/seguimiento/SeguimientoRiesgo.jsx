@@ -1,18 +1,38 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import NavegadorLider from '../../components/NavegadorLider'
 import Footer from '../../components/Footer'
-import { Card, Col, Container, Row } from 'react-bootstrap'
+import { Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
 import { Pie } from 'react-chartjs-2'
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { obtenerDatosInformeSeguimiento } from '../../services/informes'
+import { useLoaderData } from 'react-router-dom'
+import { informeSeguimiento } from "../informes/seguimiento"
+import { obtenerIteracionActual } from '../../services/proyectos'
+import { filtrarYFormatear } from '../../utils/filtrarUsuario'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+export const seguimientoLoader = async ({params}) =>{
+    const resultado = await obtenerDatosInformeSeguimiento(params.id_proyecto)
+    const iteracion_actual = await obtenerIteracionActual(params.id_proyecto)
+    resultado["iteracion_actual"] = iteracion_actual
+    return resultado;
+}
+
 export default function SeguimientoRiesgo() {
+    const {riesgos, estado, prioridad, iteracion_actual} = useLoaderData()
+    const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+    const ultima_iteracion = proyecto.iteraciones[proyecto.iteraciones.length-1]
+    const resumen_estado = useRef(null)
+    const resumen_prioridad = useRef(null)
+    
+    
+    
   return (
     <>
         <NavegadorLider />
         <Container>
-            <Row>
+            <Row className='mt-2'>
                 <Col xs={6}>
                     <Card>
                         <Card.Header>
@@ -20,13 +40,14 @@ export default function SeguimientoRiesgo() {
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
                             <Pie 
+                            ref={resumen_estado}
                             data={
                                 {
                                     labels:["No se ha iniciado", "En curso", "Cerrado"],
                                     datasets:[
                                         {
-                                            data:[1,5,3],
-                                            backgroundColor: ['#aaa', '#F44336', '#009929'],
+                                            data:estado,
+                                            backgroundColor: ['#6c757d', '#6f42c1', '#dc3545'],
                                             borderWidth:1
                                         }
                                     ]
@@ -50,13 +71,14 @@ export default function SeguimientoRiesgo() {
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
                             <Pie 
+                            ref={resumen_prioridad}
                             data={
                                 {
-                                    labels:["uno", "dos", "tres"],
+                                    labels:["Desconocida", "Nula", "Media", "Alta", "Critica"],
                                     datasets:[
                                         {
-                                            data:[10,20,30],
-                                            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                                            data:prioridad,
+                                            backgroundColor: ['#6c757d', '#339af0', '#FFCE56','#FE5000','#aC0813'],
                                             borderWidth:1
                                         }
                                     ]
@@ -74,12 +96,52 @@ export default function SeguimientoRiesgo() {
                     </Card>
                 </Col>
             </Row>
-
-            <Row>
-
-            </Row>
-
-            <Row>
+            <Button
+            variant="success"
+            onClick={() => {
+                const grafico_estado = resumen_estado.current.toBase64Image();
+                const grafico_prioridad = resumen_prioridad.current.toBase64Image();
+                
+                const datos ={
+                    nombre_proyecto: proyecto.nombre,
+                    iteracion_nombre: (iteracion_actual??ultima_iteracion).nombre,
+                    lideres_proyecto: filtrarYFormatear(proyecto.participantes, "Lider del proyecto"),
+                    desarrolladores_proyecto: filtrarYFormatear(proyecto.participantes, "Desarrollador"),
+                    riesgos: riesgos,
+                    estados: estado,
+                    prioridades: prioridad,
+                    grafico_estado,
+                    grafico_prioridad
+                }
+                informeSeguimiento(datos);
+            }}
+            className='mt-3'
+          >
+            Generar Informe
+          </Button>
+            <Row className='mt-1'>
+                <Table>
+                    <thead className='cabecera'>
+                        <tr>
+                            <th className='th'style={{width: "8em"}}>ID</th>
+                            <th className='th' style={{width: "8em"}}>Factor Riesgo</th>
+                            <th className='th'>Descripción</th>
+                            <th className='th'>Estado</th>
+                            <th className='th'>Prioridad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {riesgos.map((riesgo, index)=>(
+                            <tr key={index}>
+                                <td className='td'>{riesgo.id_riesgo}</td>
+                                <td className='td'>{riesgo.factor_riesgo}</td>
+                                <td className='td'>{riesgo.descripcion}</td>
+                                <td className='td'>{riesgo.estado}</td>
+                                <td className='td'>{riesgo.prioridad}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
 
             </Row>
         </Container>

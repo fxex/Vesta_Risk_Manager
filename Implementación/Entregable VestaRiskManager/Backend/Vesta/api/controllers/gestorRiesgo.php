@@ -41,14 +41,15 @@ class GestorRiesgo {
 
     public function obtenerRiesgoProyecto($id_proyecto){
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $resultado = null;
         if (!empty($iteracion)) {
             $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $iteracion["id_iteracion"]);
         }else{
-            $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, 0);
+            $resultado = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $ultima_iteracion["id_iteracion"]);
         }
         if (!empty($resultado)) {
-            $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : 0;
+            $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : $ultima_iteracion["id_iteracion"];
             foreach ($resultado as &$riesgo) {
                 $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"], $id_iteracion);
             }
@@ -141,6 +142,23 @@ class GestorRiesgo {
         curl_close($ch);
     }
 
+    public function obtenerIteracionUltima($id_proyecto){
+        $url = "http://localhost/Vesta/proyecto/". $id_proyecto . "/iteracion/ultima";
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
+
+        $response = curl_exec($ch);
+        
+        if (curl_errno($ch)) {
+            return curl_error($ch);
+        } else {
+            return $response;
+        }
+        
+        curl_close($ch);
+    }
+
     public function obtenerCantidadPlanes($id_proyecto,$id_riesgo, $id_iteracion) {
             $resultado = $this->riesgo->obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion);
             if (!empty($resultado)) {
@@ -190,7 +208,8 @@ class GestorRiesgo {
             $planes = $this->plan->obtenerPlanesAnteriores($id_proyecto, $iteracion["id_iteracion"]);
             return $planes;
         }else{
-            return [];
+            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+            return $this->plan->obtenerPlanesAnteriores($id_proyecto, $ultima_iteracion["id_iteracion"]+1);
         }
     }
 
@@ -210,7 +229,8 @@ class GestorRiesgo {
             $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion["id_iteracion"]);
             return $evaluaciones;
         }else{
-            return [];
+            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+            return $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $ultima_iteracion["id_iteracion"]+1);
         }
     }
 
@@ -308,19 +328,25 @@ class GestorRiesgo {
 
     public function obtenerDatosRiesgo($id_proyecto){
         $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        $iteraciones = json_decode($this->obtenerUlitmasIteraciones($id_proyecto));
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteraciones = json_decode($this->obtenerUltimasIteraciones($id_proyecto));
         $categorias = $this->categoria->obtenerCategoriasProyecto($id_proyecto);
         $evaluaciones = [];
+        $evaluacion_tongji = $this->evaluacion->obtenerMatrizTongji($id_proyecto, empty($iteracion_actual["id_iteracion"]) ? $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"]);
         foreach ($iteraciones as $iteracion) {
             $cantidad_riesgo = $this->evaluacion->obtenerCantidadRiesgoFactor($id_proyecto, $iteracion->id_iteracion);
             array_push($evaluaciones, $cantidad_riesgo);
         }
         if (!empty($iteracion_actual)) {
             $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion_actual["id_iteracion"]);
-            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones];
+            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones, "evaluacion_tongji"=>$evaluacion_tongji];
         }else{
-            return ["datos_proyecto"=> NULL, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>NULL];
+            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $ultima_iteracion["id_iteracion"]);
+            return ["datos_proyecto"=> $resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones, "evaluacion_tongji"=>$evaluacion_tongji];
         }
+    }
+    public function obtenerDatosInformeSeguimiento($id_proyecto){
+        return $this->riesgo->obtenerDatosInformeSeguimiento($id_proyecto);
     }
 
     public function obtenerTareas($id_proyecto, $id_usuario){
@@ -328,8 +354,9 @@ class GestorRiesgo {
         $resultado = NULL;
         if (!empty($iteracion)) {
             $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion["id_iteracion"], $id_usuario);
-        }else{
-            $resultado = $this->tarea->obtenerTareas($id_proyecto, 0);
+        }else {
+            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+            $resultado = $this->tarea->obtenerTareas($id_proyecto, $ultima_iteracion["id_iteracion"], $id_usuario);
         }
         return $resultado;
     }
@@ -341,7 +368,7 @@ class GestorRiesgo {
         return $resultado;
     }
 
-    public function obtenerUlitmasIteraciones($id_proyecto){
+    public function obtenerUltimasIteraciones($id_proyecto){
         $url = "http://localhost/Vesta/proyecto/". $id_proyecto . "/iteracion/ultimas";
         
         $ch = curl_init($url);
@@ -359,10 +386,13 @@ class GestorRiesgo {
     }
 
     public function obtenerDatosTareasInforme($id_proyecto){
-        $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        $riesgos = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $iteracion_actual["id_iteracion"]);
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (empty($iteracion)) {
+            $iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        }
+        $riesgos = $this->riesgo->obtenerRiesgoProyecto($id_proyecto, $iteracion["id_iteracion"]);
         foreach ($riesgos as &$riesgo) {
-            $planes = $this->plan->obtenerPlanesRiesgoProyecto($id_proyecto, $riesgo["id_riesgo"], $iteracion_actual["id_iteracion"]);
+            $planes = $this->plan->obtenerPlanesRiesgoProyecto($id_proyecto, $riesgo["id_riesgo"], $iteracion["id_iteracion"]);
             foreach ($planes as &$plan) { 
                 if(isset($plan["id_plan"])){
                     $plan["tareas"] = $this->plan->obtenerTareasPlanInforme($plan["id_plan"]);
