@@ -3,13 +3,7 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
-  Alert,
-  Button,
-  Figure,
-  Modal,
-  OverlayTrigger,
   Table,
-  Tooltip,
 } from "react-bootstrap";
 
 

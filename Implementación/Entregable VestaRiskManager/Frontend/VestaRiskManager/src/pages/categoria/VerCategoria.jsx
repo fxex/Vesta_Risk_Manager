@@ -4,12 +4,6 @@ import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData } from "react-router-dom";
-import { obtenerCategoriaId } from "../../services/categorias";
-
-export async function cargarCategoria({ params }) {
-  const categoria = await obtenerCategoriaId(params.id_categoria);
-  return { categoria };
-}
 
 export default function VerCategoria() {
   const { categoria } = useLoaderData();

@@ -3,16 +3,10 @@ import { Button, Form, Row, Col, Card, Table, Pagination, InputGroup } from "rea
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCheck,
   faMagnifyingGlass,
-  faPlus,
-  faTrashCan,
-  faXmark,
-  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import Contenedor from "../../components/Contenedor";
 import Footer from "../../components/Footer";
-import Navegador from "../../components/Navegador";
 import { crearIncidencia, obtenerRiesgosProyecto } from "../../services/riesgos";
 import NavegadorLider from "../../components/NavegadorLider";
 import { useUsuario } from "../../context/usuarioContext";
@@ -139,12 +133,12 @@ const handleRiesgoSelection = (id_riesgo) => {
 };
 
 // Eliminar riesgo de la selección
-const eliminarRiesgoSeleccionado = (id_riesgo) => {
-  setFormData(prev => ({
-    ...prev,
-    riesgos: prev.riesgos.filter(id => id !== id_riesgo)
-  }));
-};
+// const eliminarRiesgoSeleccionado = (id_riesgo) => {
+//   setFormData(prev => ({
+//     ...prev,
+//     riesgos: prev.riesgos.filter(id => id !== id_riesgo)
+//   }));
+// };
 
   return (
     <>

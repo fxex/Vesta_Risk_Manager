@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
-import { eliminarUsuario, obtenerUsuariosId } from "../../services/usuarios";
+import { eliminarUsuario } from "../../services/usuarios";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Alert, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,10 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../components/BotonSalir";
 
-export async function cargarEliminarUsuario({ params }) {
-  const usuario = await obtenerUsuariosId(params.id_usuario);
-  return { usuario };
-}
 
 export default function EliminarUsuario() {
   const { usuario } = useLoaderData();

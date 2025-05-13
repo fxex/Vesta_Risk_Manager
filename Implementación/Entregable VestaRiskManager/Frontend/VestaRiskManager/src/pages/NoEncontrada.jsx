@@ -1,6 +1,5 @@
 import React from "react";
 import Navegador from "../components/Navegador";
-import Footer from "../components/Footer";
 import LogoVesta from "./../assets/img/Logo-VestaRiskManager1.png";
 import { Figure } from "react-bootstrap";
 

@@ -3,26 +3,16 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../../utils/verificarErrores";
-import { crearEvaluacion, obtenerRiesgoId } from "../../../services/riesgos";
-import { obtenerIteracionActual } from "../../../services/proyectos";
+import { crearEvaluacion } from "../../../services/riesgos";
 import { useUsuario } from "../../../context/usuarioContext";
-import BotonSalir from "../../../components/BotonSalir";
 import { formatearFecha } from "../../../utils/fecha";
-
-export const evaluacionCreacionLoader = async ({ params }) => {
-  const id_riesgo= params.id_riesgo
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { riesgo, iteracion };
-};
 
 export default function CrearEvaluacionLider() {
   const { riesgo, iteracion } = useLoaderData();
-  console.log(iteracion.id_iteracion);
   
   const navigate = useNavigate();
 

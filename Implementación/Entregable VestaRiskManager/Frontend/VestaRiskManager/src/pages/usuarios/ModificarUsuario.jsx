@@ -2,28 +2,21 @@ import React, { useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import {
   actualizarUsuario,
-  obtenerPerfiles,
   obtenerUsuariosCorreo,
-  obtenerUsuariosId,
   obtenerUsuarioNombre,
 } from "../../services/usuarios";
 import { useNavigate, useParams } from "react-router-dom";
-import BotonSalir from "../../components/BotonSalir";
 import { useUsuario } from "../../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarCorreo } from "../../utils/verificarCorreo";
 import { verificarError } from "../../utils/verificarErrores";
 
-export async function cargarModificarUsuario({ params }) {
-  const usuario = await obtenerUsuariosId(params.id_usuario);
-  const perfiles = await obtenerPerfiles();
-  return { usuarioLoader: usuario, perfiles };
-}
+
 
 export default function ModificarUsuario() {
   const { usuario } = useUsuario();

@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Contenedor from "../../../components/Contenedor";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import {
   Alert,
   Button,
-  Figure,
-  Modal,
   OverlayTrigger,
   Table,
   Tooltip,
@@ -20,24 +18,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
-  useLocation,
   useNavigate,
-  useParams,
 } from "react-router-dom";
-import { obtenerIncidenciasProyecto } from "../../../services/riesgos";
-import "./../../../styles/ListaRiesgo.css";
 import { formatearFecha, formatearFechaHora } from "../../../utils/fecha";
-import { obtenerIteracionActual } from "../../../services/proyectos";
 import { informeIncidencia } from "../../informes/incidencia";
-import { useUsuario } from "../../../context/usuarioContext";
 import { obtenerIncidenciaId } from "../../../services/informes";
 import { filtrarYFormatear } from "../../../utils/filtrarUsuario";
-
-export const incidenciaLoader = async ({ params }) => {
-  const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { incidencias, iteracion};
-};
+import "./../../../styles/ListaRiesgo.css";
 
 export default function ListaIncidencia() {
   const { incidencias, iteracion } = useLoaderData();

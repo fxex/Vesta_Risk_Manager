@@ -3,13 +3,7 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
-import { obtenerUsuariosId } from "../../services/usuarios";
 import { useLoaderData } from "react-router-dom";
-
-export async function cargarUsuario({ params }) {
-  const usuario = await obtenerUsuariosId(params.id_usuario);
-  return { usuario };
-}
 
 export default function VerUsuario() {
   const { usuario } = useLoaderData();

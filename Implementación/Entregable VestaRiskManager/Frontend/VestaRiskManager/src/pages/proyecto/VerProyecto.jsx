@@ -3,14 +3,8 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
-import { obtenerProyectosId } from "../../services/proyectos";
 import { useLoaderData } from "react-router-dom";
 import { formatearFecha } from "../../utils/fecha";
-
-export async function cargarProyecto({ params }) {
-  const proyecto = await obtenerProyectosId(params.id_proyecto);
-  return { proyecto };
-}
 
 export default function VerProyecto() {
   const { proyecto } = useLoaderData();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Navegador from "../../../components/Navegador";
 import Footer from "../../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -6,23 +6,15 @@ import Contenedor from "../../../components/Contenedor";
 import "./../../../styles/Home.css";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-regular-svg-icons";
 import {
   obtenerProyectosId,
-  obtenerProyectosUsuarioDesarrollador,
 } from "../../../services/proyectos";
-import { useUsuario } from "../../../context/usuarioContext";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export const obtenerListaProyectoDesarrollador = async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const proyectos = await obtenerProyectosUsuarioDesarrollador(usuario.email);
-  return { proyectos };
-};
+
 
 export default function ListaProyectoDesarrollador() {
   const navigate = useNavigate();
-  const { usuario } = useUsuario();
   const { proyectos } = useLoaderData();
 
   return (

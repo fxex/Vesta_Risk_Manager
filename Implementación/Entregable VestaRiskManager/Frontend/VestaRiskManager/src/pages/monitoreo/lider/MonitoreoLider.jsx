@@ -5,7 +5,6 @@ import Contenedor from "../../../components/Contenedor";
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUsuario } from "../../../context/usuarioContext";
-import { informeSeguimiento } from "../../informes/seguimiento";
 
 export default function MonitoreoLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

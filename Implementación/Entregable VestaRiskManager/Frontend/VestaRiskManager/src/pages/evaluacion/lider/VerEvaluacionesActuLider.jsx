@@ -3,25 +3,14 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
-  Alert,
   Button,
-  Figure,
-  Modal,
   OverlayTrigger,
   Table,
   Tooltip,
 } from "react-bootstrap";
-import { obtenerEvaluacionesActualesProyecto } from "../../../services/riesgos";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faSearch, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-
-
-export const evaluacionesLoader = async ({ params }) => {
-  const evaluaciones = await obtenerEvaluacionesActualesProyecto(params.id_proyecto);
-  return { evaluaciones };
-};
-
 
 export default function VerEvaluacionesActuLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

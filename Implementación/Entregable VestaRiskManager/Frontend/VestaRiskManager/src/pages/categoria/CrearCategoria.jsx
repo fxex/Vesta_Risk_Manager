@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarError } from "../../utils/verificarErrores";
@@ -16,7 +15,6 @@ export default function CrearCategoria() {
     nombre: "",
     descripcion: "",
   });
-  const [creado, setCreado] = useState(null);
   const [error, setError] = useState({
     nombre: false,
     descripcion: false,

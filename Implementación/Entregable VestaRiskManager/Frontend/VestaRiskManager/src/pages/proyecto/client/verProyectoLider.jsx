@@ -17,7 +17,6 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar, Radar } from 'react-chartjs-2';
-import { obtenerDatosRiesgos } from "../../../services/riesgos";
 import { useLoaderData } from "react-router-dom";
 import MantrizTonji from "../../../components/MatrizTonji";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,11 +35,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-export const dashboardLoader = async ({ params }) => {
-  const datosRiesgos = await obtenerDatosRiesgos(params.id_proyecto);
-  return {datosRiesgos};
-};
 
 export default function VerProyectoLider() {
   const grafico_evolucion = useRef(null)

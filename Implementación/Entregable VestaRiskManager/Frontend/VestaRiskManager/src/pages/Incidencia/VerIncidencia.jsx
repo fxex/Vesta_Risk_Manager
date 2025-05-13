@@ -4,12 +4,6 @@ import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData } from "react-router-dom";
-import { obtenerIncidenciaId } from "../../services/informes";
-
-export async function cargarIncidencia({ params }) {
-  const incidencia = await obtenerIncidenciaId(params.id_incidencia);
-  return { incidencia };
-}
 
 export default function VerIncidencia() {
   const { incidencia } = useLoaderData();

@@ -17,43 +17,33 @@ import {
   obtenerPermisos as permisoLoader,
 } from "./services/usuarios.js";
 import RutaProtegida from "./utils/RutaProtegida.jsx";
-import VerUsuario, { cargarUsuario } from "./pages/usuarios/VerUsuario.jsx";
-import ModificarUsuario, {
-  cargarModificarUsuario,
-} from "./pages/usuarios/ModificarUsuario.jsx";
-import EliminarUsuario, {
-  cargarEliminarUsuario,
-} from "./pages/usuarios/EliminarUsuario.jsx";
+import VerUsuario from "./pages/usuarios/VerUsuario.jsx";
+import ModificarUsuario from "./pages/usuarios/ModificarUsuario.jsx";
+import EliminarUsuario from "./pages/usuarios/EliminarUsuario.jsx";
 import { UsuarioProvider } from "./context/usuarioContext.jsx";
 import ListaPerfiles from "./pages/perfiles/ListaPerfiles.jsx";
-import CrearPerfil from "./pages/perfiles/CrearPerfil.jsx";
-import VerPerfil, { cargarPerfilId } from "./pages/perfiles/VerPerfil.jsx";
-import ModificarPerfil, {
-  cargarModificarPerfil,
-} from "./pages/perfiles/ModificarPerfil.jsx";
-import EliminarPerfil, {
-  cargarEliminarPerfil,
-} from "./pages/perfiles/EliminarPerfil.jsx";
+// import CrearPerfil from "./pages/perfiles/CrearPerfil.jsx";
+// import VerPerfil, { cargarPerfilId } from "./pages/perfiles/VerPerfil.jsx";
+// import ModificarPerfil, {
+//   cargarModificarPerfil,
+// } from "./pages/perfiles/ModificarPerfil.jsx";
+// import EliminarPerfil, {
+//   cargarEliminarPerfil,
+// } from "./pages/perfiles/EliminarPerfil.jsx";
 import ListaProyecto from "./pages/proyecto/ListaProyecto.jsx";
 import CrearProyecto from "./pages/proyecto/CrearProyecto.jsx";
 import {
   obtenerCategoriaGeneral,
   obtenerProyectos as proyectoLoader,
 } from "./services/proyectos.js";
-import VerProyecto, { cargarProyecto } from "./pages/proyecto/VerProyecto.jsx";
+import VerProyecto from "./pages/proyecto/VerProyecto.jsx";
 import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
-import ListaProyectoLider, {
-  obtenerListaProyectoLider,
-} from "./pages/proyecto/client/ListaProyectoLider.jsx";
-import VerProyectoLider, { dashboardLoader } from "./pages/proyecto/client/verProyectoLider.jsx";
-import ListaProyectoDesarrollador, {
-  obtenerListaProyectoDesarrollador,
-} from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
+import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
+import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
+import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
 import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
 import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
-import CrearEvaluacionLider, {
-  evaluacionCreacionLoader,
-} from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
+import CrearEvaluacionLider from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
 
 import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/CrearEvaluacionDesarrollador.jsx";
 import CrearPlanLider, {
@@ -69,16 +59,14 @@ import EditarPlanLider, {
   planLoader,
 } from "./pages/plan/lider/EditarPlanLider.jsx";
 import NoEncontrada from "./pages/NoEncontrada.jsx";
-import VerCategoria, {
-  cargarCategoria,
-} from "./pages/categoria/VerCategoria.jsx";
+import VerCategoria from "./pages/categoria/VerCategoria.jsx";
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
-import ListaIncidencia, { incidenciaLoader } from "./pages/Incidencia/lider/ListaIncidencia.jsx";
+import ListaIncidencia from "./pages/Incidencia/lider/ListaIncidencia.jsx";
 import ListaTarea, { TareaLoader } from "./pages/tarea/ListaTarea.jsx";
 import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
 import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
-import VerEvaluacionesActuLider, { evaluacionesLoader } from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
+import VerEvaluacionesActuLider from "./pages/evaluacion/lider/VerEvaluacionesActuLider.jsx";
 import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacionesPasadasLider.jsx";
 import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
@@ -86,6 +74,20 @@ import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollado
 import VerPlanesPasados, { planesAntiguosLoader } from "./pages/plan/lider/VerPlanesPasados.jsx";
 import SeguimientoRiesgo, { seguimientoLoader } from "./pages/seguimiento/SeguimientoRiesgo.jsx";
 
+import { 
+  cargarUsuario,  
+  cargarModificarUsuario,
+  cargarEliminarUsuario,
+  cargarCategoria,
+  cargarProyecto,
+  obtenerListaProyectoLider,
+  obtenerListaProyectoDesarrollador,
+  dashboardLoader,
+  evaluacionesActualesLoader,
+  evaluacionCreacionLoader,
+  incidenciaLoader,
+  cargarIncidencia
+} from "./utils/loaders.js";
 
 const App = () => {
   const routerDesarrollador = [
@@ -196,7 +198,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",
       element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
-      loader: evaluacionesLoader,
+      loader: evaluacionesActualesLoader,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",
