@@ -65,6 +65,24 @@ class Categoria{
         return $resultado;
     }
 
+    public function obtenerDatosGraficoTelaraña($id_proyecto){
+        $query="SELECT c.nombre, COALESCE(sum(r.factor_riesgo), 0) as total_riesgo  
+                from categoria c
+                inner join proyecto_categoria pc on c.id_categoria = pc.id_categoria 
+                left join riesgo r on r.id_categoria = c.id_categoria
+                where pc.id_proyecto = ?
+                group by c.id_categoria, c.nombre";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $categorias = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $categorias->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        return $resultado;
+    }
+
     public function obtenerCategorias($pagina){
         $categoriaPorPagina = 10;
         $offset = 0;

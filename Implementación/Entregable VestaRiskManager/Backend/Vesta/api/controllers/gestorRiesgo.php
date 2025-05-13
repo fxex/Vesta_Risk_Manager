@@ -330,20 +330,29 @@ class GestorRiesgo {
         $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteraciones = json_decode($this->obtenerUltimasIteraciones($id_proyecto));
+        
         $categorias = $this->categoria->obtenerCategoriasProyecto($id_proyecto);
+        $datosTelaraña = $this->categoria->obtenerDatosGraficoTelaraña($id_proyecto);
+
         $evaluaciones = [];
         $evaluacion_tongji = $this->evaluacion->obtenerMatrizTongji($id_proyecto, empty($iteracion_actual["id_iteracion"]) ? $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"]);
+
         foreach ($iteraciones as $iteracion) {
             $cantidad_riesgo = $this->evaluacion->obtenerCantidadRiesgoFactor($id_proyecto, $iteracion->id_iteracion);
             array_push($evaluaciones, $cantidad_riesgo);
         }
-        if (!empty($iteracion_actual)) {
-            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion_actual["id_iteracion"]);
-            return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones, "evaluacion_tongji"=>$evaluacion_tongji];
-        }else{
-            $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $ultima_iteracion["id_iteracion"]);
-            return ["datos_proyecto"=> $resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones, "evaluacion_tongji"=>$evaluacion_tongji];
+
+        
+        $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, empty($iteracion_actual["id_iteracion"]) ? $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"]);
+        
+        $multiplicador = (100 / $resultado["cantidad_categoria"]) / 100;
+
+        foreach ($datosTelaraña as &$categoria) {
+            $categoria["total_riesgo"] = $categoria["total_riesgo"] * $multiplicador;
         }
+
+        return ["datos_proyecto"=>$resultado, "iteraciones"=>$iteraciones, "categorias"=>$categorias, "datos_evaluacion"=>$evaluaciones, "evaluacion_tongji"=>$evaluacion_tongji, "datos_telaraña"=>$datosTelaraña];
+        
     }
     public function obtenerDatosInformeSeguimiento($id_proyecto){
         return $this->riesgo->obtenerDatosInformeSeguimiento($id_proyecto);

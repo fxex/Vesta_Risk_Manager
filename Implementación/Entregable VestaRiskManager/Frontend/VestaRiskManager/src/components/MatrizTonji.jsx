@@ -7,7 +7,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import React from 'react';
+import React, {useRef, forwardRef, useImperativeHandle} from 'react';
 
 ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
   
@@ -75,10 +75,17 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
     },
   };
   
-  export default function MantrizTonji({puntos}) {
-    
+  function MantrizTonji({puntos}, ref) {
+    const scatterRef = useRef(null);
+
+    useImperativeHandle(ref, ()=>({
+      getScatterRef: () => scatterRef.current
+    }))
+
     return (
-      <Scatter data={
+      <Scatter 
+      ref={scatterRef}
+      data={
         {
           datasets: [
             {
@@ -91,3 +98,5 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
       } options={options} plugins={[backgroundPlugin]} height={280} width={400}/>
     );
   }
+
+export default forwardRef(MantrizTonji);

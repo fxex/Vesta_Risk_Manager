@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import { Card, Col, Container, Row } from "react-bootstrap";
@@ -20,6 +20,9 @@ import { Bar, Radar } from 'react-chartjs-2';
 import { obtenerDatosRiesgos } from "../../../services/riesgos";
 import { useLoaderData } from "react-router-dom";
 import MantrizTonji from "../../../components/MatrizTonji";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import "../../../styles/BotonDescarga.css";
 
 ChartJS.register(
   RadialLinearScale,
@@ -40,13 +43,18 @@ export const dashboardLoader = async ({ params }) => {
 };
 
 export default function VerProyectoLider() {
+  const grafico_evolucion = useRef(null)
+  const grafico_resumen = useRef(null)
+  const grafico_matriz = useRef(null)
   const {datosRiesgos} = useLoaderData()
-  const {datos_proyecto, iteraciones, categorias, datos_evaluacion, evaluacion_tongji} = datosRiesgos;
-  
+  const {datos_proyecto, iteraciones, categorias, datos_evaluacion, evaluacion_tongji, datos_telaraña} = datosRiesgos;  
   
   const ultimasIteraciones = (iteraciones??[]).map(item=>item.nombre).reverse()
   
   const categoriasProyecto = (categorias??[]).map(item=>item.nombre)
+  const datosTelarañaFormateados = (datos_telaraña??[]).map(item=>item.total_riesgo)
+  
+
   const datos_evaluacion_reversa = [...datos_evaluacion??[]].reverse()
   const datos_bajo = datos_evaluacion_reversa.map(item=>{
     return item[0].cantidad 
@@ -65,9 +73,33 @@ export default function VerProyectoLider() {
   })
 
   const puntos = evaluacion_tongji.map(item => ({ x: parseInt(item.x), y: parseInt(item.y), label: item.label > 9 ? `RK${item.label}` : `RK0${item.label}`}));
-  
 
-  
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+
+
+  const descargarGraficoEvolucion = () => {
+    const url = grafico_evolucion.current.toBase64Image();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `grafico_evolucion_${proyecto.nombre}.png`;
+    link.click();
+  }
+
+  const descargarGraficoTelaraña = () => {
+    const url = grafico_resumen.current.toBase64Image();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `grafico_telaraña_${proyecto.nombre}.png`;
+    link.click();
+  }
+
+  const descargarMatrizTongji = () => {
+    const url = grafico_matriz.current.getScatterRef().toBase64Image();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `grafico_matriz_tongji_${proyecto.nombre}.png`;
+    link.click();
+  }
   
   return (
     <>
@@ -77,11 +109,14 @@ export default function VerProyectoLider() {
         <Row className="d-flex flex-nowrap mb-5" style={{height:"50vh"}}>
           <Col xs={9}>
             <Card style={{maxHeight:"50vh"}}>
-              <Card.Header>
+              <Card.Header className="d-flex justify-content-between align-items-center">
                 Evolución de cantidad de riesgo
+                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoEvolucion}/>
               </Card.Header>
               <Card.Body >
-                <Bar data={
+                <Bar
+                ref={grafico_evolucion} 
+                data={
                   {
                     labels:ultimasIteraciones,
                     datasets:[
@@ -143,17 +178,23 @@ export default function VerProyectoLider() {
           </Col>
           <Col xs={5}>
             <Card style={{maxHeight:"55vh"}}>
-              <Card.Header>
+              <Card.Header className="d-flex justify-content-between align-items-center">
                 Resumen de riesgos
+                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoTelaraña}/>
               </Card.Header>
               <Card.Body>
-                <Radar data={
+                <Radar 
+                ref={grafico_resumen}
+                data={
                   {
                     labels: categoriasProyecto,
                     datasets: [
                       {
-                        data: [80, 90, 70, 85, 75, 95], // Valores en cada eje
+                        data: datosTelarañaFormateados, // Valores en cada eje
                         backgroundColor: "#2A6EBB ",
+                        fill:true,
+                        borderColor: "#2A6EBB",
+                        pointBackgroundColor: "#2A6EBB",
                       },
                     ]
                   }
@@ -225,11 +266,12 @@ export default function VerProyectoLider() {
           </Col>
           <Col xs={5}>
             <Card style={{maxHeight:"65vh"}}>
-              <Card.Header>
+              <Card.Header className="d-flex justify-content-between align-items-center">
                 Matriz tongji
+                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarMatrizTongji}/>
               </Card.Header>
               <Card.Body>
-                <MantrizTonji puntos={puntos} />
+                <MantrizTonji puntos={puntos} ref={grafico_matriz} />
               </Card.Body>
             </Card>
           </Col>

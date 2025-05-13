@@ -189,6 +189,10 @@ class Riesgo {
                             )",
                 "params" =>["iii", $id_iteracion, $id_proyecto, $id_iteracion]
             ],
+            "cantidad_categoria" => [
+                "query" => "SELECT COUNT(c.id_categoria) FROM categoria c inner join proyecto_categoria pc on c.id_categoria = pc.id_categoria WHERE pc.id_proyecto = ?",
+                "params" =>["i", $id_proyecto]
+            ]
             
         ];
 
