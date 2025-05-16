@@ -1,31 +1,19 @@
 import React, { useState } from "react";
 import {
   useLoaderData,
-  useLocation,
   useNavigate,
   useParams,
 } from "react-router-dom";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
-  crearRiesgo,
   modificarRiesgo,
-  obtenerRiesgoId,
 } from "../../services/riesgos";
-import BotonSalir from "../../components/BotonSalir";
 import { verificarError } from "../../utils/verificarErrores";
-import { obtenerProyectosId } from "../../services/proyectos";
-
-export async function cargarRiesgo({ params }) {
-  const id_riesgo= params.id_riesgo
-  const proyecto = await obtenerProyectosId(params.id_proyecto);
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
-  return { proyecto, riesgo };
-}
 
 export default function EditarRiesgo() {
   const { proyecto, riesgo } = useLoaderData();

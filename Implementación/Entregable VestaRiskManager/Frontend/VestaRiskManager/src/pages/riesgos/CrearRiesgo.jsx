@@ -3,11 +3,10 @@ import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { crearRiesgo } from "../../services/riesgos";
-import BotonSalir from "../../components/BotonSalir";
 import { verificarError } from "../../utils/verificarErrores";
 
 export default function CrearRiesgo() {

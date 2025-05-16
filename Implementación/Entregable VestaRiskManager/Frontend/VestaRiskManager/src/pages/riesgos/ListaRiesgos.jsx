@@ -26,10 +26,9 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { eliminarRiesgo, obtenerRiesgosProyecto } from "../../services/riesgos";
+import { eliminarRiesgo } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardList";
-import { obtenerIteracionActual } from "../../services/proyectos";
 import escudoAmarillo from "../../assets/img/escudo amarillo.png";
 import escudoGris from "../../assets/img/escudo gris.png";
 import escudoAzul from "../../assets/img/Escudo azul.png";
@@ -37,13 +36,6 @@ import escudoRojo from "../../assets/img/escudo rojo.png";
 import escudoCritico from "../../assets/img/Escudo critico.png";
 import escudoVerde from "../../assets/img/escudo verde.png";
 import { formatearFecha } from "../../utils/fecha";
-
-export const riesgoLoader = async ({ params }) => {
-  const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-
-  return { riesgos, iteracion };
-};
 
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();

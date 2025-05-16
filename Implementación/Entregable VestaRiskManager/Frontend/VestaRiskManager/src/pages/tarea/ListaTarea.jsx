@@ -5,7 +5,6 @@ import Footer from "../../components/Footer";
 import {
   Alert,
   Button,
-  Figure,
   Modal,
   OverlayTrigger,
   Table,
@@ -14,34 +13,19 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
-  faPlus,
-  faTrashCan,
-  faFilePdf,
   faCheck,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
-  useLocation,
   useNavigate,
-  useParams,
 } from "react-router-dom";
-import { obtenerTareasProyecto } from "../../services/riesgos";
-import "./../../styles/ListaRiesgo.css";
-import { formatearFecha, formatearFechaHora } from "../../utils/fecha";
-import { obtenerIteracionActual } from "../../services/proyectos";
-import { informeIncidencia } from "../informes/incidencia";
+import { formatearFecha } from "../../utils/fecha";
 import { useUsuario } from "../../context/usuarioContext";
-import { obtenerIncidenciaId } from "../../services/informes";
 import { completarTarea, obtenerDatosTareasInforme } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
 import { filtrarYFormatear } from "../../utils/filtrarUsuario";
-
-export const TareaLoader = async ({ params }) => {
-  const tareas = await obtenerTareasProyecto(params.id_proyecto, params.id_usuario);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { tareas, iteracion};
-};
+import "./../../styles/ListaRiesgo.css";
 
 export default function ListaTarea() {
   const { tareas, iteracion } = useLoaderData();

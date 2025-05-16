@@ -3,21 +3,11 @@ import NavegadorLider from '../../components/NavegadorLider'
 import Footer from '../../components/Footer'
 import { Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
 import { Pie } from 'react-chartjs-2'
-
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { obtenerDatosInformeSeguimiento } from '../../services/informes'
 import { useLoaderData } from 'react-router-dom'
 import { informeSeguimiento } from "../informes/seguimiento"
-import { obtenerIteracionActual } from '../../services/proyectos'
 import { filtrarYFormatear } from '../../utils/filtrarUsuario'
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-export const seguimientoLoader = async ({params}) =>{
-    const resultado = await obtenerDatosInformeSeguimiento(params.id_proyecto)
-    const iteracion_actual = await obtenerIteracionActual(params.id_proyecto)
-    resultado["iteracion_actual"] = iteracion_actual
-    return resultado;
-}
 
 export default function SeguimientoRiesgo() {
     const {riesgos, estado, prioridad, iteracion_actual} = useLoaderData()

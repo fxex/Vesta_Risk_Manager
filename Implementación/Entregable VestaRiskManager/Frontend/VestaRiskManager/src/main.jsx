@@ -41,7 +41,7 @@ import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
 import ListaProyectoLider from "./pages/proyecto/client/ListaProyectoLider.jsx";
 import VerProyectoLider from "./pages/proyecto/client/verProyectoLider.jsx";
 import ListaProyectoDesarrollador from "./pages/proyecto/client/ListaProyectoDesarrollador.jsx";
-import ListaRiesgos, { riesgoLoader } from "./pages/riesgos/ListaRiesgos.jsx";
+import ListaRiesgos from "./pages/riesgos/ListaRiesgos.jsx";
 import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
 import CrearEvaluacionLider from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
 
@@ -50,19 +50,15 @@ import CrearPlanLider, {
   planCreacionLoader,
 } from "./pages/plan/lider/crearPlanLider.jsx";
 import CrearPlanDesarrollador from "./pages/plan/desarrollador/CrearPlanDesarrollador.jsx";
-import EditarRiesgo, { cargarRiesgo } from "./pages/riesgos/EditarRiesgo.jsx";
+import EditarRiesgo from "./pages/riesgos/EditarRiesgo.jsx";
 import MonitoreoLider from "./pages/monitoreo/lider/MonitoreoLider.jsx";
-import VerPlanesActuales, {
-  planesLoader,
-} from "./pages/plan/lider/VerPlanesActuales.jsx";
-import EditarPlanLider, {
-  planLoader,
-} from "./pages/plan/lider/EditarPlanLider.jsx";
+import VerPlanesActuales from "./pages/plan/lider/VerPlanesActuales.jsx";
+import EditarPlanLider from "./pages/plan/lider/EditarPlanLider.jsx";
 import NoEncontrada from "./pages/NoEncontrada.jsx";
 import VerCategoria from "./pages/categoria/VerCategoria.jsx";
 import ListaCategorias from "./pages/categoria/ListaCategorias.jsx";
 import ListaIncidencia from "./pages/Incidencia/lider/ListaIncidencia.jsx";
-import ListaTarea, { TareaLoader } from "./pages/tarea/ListaTarea.jsx";
+import ListaTarea from "./pages/tarea/ListaTarea.jsx";
 import CrearCategoria from "./pages/categoria/CrearCategoria.jsx";
 import ModificarCategoria from "./pages/categoria/ModificarCategoria.jsx";
 import { obtenerCategorias } from "./services/categorias.js";
@@ -71,8 +67,8 @@ import VerEvaluacionesPasadasLider from "./pages/evaluacion/lider/VerEvaluacione
 import MonitoreoDesarrollador from "./pages/monitoreo/desarrollador/MonitoreoDesarrollador.jsx";
 import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesActualesDesarrollador.jsx";
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
-import VerPlanesPasados, { planesAntiguosLoader } from "./pages/plan/lider/VerPlanesPasados.jsx";
-import SeguimientoRiesgo, { seguimientoLoader } from "./pages/seguimiento/SeguimientoRiesgo.jsx";
+import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
+import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
 
 import { 
   cargarUsuario,  
@@ -83,8 +79,15 @@ import {
   obtenerListaProyectoLider,
   obtenerListaProyectoDesarrollador,
   dashboardLoader,
+  riesgoLoader,
+  cargarRiesgo,
+  seguimientoLoader,
   evaluacionesActualesLoader,
   evaluacionCreacionLoader,
+  planesLoader,
+  planLoader,
+  planesAntiguosLoader,
+  TareaLoader,
   incidenciaLoader,
   cargarIncidencia
 } from "./utils/loaders.js";

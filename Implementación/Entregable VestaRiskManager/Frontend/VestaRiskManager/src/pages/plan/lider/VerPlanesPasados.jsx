@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
-import { Alert, Button, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
-import { obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto } from "../../../services/riesgos";
-import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
+import { Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
-
-export const planesAntiguosLoader = async ({ params }) => {
-  const planes = await obtenerPlanesAnterioresProyecto(params.id_proyecto);
-  return { planes };
-};
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function VerPlanesPasados() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

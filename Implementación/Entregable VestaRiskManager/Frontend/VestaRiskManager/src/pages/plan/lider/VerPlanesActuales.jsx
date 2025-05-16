@@ -3,15 +3,10 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { Alert, Button, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
-import { obtenerPlanesProyecto } from "../../../services/riesgos";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export const planesLoader = async ({ params }) => {
-  const planes = await obtenerPlanesProyecto(params.id_proyecto);
-  return { planes };
-};
 
 export default function VerPlanesActuales() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

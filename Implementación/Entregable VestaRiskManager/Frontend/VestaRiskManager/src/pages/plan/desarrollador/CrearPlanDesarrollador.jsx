@@ -3,13 +3,9 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
-  crearPlan,
-  obtenerCantidadPlanTipo,
-  obtenerRiesgoId,
+  crearPlan
 } from "../../../services/riesgos";
-import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { useUsuario } from "../../../context/usuarioContext";
 import { Alert, Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

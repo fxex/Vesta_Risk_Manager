@@ -1,22 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { Table, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faTrashCan,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { useLoaderData } from "react-router-dom";
+import { Table } from "react-bootstrap";
 
 export default function ListaPerfiles() {
   const perfiles = useLoaderData();
-  console.log(perfiles);
-
-  const navigate = useNavigate();
 
   return (
     <>

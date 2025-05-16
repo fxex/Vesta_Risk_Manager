@@ -24,15 +24,6 @@ import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
 import { verificarError } from "../../../utils/verificarErrores";
 import { formatearFecha } from "../../../utils/fecha";
-import BotonSalir from "../../../components/BotonSalir";
-
-export const planLoader = async ({ params }) => {
-  const id_plan= params.id_plan;
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  const plan = await obtenerPlanId(params.id_proyecto, id_plan);
-
-  return { iteracion, plan };
-};
 
 export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

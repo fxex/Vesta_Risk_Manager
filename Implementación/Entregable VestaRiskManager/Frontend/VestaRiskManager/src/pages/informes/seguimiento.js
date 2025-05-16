@@ -1,7 +1,6 @@
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 import { formatearFechaHora } from "../../utils/fecha";
-import { text } from "@fortawesome/fontawesome-svg-core";
 
 export const informeSeguimiento = (datos) => {
     pdfMake.tableLayouts = {

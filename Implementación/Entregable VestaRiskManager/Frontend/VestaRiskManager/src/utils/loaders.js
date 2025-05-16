@@ -1,9 +1,8 @@
 import { obtenerCategoriaId } from "../services/categorias";
-import { obtenerIncidenciaId } from "../services/informes";
+import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
-import { obtenerDatosRiesgos, obtenerEvaluacionesActualesProyecto, obtenerIncidenciasProyecto, obtenerRiesgoId } from "../services/riesgos";
+import { obtenerDatosRiesgos, obtenerEvaluacionesActualesProyecto, obtenerIncidenciasProyecto, obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerTareasProyecto } from "../services/riesgos";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
-
 
 // Loaders de Usuarios
 export async function cargarUsuario({ params }) {
@@ -54,6 +53,27 @@ export const dashboardLoader = async ({ params }) => {
   return {datosRiesgos};
 };
 
+export const riesgoLoader = async ({ params }) => {
+  const riesgos = await obtenerRiesgosProyecto(params.id_proyecto);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+
+  return { riesgos, iteracion };
+};
+
+export async function cargarRiesgo({ params }) {
+  const id_riesgo= params.id_riesgo
+  const proyecto = await obtenerProyectosId(params.id_proyecto);
+  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
+  return { proyecto, riesgo };
+}
+
+export const seguimientoLoader = async ({params}) =>{
+    const resultado = await obtenerDatosInformeSeguimiento(params.id_proyecto)
+    const iteracion_actual = await obtenerIteracionActual(params.id_proyecto)
+    resultado["iteracion_actual"] = iteracion_actual
+    return resultado;
+}
+
 //Loader de Evaluaciones
 export const evaluacionesActualesLoader = async ({ params }) => {
   const evaluaciones = await obtenerEvaluacionesActualesProyecto(params.id_proyecto);
@@ -65,6 +85,31 @@ export const evaluacionCreacionLoader = async ({ params }) => {
   const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { riesgo, iteracion };
+};
+
+// Loader de Planes
+export const planesLoader = async ({ params }) => {
+  const planes = await obtenerPlanesProyecto(params.id_proyecto);
+  return { planes };
+};
+
+export const planLoader = async ({ params }) => {
+  const id_plan= params.id_plan;
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  const plan = await obtenerPlanId(params.id_proyecto, id_plan);
+
+  return { iteracion, plan };
+};
+
+export const planesAntiguosLoader = async ({ params }) => {
+  const planes = await obtenerPlanesAnterioresProyecto(params.id_proyecto);
+  return { planes };
+};
+
+export const TareaLoader = async ({ params }) => {
+  const tareas = await obtenerTareasProyecto(params.id_proyecto, params.id_usuario);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { tareas, iteracion};
 };
 
 // Loader de Incidencias
