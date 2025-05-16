@@ -1,4 +1,4 @@
-import { URL } from "../utils/URL";
+import { URL } from "../utils/funciones";
 
 export const obtenerRiesgosProyecto = async (id_proyecto) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgos`, {

@@ -6,7 +6,7 @@ import { Button, Form } from "react-bootstrap";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { verificarError } from "../../utils/verificarErrores";
+import { verificarError } from "../../utils/funciones";
 import { actualizarCategoria, obtenerCategoriaNombre } from "../../services/categorias";
 
 export default function ModificarCategoria() {

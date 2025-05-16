@@ -28,7 +28,7 @@ import {
 } from "react-router-dom";
 import { obtenerTareasProyecto } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
-import { formatearFecha, formatearFechaHora } from "../../utils/fecha";
+import { formatearFecha } from "../../utils/funciones";
 import { obtenerIteracionActual } from "../../services/proyectos";
 import { informeIncidencia } from "../informes/incidencia";
 import { useUsuario } from "../../context/usuarioContext";

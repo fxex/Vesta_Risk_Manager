@@ -1,3 +1,35 @@
+
+export const URL = "http://localhost/Vesta";
+
+/**
+ * Valida si un correo electrónico tiene un formato válido y pertenece a los dominios permitidos.
+ *
+ * @param {string} correo - El correo electrónico a validar.
+ * @returns {boolean} - `true` si el correo es válido, `false` en caso contrario.
+ */
+export function verificarCorreo(correo) {
+  const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|uarg\.unpa\.edu\.ar)$/;
+  return regex.test(correo);
+}
+
+/**
+ * Verifica si algún valor en un objeto de errores es `true`.
+ *
+ * @param {Object} comprobacionError - Un objeto cuyos valores son booleanos.
+ * @returns {boolean} - El primer valor `true` encontrado en el objeto, o `false` si no hay errores.
+ */
+export const verificarError = (comprobacionError) => {
+  let comprobacion = false;
+  Object.values(comprobacionError);
+  for (const valor of Object.values(comprobacionError)) {
+    if (valor) {
+      comprobacion = valor;
+      break;
+    }
+  }
+  return comprobacion;
+};
+
 /**
  * Convierte una fecha en formato YYYY-MM-DD a DD/MM/YYYY.
  *
@@ -46,3 +78,17 @@ export const comprobarFechasNuevaIteracion = (fecha_inicio, fecha_fin) => {
     return false;
   }
 };
+
+/**
+ * Filtra y formatea una lista de usuarios según su rol.
+ *
+ * @param {Array} usuarios - Lista de usuarios a filtrar.
+ * @param {string} rolBuscado - Rol por el que se desea filtrar.
+ * @returns {string} - Lista de usuarios filtrados y formateados.
+ */
+export function filtrarYFormatear(usuarios, rolBuscado) {
+    return usuarios
+      .filter(user => user.rol === rolBuscado)
+      .map(user => `${user.nombre} - ${user.email}`)
+      .join('\n');
+}

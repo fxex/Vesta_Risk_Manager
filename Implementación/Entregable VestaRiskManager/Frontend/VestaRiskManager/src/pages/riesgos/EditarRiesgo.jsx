@@ -13,7 +13,7 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
   modificarRiesgo,
 } from "../../services/riesgos";
-import { verificarError } from "../../utils/verificarErrores";
+import { verificarError } from "../../utils/funciones";
 
 export default function EditarRiesgo() {
   const { proyecto, riesgo } = useLoaderData();

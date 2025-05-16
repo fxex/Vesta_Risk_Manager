@@ -22,8 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
-import { verificarError } from "../../../utils/verificarErrores";
-import { formatearFecha } from "../../../utils/fecha";
+import { formatearFecha, verificarError } from "../../../utils/funciones";
 
 export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

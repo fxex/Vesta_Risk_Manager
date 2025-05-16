@@ -7,7 +7,7 @@ import { Form, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { crearRiesgo } from "../../services/riesgos";
-import { verificarError } from "../../utils/verificarErrores";
+import { verificarError } from "../../utils/funciones";
 
 export default function CrearRiesgo() {
   const { proyecto } = useLoaderData();

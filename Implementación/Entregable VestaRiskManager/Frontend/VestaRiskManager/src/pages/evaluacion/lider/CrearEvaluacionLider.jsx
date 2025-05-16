@@ -6,10 +6,9 @@ import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { verificarError } from "../../../utils/verificarErrores";
 import { crearEvaluacion } from "../../../services/riesgos";
 import { useUsuario } from "../../../context/usuarioContext";
-import { formatearFecha } from "../../../utils/fecha";
+import { formatearFecha, verificarError } from "../../../utils/funciones";
 
 export default function CrearEvaluacionLider() {
   const { riesgo, iteracion } = useLoaderData();

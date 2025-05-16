@@ -14,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { verificarError } from "../../utils/verificarErrores";
+import { verificarError } from "../../utils/funciones";
 
 export async function cargarModificarPerfil({ params }) {
   const perfil = await obtenerPerfilId(params.id_perfil);

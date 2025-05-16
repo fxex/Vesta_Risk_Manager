@@ -1,4 +1,4 @@
-import { URL } from "../utils/URL";
+import { URL } from "../utils/funciones";
 
 /**
  * Obtiene la lista de todos los proyectos.

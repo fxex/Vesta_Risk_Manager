@@ -1,6 +1,6 @@
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
-import { formatearFechaHora } from "../../utils/fecha";
+import { formatearFechaHora } from "../../utils/funciones";
 
 export const informeTarea = (datos) => {
     pdfMake.tableLayouts = {

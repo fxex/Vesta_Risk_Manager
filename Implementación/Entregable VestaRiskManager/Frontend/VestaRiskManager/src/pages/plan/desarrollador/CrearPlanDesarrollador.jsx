@@ -16,8 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
-import { verificarError } from "../../../utils/verificarErrores";
-import { formatearFecha } from "../../../utils/fecha";
+import { formatearFecha, verificarError } from "../../../utils/funciones";
 import BotonSalir from "../../../components/BotonSalir";
 
 export default function CrearPlanDesarrollador() {

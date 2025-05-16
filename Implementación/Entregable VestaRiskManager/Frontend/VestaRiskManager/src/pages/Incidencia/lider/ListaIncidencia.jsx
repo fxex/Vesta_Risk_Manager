@@ -20,10 +20,9 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import { formatearFecha, formatearFechaHora } from "../../../utils/fecha";
+import { formatearFecha, formatearFechaHora, filtrarYFormatear } from "../../../utils/funciones";
 import { informeIncidencia } from "../../informes/incidencia";
 import { obtenerIncidenciaId } from "../../../services/informes";
-import { filtrarYFormatear } from "../../../utils/filtrarUsuario";
 import "./../../../styles/ListaRiesgo.css";
 
 export default function ListaIncidencia() {

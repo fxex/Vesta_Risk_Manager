@@ -1,4 +1,4 @@
-import { URL } from "../utils/URL";
+import { URL } from "../utils/funciones";
 
 export const completarTarea = async (id_tarea) => {
   const respuesta = await fetch(

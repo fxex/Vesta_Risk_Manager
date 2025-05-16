@@ -1,4 +1,4 @@
-import { URL } from "../utils/URL";
+import { URL } from "../utils/funciones";
 
 export const obtenerIncidenciaId = async (id_incidencia) => {
     const respuesta = await fetch(`${URL}/incidencia/${id_incidencia}`, {

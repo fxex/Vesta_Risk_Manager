@@ -20,11 +20,10 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import { formatearFecha } from "../../utils/fecha";
+import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
 import { useUsuario } from "../../context/usuarioContext";
 import { completarTarea, obtenerDatosTareasInforme } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
-import { filtrarYFormatear } from "../../utils/filtrarUsuario";
 import "./../../styles/ListaRiesgo.css";
 
 export default function ListaTarea() {

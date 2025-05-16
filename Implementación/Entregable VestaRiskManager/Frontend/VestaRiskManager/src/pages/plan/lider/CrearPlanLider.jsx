@@ -9,8 +9,7 @@ import {
 } from "../../../services/riesgos";
 import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { useUsuario } from "../../../context/usuarioContext";
-import { Alert, Button, Form, Table } from "react-bootstrap";
+import { Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -20,9 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
-import { verificarError } from "../../../utils/verificarErrores";
-import { formatearFecha } from "../../../utils/fecha";
-import BotonSalir from "../../../components/BotonSalir";
+import { formatearFecha, verificarError } from "../../../utils/funciones";
 
 export const planCreacionLoader = async ({ params }) => {
   const id_riesgo = params.id_riesgo;

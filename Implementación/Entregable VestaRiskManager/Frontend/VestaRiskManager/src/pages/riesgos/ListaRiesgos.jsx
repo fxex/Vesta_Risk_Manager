@@ -35,7 +35,7 @@ import escudoAzul from "../../assets/img/Escudo azul.png";
 import escudoRojo from "../../assets/img/escudo rojo.png";
 import escudoCritico from "../../assets/img/Escudo critico.png";
 import escudoVerde from "../../assets/img/escudo verde.png";
-import { formatearFecha } from "../../utils/fecha";
+import { formatearFecha } from "../../utils/funciones";
 
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();

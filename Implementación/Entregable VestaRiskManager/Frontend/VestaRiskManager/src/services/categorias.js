@@ -1,4 +1,4 @@
-import { URL } from "../utils/URL";
+import { URL } from "../utils/funciones";
 
 export async function obtenerCategorias(pagina) {
   let paginaUsada = pagina ? pagina : 1;

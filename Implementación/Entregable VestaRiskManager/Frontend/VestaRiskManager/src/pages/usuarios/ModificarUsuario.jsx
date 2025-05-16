@@ -13,10 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUsuario } from "../../context/usuarioContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { verificarCorreo } from "../../utils/verificarCorreo";
-import { verificarError } from "../../utils/verificarErrores";
-
-
+import { verificarCorreo, verificarError } from "../../utils/funciones";
 
 export default function ModificarUsuario() {
   const { usuario } = useUsuario();

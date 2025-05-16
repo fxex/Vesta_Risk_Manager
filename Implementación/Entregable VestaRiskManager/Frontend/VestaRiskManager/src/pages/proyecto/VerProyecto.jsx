@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData } from "react-router-dom";
-import { formatearFecha } from "../../utils/fecha";
+import { formatearFecha } from "../../utils/funciones";
 
 export default function VerProyecto() {
   const { proyecto } = useLoaderData();

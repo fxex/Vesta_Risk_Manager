@@ -21,9 +21,9 @@ import {
 import {
   comprobarFechasNuevaIteracion,
   formatearFecha,
-} from "../../utils/fecha";
+  verificarError
+} from "../../utils/funciones";
 import ModalPersonalizado from "../../components/ModalPersonalizado";
-import { verificarError } from "../../utils/verificarErrores";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
