@@ -5,8 +5,8 @@ import Contenedor from "../../../components/Contenedor";
 import {
   crearPlan,
   obtenerCantidadPlanTipo,
-  obtenerRiesgoId,
-} from "../../../services/riesgos";
+} from "../../../services/planes";
+import { obtenerRiesgoId } from "../../../services/riesgos";
 import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Table } from "react-bootstrap";

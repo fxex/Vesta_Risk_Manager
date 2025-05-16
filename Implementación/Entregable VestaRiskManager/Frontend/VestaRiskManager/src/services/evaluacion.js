@@ -1,0 +1,39 @@
+export const crearEvaluacion = async (id_proyecto, id_riesgo, data) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/evaluacion`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerEvaluacionesActualesProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerEvaluacionesAnterioresProyecto = async (id_proyecto) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/antiguos`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};

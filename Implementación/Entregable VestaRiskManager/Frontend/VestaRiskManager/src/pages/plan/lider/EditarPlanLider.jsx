@@ -7,8 +7,7 @@ import {
   modificarPlan,
   obtenerCantidadPlanTipo,
   obtenerPlanId,
-  obtenerRiesgoId,
-} from "../../../services/riesgos";
+} from "../../../services/planes";
 import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { useUsuario } from "../../../context/usuarioContext";

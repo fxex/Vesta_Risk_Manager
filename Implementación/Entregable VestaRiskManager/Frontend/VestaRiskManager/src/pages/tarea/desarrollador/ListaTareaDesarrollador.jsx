@@ -26,7 +26,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { obtenerTareasProyecto } from "../../services/riesgos";
+import { obtenerTareasProyecto } from "../../services/planes";
 import "./../../styles/ListaRiesgo.css";
 import { formatearFecha } from "../../utils/funciones";
 import { obtenerIteracionActual } from "../../services/proyectos";

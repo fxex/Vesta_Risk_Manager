@@ -7,7 +7,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Contenedor from "../../components/Contenedor";
 import Footer from "../../components/Footer";
-import { crearIncidencia, obtenerRiesgosProyecto } from "../../services/riesgos";
+import { obtenerRiesgosProyecto } from "../../services/riesgos";
+import { crearIncidencia } from "../../services/incidencia";
 import NavegadorLider from "../../components/NavegadorLider";
 import { useUsuario } from "../../context/usuarioContext";
 

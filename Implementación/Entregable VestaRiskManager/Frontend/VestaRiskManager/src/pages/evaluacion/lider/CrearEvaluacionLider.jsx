@@ -6,7 +6,7 @@ import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { crearEvaluacion } from "../../../services/riesgos";
+import { crearEvaluacion } from "../../../services/evaluacion";
 import { useUsuario } from "../../../context/usuarioContext";
 import { formatearFecha, verificarError } from "../../../utils/funciones";
 

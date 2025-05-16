@@ -4,7 +4,7 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
   crearPlan
-} from "../../../services/riesgos";
+} from "../../../services/planes";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Alert, Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

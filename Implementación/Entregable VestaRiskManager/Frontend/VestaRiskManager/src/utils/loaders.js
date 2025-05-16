@@ -1,7 +1,10 @@
 import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
-import { obtenerDatosRiesgos, obtenerEvaluacionesActualesProyecto, obtenerIncidenciasProyecto, obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerTareasProyecto } from "../services/riesgos";
+import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto} from "../services/riesgos";
+import { obtenerEvaluacionesActualesProyecto} from "../services/evaluaciones"
+import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto} from "../services/planes"
+import { obtenerIncidenciasProyecto } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
 // Loaders de Usuarios
