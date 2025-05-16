@@ -2,7 +2,7 @@ import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto} from "../services/riesgos";
-import { obtenerEvaluacionesActualesProyecto} from "../services/evaluaciones"
+import { obtenerEvaluacionesActualesProyecto} from "../services/evaluacion"
 import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto} from "../services/planes"
 import { obtenerIncidenciasProyecto } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";

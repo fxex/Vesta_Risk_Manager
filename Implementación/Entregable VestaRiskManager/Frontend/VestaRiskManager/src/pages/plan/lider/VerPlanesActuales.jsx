@@ -134,7 +134,13 @@ export default function VerPlanesActuales() {
                     </td>
                   </tr>
                 ))
-              : null}
+              : 
+                <tr>
+                  <td colSpan="5" className="text-center fs-5">
+                    No hay planes de riesgo registrados.
+                  </td>
+                </tr>
+                }
           </tbody>
         </Table>
       </Contenedor>

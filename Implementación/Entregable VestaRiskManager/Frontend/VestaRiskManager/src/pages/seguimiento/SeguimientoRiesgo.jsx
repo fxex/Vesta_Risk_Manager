@@ -6,7 +6,7 @@ import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useLoaderData } from 'react-router-dom'
 import { informeSeguimiento } from "../informes/seguimiento"
-import { filtrarYFormatear } from '../../utils/filtrarUsuario'
+import { filtrarYFormatear } from '../../utils/funciones'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SeguimientoRiesgo() {
