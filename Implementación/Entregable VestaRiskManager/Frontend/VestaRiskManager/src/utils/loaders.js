@@ -1,7 +1,7 @@
 import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
-import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto} from "../services/riesgos";
+import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto} from "../services/evaluacion"
 import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto} from "../services/planes"
 import { obtenerIncidenciasProyecto } from "../services/incidencia";
@@ -61,6 +61,13 @@ export const riesgoLoader = async ({ params }) => {
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
 
   return { riesgos, iteracion };
+};
+
+export const riesgoLoaderPage = async ({ params }, pagina) => {
+  const {riesgos, totalPaginas} = await obtenerRiesgosProyectoPaginado(params.id_proyecto, pagina);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+
+  return { riesgos, totalPaginas, iteracion };
 };
 
 export async function cargarRiesgo({ params }) {

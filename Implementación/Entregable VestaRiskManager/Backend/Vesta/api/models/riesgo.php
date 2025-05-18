@@ -48,7 +48,7 @@ class Riesgo {
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                     WHERE r.id_proyecto = ?
-                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre;
+                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre
                     ";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
@@ -59,6 +59,61 @@ class Riesgo {
             $resultado[] = $fila;
         }
         return $resultado;
+    }
+
+    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $id_iteracion, $pagina){
+        $cantidad_riesgos = 5;
+        $offset = 0;
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_riesgos;
+        }
+
+        $ids = [];
+        $queryIds = "SELECT r.id_riesgo FROM riesgo r WHERE r.id_proyecto = ? ORDER BY r.id_riesgo LIMIT $cantidad_riesgos OFFSET $offset";
+        $stmtId = $this->conexion->prepare($queryIds);
+        $stmtId->bind_param("i", $id_proyecto);
+        $stmtId->execute();
+        $resultado = $stmtId->get_result();
+        while ($fila = $resultado->fetch_assoc()) {
+            $ids[] = $fila['id_riesgo'];
+        }
+
+        $ids_string = implode(',', $ids);
+
+        $query = "SELECT 
+                        r.id_riesgo, 
+                        r.descripcion, 
+                        r.factor_riesgo, 
+                        c.nombre AS nombre_categoria,
+                        GROUP_CONCAT(DISTINCT u.nombre ORDER BY u.nombre SEPARATOR ', ') AS responsables,
+                        COUNT(DISTINCT e.id_evaluacion) AS evaluado
+                    FROM riesgo r
+                    INNER JOIN categoria c ON r.id_categoria = c.id_categoria
+                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo
+                    LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
+                    LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
+                    WHERE r.id_riesgo in ($ids_string)
+                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre";
+
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_iteracion);
+        $stmt->execute();
+        $riesgos = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $riesgos->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginas($cantidad_riesgos, $id_proyecto);
+
+        return ["riesgos"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+
+    private function obtenerCantidadPaginas($cantidadRiesgos, $id_proyecto){
+        $totalQuery = $this->conexion->query("select count(*) as total from riesgo where id_proyecto = $id_proyecto");
+        $totalRiesgo = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalRiesgo / $cantidadRiesgos);
+
+        return $totalPaginas;
     }
 
     public function obtenerParticipantesRiesgo($id_riesgo){
@@ -228,9 +283,14 @@ class Riesgo {
             WHEN r.factor_riesgo >= 9 AND r.factor_riesgo < 36 THEN 'Media'
             WHEN r.factor_riesgo >= 36 AND r.factor_riesgo < 64 THEN 'Alta'
             WHEN r.factor_riesgo >= 64 THEN 'Crítica'
-        END as prioridad
+        END as prioridad,
+        GROUP_CONCAT(DISTINCT u.nombre ORDER BY u.nombre SEPARATOR ', ') AS responsables
         from riesgo r
-        where r.id_proyecto = ?";
+        left join participante_riesgo pr on r.id_riesgo = pr.id_riesgo
+        left join usuario u on pr.id_usuario = u.id_usuario
+        where r.id_proyecto = ?
+        GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, estado, prioridad
+        ";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();

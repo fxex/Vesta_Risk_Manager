@@ -80,6 +80,7 @@ import {
   obtenerListaProyectoDesarrollador,
   dashboardLoader,
   riesgoLoader,
+  riesgoLoaderPage,
   cargarRiesgo,
   seguimientoLoader,
   evaluacionesActualesLoader,
@@ -148,7 +149,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
       element: <RutaProtegida element={<ListaRiesgos />} />,
-      loader: riesgoLoader,
+      loader: riesgoLoaderPage,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/modificar/:id_riesgo",

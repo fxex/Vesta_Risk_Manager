@@ -57,6 +57,24 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $pagina){
+        $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $resultado = null;
+        if (!empty($iteracion)) {
+            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $iteracion["id_iteracion"], $pagina);
+        }else{
+            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $ultima_iteracion["id_iteracion"], $pagina);
+        }
+        if (!empty($resultado["riesgos"])) {
+            $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : $ultima_iteracion["id_iteracion"];
+            foreach ($resultado["riesgos"] as &$riesgo) {
+                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"], $id_iteracion);
+            }
+        }
+        return $resultado;
+    }
+
     public function crearRiesgo($id_proyecto, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["categoria"]) && !empty($data["responsables"]) && is_numeric($data["categoria"]);
         if ($comprobar) {

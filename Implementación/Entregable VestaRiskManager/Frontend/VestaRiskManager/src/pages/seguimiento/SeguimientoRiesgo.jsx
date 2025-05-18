@@ -11,12 +11,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SeguimientoRiesgo() {
     const {riesgos, estado, prioridad, iteracion_actual} = useLoaderData()
+    
     const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
     const ultima_iteracion = proyecto.iteraciones[proyecto.iteraciones.length-1]
     const resumen_estado = useRef(null)
     const resumen_prioridad = useRef(null)
-    
-    
     
   return (
     <>

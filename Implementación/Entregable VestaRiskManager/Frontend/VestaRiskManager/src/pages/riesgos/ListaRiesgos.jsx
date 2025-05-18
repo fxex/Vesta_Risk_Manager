@@ -5,6 +5,8 @@ import Footer from "../../components/Footer";
 import {
   Alert,
   Button,
+  Dropdown,
+  DropdownButton,
   Figure,
   Modal,
   OverlayTrigger,
@@ -39,10 +41,10 @@ import { formatearFecha } from "../../utils/funciones";
 
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
-  const { riesgos, iteracion } = useLoaderData();
+  const { riesgos, totalPaginas, iteracion } = useLoaderData();
+  
   const [eliminar, setEliminar] = useState(false)
   const [riesgoSeleccionado, setRiesgoSeleccionado] = useState(0)
-  
 
   const location = useLocation();
 
@@ -102,6 +104,7 @@ export default function ListaRiesgos() {
           ) : null}
         </>
         <>
+        <div className="d-flex justify-content-between">
           <Button
             variant="success"
             onClick={() => {
@@ -116,6 +119,12 @@ export default function ListaRiesgos() {
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo Riesgo
           </Button>
+          <DropdownButton variant="success" title="Ordenar segun">
+              <Dropdown.Item>Identificador</Dropdown.Item>
+              <Dropdown.Item>Escudos</Dropdown.Item>
+              <Dropdown.Item>Falta evaluación</Dropdown.Item>
+          </DropdownButton>
+        </div>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>

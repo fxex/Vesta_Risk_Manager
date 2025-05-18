@@ -201,7 +201,7 @@ export const informeSeguimiento = (datos) => {
                           alignment:"center", margin:[0,3,0,0]
                         },
                         {
-                          text: riesgo.prioridad,
+                          text: riesgo.responsables,
                           alignment:"center", margin:[0,3,0,0]
                         }
                       ]

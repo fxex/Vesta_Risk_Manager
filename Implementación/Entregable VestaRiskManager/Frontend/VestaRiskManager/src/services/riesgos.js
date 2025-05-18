@@ -12,6 +12,18 @@ export const obtenerRiesgosProyecto = async (id_proyecto) => {
   return json;
 };
 
+export const obtenerRiesgosProyectoPaginado = async (id_proyecto, pagina) => {
+  let paginaUsada = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgos/${paginaUsada}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+  return json;
+};
+
 export const crearRiesgo = async (id_proyecto, data) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgo`, {
     method: "POST",

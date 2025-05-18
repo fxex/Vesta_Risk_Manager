@@ -432,8 +432,14 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgos", function($id_proyecto) use
     echo json_encode($resultado);
 });
 
+
 $router->add("GET", "proyecto/{id_proyecto}/riesgos/informe", function($id_proyecto) use ($controladorRiesgo){
     $resultado = $controladorRiesgo->obtenerDatosInformeSeguimiento($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/riesgos/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, (int)$pagina);
     echo json_encode($resultado);
 });
 
