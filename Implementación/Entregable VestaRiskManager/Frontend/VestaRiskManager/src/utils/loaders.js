@@ -2,7 +2,7 @@ import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
-import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionId} from "../services/evaluacion"
+import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciasProyecto } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
@@ -86,13 +86,13 @@ export const seguimientoLoader = async ({params}) =>{
 
 //Loader de Evaluaciones
 export const evaluacionesActualesLoader = async ({ params }) => {
-  const evaluaciones = await obtenerEvaluacionesActualesProyecto(params.id_proyecto);
-  return { evaluaciones };
+  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesActualesProyectoPaginado(params.id_proyecto);
+  return { evaluaciones, totalPaginas };
 };
 
 export const evaluacionesPasadasLoader = async ({ params }) => {
-  const evaluaciones = await obtenerEvaluacionesAnterioresProyecto(params.id_proyecto);
-  return { evaluaciones };
+  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresProyectoPaginado(params.id_proyecto);
+  return { evaluaciones, totalPaginas };
 };
 
 export const evaluacionLoader = async ({ params }) => {

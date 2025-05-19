@@ -7,7 +7,6 @@ import {
   Button,
   Modal,
   OverlayTrigger,
-  Pagination,
   Table,
   Tooltip,
 } from "react-bootstrap";
@@ -27,6 +26,7 @@ import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginad
 import { informeTarea } from "../informes/tareas";
 import BotonSalir from "../../components/BotonSalir";
 import "./../../styles/ListaRiesgo.css";
+import Paginado from "../../components/Paginado";
 
 export default function ListaTarea() {
   const { tareas,totalPaginas, iteracion } = useLoaderData();
@@ -159,21 +159,7 @@ export default function ListaTarea() {
               }
             </tbody>
           </Table>
-          <Pagination>
-            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
-            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
-            {[...Array(totalPaginas)].map((_, index) => (
-              <Pagination.Item 
-                key={index + 1} 
-                active={index + 1 === paginaActual}
-                onClick={() => {setPaginaActual(index + 1)}}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
-            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
-          </Pagination>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
           <Modal
             show={completar}

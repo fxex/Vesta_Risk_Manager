@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
@@ -12,12 +12,23 @@ import BotonSalir from "../../../components/BotonSalir";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { obtenerEvaluacionesAnterioresProyectoPaginado } from "../../../services/evaluacion";
+import Paginado from "../../../components/Paginado";
 
 export default function VerEvaluacionesPasadasLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
-  const { evaluaciones } = useLoaderData();
-  
+  const { evaluaciones, totalPaginas } = useLoaderData();
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [evaluacionesCargadas, setEvaluacionesCargadas] = useState(evaluaciones);
+
+  useEffect(() => {
+    obtenerEvaluacionesAnterioresProyectoPaginado(proyecto.id_proyecto, paginaActual).then(
+      (data) => {
+        setEvaluacionesCargadas(data.evaluaciones);
+      }
+    );
+  }, [paginaActual]);
 
   return (
     <>
@@ -54,7 +65,7 @@ export default function VerEvaluacionesPasadasLider() {
             </tr>
           </thead>
           <tbody>
-            {evaluaciones.length > 0 ? evaluaciones.map((evaluacion, key) => (
+            {evaluacionesCargadas.length > 0 ? evaluacionesCargadas.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
                 <td className="td">{evaluacion.id_riesgo}</td>
                 <td className="td">{evaluacion.impacto}</td>
@@ -85,6 +96,7 @@ export default function VerEvaluacionesPasadasLider() {
             }
           </tbody>
         </Table>
+        <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
         <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>

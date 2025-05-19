@@ -3,7 +3,7 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { Table, Button, Pagination, Alert, Modal } from "react-bootstrap";
+import { Table, Button, Alert, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../../context/usuarioContext";
 import { eliminarUsuario, obtenerUsuarios } from "../../services/usuarios";
 import BotonSalir from "../../components/BotonSalir";
+import Paginado from "../../components/Paginado";
 
 export default function ListaUsuarios() {
   const { usuario } = useUsuario();
@@ -122,21 +123,7 @@ export default function ListaUsuarios() {
               ))}
             </tbody>
           </Table>
-          <Pagination>
-            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
-            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
-            {[...Array(totalPaginas)].map((_, index) => (
-              <Pagination.Item 
-                key={index + 1} 
-                active={index + 1 === paginaActual}
-                onClick={() => {setPaginaActual(index + 1)}}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
-            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
-          </Pagination>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
           <BotonSalir ruta={"/inicio"} />
 
         </>

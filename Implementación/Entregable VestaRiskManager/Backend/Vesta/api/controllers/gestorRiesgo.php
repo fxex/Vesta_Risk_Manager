@@ -234,6 +234,16 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerEvaluacionesActualesPaginado ($id_proyecto, $pagina) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $evaluaciones = $this->evaluacion->obtenerEvaluacionesActualesProyectoPaginado($id_proyecto, $iteracion["id_iteracion"], $pagina);
+            return $evaluaciones;
+        }else{
+            return ["evaluaciones"=>[], "totalPaginas"=>0];
+        }
+    }
+
     public function obtenerEvaluacionId($id_evaluacion){
         $resultado = $this->evaluacion->obtenerEvaluacionId($id_evaluacion);
         return $resultado;
@@ -244,6 +254,14 @@ class GestorRiesgo {
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
         $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada);
+        return $evaluaciones;
+    }
+
+    public function obtenerEvaluacionesAnterioresPaginado ($id_proyecto, $pagina) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyectoPaginado($id_proyecto, $iteracion_utilizada, $pagina);
         return $evaluaciones;
     }
 

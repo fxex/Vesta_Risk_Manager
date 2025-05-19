@@ -10,7 +10,6 @@ import {
   Figure,
   Modal,
   OverlayTrigger,
-  Pagination,
   Table,
   Tooltip,
 } from "react-bootstrap";
@@ -39,6 +38,7 @@ import escudoRojo from "../../assets/img/escudo rojo.png";
 import escudoCritico from "../../assets/img/Escudo critico.png";
 import escudoVerde from "../../assets/img/escudo verde.png";
 import { formatearFecha } from "../../utils/funciones";
+import Paginado from "../../components/Paginado";
 
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
@@ -400,37 +400,7 @@ export default function ListaRiesgos() {
               ))}
             </tbody>
           </Table>
-          <Pagination>
-            <Pagination.First disabled={paginaActual == 1} onClick={()=>{
-              setPaginaActual(1)
-              localStorage.setItem("pagina_riesgo", 1)
-
-            }}/>
-            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{
-              setPaginaActual(paginaActual-1)
-              localStorage.setItem("pagina_riesgo", paginaActual-1)
-            }}/>
-            {[...Array(totalPaginas)].map((_, index) => (
-              <Pagination.Item 
-                key={index + 1} 
-                active={index + 1 == paginaActual}
-                onClick={() => {
-                  setPaginaActual(index + 1)
-                  localStorage.setItem("pagina_riesgo", index + 1)
-                }}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{
-              setPaginaActual(paginaActual +1)
-              localStorage.setItem("pagina_riesgo", paginaActual + 1)
-            }} />
-            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{
-              setPaginaActual(totalPaginas)
-              localStorage.setItem("pagina_riesgo", totalPaginas)
-            }}/> 
-          </Pagination>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
 
           <Modal
             show={confirmarEdicion.confirmar}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Button, Form, Modal, Pagination, Table } from "react-bootstrap";
+import { Button, Form, Modal, Table } from "react-bootstrap";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,6 +24,7 @@ import {
   verificarError
 } from "../../utils/funciones";
 import ModalPersonalizado from "../../components/ModalPersonalizado";
+import Paginado from "../../components/Paginado";
 
 export default function ModificarProyecto() {
   const { proyecto } = useLoaderData();
@@ -869,30 +870,7 @@ export default function ModificarProyecto() {
                 Seleccione un participante.
               </Form.Text>
             )}
-            {totalPaginas > 1 && (
-              <Pagination size="sm">
-                <Pagination.Prev
-                  onClick={() => handlePageChange(pagina - 1)}
-                  disabled={pagina === 1}
-                />
-                {Array.from({ length: totalPaginas }, (_, index) => (
-                  <Pagination.Item
-                    key={index + 1}
-                    active={index + 1 === pagina}
-                    onClick={() => {
-                      setPagina(index + 1);
-                    }}
-                  >
-                    {index + 1}
-                  </Pagination.Item>
-                ))}
-
-                <Pagination.Next
-                  onClick={() => handlePageChange(pagina + 1)}
-                  disabled={pagina === totalPaginas}
-                />
-              </Pagination>
-            )}
+            <Paginado paginaActual={pagina} setPaginaActual={setPagina} totalPaginas={totalPaginas} />
           </Form.Group>
           <Form.Group>
             <h5>Rol</h5>
