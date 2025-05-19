@@ -69,6 +69,8 @@ import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollad
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
 import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
+import VerEvaluacionLider from "./pages/evaluacion/lider/VerEvaluacionLider.jsx";
+import VerPlanLider from "./pages/plan/lider/VerPlanLider.jsx";
 
 import { 
   cargarUsuario,  
@@ -162,6 +164,10 @@ const App = () => {
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
+      element: <RutaProtegida element={<VerPlanLider />}/>
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/actuales",
       element: <RutaProtegida element={<VerPlanesActuales />} />,
       loader: planesLoader,
     },
@@ -198,6 +204,10 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionLider />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones",
+      element: <RutaProtegida element={<VerEvaluacionLider />}/>
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",

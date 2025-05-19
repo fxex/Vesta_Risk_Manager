@@ -104,7 +104,7 @@ export default function ListaRiesgos() {
       ) : null}
       <Contenedor>
         <>
-          <h3>{proyecto.nombre}</h3>
+          <h3>{proyecto.nombre} - Lista de riesgos</h3>
           {iteracion ? (
             <>
               <h4>
