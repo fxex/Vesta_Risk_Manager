@@ -6,6 +6,7 @@ import { Alert, Button, Modal, OverlayTrigger, Table, Tooltip } from "react-boot
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import BotonSalir from "../../../components/BotonSalir";
 
 
 export default function VerPlanesActuales() {
@@ -45,104 +46,107 @@ export default function VerPlanesActuales() {
       ) : null}
       <Contenedor>
         <h3>{proyecto.nombre} - Planes actuales</h3>
-        <Table size="sm" hover className="mt-2" bordered>
-          <thead className="cabecera">
-            <tr>
-              <th className="th" style={{ width: "6em" }}>
-                Riesgo
-              </th>
-              <th className="th" style={{ width: "8em" }}>
-                Factor de riesgo
-              </th>
-              <th className="th" style={{ width: "10em" }}>
-                Tipo
-              </th>
-              <th className="th" style={{ width: "28em" }}>
-                Descripción
-              </th>
-              <th className="th">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {planes && planes.length > 0
-              ? planes.map((plan, key) => (
-                  <tr key={key}>
-                    <td className="td">
-                      RK
-                      {plan.id_riesgo < 10
-                        ? "0"
-                        : ""}
-                      {
-                        plan.id_riesgo
-                      }
-                    </td>
-                    <td className="td">{plan.factor_riesgo}</td>
-                    <td className="td">{plan.tipo}</td>
-                    <td className="td">{plan.descripcion}</td>
-                    <td className="td">
-                      <div>
-                      <OverlayTrigger
-                          placement="top"
-                          overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
-                        >
-                          <Button
-                            variant="outline-primary"
-                            onClick={() => {
-                              navigate(
-                                `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`
-                              );
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faSearch} />
-                          </Button>
-                        </OverlayTrigger>
+        <>
+          <Table size="sm" hover className="mt-2" bordered>
+            <thead className="cabecera">
+              <tr>
+                <th className="th" style={{ width: "6em" }}>
+                  Riesgo
+                </th>
+                <th className="th" style={{ width: "8em" }}>
+                  Factor de riesgo
+                </th>
+                <th className="th" style={{ width: "10em" }}>
+                  Tipo
+                </th>
+                <th className="th" style={{ width: "28em" }}>
+                  Descripción
+                </th>
+                <th className="th">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {planes && planes.length > 0
+                ? planes.map((plan, key) => (
+                    <tr key={key}>
+                      <td className="td">
+                        RK
+                        {plan.id_riesgo < 10
+                          ? "0"
+                          : ""}
+                        {
+                          plan.id_riesgo
+                        }
+                      </td>
+                      <td className="td">{plan.factor_riesgo}</td>
+                      <td className="td">{plan.tipo}</td>
+                      <td className="td">{plan.descripcion}</td>
+                      <td className="td">
+                        <div>
                         <OverlayTrigger
-                          placement="top"
-                          overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
-                        >
-                          <Button
-                            variant="outline-warning"
-                            style={{ marginLeft: "5px" }}
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
+                          >
+                            <Button
+                              variant="outline-primary"
+                              onClick={() => {
+                                navigate(
+                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`
+                                );
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faSearch} />
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                          >
+                            <Button
+                              variant="outline-warning"
+                              style={{ marginLeft: "5px" }}
 
-                            onClick={() => {
-                              navigate(
-                                `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}`
-                              );
-                            }}
+                              onClick={() => {
+                                navigate(
+                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}`
+                                );
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={
+                              <Tooltip id="tooltip-edit">Eliminar</Tooltip>
+                            }
                           >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </Button>
-                        </OverlayTrigger>
-                        <OverlayTrigger
-                          placement="top"
-                          overlay={
-                            <Tooltip id="tooltip-edit">Eliminar</Tooltip>
-                          }
-                        >
-                          <Button
-                            style={{ marginLeft: "5px" }}
-                            onClick={()=>{
-                              setEliminar(true)
-                              setPlanSeleccionado(plan.id_plan)
-                            }}
-                            variant="outline-danger"
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </Button>
-                        </OverlayTrigger>
-                      </div>
+                            <Button
+                              style={{ marginLeft: "5px" }}
+                              onClick={()=>{
+                                setEliminar(true)
+                                setPlanSeleccionado(plan.id_plan)
+                              }}
+                              variant="outline-danger"
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
+                          </OverlayTrigger>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                : 
+                  <tr>
+                    <td colSpan="5" className="text-center fs-5">
+                      No hay planes de riesgo registrados.
                     </td>
                   </tr>
-                ))
-              : 
-                <tr>
-                  <td colSpan="5" className="text-center fs-5">
-                    No hay planes de riesgo registrados.
-                  </td>
-                </tr>
-                }
-          </tbody>
-        </Table>
+                  }
+            </tbody>
+          </Table>
+          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+        </>
       </Contenedor>
       <Footer />
 

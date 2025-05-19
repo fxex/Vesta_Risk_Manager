@@ -16,6 +16,7 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useUsuario } from "../../context/usuarioContext";
 import { eliminarUsuario, obtenerUsuarios } from "../../services/usuarios";
+import BotonSalir from "../../components/BotonSalir";
 
 export default function ListaUsuarios() {
   const { usuario } = useUsuario();
@@ -136,6 +137,8 @@ export default function ListaUsuarios() {
             <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
             <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
           </Pagination>
+          <BotonSalir ruta={"/inicio"} />
+
         </>
       </Contenedor>
       <Footer />

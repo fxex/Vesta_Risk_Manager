@@ -13,16 +13,16 @@ import { useNavigate } from "react-router-dom";
  * @returns {JSX.Element} - Un botón con un ícono de salida que redirige al usuario.
  */
 export default function BotonSalir({ ruta }) {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return (
-    <Button
-      onClick={() => {
+    return (
+      <Button
+        onClick={() => {
         navigate(ruta);
       }}
     >
       <FontAwesomeIcon icon={faArrowRightFromBracket} className="mx-1" />
-      Salir
+      Volver
     </Button>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faSearch, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import BotonSalir from "../../../components/BotonSalir";
 
 export default function VerEvaluacionesActuLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -69,6 +70,7 @@ export default function VerEvaluacionesActuLider() {
             </h4>
           </>
         ) : null*/}
+        <>
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
             <tr>
@@ -142,6 +144,8 @@ export default function VerEvaluacionesActuLider() {
             ))}
           </tbody>
         </Table>
+        <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+        </>
       </Contenedor>
       <Footer />
     </>

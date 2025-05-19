@@ -25,6 +25,7 @@ import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
 import { useUsuario } from "../../context/usuarioContext";
 import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
+import BotonSalir from "../../components/BotonSalir";
 import "./../../styles/ListaRiesgo.css";
 
 export default function ListaTarea() {
@@ -173,6 +174,7 @@ export default function ListaTarea() {
             <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
             <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
           </Pagination>
+          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
           <Modal
             show={completar}
             onHide={() => {

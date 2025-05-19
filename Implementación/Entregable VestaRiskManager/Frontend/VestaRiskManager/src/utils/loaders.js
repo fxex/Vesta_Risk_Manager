@@ -64,7 +64,7 @@ export const riesgoLoader = async ({ params }) => {
 };
 
 export const riesgoLoaderPage = async ({ params }) => {
-  const {riesgos, totalPaginas} = await obtenerRiesgosProyectoPaginado(params.id_proyecto);
+  const {riesgos, totalPaginas} = await obtenerRiesgosProyectoPaginado(params.id_proyecto, localStorage.getItem("pagina_riesgo")??1, localStorage.getItem("orden_riesgo")??1);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
 
   return { riesgos, totalPaginas, iteracion };

@@ -8,6 +8,7 @@ import { Alert, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import BotonSalir from "../../components/BotonSalir";
 
 export default function ListaProyecto() {
   const navigate = useNavigate();
@@ -76,6 +77,8 @@ export default function ListaProyecto() {
               </div>
             </Button>
           ))}
+
+          <BotonSalir ruta={"/inicio"} />
         </div>
       </Contenedor>
       <Footer />

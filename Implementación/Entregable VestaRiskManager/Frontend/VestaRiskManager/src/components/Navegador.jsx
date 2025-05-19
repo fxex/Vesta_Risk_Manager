@@ -64,7 +64,7 @@ export default function Navegador() {
                   icon={faArrowRightFromBracket}
                   className="mx-2"
                 />
-                Salir
+                Cerrar Sesión
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

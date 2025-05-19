@@ -40,15 +40,11 @@ export default function NavegadorLider() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse>
           <Nav className="me-auto">
-            <Nav.Link href="/inicio">
+            <Nav.Link 
+              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
+            >
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
               Inicio
-            </Nav.Link>
-            <Nav.Link
-              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
-              className={`${comprobacionLider ? "" : "d-none"}`}
-            >
-              Dashboard
             </Nav.Link>
             <Nav.Link
               href={`/inicio/proyecto/${
@@ -65,12 +61,20 @@ export default function NavegadorLider() {
               Monitoreo
             </Nav.Link>
 
-            <Nav.Link href="/salir">
+            <Nav.Link href={`/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className="mx-2"
               />
               Salir
+            </Nav.Link>
+
+            <Nav.Link href={`/salir`}>
+              <FontAwesomeIcon
+                icon={faArrowRightFromBracket}
+                className="mx-2"
+              />
+              Cerrar Sesión
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

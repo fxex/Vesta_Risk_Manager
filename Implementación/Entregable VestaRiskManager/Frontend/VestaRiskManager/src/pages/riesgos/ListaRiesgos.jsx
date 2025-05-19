@@ -48,9 +48,9 @@ export default function ListaRiesgos() {
   const [riesgoSeleccionado, setRiesgoSeleccionado] = useState(0)
 
   const [riesgosCargados, setRiesgosCargados] = useState(riesgos)
-  const [paginaActual, setPaginaActual] = useState(1)
+  const [paginaActual, setPaginaActual] = useState(localStorage.getItem("pagina_riesgo")??1)
 
-  const [orden, setOrden] = useState(1)
+  const [orden, setOrden] = useState(localStorage.getItem("orden_riesgo")??1)
   
   const location = useLocation();
 
@@ -62,7 +62,6 @@ export default function ListaRiesgos() {
     riesgo: null,
   });
 
-
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
@@ -71,14 +70,7 @@ export default function ListaRiesgos() {
       setRiesgosCargados(riesgos)
     })
     
-  }, [paginaActual])
-
-  useEffect(() => {
-    obtenerRiesgosProyectoPaginado(proyecto.id_proyecto, paginaActual, orden).then((data)=>{
-      const {riesgos, _} = data;
-      setRiesgosCargados(riesgos)
-    })
-  }, [orden])
+  }, [paginaActual, orden])
   
 
   useEffect(() => {
@@ -142,9 +134,18 @@ export default function ListaRiesgos() {
             Nuevo Riesgo
           </Button>
           <DropdownButton variant="success" title="Ordenar segun">
-              <Dropdown.Item onClick={()=>{setOrden(1)}} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
-              <Dropdown.Item onClick={()=>{setOrden(2)}} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
-              <Dropdown.Item onClick={()=>{setOrden(3)}} className={orden == 3 ? "active" : ""}>Falta evaluación</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(1)
+                localStorage.setItem("orden_riesgo", 1)
+              }} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(2)
+                localStorage.setItem("orden_riesgo", 2)
+                }} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(3)
+                localStorage.setItem("orden_riesgo", 3)
+                }} className={orden == 3 ? "active" : ""}>Falta evaluación</Dropdown.Item>
           </DropdownButton>
         </div>
           <Table size="sm" hover className="mt-2" bordered>
@@ -400,19 +401,35 @@ export default function ListaRiesgos() {
             </tbody>
           </Table>
           <Pagination>
-            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
-            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
+            <Pagination.First disabled={paginaActual == 1} onClick={()=>{
+              setPaginaActual(1)
+              localStorage.setItem("pagina_riesgo", 1)
+
+            }}/>
+            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{
+              setPaginaActual(paginaActual-1)
+              localStorage.setItem("pagina_riesgo", paginaActual-1)
+            }}/>
             {[...Array(totalPaginas)].map((_, index) => (
               <Pagination.Item 
                 key={index + 1} 
-                active={index + 1 === paginaActual}
-                onClick={() => {setPaginaActual(index + 1)}}
+                active={index + 1 == paginaActual}
+                onClick={() => {
+                  setPaginaActual(index + 1)
+                  localStorage.setItem("pagina_riesgo", index + 1)
+                }}
               >
                 {index + 1}
               </Pagination.Item>
             ))}
-            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
-            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
+            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{
+              setPaginaActual(paginaActual +1)
+              localStorage.setItem("pagina_riesgo", paginaActual + 1)
+            }} />
+            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{
+              setPaginaActual(totalPaginas)
+              localStorage.setItem("pagina_riesgo", totalPaginas)
+            }}/> 
           </Pagination>
 
           <Modal

@@ -23,6 +23,7 @@ import {
 import { formatearFecha, formatearFechaHora, filtrarYFormatear } from "../../../utils/funciones";
 import { informeIncidencia } from "../../informes/incidencia";
 import { obtenerIncidenciaId } from "../../../services/informes";
+import BotonSalir from "../../../components/BotonSalir";
 import "./../../../styles/ListaRiesgo.css";
 
 export default function ListaIncidencia() {
@@ -153,6 +154,7 @@ export default function ListaIncidencia() {
               ))}
             </tbody>
           </Table>
+          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>
       <Footer />

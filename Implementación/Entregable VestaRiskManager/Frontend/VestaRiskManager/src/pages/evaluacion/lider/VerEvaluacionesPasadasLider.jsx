@@ -5,9 +5,11 @@ import Contenedor from "../../../components/Contenedor";
 import {
   Table,
 } from "react-bootstrap";
-
+import BotonSalir from "../../../components/BotonSalir";
 
 export default function VerEvaluacionesPasadasLider() {
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+
   return (
     <>
       <NavegadorLider />
@@ -31,6 +33,7 @@ export default function VerEvaluacionesPasadasLider() {
             </h4>
           </>
         ) : null*/}
+        <>
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
             <tr>
@@ -70,6 +73,8 @@ export default function VerEvaluacionesPasadasLider() {
             ))*/}
           </tbody>
         </Table>
+        <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+        </>
       </Contenedor>
       <Footer />
     </>

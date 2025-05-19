@@ -4,6 +4,7 @@ import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import { useLoaderData } from "react-router-dom";
 import { Table } from "react-bootstrap";
+import BotonSalir from "../../components/BotonSalir";
 
 export default function ListaPerfiles() {
   const perfiles = useLoaderData();
@@ -72,6 +73,8 @@ export default function ListaPerfiles() {
               ))}
             </tbody>
           </Table>
+          <BotonSalir ruta={"/inicio"} />
+
         </>
       </Contenedor>
       <Footer />

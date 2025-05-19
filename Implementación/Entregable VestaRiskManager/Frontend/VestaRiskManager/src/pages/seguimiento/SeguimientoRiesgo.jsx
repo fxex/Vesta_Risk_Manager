@@ -7,6 +7,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useLoaderData } from 'react-router-dom'
 import { informeSeguimiento } from "../informes/seguimiento"
 import { filtrarYFormatear } from '../../utils/funciones'
+import BotonSalir from '../../components/BotonSalir'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SeguimientoRiesgo() {
@@ -131,8 +132,8 @@ export default function SeguimientoRiesgo() {
                         ))}
                     </tbody>
                 </Table>
-
             </Row>
+                <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </Container>
         <Footer />
     </>

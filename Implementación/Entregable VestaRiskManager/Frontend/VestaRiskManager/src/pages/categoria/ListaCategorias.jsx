@@ -15,6 +15,7 @@ import {
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { eliminarCategoria, obtenerCategorias } from "../../services/categorias";
+import BotonSalir from "../../components/BotonSalir";
 
 export default function ListaCategorias() {
   const {categorias, totalPaginas} = useLoaderData();
@@ -134,6 +135,8 @@ export default function ListaCategorias() {
             <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
             <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
           </Pagination>
+          <BotonSalir ruta={"/inicio"} />
+
         </>
       </Contenedor>
       <Footer />

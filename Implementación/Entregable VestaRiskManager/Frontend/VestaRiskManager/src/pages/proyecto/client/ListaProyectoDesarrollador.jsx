@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navegador from "../../../components/Navegador";
 import Footer from "../../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -10,12 +10,19 @@ import {
   obtenerProyectosId,
 } from "../../../services/proyectos";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import BotonSalir from "../../../components/BotonSalir";
 
 
 
 export default function ListaProyectoDesarrollador() {
   const navigate = useNavigate();
   const { proyectos } = useLoaderData();
+
+  useEffect(() => {
+    localStorage.removeItem("pagina_riesgo")
+    localStorage.removeItem("orden_riesgo")
+    localStorage.removeItem("proyecto_seleccionado")
+  }, [])
 
   return (
     <>
@@ -45,6 +52,7 @@ export default function ListaProyectoDesarrollador() {
               />
             </Button>
           ))}
+          <BotonSalir ruta={"/inicio"} />
         </div>
       </Contenedor>
       <Footer />

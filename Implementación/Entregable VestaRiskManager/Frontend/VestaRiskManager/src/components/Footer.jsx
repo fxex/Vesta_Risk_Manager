@@ -44,7 +44,7 @@ export default function Footer() {
               localStorage.removeItem("usuario");
             }}
           >
-            Salir
+            Cerrar Sesión
           </a>
         </p>
       </footer>
