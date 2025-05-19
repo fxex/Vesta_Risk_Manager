@@ -69,8 +69,7 @@ class Categoria{
         $query="SELECT c.nombre, COALESCE(sum(r.factor_riesgo), 0) as total_riesgo  
                 from categoria c
                 inner join proyecto_categoria pc on c.id_categoria = pc.id_categoria 
-                left join riesgo r on r.id_categoria = c.id_categoria
-                where pc.id_proyecto = ?
+                left join riesgo r on r.id_categoria = c.id_categoria and r.id_proyecto = ?
                 group by c.id_categoria, c.nombre";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);

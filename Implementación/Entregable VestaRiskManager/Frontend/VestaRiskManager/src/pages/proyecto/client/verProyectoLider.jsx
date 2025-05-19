@@ -184,8 +184,8 @@ export default function VerProyectoLider() {
                     labels: categoriasProyecto,
                     datasets: [
                       {
-                        data: datosTelarañaFormateados, // Valores en cada eje
-                        backgroundColor: "#2A6EBB ",
+                        data: datosTelarañaFormateados,
+                        backgroundColor: "#2A6EBB",
                         fill:true,
                         borderColor: "#2A6EBB",
                         pointBackgroundColor: "#2A6EBB",
@@ -197,10 +197,11 @@ export default function VerProyectoLider() {
                   responsive:false,
                   plugins:{
                     legend:{display:false},
-                    tooltip:{enabled:false}
+                    tooltip:{enabled:true}
                   },
                   scales:{
                     r:{
+                      min:0,
                       ticks:{
                         display:false
                       },

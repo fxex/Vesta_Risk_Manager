@@ -164,12 +164,8 @@ const App = () => {
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",
-      element: <RutaProtegida element={<VerPlanLider />}/>
-    },
-    {
-      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/actuales",
-      element: <RutaProtegida element={<VerPlanesActuales />} />,
-      loader: planesLoader,
+      element: <RutaProtegida element={<VerPlanesActuales />}/>,
+      loader: planesLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes/pasados",

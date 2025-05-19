@@ -98,6 +98,9 @@ class Riesgo {
         while ($fila = $resultado->fetch_assoc()) {
             $ids[] = $fila['id_riesgo'];
         }
+        if (count($ids) == 0) {
+            return ["riesgos"=>[], "totalPaginas"=>0];
+        }
 
         $ids_string = implode(',', $ids);
 

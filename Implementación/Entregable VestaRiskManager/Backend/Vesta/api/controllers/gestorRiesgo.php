@@ -60,16 +60,12 @@ class GestorRiesgo {
     public function obtenerRiesgoProyectoPorPagina($id_proyecto, $pagina, $orden){
         $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion_actual) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"];
         $resultado = null;
-        if (!empty($iteracion)) {
-            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $iteracion["id_iteracion"], $pagina, $orden);
-        }else{
-            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $ultima_iteracion["id_iteracion"], $pagina, $orden);
-        }
+        $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $iteracion_utilizada, $pagina, $orden);
         if (!empty($resultado["riesgos"])) {
-            $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : $ultima_iteracion["id_iteracion"];
             foreach ($resultado["riesgos"] as &$riesgo) {
-                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"], $id_iteracion);
+                $riesgo["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $riesgo["id_riesgo"], $iteracion_utilizada);
             }
         }
         return $resultado;
@@ -222,13 +218,10 @@ class GestorRiesgo {
 
     public function obtenerPlanesIteracionAnteriores ($id_proyecto) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        if (!empty($iteracion)) {
-            $planes = $this->plan->obtenerPlanesAnteriores($id_proyecto, $iteracion["id_iteracion"]);
-            return $planes;
-        }else{
-            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
-            return $this->plan->obtenerPlanesAnteriores($id_proyecto, $ultima_iteracion["id_iteracion"]+1);
-        }
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $planes = $this->plan->obtenerPlanesAnteriores($id_proyecto, $iteracion_utilizada);
+        return $planes; 
     }
 
     public function obtenerEvaluacionesActuales ($id_proyecto) {
@@ -347,13 +340,14 @@ class GestorRiesgo {
     public function obtenerDatosRiesgo($id_proyecto){
         $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion_actual) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"];
         $iteraciones = json_decode($this->obtenerUltimasIteraciones($id_proyecto));
         
         $categorias = $this->categoria->obtenerCategoriasProyecto($id_proyecto);
         $datosTelaraña = $this->categoria->obtenerDatosGraficoTelaraña($id_proyecto);
 
         $evaluaciones = [];
-        $evaluacion_tongji = $this->evaluacion->obtenerMatrizTongji($id_proyecto, empty($iteracion_actual["id_iteracion"]) ? $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"]);
+        $evaluacion_tongji = $this->evaluacion->obtenerMatrizTongji($id_proyecto, $iteracion_utilizada);
 
         foreach ($iteraciones as $iteracion) {
             $cantidad_riesgo = $this->evaluacion->obtenerCantidadRiesgoFactor($id_proyecto, $iteracion->id_iteracion);
@@ -361,7 +355,7 @@ class GestorRiesgo {
         }
 
         
-        $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, empty($iteracion_actual["id_iteracion"]) ? $ultima_iteracion["id_iteracion"] : $iteracion_actual["id_iteracion"]);
+        $resultado = $this->riesgo->obtenerDatosRiesgo($id_proyecto, $iteracion_utilizada);
         
         $multiplicador = (100 / $resultado["cantidad_categoria"]) / 100;
 
@@ -378,25 +372,17 @@ class GestorRiesgo {
 
     public function obtenerTareas($id_proyecto, $id_usuario){
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        $resultado = NULL;
-        if (!empty($iteracion)) {
-            $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion["id_iteracion"], $id_usuario);
-        }else {
-            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
-            $resultado = $this->tarea->obtenerTareas($id_proyecto, $ultima_iteracion["id_iteracion"], $id_usuario);
-        }
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $resultado = $this->tarea->obtenerTareas($id_proyecto, $iteracion_utilizada, $id_usuario);
         return $resultado;
     }
 
     public function obtenerTareasPaginado($id_proyecto, $id_usuario, $pagina){
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        $resultado = NULL;
-        if (!empty($iteracion)) {
-            $resultado = $this->tarea->obtenerTareasPaginado($id_proyecto, $iteracion["id_iteracion"], $id_usuario, $pagina);
-        }else {
-            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
-            $resultado = $this->tarea->obtenerTareasPaginado($id_proyecto, $ultima_iteracion["id_iteracion"], $id_usuario, $pagina);
-        }
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $resultado = $this->tarea->obtenerTareasPaginado($id_proyecto, $iteracion_utilizada, $id_usuario, $pagina);
         return $resultado;
     }
 

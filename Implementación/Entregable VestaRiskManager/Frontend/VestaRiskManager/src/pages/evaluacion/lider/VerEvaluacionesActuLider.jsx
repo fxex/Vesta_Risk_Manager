@@ -82,7 +82,7 @@ export default function VerEvaluacionesActuLider() {
             </tr>
           </thead>
           <tbody>
-            {evaluaciones.map((evaluacion, key) => (
+            {evaluaciones.length > 0 ? evaluaciones.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
                 <td style={{ textWrap: "wrap" }}>{evaluacion.id_riesgo < 9 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
                 <td>{modificarImpacto(evaluacion.impacto)}</td>
@@ -138,10 +138,13 @@ export default function VerEvaluacionesActuLider() {
                     </Button>
                   </OverlayTrigger>
 
-
                 </td>
               </tr>
-            ))}
+            )) : (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>No hay evaluaciones</td>
+              </tr>
+            )}
           </tbody>
         </Table>
         <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
