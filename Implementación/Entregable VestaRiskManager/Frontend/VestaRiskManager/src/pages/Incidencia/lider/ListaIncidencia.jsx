@@ -82,7 +82,7 @@ export default function ListaIncidencia() {
               </tr>
             </thead>
             <tbody>
-              {incidencias.map((incidencia, key) => (
+              {incidencias.length > 0 ? incidencias.map((incidencia, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
                   <td>RK
                     {incidencia.id_riesgo < 10
@@ -151,7 +151,11 @@ export default function ListaIncidencia() {
                       
                   </td>
                 </tr>
-              ))}
+              )) : (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: "center" }}>No hay incidencias</td>
+                </tr>
+              )}
             </tbody>
           </Table>
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />

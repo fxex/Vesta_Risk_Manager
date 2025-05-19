@@ -92,7 +92,8 @@ import {
   planesAntiguosLoader,
   TareaLoader,
   incidenciaLoader,
-  cargarIncidencia
+  cargarIncidencia,
+  evaluacionesPasadasLoader
 } from "./utils/loaders.js";
 
 const App = () => {
@@ -212,7 +213,8 @@ const App = () => {
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/pasada",
-      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>
+      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>,
+      loader: evaluacionesPasadasLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",

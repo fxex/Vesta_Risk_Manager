@@ -3,12 +3,20 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
+  Button,
+  OverlayTrigger,
   Table,
+  Tooltip,
 } from "react-bootstrap";
 import BotonSalir from "../../../components/BotonSalir";
+import { useLoaderData } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function VerEvaluacionesPasadasLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const { evaluaciones } = useLoaderData();
+  
 
   return (
     <>
@@ -45,32 +53,33 @@ export default function VerEvaluacionesPasadasLider() {
             </tr>
           </thead>
           <tbody>
-            {/*tareas.map((evaluacion, key) => (
+            {evaluaciones.length > 0 ? evaluaciones.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
-                <td style={{ textWrap: "wrap" }}>{evaluacion.riesgo}</td>
-                <td>{evaluacion.impacto}</td>
-                <td>{evaluacion.probailidad}</td>
-                <td style={{ textWrap: "wrap" }}>{evaluacion.justificacion}</td>
+                <td className="td">{evaluacion.id_riesgo}</td>
+                <td className="td">{evaluacion.impacto}</td>
+                <td className="td">{evaluacion.probabilidad}</td>
+                <td className="td">{evaluacion.descripcion}</td>
                 <td className="td">
-
-                  <OverlayTrigger
+                <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
                   >
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
+                        // navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
                       }}
                     >
                       <FontAwesomeIcon icon={faSearch} />
                     </Button>
                   </OverlayTrigger>
-
-
                 </td>
               </tr>
-            ))*/}
+            )) :
+            <tr>
+              <td colSpan="5" style={{ textAlign: "center" }}>No hay evaluaciones anteriores</td>
+            </tr> 
+            }
           </tbody>
         </Table>
         <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
