@@ -1,3 +1,5 @@
+import { URL } from "../utils/funciones";
+
 export const crearIncidencia = async (id_proyecto, data) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencia`, {
     method: "POST",

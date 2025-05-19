@@ -57,14 +57,14 @@ class GestorRiesgo {
         return $resultado;
     }
 
-    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $pagina){
+    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $pagina, $orden){
         $iteracion_actual = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $resultado = null;
         if (!empty($iteracion)) {
-            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $iteracion["id_iteracion"], $pagina);
+            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $iteracion["id_iteracion"], $pagina, $orden);
         }else{
-            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $ultima_iteracion["id_iteracion"], $pagina);
+            $resultado = $this->riesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, $ultima_iteracion["id_iteracion"], $pagina, $orden);
         }
         if (!empty($resultado["riesgos"])) {
             $id_iteracion = isset($iteracion["id_iteracion"]) ? $iteracion["id_iteracion"] : $ultima_iteracion["id_iteracion"];
@@ -387,6 +387,19 @@ class GestorRiesgo {
         }
         return $resultado;
     }
+
+    public function obtenerTareasPaginado($id_proyecto, $id_usuario, $pagina){
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $resultado = NULL;
+        if (!empty($iteracion)) {
+            $resultado = $this->tarea->obtenerTareasPaginado($id_proyecto, $iteracion["id_iteracion"], $id_usuario, $pagina);
+        }else {
+            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+            $resultado = $this->tarea->obtenerTareasPaginado($id_proyecto, $ultima_iteracion["id_iteracion"], $id_usuario, $pagina);
+        }
+        return $resultado;
+    }
+
 
     public function completarTarea($id_tarea){
         $this->tarea->setEstado(1);

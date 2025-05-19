@@ -3,7 +3,7 @@ import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto} from "../services/evaluacion"
-import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto} from "../services/planes"
+import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciasProyecto } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
@@ -63,8 +63,8 @@ export const riesgoLoader = async ({ params }) => {
   return { riesgos, iteracion };
 };
 
-export const riesgoLoaderPage = async ({ params }, pagina) => {
-  const {riesgos, totalPaginas} = await obtenerRiesgosProyectoPaginado(params.id_proyecto, pagina);
+export const riesgoLoaderPage = async ({ params }) => {
+  const {riesgos, totalPaginas} = await obtenerRiesgosProyectoPaginado(params.id_proyecto);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
 
   return { riesgos, totalPaginas, iteracion };
@@ -117,9 +117,9 @@ export const planesAntiguosLoader = async ({ params }) => {
 };
 
 export const TareaLoader = async ({ params }) => {
-  const tareas = await obtenerTareasProyecto(params.id_proyecto, params.id_usuario);
+  const {tareas, totalPaginas} = await obtenerTareasProyectoPaginado(params.id_proyecto, params.id_usuario, 1);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { tareas, iteracion};
+  return { tareas, totalPaginas, iteracion};
 };
 
 // Loader de Incidencias

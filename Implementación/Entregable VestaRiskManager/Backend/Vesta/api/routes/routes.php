@@ -438,8 +438,8 @@ $router->add("GET", "proyecto/{id_proyecto}/riesgos/informe", function($id_proye
     echo json_encode($resultado);
 });
 
-$router->add("GET", "proyecto/{id_proyecto}/riesgos/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){
-    $resultado = $controladorRiesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, (int)$pagina);
+$router->add("GET", "proyecto/{id_proyecto}/riesgos/{pagina}/{orden}", function($id_proyecto, $pagina, $orden) use ($controladorRiesgo){
+    $resultado = $controladorRiesgo->obtenerRiesgoProyectoPorPagina($id_proyecto, (int)$pagina, $orden);
     echo json_encode($resultado);
 });
 
@@ -579,6 +579,11 @@ $router->add("GET", "proyecto/{id_proyecto}/tareas/informe", function($id_proyec
 
 $router->add("GET", "proyecto/{id_proyecto}/tareas/{id_usuario}", function($id_proyecto, $id_usuario) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerTareas($id_proyecto, $id_usuario);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/tareas/{id_usuario}/{pagina}", function($id_proyecto, $id_usuario, $pagina) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerTareasPaginado($id_proyecto, $id_usuario, $pagina);
     echo json_encode($resultado);
 });
 

@@ -61,15 +61,36 @@ class Riesgo {
         return $resultado;
     }
 
-    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $id_iteracion, $pagina){
+    private function obtenerOrden($orden){
+        switch($orden){
+            case 1:
+                return "r.id_riesgo asc";
+            case 2:
+                return "r.factor_riesgo desc";
+            case 3:
+                return "r.factor_riesgo asc";
+            default:
+                return "r.id_riesgo asc";
+        }
+    }
+
+    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $id_iteracion, $pagina, $orden){
         $cantidad_riesgos = 5;
         $offset = 0;
         if($pagina > 1){
             $offset = ($pagina - 1) * $cantidad_riesgos;
         }
 
+        $ordenado = $this->obtenerOrden($orden);
+        
         $ids = [];
-        $queryIds = "SELECT r.id_riesgo FROM riesgo r WHERE r.id_proyecto = ? ORDER BY r.id_riesgo LIMIT $cantidad_riesgos OFFSET $offset";
+        
+        $queryIds = "SELECT r.id_riesgo FROM riesgo r 
+        WHERE r.id_proyecto = ? 
+        ORDER BY $ordenado 
+        LIMIT $cantidad_riesgos OFFSET $offset
+        ";
+
         $stmtId = $this->conexion->prepare($queryIds);
         $stmtId->bind_param("i", $id_proyecto);
         $stmtId->execute();
@@ -93,7 +114,9 @@ class Riesgo {
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                     WHERE r.id_riesgo in ($ids_string)
-                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre";
+                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre
+                    ORDER BY $ordenado
+                    ";
 
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_iteracion);

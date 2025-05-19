@@ -98,11 +98,12 @@ class Tarea{
 
 
     public function obtenerTareas($id_proyecto, $id_iteracion, $id_usuario){
-        $query = "select t.*, CASE WHEN pt.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS pertenece 
+        $query = "SELECT t.*, CASE WHEN pt.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS pertenece 
         from tarea t 
         inner join plan p on t.id_plan = p.id_plan
         left join participante_tarea pt on t.id_tarea = pt.id_tarea and pt.id_usuario = ? 
-        where p.id_proyecto = ? and p.id_iteracion = ? order by pertenece desc";
+        where p.id_proyecto = ? and p.id_iteracion = ? 
+        order by pertenece desc, t.fecha_inicio asc";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("iii",$id_usuario, $id_proyecto, $id_iteracion);
         $stmt->execute();
@@ -112,6 +113,47 @@ class Tarea{
             $resultados[] = $fila;
         }
         return $resultados;
+    }
+
+    public function obtenerTareasPaginado($id_proyecto, $id_iteracion, $id_usuario, $pagina){
+        $cantidad_tareas = 10;
+        $offset = 0;
+        
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_tareas;
+        }
+
+        $query = "SELECT t.*, CASE WHEN pt.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS pertenece 
+        from tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        left join participante_tarea pt on t.id_tarea = pt.id_tarea and pt.id_usuario = ? 
+        where p.id_proyecto = ? and p.id_iteracion = ? 
+        order by pertenece desc, t.fecha_inicio asc
+        limit $cantidad_tareas offset $offset";
+        
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii",$id_usuario, $id_proyecto, $id_iteracion);
+        $stmt->execute();
+        
+        $tareas = $stmt->get_result();
+        $resultados = [];
+        
+        while ($fila = $tareas->fetch_assoc()) {
+            $resultados[] = $fila;
+        }
+
+        $totalPaginas = $this->obtenerCantidadPaginas($cantidad_tareas, $id_proyecto, $id_iteracion);
+        return ["tareas"=>$resultados, "totalPaginas"=>$totalPaginas];
+    }
+
+    private function obtenerCantidadPaginas($cantidadTareas, $id_proyecto, $id_iteracion){
+        $totalQuery = $this->conexion->query("select count(*) as total from tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        where p.id_proyecto = $id_proyecto and p.id_iteracion = $id_iteracion");
+        $totalTareas = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalTareas / $cantidadTareas);
+
+        return $totalPaginas;
     }
 
     public function completarTarea($id_tarea){

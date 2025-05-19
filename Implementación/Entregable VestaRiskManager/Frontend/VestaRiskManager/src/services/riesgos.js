@@ -12,9 +12,9 @@ export const obtenerRiesgosProyecto = async (id_proyecto) => {
   return json;
 };
 
-export const obtenerRiesgosProyectoPaginado = async (id_proyecto, pagina) => {
+export const obtenerRiesgosProyectoPaginado = async (id_proyecto, pagina, orden) => {
   let paginaUsada = pagina ? pagina : 1;
-  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgos/${paginaUsada}`, {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/riesgos/${paginaUsada}/${orden}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

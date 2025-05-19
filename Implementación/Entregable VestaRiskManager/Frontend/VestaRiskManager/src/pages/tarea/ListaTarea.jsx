@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
@@ -7,6 +7,7 @@ import {
   Button,
   Modal,
   OverlayTrigger,
+  Pagination,
   Table,
   Tooltip,
 } from "react-bootstrap";
@@ -22,18 +23,30 @@ import {
 } from "react-router-dom";
 import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
 import { useUsuario } from "../../context/usuarioContext";
-import { completarTarea, obtenerDatosTareasInforme } from "../../services/planes";
+import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
 import "./../../styles/ListaRiesgo.css";
 
 export default function ListaTarea() {
-  const { tareas, iteracion } = useLoaderData();
+  const { tareas,totalPaginas, iteracion } = useLoaderData();
+  
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const { usuario } = useUsuario();  
 
   const [completar, setCompletar] = useState(false)
   const [tareaSeleccionada, setTareaSeleccionada] = useState(0)
+
+  const [tareasCargadas, setTareasCargadas] = useState(tareas)
+  const [paginaActual, setPaginaActual] = useState(1)
+
+  useEffect(() => {
+    obtenerTareasProyectoPaginado(proyecto.id_proyecto, usuario.id_usuario, paginaActual).then((data) => {
+      const {tareas, _} = data;
+      setTareasCargadas(tareas)
+    })
+  }, [paginaActual])
+  
 
   return (
     <>
@@ -75,23 +88,10 @@ export default function ListaTarea() {
               }
               informeTarea(datos)
             }}
-            // disabled={iteracion === null}
+            disabled={tareas.length == 0}
           >
             Generar Informe
           </Button>
-          {/* <Button
-            variant="success"
-            onClick={() => {
-              // navigate(
-              //   `/inicio/proyecto/${
-              //     comprobacionLider ? "lider" : "desarrollador"
-              //   }/${id_proyecto}/incidencia/crear`
-              // );
-            }}
-            // disabled={iteracion === null}
-          >
-            Generar Informe completo
-          </Button> */}
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
@@ -108,7 +108,7 @@ export default function ListaTarea() {
               </tr>
             </thead>
             <tbody>
-              {tareas.map((tarea, key) => (
+              {tareas && tareas.length > 0 ? tareas.map((tarea, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
                   <td>{tarea.nombre}</td>
                   <td style={{textWrap:"wrap"}}>{tarea.descripcion}</td>
@@ -149,10 +149,30 @@ export default function ListaTarea() {
                       
                   </td>
                 </tr>
-              ))}
+              )) : 
+              <tr>
+                <td colSpan="6" className="text-center fs-5">
+                  No hay tareas registradas.
+                </td>
+              </tr>
+              }
             </tbody>
           </Table>
-
+          <Pagination>
+            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
+            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
+            {[...Array(totalPaginas)].map((_, index) => (
+              <Pagination.Item 
+                key={index + 1} 
+                active={index + 1 === paginaActual}
+                onClick={() => {setPaginaActual(index + 1)}}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
+            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
+          </Pagination>
           <Modal
             show={completar}
             onHide={() => {

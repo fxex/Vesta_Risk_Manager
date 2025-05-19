@@ -10,6 +10,7 @@ import {
   Figure,
   Modal,
   OverlayTrigger,
+  Pagination,
   Table,
   Tooltip,
 } from "react-bootstrap";
@@ -28,7 +29,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { eliminarRiesgo } from "../../services/riesgos";
+import { eliminarRiesgo, obtenerRiesgosProyectoPaginado } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardList";
 import escudoAmarillo from "../../assets/img/escudo amarillo.png";
@@ -46,6 +47,11 @@ export default function ListaRiesgos() {
   const [eliminar, setEliminar] = useState(false)
   const [riesgoSeleccionado, setRiesgoSeleccionado] = useState(0)
 
+  const [riesgosCargados, setRiesgosCargados] = useState(riesgos)
+  const [paginaActual, setPaginaActual] = useState(1)
+
+  const [orden, setOrden] = useState(1)
+  
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -58,6 +64,22 @@ export default function ListaRiesgos() {
 
 
   const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    obtenerRiesgosProyectoPaginado(proyecto.id_proyecto, paginaActual, orden).then((data)=>{
+      const {riesgos, _} = data;
+      setRiesgosCargados(riesgos)
+    })
+    
+  }, [paginaActual])
+
+  useEffect(() => {
+    obtenerRiesgosProyectoPaginado(proyecto.id_proyecto, paginaActual, orden).then((data)=>{
+      const {riesgos, _} = data;
+      setRiesgosCargados(riesgos)
+    })
+  }, [orden])
+  
 
   useEffect(() => {
     if (location.state?.mensaje) {
@@ -120,9 +142,9 @@ export default function ListaRiesgos() {
             Nuevo Riesgo
           </Button>
           <DropdownButton variant="success" title="Ordenar segun">
-              <Dropdown.Item>Identificador</Dropdown.Item>
-              <Dropdown.Item>Escudos</Dropdown.Item>
-              <Dropdown.Item>Falta evaluación</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{setOrden(1)}} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{setOrden(2)}} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{setOrden(3)}} className={orden == 3 ? "active" : ""}>Falta evaluación</Dropdown.Item>
           </DropdownButton>
         </div>
           <Table size="sm" hover className="mt-2" bordered>
@@ -142,7 +164,7 @@ export default function ListaRiesgos() {
               </tr>
             </thead>
             <tbody>
-              {riesgos.map((riesgo, key) => (
+              {riesgosCargados.map((riesgo, key) => (
                 <tr key={key} style={{ textAlign: "center" }}>
                   <td className="td" style={{}}>
                     {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
@@ -377,6 +399,22 @@ export default function ListaRiesgos() {
               ))}
             </tbody>
           </Table>
+          <Pagination>
+            <Pagination.First disabled={paginaActual == 1} onClick={()=>{setPaginaActual(1)}}/>
+            <Pagination.Prev disabled={paginaActual == 1} onClick={()=>{setPaginaActual(paginaActual-1)}}/>
+            {[...Array(totalPaginas)].map((_, index) => (
+              <Pagination.Item 
+                key={index + 1} 
+                active={index + 1 === paginaActual}
+                onClick={() => {setPaginaActual(index + 1)}}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(paginaActual +1)}} />
+            <Pagination.Last disabled={paginaActual == totalPaginas} onClick={()=>{setPaginaActual(totalPaginas)}}/> 
+          </Pagination>
+
           <Modal
             show={confirmarEdicion.confirmar}
             onHide={() => {

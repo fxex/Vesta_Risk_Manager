@@ -110,7 +110,7 @@ useEffect(() => {
     setRiesgosFiltrados(riesgos);
   } else {
     const filtrados = riesgos.filter(riesgo => 
-      riesgo.nombre.toLowerCase().includes(busquedaRiesgo.toLowerCase())
+      riesgo.descripcion.toLowerCase().includes(busquedaRiesgo.toLowerCase())
     );
     setRiesgosFiltrados(filtrados);
   }
