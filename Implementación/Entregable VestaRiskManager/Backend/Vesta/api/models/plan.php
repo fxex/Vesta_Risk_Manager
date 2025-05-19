@@ -50,6 +50,38 @@ class Plan{
         return $resultado;
     }
 
+    public function obtenerPlanesIteracionActualPaginado($id_proyecto, $id_iteracion, $pagina){
+        $cantidad_planes = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_planes;
+        }
+
+        $query = "SELECT p.id_plan, p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
+                inner join riesgo r on p.id_riesgo = r.id_riesgo 
+                where p.id_iteracion = ? and p.id_proyecto = ?
+                limit $cantidad_planes offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
+        $stmt->execute();
+        $planes = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $planes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasActuales($cantidad_planes, $id_proyecto, $id_iteracion);
+        return ["planes"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+    private function obtenerCantidadPaginasActuales($cantidad_planes, $id_proyecto, $id_iteracion){
+        $totalQuery = $this->conexion->query("select count(*) as total from plan p 
+        where p.id_proyecto = $id_proyecto and p.id_iteracion = $id_iteracion");
+        $totalPlanes = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalPlanes / $cantidad_planes);
+
+        return $totalPaginas;
+    }
+
 
     public function obtenerPlanesRiesgoProyecto($id_proyecto, $id_riesgo, $id_iteracion){
         $query = "SELECT 
@@ -92,6 +124,38 @@ class Plan{
             $resultado[] = $fila;
         }
         return $resultado;
+    }
+
+    public function obtenerPlanesIteracionAnterioresPaginado($id_proyecto, $id_iteracion, $pagina){
+        $cantidad_planes = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_planes;
+        }
+
+        $query = "SELECT p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
+                inner join riesgo r on p.id_riesgo = r.id_riesgo 
+                where p.id_iteracion < ? and p.id_proyecto = ?
+                limit $cantidad_planes offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii",$id_iteracion, $id_proyecto);
+        $stmt->execute();
+        $planes = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $planes->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasAnteriores($cantidad_planes, $id_proyecto, $id_iteracion);
+        return ["planes"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+    private function obtenerCantidadPaginasAnteriores($cantidad_planes, $id_proyecto, $id_iteracion){
+        $totalQuery = $this->conexion->query("select count(*) as total from plan p 
+        where p.id_proyecto = $id_proyecto and p.id_iteracion < $id_iteracion");
+        $totalPlanes = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalPlanes / $cantidad_planes);
+
+        return $totalPaginas;
     }
 
     public function obtenerPlanId($id_plan){

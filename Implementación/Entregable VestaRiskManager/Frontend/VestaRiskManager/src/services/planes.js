@@ -45,8 +45,34 @@ export const obtenerPlanesProyecto = async (id_proyecto) => {
   return json;
 };
 
+export const obtenerPlanesProyectoPaginado = async (id_proyecto, pagina) => {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/${paginaActual}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
 export const obtenerPlanesAnterioresProyecto = async (id_proyecto) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/antiguos`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerPlanesAnterioresProyectoPaginado = async (id_proyecto, pagina) => {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/planes/antiguos/${paginaActual}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

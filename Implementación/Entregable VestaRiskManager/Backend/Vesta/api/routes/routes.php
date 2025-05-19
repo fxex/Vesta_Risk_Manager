@@ -551,6 +551,16 @@ $router->add("GET", "proyecto/{id_proyecto}/planes/antiguos", function($id_proye
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/planes/antiguos/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerPlanesIteracionAnterioresPaginado($id_proyecto, $pagina);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/planes/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerPlanesIteracionActualPaginado($id_proyecto, $pagina);
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyecto, $id_plan) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerPlanId($id_plan, $id_proyecto);
     echo json_encode($resultado);

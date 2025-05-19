@@ -7,20 +7,33 @@ import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
+import { obtenerPlanesProyectoPaginado } from "../../../services/planes";
+import Paginado from "../../../components/Paginado";
 
 
 export default function VerPlanesActuales() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
 
-  const { planes } = useLoaderData();
+  const { planes, totalPaginas } = useLoaderData();
   const location = useLocation();
   
   const [mensaje, setMensaje] = useState("");
 
   const [eliminar, setEliminar] = useState(false)
   const [planSeleccionado, setPlanSeleccionado] = useState(0)
-  
+
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [planesCargados, setPlanesCargados] = useState(planes);
+
+  useEffect(() => {
+    obtenerPlanesProyectoPaginado(proyecto.id_proyecto, paginaActual).then(
+      (data) => {
+        setPlanesCargados(data.planes);
+      }
+    );
+  }, [paginaActual]);
+
     useEffect(() => {
       if (location.state?.mensaje) {
         window.scrollTo(0, 0);
@@ -66,8 +79,8 @@ export default function VerPlanesActuales() {
               </tr>
             </thead>
             <tbody>
-              {planes && planes.length > 0
-                ? planes.map((plan, key) => (
+              {planesCargados && planesCargados.length > 0
+                ? planesCargados.map((plan, key) => (
                     <tr key={key}>
                       <td className="td">
                         RK
@@ -145,6 +158,7 @@ export default function VerPlanesActuales() {
                   }
             </tbody>
           </Table>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>

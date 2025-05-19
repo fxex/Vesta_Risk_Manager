@@ -216,12 +216,30 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerPlanesIteracionActualPaginado ($id_proyecto, $pagina) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $planes = $this->plan->obtenerPlanesIteracionActualPaginado($id_proyecto, $iteracion["id_iteracion"], $pagina);
+            return $planes;
+        }else{
+            return [];
+        }
+    }
+
     public function obtenerPlanesIteracionAnteriores ($id_proyecto) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
         $planes = $this->plan->obtenerPlanesAnteriores($id_proyecto, $iteracion_utilizada);
         return $planes; 
+    }
+
+    public function obtenerPlanesIteracionAnterioresPaginado ($id_proyecto, $pagina) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $planes = $this->plan->obtenerPlanesIteracionAnterioresPaginado($id_proyecto, $iteracion_utilizada, $pagina);
+        return $planes;
     }
 
     public function obtenerEvaluacionesActuales ($id_proyecto) {
@@ -261,7 +279,7 @@ class GestorRiesgo {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
-        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyectoPaginado($id_proyecto, $iteracion_utilizada, $pagina);
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada);
         return $evaluaciones;
     }
 

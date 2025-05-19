@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
@@ -7,13 +7,25 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
+import { obtenerPlanesAnterioresProyectoPaginado } from "../../../services/planes";
+import Paginado from "../../../components/Paginado";
 
 export default function VerPlanesPasados() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
 
-  const { planes } = useLoaderData();
+  const { planes, totalPaginas } = useLoaderData();
   
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [planesCargados, setPlanesCargados] = useState(planes);
+
+  useEffect(() => {
+    obtenerPlanesAnterioresProyectoPaginado(proyecto.id_proyecto, paginaActual).then(
+      (data) => {
+        setPlanesCargados(data.planes);
+      }
+    );
+  }, [paginaActual]);
 
   return (
     <>
@@ -40,8 +52,8 @@ export default function VerPlanesPasados() {
               </tr>
             </thead>
             <tbody>
-              {planes && planes.length > 0
-                ? planes.map((plan, key) => (
+              {planesCargados && planesCargados.length > 0
+                ? planesCargados.map((plan, key) => (
                     <tr key={key}>
                       <td className="td">
                         RK
@@ -85,6 +97,7 @@ export default function VerPlanesPasados() {
                 }
             </tbody>
           </Table>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>
