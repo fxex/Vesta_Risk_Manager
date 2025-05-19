@@ -19,8 +19,6 @@ export default function VerEvaluacionesActuLider() {
   const navigate = useNavigate();
   
   const { evaluaciones } = useLoaderData();
-  
-  
     
   return (
     <>
@@ -66,7 +64,9 @@ export default function VerEvaluacionesActuLider() {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        // navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
+                        navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
+                          state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/evaluaciones/actual` }
+                        })
                       }}
                     >
                       <FontAwesomeIcon icon={faSearch} />

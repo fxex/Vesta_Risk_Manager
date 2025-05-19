@@ -2,7 +2,7 @@ import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
-import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesAnterioresProyecto} from "../services/evaluacion"
+import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerPlanesAnterioresProyecto, obtenerPlanesProyecto, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciasProyecto } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
@@ -93,6 +93,11 @@ export const evaluacionesActualesLoader = async ({ params }) => {
 export const evaluacionesPasadasLoader = async ({ params }) => {
   const evaluaciones = await obtenerEvaluacionesAnterioresProyecto(params.id_proyecto);
   return { evaluaciones };
+};
+
+export const evaluacionLoader = async ({ params }) => {
+  const evaluacion = await obtenerEvaluacionId(params.id_proyecto, params.id_evaluacion);
+  return { evaluacion };
 };
 
 export const evaluacionCreacionLoader = async ({ params }) => {

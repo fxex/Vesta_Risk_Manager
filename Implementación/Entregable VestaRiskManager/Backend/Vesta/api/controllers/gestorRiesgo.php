@@ -234,16 +234,19 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerEvaluacionId($id_evaluacion){
+        $resultado = $this->evaluacion->obtenerEvaluacionId($id_evaluacion);
+        return $resultado;
+    }
+
     public function obtenerEvaluacionesAnteriores ($id_proyecto) {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
-        if (!empty($iteracion)) {
-            $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion["id_iteracion"]);
-            return $evaluaciones;
-        }else{
-            $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
-            return $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $ultima_iteracion["id_iteracion"]+1);
-        }
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada);
+        return $evaluaciones;
     }
+
 
     public function obtenerPlanId ($id_plan, $id_proyecto) {
         $resultado = $this->plan->obtenerPlanId($id_plan);

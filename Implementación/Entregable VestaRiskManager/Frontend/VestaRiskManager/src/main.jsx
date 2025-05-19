@@ -69,7 +69,7 @@ import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollad
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
 import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
-import VerEvaluacionLider from "./pages/evaluacion/lider/VerEvaluacionLider.jsx";
+import VerEvaluacion from "./pages/evaluacion/lider/VerEvaluacion.jsx";
 import VerPlanLider from "./pages/plan/lider/VerPlanLider.jsx";
 
 import { 
@@ -93,7 +93,8 @@ import {
   TareaLoader,
   incidenciaLoader,
   cargarIncidencia,
-  evaluacionesPasadasLoader
+  evaluacionesPasadasLoader,
+  evaluacionLoader
 } from "./utils/loaders.js";
 
 const App = () => {
@@ -203,8 +204,9 @@ const App = () => {
       loader: evaluacionCreacionLoader,
     },
     {
-      path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones",
-      element: <RutaProtegida element={<VerEvaluacionLider />}/>
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/evaluacion/:id_evaluacion",
+      element: <RutaProtegida element={<VerEvaluacion />}/>,
+      loader: evaluacionLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/evaluaciones/actual",

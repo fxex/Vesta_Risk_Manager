@@ -9,12 +9,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import BotonSalir from "../../../components/BotonSalir";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function VerEvaluacionesPasadasLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const navigate = useNavigate();
   const { evaluaciones } = useLoaderData();
   
 
@@ -67,7 +68,9 @@ export default function VerEvaluacionesPasadasLider() {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        // navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
+                        navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
+                          state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/evaluaciones/pasadas` }
+                        })
                       }}
                     >
                       <FontAwesomeIcon icon={faSearch} />

@@ -41,3 +41,15 @@ export const obtenerEvaluacionesAnterioresProyecto = async (id_proyecto) => {
 
   return json;
 };
+
+export const obtenerEvaluacionId = async (id_proyecto, id_evaluacion) => {
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluacion/${id_evaluacion}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
