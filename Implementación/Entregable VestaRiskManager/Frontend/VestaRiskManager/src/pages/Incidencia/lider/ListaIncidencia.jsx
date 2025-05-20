@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Contenedor from "../../../components/Contenedor";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
@@ -25,12 +25,24 @@ import { informeIncidencia } from "../../informes/incidencia";
 import { obtenerIncidenciaId } from "../../../services/informes";
 import BotonSalir from "../../../components/BotonSalir";
 import "./../../../styles/ListaRiesgo.css";
+import { obtenerIncidenciasProyectoPaginado } from "../../../services/incidencia";
+import Paginado from "../../../components/Paginado";
 
 export default function ListaIncidencia() {
-  const { incidencias, iteracion } = useLoaderData();
+  const { incidencias, totalPaginas, iteracion } = useLoaderData();
+  
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [incidenciasCargadas, setIncidenciasCargadas] = useState(incidencias);
 
+  useEffect(() => {
+    obtenerIncidenciasProyectoPaginado(proyecto.id_proyecto, paginaActual).then(
+      (data) => {
+        setIncidenciasCargadas(data.incidencias);
+      }
+    );
+  }, [paginaActual]);
   return (
     <>
       <NavegadorLider />
@@ -82,7 +94,7 @@ export default function ListaIncidencia() {
               </tr>
             </thead>
             <tbody>
-              {incidencias.length > 0 ? incidencias.map((incidencia, key) => (
+              {incidenciasCargadas && incidenciasCargadas.length > 0 ? incidenciasCargadas.map((incidencia, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
                   <td>RK
                     {incidencia.id_riesgo < 10
@@ -158,6 +170,7 @@ export default function ListaIncidencia() {
               )}
             </tbody>
           </Table>
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>

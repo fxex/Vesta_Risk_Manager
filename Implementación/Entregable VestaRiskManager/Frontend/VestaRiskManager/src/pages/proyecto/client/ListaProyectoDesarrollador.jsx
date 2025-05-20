@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navegador from "../../../components/Navegador";
 import Footer from "../../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -11,12 +11,18 @@ import {
 } from "../../../services/proyectos";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
+import { useUsuario } from "../../../context/usuarioContext";
+import Paginado from "../../../components/Paginado";
 
 
 
 export default function ListaProyectoDesarrollador() {
   const navigate = useNavigate();
-  const { proyectos } = useLoaderData();
+  const { proyectos, totalPaginas } = useLoaderData();
+  const {usuario} = useUsuario();
+
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [proyectosCargados, setProyectosCargados] = useState(proyectos);
 
   useEffect(() => {
     localStorage.removeItem("pagina_riesgo")
@@ -30,10 +36,11 @@ export default function ListaProyectoDesarrollador() {
       <Contenedor>
         <h3>Proyectos de Desarrollador</h3>
         <div style={{ minHeight: "40vh" }}>
-          {proyectos.map((item, key) => (
-            <Button
-              key={key}
-              className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
+          {proyectosCargados && proyectosCargados.length > 0 ? (
+            proyectosCargados.map((item, key) => (
+              <Button
+                key={key}
+                className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
             >
               {item.nombre}
               <FontAwesomeIcon
@@ -51,8 +58,17 @@ export default function ListaProyectoDesarrollador() {
                 }}
               />
             </Button>
-          ))}
+            ))
+          ) : (
+            <p className="text-center fw-bold">No posee proyectos asignados</p>
+          )}
+          <Paginado
+            paginaActual={paginaActual}
+            totalPaginas={totalPaginas}
+            setPaginaActual={setPaginaActual}
+          />
           <BotonSalir ruta={"/inicio"} />
+
         </div>
       </Contenedor>
       <Footer />

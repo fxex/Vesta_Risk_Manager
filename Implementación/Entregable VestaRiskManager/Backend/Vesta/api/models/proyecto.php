@@ -82,6 +82,31 @@ class Proyecto{
         return $resultado;
     }
 
+    public function obtenerTodosProyectoPaginado($pagina){
+        $cantidad_proyectos = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_proyectos;
+        }
+        $proyectos = $this->conexion->query("select * from proyecto limit $cantidad_proyectos offset $offset");
+        $resultado = [];
+        while ($fila = $proyectos->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginas($cantidad_proyectos);
+        return ["proyectos" => $resultado, "totalPaginas" => $totalPaginas];
+    }
+
+    private function obtenerCantidadPaginas($cantidad_proyectos){
+        $query = "SELECT count(*) as total from proyecto";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->execute();
+        $total = $stmt->get_result()->fetch_assoc()['total'];
+        $totalPaginas = ceil($total / $cantidad_proyectos);
+        return $totalPaginas;
+    }
+
     public function obtenerTodosProyectoLider($correo){
         $query = "SELECT p.* from proyecto p 
         inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
@@ -97,10 +122,48 @@ class Proyecto{
         return $resultado;
     }
 
+    public function obtenerTodosProyectoLiderPaginado($correo, $pagina){
+        $cantidad_proyectos = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_proyectos;
+        }
+
+        $query = "SELECT p.* from proyecto p 
+        inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
+        inner join usuario u on u.id_usuario = pp.id_usuario 
+        where u.email = ? and pp.rol = 'lider del proyecto' 
+        limit $cantidad_proyectos offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $proyectos = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $proyectos->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasLider($cantidad_proyectos, $correo);
+        return ["proyectos" => $resultado, "totalPaginas" => $totalPaginas];
+    }
+
+    private function obtenerCantidadPaginasLider($cantidad_proyectos, $correo){
+        $query = "SELECT count(*) as total from proyecto p 
+        inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
+        inner join usuario u on u.id_usuario = pp.id_usuario where u.email = ? and pp.rol = 'lider del proyecto'";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $total = $stmt->get_result()->fetch_assoc()['total'];
+        $totalPaginas = ceil($total / $cantidad_proyectos);
+        return $totalPaginas;
+    }
+
     public function obtenerTodosProyectoDesarrollador($correo){
         $query = "SELECT p.* from proyecto p 
         inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
-        inner join usuario u on u.id_usuario = pp.id_usuario where u.email = ? and pp.rol = 'desarrollador'";
+        inner join usuario u on u.id_usuario = pp.id_usuario 
+        where u.email = ? and pp.rol = 'desarrollador'";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $correo);
         $stmt->execute();
@@ -110,6 +173,43 @@ class Proyecto{
             $resultado[] = $fila;
         }
         return $resultado;
+    }
+
+    public function obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina){
+        $cantidad_proyectos = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_proyectos;
+        }
+
+        $query = "SELECT p.* from proyecto p 
+        inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
+        inner join usuario u on u.id_usuario = pp.id_usuario 
+        where u.email = ? and pp.rol = 'desarrollador' 
+        limit $cantidad_proyectos offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $proyectos = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $proyectos->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasDesarrollador($cantidad_proyectos, $correo);
+        return ["proyectos" => $resultado, "totalPaginas" => $totalPaginas];
+    }
+
+    private function obtenerCantidadPaginasDesarrollador($cantidad_proyectos, $correo){
+        $query = "SELECT count(*) as total from proyecto p 
+        inner join proyecto_participante pp on p.id_proyecto = pp.id_proyecto
+        inner join usuario u on u.id_usuario = pp.id_usuario where u.email = ? and pp.rol = 'desarrollador'";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("s", $correo);
+        $stmt->execute();
+        $total = $stmt->get_result()->fetch_assoc()['total'];
+        $totalPaginas = ceil($total / $cantidad_proyectos);
+        return $totalPaginas;
     }
 
     public function obtenerProyectoId($id) {

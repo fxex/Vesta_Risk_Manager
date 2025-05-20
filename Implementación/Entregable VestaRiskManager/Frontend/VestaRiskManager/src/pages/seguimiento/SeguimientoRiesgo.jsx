@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import NavegadorLider from '../../components/NavegadorLider'
 import Footer from '../../components/Footer'
 import { Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
@@ -8,6 +8,8 @@ import { useLoaderData } from 'react-router-dom'
 import { informeSeguimiento } from "../informes/seguimiento"
 import { filtrarYFormatear } from '../../utils/funciones'
 import BotonSalir from '../../components/BotonSalir'
+import { useState } from 'react'
+import Paginado from '../../components/Paginado'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SeguimientoRiesgo() {
@@ -15,13 +17,22 @@ export default function SeguimientoRiesgo() {
     
     const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
     const ultima_iteracion = proyecto.iteraciones[proyecto.iteraciones.length-1]
+
     const resumen_estado = useRef(null)
     const resumen_prioridad = useRef(null)
+    const riesgos_por_pagina = 5;
+    const total_paginas = Math.ceil((riesgos??[]).length / riesgos_por_pagina);
+    
+    const [paginaActual, setPaginaActual] = useState(1)
+
+    const indice_inicio = (paginaActual - 1) * riesgos_por_pagina;
+    const indice_fin = indice_inicio + riesgos_por_pagina;
+    const riesgos_cargados = riesgos.slice(indice_inicio, indice_fin);
     
   return (
     <>
         <NavegadorLider />
-        <Container>
+        <Container style={{minHeight: "70vh"}}>
             <Row className='mt-2'>
                 <Col xs={6}>
                     <Card>
@@ -29,8 +40,9 @@ export default function SeguimientoRiesgo() {
                             Resumen de Estado
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
-                            <Pie 
-                            ref={resumen_estado}
+                            {estado && estado.some(p => p > 0)  ? (
+                                <Pie 
+                                ref={resumen_estado}
                             data={
                                 {
                                     labels:["No se ha iniciado", "En curso", "Cerrado"],
@@ -50,7 +62,10 @@ export default function SeguimientoRiesgo() {
                             } 
                             height={250} 
                             width={400}
-                            />
+                                />
+                            ) : (
+                                <p className="text-center fw-bold">No se han registrado riesgos</p>
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>
@@ -60,8 +75,9 @@ export default function SeguimientoRiesgo() {
                             Resumen de Prioridad
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
-                            <Pie 
-                            ref={resumen_prioridad}
+                            {prioridad && prioridad.some(p => p > 0) ? (
+                                <Pie 
+                                ref={resumen_prioridad}
                             data={
                                 {
                                     labels:["Desconocida", "Nula", "Media", "Alta", "Critica"],
@@ -82,12 +98,16 @@ export default function SeguimientoRiesgo() {
                             height={250} 
                             width={400}
                             />
+                            ) : (
+                                <p className="text-center fw-bold">No se han registrado riesgos</p>
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
             <Button
             variant="success"
+            disabled={riesgos_cargados.length === 0}
             onClick={() => {
                 const grafico_estado = resumen_estado.current.toBase64Image();
                 const grafico_prioridad = resumen_prioridad.current.toBase64Image();
@@ -121,19 +141,30 @@ export default function SeguimientoRiesgo() {
                         </tr>
                     </thead>
                     <tbody>
-                        {riesgos.map((riesgo, index)=>(
-                            <tr key={index}>
-                                <td className='td'>{riesgo.id_riesgo}</td>
-                                <td className='td'>{riesgo.factor_riesgo}</td>
-                                <td className='td'>{riesgo.descripcion}</td>
-                                <td className='td'>{riesgo.estado}</td>
+                        {riesgos_cargados && riesgos_cargados.length > 0 ? (
+                            riesgos_cargados.map((riesgo, index)=>(
+                                <tr key={index}>
+                                    <td className='td'>{riesgo.id_riesgo}</td>
+                                    <td className='td'>{riesgo.factor_riesgo}</td>
+                                    <td className='td'>{riesgo.descripcion}</td>
+                                    <td className='td'>{riesgo.estado}</td>
                                 <td className='td'>{riesgo.prioridad}</td>
                             </tr>
-                        ))}
+                        ))
+                        ) : (
+                            <tr>
+                                <td colSpan={5} className='text-center'>No se han registrado riesgos</td>
+                            </tr>
+                        )}
                     </tbody>
                 </Table>
             </Row>
-                <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+            <Paginado
+                totalPaginas={total_paginas}
+                paginaActual={paginaActual}
+                setPaginaActual={setPaginaActual}
+            />
+            <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </Container>
         <Footer />
     </>

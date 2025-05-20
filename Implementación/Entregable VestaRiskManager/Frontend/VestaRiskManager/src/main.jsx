@@ -78,6 +78,7 @@ import {
   cargarEliminarUsuario,
   cargarCategoria,
   cargarProyecto,
+  cargarProyectos,
   obtenerListaProyectoLider,
   obtenerListaProyectoDesarrollador,
   dashboardLoader,
@@ -284,7 +285,7 @@ const App = () => {
     {
       path: "/inicio/proyectos",
       element: <RutaProtegida element={<ListaProyecto />} isAdmin={true} />,
-      loader: proyectoLoader,
+      loader: cargarProyectos,
     },
 
     {

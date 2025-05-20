@@ -333,6 +333,11 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerIncidenciasProyectoPaginado($id_proyecto, $pagina){
+        $resultado = $this->incidencia->obtenerTodasIncidenciaPaginado($id_proyecto, $pagina);
+        return $resultado;
+    }
+
     public function obtenerIncidenciaId($id_incidencia){
         $resultado = $this->incidencia->obtenerDatosIncidencia($id_incidencia);
         return $resultado;

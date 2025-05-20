@@ -9,13 +9,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
+import Paginado from "../../components/Paginado";
+import { obtenerProyectosPaginado } from "../../services/proyectos";
 
 export default function ListaProyecto() {
   const navigate = useNavigate();
-  const proyectos = useLoaderData();
+  const {proyectos, totalPaginas} = useLoaderData();
   const location = useLocation();
 
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [proyectosCargados, setProyectosCargados] = useState(proyectos);
+
   const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    obtenerProyectosPaginado(paginaActual).then(
+      ({proyectos, _}) => {
+        setProyectosCargados(proyectos);
+      }
+    )
+  }, [paginaActual])
+  
 
   useEffect(() => {
     if (location.state?.mensaje) {
@@ -53,10 +67,11 @@ export default function ListaProyecto() {
           <FontAwesomeIcon icon={faPlus} className="mx-1" />
           Nuevo Proyecto
         </Button>
-          {proyectos.map((item, key) => (
-            <Button
-              key={key}
-              className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
+          {proyectosCargados && proyectosCargados.length > 0 ? (
+            proyectosCargados.map((item, key) => (
+              <Button
+                key={key}
+                className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
             >
               {item.nombre}
               <div className="w-25 d-flex justify-content-end gap-1 align-items-center">
@@ -76,8 +91,15 @@ export default function ListaProyecto() {
                 />
               </div>
             </Button>
-          ))}
-
+          ))
+          ) : (
+            <p className="text-center fw-bold">No posee proyectos creados</p>
+          )}
+          <Paginado
+            paginaActual={paginaActual}
+            totalPaginas={totalPaginas}
+            setPaginaActual={setPaginaActual}
+          />
           <BotonSalir ruta={"/inicio"} />
         </div>
       </Contenedor>

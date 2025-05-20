@@ -10,6 +10,9 @@ export default function Salir() {
   useEffect(() => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("usuario");
+    localStorage.removeItem("pagina_riesgo")
+    localStorage.removeItem("orden_riesgo")
+    localStorage.removeItem("proyecto_seleccionado")
   }, []);
   return (
     <>

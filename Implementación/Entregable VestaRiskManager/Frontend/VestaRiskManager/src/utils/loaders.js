@@ -1,10 +1,10 @@
 import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
-import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioLider } from "../services/proyectos";
+import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
-import { obtenerIncidenciasProyecto } from "../services/incidencia";
+import { obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
 // Loaders de Usuarios
@@ -37,16 +37,21 @@ export async function cargarProyecto({ params }) {
   return { proyecto };
 }
 
+export async function cargarProyectos() {
+  const {proyectos, totalPaginas} = await obtenerProyectosPaginado();
+  return { proyectos, totalPaginas };
+}
+
 export const obtenerListaProyectoLider = async () => {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const proyectos = await obtenerProyectosUsuarioLider(usuario.email);
-  return { proyectos };
+  const {proyectos, totalPaginas} = await obtenerProyectosUsuarioLiderPaginado(usuario.email);
+  return { proyectos, totalPaginas };
 };
 
 export const obtenerListaProyectoDesarrollador = async () => {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
-  const proyectos = await obtenerProyectosUsuarioDesarrollador(usuario.email);
-  return { proyectos };
+  const {proyectos, totalPaginas} = await obtenerProyectosUsuarioDesarrolladorPaginado(usuario.email);
+  return { proyectos, totalPaginas };
 };
 
 
@@ -134,9 +139,9 @@ export const TareaLoader = async ({ params }) => {
 
 // Loader de Incidencias
 export const incidenciaLoader = async ({ params }) => {
-  const incidencias = await obtenerIncidenciasProyecto(params.id_proyecto);
+  const {incidencias, totalPaginas} = await obtenerIncidenciasProyectoPaginado(params.id_proyecto);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { incidencias, iteracion};
+  return { incidencias, totalPaginas, iteracion};
 };
 
 

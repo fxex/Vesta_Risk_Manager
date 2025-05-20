@@ -310,13 +310,24 @@ $router->add("GET","proyecto/participante/{nombre}", function($nombre) use($cont
 });
 
 $router->add("POST","proyectos/lider", function() use($controladorProyecto){
-    $body = file_get_contents('php://input'); // Obtiene el cuerpo de la peticion                
+    $body = file_get_contents('php://input');                
     if (!empty($body)) {
-        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $data = json_decode($body, true); 
         $resultado = $controladorProyecto->obtenerTodosProyectoLider($data["correo"]);
         echo json_encode($resultado); 
     } else {
-        echo json_encode(null);
+        echo json_encode([]);
+    }
+});
+
+$router->add("POST","proyectos/lider/{pagina}", function($pagina) use($controladorProyecto){
+    $body = file_get_contents('php://input');                
+    if (!empty($body)) {
+        $data = json_decode($body, true); 
+        $resultado = $controladorProyecto->obtenerTodosProyectoLiderPaginado($data["correo"], (int)$pagina);
+        echo json_encode($resultado); 
+    } else {
+        echo json_encode([]);
     }
 });
 
@@ -330,6 +341,23 @@ $router->add("POST","proyectos/desarrollador", function() use($controladorProyec
         echo json_encode(null);
     }
 });
+
+$router->add("POST","proyectos/desarrollador/{pagina}", function($pagina) use($controladorProyecto){
+    $body = file_get_contents('php://input');           
+    if (!empty($body)) {
+        $data = json_decode($body, true); 
+        $resultado = $controladorProyecto->obtenerTodosProyectoDesarrolladorPaginado($data["correo"], (int)$pagina);
+        echo json_encode($resultado); 
+    } else {
+        echo json_encode(null);
+    }
+});
+
+$router->add("GET", "proyectos/{pagina}", function($pagina) use ($controladorProyecto){
+    $resultado = $controladorProyecto->obtenerTodosProyectoPaginado((int)$pagina); 
+    echo json_encode($resultado);
+});
+
 
 $router->add("POST","proyecto", function() use($controladorProyecto){
     $body = file_get_contents('php://input');                 
@@ -366,6 +394,8 @@ $router->add("GET", "proyecto/{id}/iteracion", function($id) use ($controladorPr
     $resultado = $controladorProyecto->obtenerIteracionActual($id); 
     echo json_encode($resultado);
 });
+
+
 
 $router->add("PUT", "proyecto/{id}",function($id) use($controladorProyecto){
     $body = file_get_contents('php://input');                 
@@ -579,6 +609,11 @@ $router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyec
 
 $router->add("GET", "proyecto/{id_proyecto}/incidencias", function($id_proyecto) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerIncidenciasProyecto($id_proyecto);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/incidencias/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerIncidenciasProyectoPaginado($id_proyecto, $pagina);
     echo json_encode($resultado);
 });
 

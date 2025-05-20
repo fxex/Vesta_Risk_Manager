@@ -19,13 +19,28 @@ class GestorProyecto {
         return $resultado;
     }
 
+    public function obtenerTodosProyectoPaginado($pagina){
+        $resultado = $this->proyecto->obtenerTodosProyectoPaginado($pagina);
+        return $resultado;
+    }
+
     public function obtenerTodosProyectoLider($correo){
         $resultado = $this->proyecto->obtenerTodosProyectoLider($correo);
         return $resultado;
     }
 
+    public function obtenerTodosProyectoLiderPaginado($correo, $pagina){
+        $resultado = $this->proyecto->obtenerTodosProyectoLiderPaginado($correo, $pagina);
+        return $resultado;
+    }
+
     public function obtenerTodosProyectoDesarrollador($correo){
         $resultado = $this->proyecto->obtenerTodosProyectoDesarrollador($correo);
+        return $resultado;
+    }
+
+    public function obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina){
+        $resultado = $this->proyecto->obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina);
         return $resultado;
     }
 

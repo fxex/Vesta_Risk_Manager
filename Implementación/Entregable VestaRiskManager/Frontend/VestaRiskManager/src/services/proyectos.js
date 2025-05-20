@@ -11,6 +11,12 @@ export async function obtenerProyectos() {
   return json;
 }
 
+export async function obtenerProyectosPaginado(pagina) {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyectos/${paginaActual}`);
+  const json = await respuesta.json();
+  return json;
+}
 /**
  * Obtiene los datos de un participante por su nombre.
  *
@@ -81,8 +87,36 @@ export async function obtenerProyectosUsuarioLider(correo) {
   return json;
 }
 
+export async function obtenerProyectosUsuarioLiderPaginado(correo, pagina) {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyectos/lider/${paginaActual}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ correo: correo }),
+  });
+  const json = await respuesta.json();
+
+  return json;
+}
+
 export async function obtenerProyectosUsuarioDesarrollador(correo) {
   const respuesta = await fetch(`${URL}/proyectos/desarrollador`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ correo: correo }),
+  });
+  const json = await respuesta.json();
+
+  return json;
+}
+
+export async function obtenerProyectosUsuarioDesarrolladorPaginado(correo, pagina) {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyectos/desarrollador/${paginaActual}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

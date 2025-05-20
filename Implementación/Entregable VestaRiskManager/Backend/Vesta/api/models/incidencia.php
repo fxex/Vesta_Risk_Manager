@@ -69,6 +69,38 @@ class Incidencia{
         return $resultado;
     }
 
+    public function obtenerTodasIncidenciaPaginado($id_proyecto, $pagina){
+        $cantidad_incidencias = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_incidencias;
+        }
+
+        $query = "select i.id_incidencia, i.descripcion, i.gravedad, i.fecha_ocurrencia, i.id_riesgo, 
+        u.nombre as responsable_nombre from incidencia i 
+        inner join usuario u on i.id_usuario = u.id_usuario 
+        where i.id_proyecto = ?
+        limit $cantidad_incidencias offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_proyecto);
+        $stmt->execute();
+        $incidencias = $stmt->get_result();
+        $resultado = [];
+        while ($fila = $incidencias->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginas($cantidad_incidencias, $id_proyecto);
+        return ["incidencias" => $resultado, "totalPaginas" => $totalPaginas];
+    }
+    private function obtenerCantidadPaginas($cantidadIncidencias, $id_proyecto){
+        $totalQuery = $this->conexion->query("select count(*) as total from incidencia i 
+        where i.id_proyecto = $id_proyecto");
+        $totalIncidencias = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalIncidencias / $cantidadIncidencias);
+
+        return $totalPaginas;
+    }
     public function obtenerTodasIncidenciaUsuario($id_proyecto, $id_usuario){
         $query = "select i.id_incidencia, i.descripcion, i.gravedad, i.fecha_ocurrencia, i.id_riesgo, u.nombre as responsable from incidencia i inner join usuario u on i.id_usuario = u.id_usuario where id_proyecto = ? and id_usuario = ?";
         $stmt = $this->conexion->prepare($query);

@@ -24,3 +24,16 @@ export const obtenerIncidenciasProyecto = async (id_proyecto) => {
 
   return json;
 };
+
+export const obtenerIncidenciasProyectoPaginado = async (id_proyecto, pagina) => {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/incidencias/${paginaActual}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
