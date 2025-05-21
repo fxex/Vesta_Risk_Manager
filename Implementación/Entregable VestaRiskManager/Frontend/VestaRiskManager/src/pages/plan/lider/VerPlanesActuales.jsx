@@ -9,13 +9,14 @@ import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawes
 import BotonSalir from "../../../components/BotonSalir";
 import { eliminarPlan, obtenerPlanesProyectoPaginado } from "../../../services/planes";
 import Paginado from "../../../components/Paginado";
+import { formatearFecha } from "../../../utils/funciones";
 
 
 export default function VerPlanesActuales() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
 
-  const { planes, totalPaginas } = useLoaderData();
+  const { planes, totalPaginas, iteracion } = useLoaderData();
   const location = useLocation();
   
   const [mensaje, setMensaje] = useState("");
@@ -57,8 +58,27 @@ export default function VerPlanesActuales() {
           {mensaje}
         </Alert>
       ) : null}
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>{proyecto.nombre} - Planes actuales</h3>
+        <>
+          <h3>{proyecto.nombre} - Planes actuales</h3>
+          {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
+        </>
         <>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
@@ -119,6 +139,7 @@ export default function VerPlanesActuales() {
                             overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                           >
                             <Button
+                              disabled={iteracion === null}
                               variant="outline-warning"
                               style={{ marginLeft: "5px" }}
 
@@ -138,6 +159,7 @@ export default function VerPlanesActuales() {
                             }
                           >
                             <Button
+                              disabled={iteracion === null}
                               style={{ marginLeft: "5px" }}
                               onClick={()=>{
                                 setEliminar(true)

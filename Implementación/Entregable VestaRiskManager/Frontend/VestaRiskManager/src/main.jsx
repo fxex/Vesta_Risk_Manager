@@ -90,7 +90,8 @@ import {
   TareaLoader,
   incidenciaLoader,
   evaluacionesPasadasLoader,
-  evaluacionLoader
+  evaluacionLoader,
+  iteracionLoader
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
@@ -160,6 +161,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo",
       element: <RutaProtegida element={<MonitoreoLider />} />,
+      loader: iteracionLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/planes",

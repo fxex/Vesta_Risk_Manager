@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
-import { Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import { Alert, Button, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
 import { obtenerPlanesAnterioresProyectoPaginado } from "../../../services/planes";
 import Paginado from "../../../components/Paginado";
+import { formatearFecha } from "../../../utils/funciones";
 
 export default function VerPlanesPasados() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
 
-  const { planes, totalPaginas } = useLoaderData();
+  const { planes, totalPaginas, iteracion } = useLoaderData();
   
   const [paginaActual, setPaginaActual] = useState(1);
   const [planesCargados, setPlanesCargados] = useState(planes);
@@ -30,8 +31,28 @@ export default function VerPlanesPasados() {
   return (
     <>
       <NavegadorLider />
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>{proyecto.nombre} - Planes pasados</h3>
+        <>
+        
+          <h3>{proyecto.nombre} - Planes pasados</h3>
+          {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
+        </>
         <>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">

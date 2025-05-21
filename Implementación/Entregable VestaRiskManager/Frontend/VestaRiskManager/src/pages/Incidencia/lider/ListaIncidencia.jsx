@@ -73,7 +73,7 @@ export default function ListaIncidencia() {
             onClick={() => {
               navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/incidencia/crear`);
             }}
-            // disabled={iteracion === null}
+            disabled={iteracion === null}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nueva incidencia

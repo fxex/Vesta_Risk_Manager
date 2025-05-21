@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import NavegadorLider from '../../components/NavegadorLider'
 import Footer from '../../components/Footer'
-import { Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
+import { Alert, Button, Card, Col, Container, Row, Table } from 'react-bootstrap'
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useLoaderData } from 'react-router-dom'
@@ -32,6 +32,12 @@ export default function SeguimientoRiesgo() {
   return (
     <>
         <NavegadorLider />
+        {iteracion_actual === null ? (
+            <Alert variant="danger" className="text-center">
+                No existe una iteración activa del proyecto. Sólo se permite
+                visualizar.
+            </Alert>
+        ) : null}
         <Container style={{minHeight: "70vh"}}>
             <Row className='mt-2'>
                 <Col xs={6}>
@@ -107,7 +113,7 @@ export default function SeguimientoRiesgo() {
             </Row>
             <Button
             variant="success"
-            disabled={riesgos_cargados.length === 0}
+            disabled={riesgos_cargados.length === 0 || iteracion_actual === null}
             onClick={() => {
                 const grafico_estado = resumen_estado.current.toBase64Image();
                 const grafico_prioridad = resumen_prioridad.current.toBase64Image();

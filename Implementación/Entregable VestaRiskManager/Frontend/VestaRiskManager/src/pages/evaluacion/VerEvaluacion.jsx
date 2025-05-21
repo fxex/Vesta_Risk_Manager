@@ -5,24 +5,41 @@ import NavegadorLider from "../../components/NavegadorLider";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData, useLocation } from "react-router-dom";
 import { formatearFecha, formatearFechaHora, modificarImpacto, modificarProbabilidad } from "../../utils/funciones";
+import { Alert } from "react-bootstrap";
 
 export default function VerEvaluacion() {
   const location = useLocation();
   const ruta = location.state?.ruta;
 
-  const { evaluacion } = useLoaderData();
+  const { evaluacion, iteracion } = useLoaderData();
 
   return (
     <>
       <NavegadorLider />
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>Evaluacion - {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}</h3>
+        <>
+          <h3>Evaluacion - {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}</h3>
+          {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
+        </>
         <>
           <h4>Descripción del riesgo {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}</h4>
           <p>{evaluacion.descripcion_riesgo}</p>
-          <hr />
-          <h4>Iteración</h4>
-          <p>{evaluacion.nombre_iteracion} - {formatearFecha(evaluacion.fecha_inicio_iteracion)} - {formatearFecha(evaluacion.fecha_fin_iteracion)}</p>
           <hr />
           <h4>Descripción de la evaluación</h4>
           <p>{evaluacion.descripcion}</p>

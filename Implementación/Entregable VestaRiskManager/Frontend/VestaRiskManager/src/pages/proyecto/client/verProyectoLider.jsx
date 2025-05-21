@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Alert, Card, Col, Container, Row } from "react-bootstrap";
 
 import {
   Chart as ChartJS,
@@ -40,7 +40,7 @@ export default function VerProyectoLider() {
   const grafico_evolucion = useRef(null)
   const grafico_resumen = useRef(null)
   const grafico_matriz = useRef(null)
-  const {datosRiesgos} = useLoaderData()
+  const {datosRiesgos, iteracion} = useLoaderData()
   const {datos_proyecto, iteraciones, categorias, datos_evaluacion, evaluacion_tongji, datos_telaraña} = datosRiesgos;  
   
   const ultimasIteraciones = (iteraciones??[]).map(item=>item.nombre).reverse()
@@ -98,6 +98,12 @@ export default function VerProyectoLider() {
   return (
     <>
       <NavegadorLider />
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <>
         <Container className="mt-2 mx-0 d-flex flex-column justify-content-around">
         <Row className="d-flex flex-nowrap mb-5" style={{height:"50vh"}}>
@@ -215,7 +221,7 @@ export default function VerProyectoLider() {
         </Row>
         <Row className="d-flex flex-nowrap">
           <Col xs={9}>
-            <h2 className="text-center fs-4" style={{position:"absolute", top:"66%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
+            <h2 className="text-center fs-4" style={{position:"absolute", top:iteracion ?"66%":"77%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
             <Row className="mb-3">
               <Col xs={3}>
                 <Card>

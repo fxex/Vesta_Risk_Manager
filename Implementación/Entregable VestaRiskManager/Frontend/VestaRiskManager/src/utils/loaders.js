@@ -58,7 +58,8 @@ export const obtenerListaProyectoDesarrollador = async () => {
 // Loaders de Riesgos
 export const dashboardLoader = async ({ params }) => {
   const datosRiesgos = await obtenerDatosRiesgos(params.id_proyecto);
-  return {datosRiesgos};
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return {datosRiesgos, iteracion};
 };
 
 export const riesgoLoader = async ({ params }) => {
@@ -92,17 +93,20 @@ export const seguimientoLoader = async ({params}) =>{
 //Loader de Evaluaciones
 export const evaluacionesActualesLoader = async ({ params }) => {
   const {evaluaciones, totalPaginas} = await obtenerEvaluacionesActualesProyectoPaginado(params.id_proyecto);
-  return { evaluaciones, totalPaginas };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { evaluaciones, totalPaginas, iteracion };
 };
 
 export const evaluacionesPasadasLoader = async ({ params }) => {
   const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresProyectoPaginado(params.id_proyecto);
-  return { evaluaciones, totalPaginas };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { evaluaciones, totalPaginas, iteracion };
 };
 
 export const evaluacionLoader = async ({ params }) => {
   const evaluacion = await obtenerEvaluacionId(params.id_proyecto, params.id_evaluacion);
-  return { evaluacion };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { evaluacion, iteracion };
 };
 
 export const evaluacionCreacionLoader = async ({ params }) => {
@@ -115,7 +119,8 @@ export const evaluacionCreacionLoader = async ({ params }) => {
 // Loader de Planes
 export const planesLoader = async ({ params }) => {
   const {planes, totalPaginas} = await obtenerPlanesProyectoPaginado(params.id_proyecto);
-  return { planes, totalPaginas };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { planes, totalPaginas, iteracion };
 };
 
 export const planCreacionLoader = async ({ params }) => {
@@ -141,7 +146,8 @@ export const planLoader = async ({ params }) => {
 
 export const planesAntiguosLoader = async ({ params }) => {
   const {planes, totalPaginas} = await obtenerPlanesAnterioresProyectoPaginado(params.id_proyecto);
-  return { planes, totalPaginas };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { planes, totalPaginas, iteracion };
 };
 
 export const TareaLoader = async ({ params }) => {
@@ -162,4 +168,11 @@ export async function cargarIncidencia({ params }) {
   const incidencia = await obtenerIncidenciaId(params.id_incidencia);
   return { incidencia };
 }
+
+// Loader de Iteraciones
+export const iteracionLoader = async ({ params }) => {
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { iteracion };
+};
+
 

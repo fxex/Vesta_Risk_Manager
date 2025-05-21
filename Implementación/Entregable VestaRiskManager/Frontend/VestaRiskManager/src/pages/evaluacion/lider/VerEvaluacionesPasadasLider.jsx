@@ -3,6 +3,7 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
+  Alert,
   Button,
   OverlayTrigger,
   Table,
@@ -14,11 +15,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { obtenerEvaluacionesAnterioresProyectoPaginado } from "../../../services/evaluacion";
 import Paginado from "../../../components/Paginado";
+import { formatearFecha } from "../../../utils/funciones";
 
 export default function VerEvaluacionesPasadasLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const navigate = useNavigate();
-  const { evaluaciones, totalPaginas } = useLoaderData();
+  const { evaluaciones, totalPaginas, iteracion } = useLoaderData();
   const [paginaActual, setPaginaActual] = useState(1);
   const [evaluacionesCargadas, setEvaluacionesCargadas] = useState(evaluaciones);
 
@@ -33,16 +35,18 @@ export default function VerEvaluacionesPasadasLider() {
   return (
     <>
       <NavegadorLider />
-      {/*iteracion === null ? (
+      {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
           visualizar.
         </Alert>
-      ) : null*/}
+      ) : null}
       <Contenedor>
+
+        <>
         <h3>{proyecto.nombre} - Evaluaciones anteriores</h3>
         
-        {/*iteracion ? (
+        {iteracion ? (
           <>
             <h4>
               {iteracion.nombre}
@@ -52,7 +56,8 @@ export default function VerEvaluacionesPasadasLider() {
               {formatearFecha(iteracion.fecha_fin)}
             </h4>
           </>
-        ) : null*/}
+        ) : null}
+        </>
         <>
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">

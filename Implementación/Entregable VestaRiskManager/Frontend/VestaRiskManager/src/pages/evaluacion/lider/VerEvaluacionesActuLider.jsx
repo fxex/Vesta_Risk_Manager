@@ -13,7 +13,7 @@ import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faSearch, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
-import { modificarImpacto, modificarProbabilidad } from "../../../utils/funciones";
+import { formatearFecha, modificarImpacto, modificarProbabilidad } from "../../../utils/funciones";
 import Paginado from "../../../components/Paginado";
 import { obtenerEvaluacionesActualesProyectoPaginado } from "../../../services/evaluacion";
 
@@ -22,7 +22,7 @@ export default function VerEvaluacionesActuLider() {
   const location = useLocation();
   const navigate = useNavigate();
   
-  const { evaluaciones, totalPaginas } = useLoaderData();
+  const { evaluaciones, totalPaginas, iteracion } = useLoaderData();
   const [paginaActual, setPaginaActual] = useState(1);
   const [evaluacionesCargadas, setEvaluacionesCargadas] = useState(evaluaciones);
 
@@ -59,20 +59,29 @@ export default function VerEvaluacionesActuLider() {
           {mensaje}
         </Alert>
       ) : null}
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>{proyecto.nombre} - Evaluaciones Actuales</h3>
-        
-        {/*iteracion ? (
-          <>
-            <h4>
-              {iteracion.nombre}
-              {" - "}
-              {formatearFecha(iteracion.fecha_inicio)}
-              {" al "}
-              {formatearFecha(iteracion.fecha_fin)}
-            </h4>
-          </>
-        ) : null*/}
+        <>
+
+          <h3>{proyecto.nombre} - Evaluaciones Actuales</h3>
+          
+          {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
+        </>
         <>
         <Table size="sm" hover className="mt-2" bordered>
           <thead className="cabecera">
@@ -113,6 +122,7 @@ export default function VerEvaluacionesActuLider() {
                     overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                   >
                     <Button
+                      disabled={iteracion === null}
                       variant="outline-warning"
                       style={{ marginLeft: "5px" }}
 

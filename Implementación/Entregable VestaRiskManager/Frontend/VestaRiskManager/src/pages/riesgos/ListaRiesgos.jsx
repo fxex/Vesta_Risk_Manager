@@ -133,7 +133,7 @@ export default function ListaRiesgos() {
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo Riesgo
           </Button>
-          <DropdownButton variant="success" title="Ordenar segun">
+          <DropdownButton variant="success" title="Ordenar segun" disabled={iteracion === null}>
               <Dropdown.Item onClick={()=>{
                 setOrden(1)
                 localStorage.setItem("orden_riesgo", 1)
@@ -165,10 +165,11 @@ export default function ListaRiesgos() {
               </tr>
             </thead>
             <tbody>
-              {riesgosCargados.map((riesgo, key) => (
-                <tr key={key} style={{ textAlign: "center" }}>
-                  <td className="td" style={{}}>
-                    {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
+              { riesgosCargados.length > 0 ? (
+                riesgosCargados.map((riesgo, key) => (
+                  <tr key={key} style={{ textAlign: "center" }}>
+                    <td className="td" style={{}}>
+                      {riesgo.factor_riesgo === null || riesgo.evaluado <= 0 ? (
                       <OverlayTrigger
                         placement="top"
                         overlay={
@@ -397,7 +398,11 @@ export default function ListaRiesgos() {
                     </div>
                   </td>
                 </tr>
-              ))}
+              ))) : (
+                <tr>
+                  <td colSpan="8" className="text-center">No hay riesgos cargados</td>
+                </tr> 
+              )}
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />

@@ -5,6 +5,7 @@ import { useLoaderData, useLocation } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import { formatearFecha } from "../../utils/funciones";
 import NavegadorLider from "../../components/NavegadorLider";
+import { Alert } from "react-bootstrap";
 
 export default function VerPlan() {
   const {  iteracion, plan  } = useLoaderData();
@@ -14,15 +15,32 @@ export default function VerPlan() {
   return (
     <>
       <NavegadorLider />
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>Plan de {plan.tipo} del riesgo {plan.id_riesgo > 9 ? "RK" : "RK0"}{plan.id_riesgo}</h3>
         <>
+        <h3>Plan de {plan.tipo} del riesgo {plan.id_riesgo > 9 ? "RK" : "RK0"}{plan.id_riesgo}</h3>
+        {iteracion ? (
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
+          ) : null}
+        </>
+        <>
+
           <h4>Descripción del riesgo</h4>
           <p>{plan.riesgo.descripcion}</p>
           <hr />
-          <h4>Iteración</h4>
-          <p>{iteracion.nombre}: {formatearFecha(iteracion.fecha_inicio)} - {formatearFecha(iteracion.fecha_fin)}</p>
-          <hr/>
           <h4>Descripción del plan</h4>
           <p>{plan.descripcion}</p>
           <hr />
