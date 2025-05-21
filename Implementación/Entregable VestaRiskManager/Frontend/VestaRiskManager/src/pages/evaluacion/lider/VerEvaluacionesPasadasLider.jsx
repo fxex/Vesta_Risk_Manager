@@ -40,7 +40,7 @@ export default function VerEvaluacionesPasadasLider() {
         </Alert>
       ) : null*/}
       <Contenedor>
-        <h3>Evaluaciones anteriores</h3>
+        <h3>{proyecto.nombre} - Evaluaciones anteriores</h3>
         
         {/*iteracion ? (
           <>

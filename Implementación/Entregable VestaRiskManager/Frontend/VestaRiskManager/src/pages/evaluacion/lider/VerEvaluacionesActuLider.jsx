@@ -3,12 +3,13 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
+  Alert,
   Button,
   OverlayTrigger,
   Table,
   Tooltip,
 } from "react-bootstrap";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faSearch, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
@@ -18,6 +19,7 @@ import { obtenerEvaluacionesActualesProyectoPaginado } from "../../../services/e
 
 export default function VerEvaluacionesActuLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const location = useLocation();
   const navigate = useNavigate();
   
   const { evaluaciones, totalPaginas } = useLoaderData();
@@ -32,11 +34,33 @@ export default function VerEvaluacionesActuLider() {
     );
   }, [paginaActual]);
 
+  const [mensaje, setMensaje] = useState("")
+
+  useEffect(() => {
+    if (location.state?.mensaje) {
+      window.scrollTo(0, 0);
+      setMensaje(location.state.mensaje);
+
+      // Limpiar el mensaje después de unos segundos
+      const timeoutId = setTimeout(() => {
+        setMensaje("");
+      }, 3000); // Mostrar el mensaje durante 3 segundos
+
+      // Limpiar el timeout si el componente se desmonta
+      return () => clearTimeout(timeoutId);
+    }
+  }, [location.state]);
+
   return (
     <>
       <NavegadorLider />
+      {mensaje ? (
+        <Alert variant="success" className="text-center fs-4">
+          {mensaje}
+        </Alert>
+      ) : null}
       <Contenedor>
-        <h3>Evaluaciones Actuales</h3>
+        <h3>{proyecto.nombre} - Evaluaciones Actuales</h3>
         
         {/*iteracion ? (
           <>
@@ -93,9 +117,9 @@ export default function VerEvaluacionesActuLider() {
                       style={{ marginLeft: "5px" }}
 
                       onClick={() => {
-                        // navigate(
-                        //   `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/editar/${plan.id_plan}`
-                        // );
+                        navigate(
+                          `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/editar/${evaluacion.id_evaluacion}`,
+                        );
                       }}
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />

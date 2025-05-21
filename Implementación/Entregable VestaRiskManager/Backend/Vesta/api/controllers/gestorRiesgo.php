@@ -107,8 +107,25 @@ class GestorRiesgo {
             $id_evaluacion = $this->evaluacion->crearEvaluacion($data["responsable"], $id_riesgo, $id_proyecto, $data["id_iteracion"]);
             $factorRiesgo = $data["impacto"] * $data["probabilidad"];
             $this->riesgo->setFactorRiesgo($factorRiesgo);
-            $this->riesgo->actualizarFactorRiesgo($id_riesgo);
+            $this->riesgo->actualizarFactorRiesgo($id_riesgo, $id_proyecto);
             return $id_evaluacion > 0;
+        }else{
+            return false;
+        }
+    }
+
+    public function actualizarEvaluacion($id_evaluacion, $id_riesgo, $id_proyecto, $data){
+        $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable");
+        if ($comprobar) {
+            $this->evaluacion->setDescripcion($data["descripcion"]);
+            $this->evaluacion->setImpacto($data["impacto"]);
+            $this->evaluacion->setProbabilidad($data["probabilidad"]);
+            $this->evaluacion->setFechaRealizacion(date("Y-m-d H:i:s"));
+            $this->evaluacion->actualizarEvaluacion($id_evaluacion, $data["responsable"]);
+            $factorRiesgo = $data["impacto"] * $data["probabilidad"];
+            $this->riesgo->setFactorRiesgo($factorRiesgo);
+            $this->riesgo->actualizarFactorRiesgo($id_riesgo, $id_proyecto);
+            return true;
         }else{
             return false;
         }

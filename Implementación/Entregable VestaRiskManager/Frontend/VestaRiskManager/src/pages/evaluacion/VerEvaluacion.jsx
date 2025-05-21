@@ -27,6 +27,9 @@ export default function VerEvaluacion() {
           <h4>Descripción de la evaluación</h4>
           <p>{evaluacion.descripcion}</p>
           <hr />
+          <h4>Responsable</h4>
+          <p>{evaluacion.nombre_usuario}</p>
+          <hr />
           <h4>Impacto</h4>
           <p>{modificarImpacto(evaluacion.impacto)}</p>
           <hr />

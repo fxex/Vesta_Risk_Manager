@@ -211,14 +211,14 @@ class Riesgo {
         return $resultado;
     }
 
-    public function actualizarFactorRiesgo($id_riesgo) {
-        $query = "UPDATE riesgo SET factor_riesgo= ? WHERE id_riesgo = ?";
+    public function actualizarFactorRiesgo($id_riesgo, $id_proyecto) {
+        $query = "UPDATE riesgo SET factor_riesgo= ? WHERE id_riesgo = ? and id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("ii", $this->factor_riesgo, $id_riesgo);
+        $stmt->bind_param("iii", $this->factor_riesgo, $id_riesgo, $id_proyecto);
         if ($stmt->execute()) {
             return true;
         }else{
-            throw new Exception("Error al crear la evaluación: " . $stmt->error);
+            throw new Exception("Error al actualizar el factor de riesgo: " . $stmt->error);
             return false;
         }   
     }

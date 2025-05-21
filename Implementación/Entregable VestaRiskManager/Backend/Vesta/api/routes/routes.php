@@ -518,6 +518,17 @@ $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion", fun
     }
 });
 
+$router->add("PUT", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/evaluacion/editar/{id_evaluacion}", function($id_proyecto, $id_riesgo, $id_evaluacion) use ($controladorRiesgo){
+    $body = file_get_contents('php://input');          
+    if (!empty($body)) {
+        $data = json_decode($body, true);
+        $resultado = $controladorRiesgo->actualizarEvaluacion($id_evaluacion, $id_riesgo, $id_proyecto, $data);
+        echo json_encode(["modificacion"=>$resultado]);
+    } else {
+        echo json_encode(["modificacion"=>false]);
+    }
+});
+
 $router->add("POST", "proyecto/{id_proyecto}/riesgo/{id_riesgo}/plan", function($id_proyecto, $id_riesgo) use ($controladorRiesgo, $controladorUsuario){
     $validado = validarJWT($controladorUsuario);
     if ($validado) {

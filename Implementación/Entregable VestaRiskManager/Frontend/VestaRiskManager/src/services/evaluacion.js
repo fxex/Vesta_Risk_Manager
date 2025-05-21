@@ -11,9 +11,7 @@ export const crearEvaluacion = async (id_proyecto, id_riesgo, data) => {
       body: JSON.stringify(data),
     }
   );
-  const json = await respuesta.text();
-  console.log(json);
-  
+  const json = await respuesta.json();  
 
   return json;
 };
@@ -76,6 +74,22 @@ export const obtenerEvaluacionId = async (id_proyecto, id_evaluacion) => {
     },
   });
   const json = await respuesta.json();
+
+  return json;
+};
+
+export const editarEvaluacion = async (id_proyecto, id_riesgo, id_evaluacion, data) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/riesgo/${id_riesgo}/evaluacion/editar/${id_evaluacion}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();  
 
   return json;
 };

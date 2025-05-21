@@ -50,7 +50,19 @@ class Evaluacion {
         if ($stmt->execute()) {
             return $this->conexion->insert_id;
         } else {
-            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            throw new Exception("Error al crear la evaluacion: " . $stmt->error);
+            return -1;
+        }
+    }
+
+    public function actualizarEvaluacion($id_evaluacion, $id_usuario){
+        $query = "UPDATE evaluacion SET descripcion = ?, impacto = ?, probabilidad = ?, fecha_realizacion = ?, id_usuario = ? WHERE id_evaluacion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("siisii", $this->descripcion, $this->impacto, $this->probabilidad, $this->fecha_realizacion, $id_usuario, $id_evaluacion);
+        if ($stmt->execute()) {
+            return $this->conexion->insert_id;
+        } else {
+            throw new Exception("Error al actualizar la evaluacion: " . $stmt->error);
             return -1;
         }
     }
@@ -213,9 +225,10 @@ class Evaluacion {
     }
 
     public function obtenerEvaluacionId($id_evaluacion){
-        $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion, i.fecha_inicio as fecha_inicio_iteracion, i.fecha_fin as fecha_fin_iteracion FROM evaluacion e 
+        $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion, i.fecha_inicio as fecha_inicio_iteracion, i.fecha_fin as fecha_fin_iteracion, u.nombre as nombre_usuario FROM evaluacion e 
         inner join riesgo r on e.id_riesgo = r.id_riesgo 
-        inner join iteracion i on e.id_iteracion = i.id_iteracion 
+        inner join iteracion i on e.id_iteracion = i.id_iteracion
+        inner join usuario u on e.id_usuario = u.id_usuario
         where e.id_evaluacion = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_evaluacion);

@@ -93,6 +93,7 @@ import {
   evaluacionLoader
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
+import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -198,6 +199,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/evaluacion/crear",
       element: <RutaProtegida element={<CrearEvaluacionLider />} />,
       loader: evaluacionCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/evaluacion/editar/:id_evaluacion",
+      element: <RutaProtegida element={<EditarEvaluacion />}/>,
+      loader: evaluacionLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/evaluacion/:id_evaluacion",
