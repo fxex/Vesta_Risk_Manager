@@ -570,6 +570,7 @@ $router->add("GET", "proyecto/{id_proyecto}/evaluacion/{id_evaluacion}", functio
 });
 
 
+
 $router->add("GET", "proyecto/{id_proyecto}/planes", function($id_proyecto) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerPlanesIteracionActual($id_proyecto);
     echo json_encode($resultado);
@@ -606,6 +607,13 @@ $router->add("PUT", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyec
         echo json_encode(["modificado"=>false]);
     }
 });
+
+$router->add("DELETE", "proyecto/{id_proyecto}/plan/{id_plan}", function($id_proyecto, $id_plan) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->eliminarPlan($id_plan);
+    echo json_encode(["eliminado"=>$resultado]);
+});
+
+
 
 $router->add("GET", "proyecto/{id_proyecto}/incidencias", function($id_proyecto) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerIncidenciasProyecto($id_proyecto);

@@ -77,7 +77,12 @@ export default function VerPlanesPasados() {
                               variant="outline-primary"
                               onClick={() => {
                                 navigate(
-                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`
+                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
+                                  {
+                                    state: {
+                                      ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/plan/" + plan.id_plan,
+                                    },
+                                  }
                                 );
                               }}
                             >

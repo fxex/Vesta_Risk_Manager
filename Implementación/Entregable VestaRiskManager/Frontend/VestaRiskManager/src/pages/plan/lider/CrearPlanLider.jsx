@@ -4,10 +4,7 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
   crearPlan,
-  obtenerCantidadPlanTipo,
 } from "../../../services/planes";
-import { obtenerRiesgoId } from "../../../services/riesgos";
-import { obtenerIteracionActual } from "../../../services/proyectos";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,19 +17,6 @@ import {
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
 import { formatearFecha, verificarError } from "../../../utils/funciones";
-
-export const planCreacionLoader = async ({ params }) => {
-  const id_riesgo = params.id_riesgo;
-
-  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  const planes = await obtenerCantidadPlanTipo(
-    params.id_proyecto,
-    id_riesgo,
-    iteracion.id_iteracion
-  );
-  return { riesgo, iteracion, planes };
-};
 
 export default function CrearPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));

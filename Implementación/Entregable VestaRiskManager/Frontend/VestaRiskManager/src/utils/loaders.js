@@ -3,7 +3,7 @@ import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
-import {obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
+import {obtenerCantidadPlanTipo, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
@@ -116,6 +116,19 @@ export const evaluacionCreacionLoader = async ({ params }) => {
 export const planesLoader = async ({ params }) => {
   const {planes, totalPaginas} = await obtenerPlanesProyectoPaginado(params.id_proyecto);
   return { planes, totalPaginas };
+};
+
+export const planCreacionLoader = async ({ params }) => {
+  const id_riesgo = params.id_riesgo;
+
+  const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  const planes = await obtenerCantidadPlanTipo(
+    params.id_proyecto,
+    id_riesgo,
+    iteracion.id_iteracion
+  );
+  return { riesgo, iteracion, planes };
 };
 
 export const planLoader = async ({ params }) => {

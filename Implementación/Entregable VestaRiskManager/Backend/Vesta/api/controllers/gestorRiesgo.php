@@ -95,6 +95,8 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    
+
     public function crearEvaluacion($id_proyecto, $id_riesgo, $data){
         $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable") && !empty($data["id_iteracion"]);
         if ($comprobar) {
@@ -326,6 +328,13 @@ class GestorRiesgo {
         }else{
             return false;
         }
+    }
+
+    public function eliminarPlan($id_plan){
+        vincularTabla::eliminarVinculo($this->conexion,"participante_tarea", "id_tarea", $id_plan);
+        vincularTabla::eliminarVinculo($this->conexion,"tarea", "id_plan", $id_plan);
+        $resultado = $this->plan->eliminarPlan($id_plan);
+        return $resultado;
     }
 
     public function obtenerIncidenciasProyecto($id_proyecto){

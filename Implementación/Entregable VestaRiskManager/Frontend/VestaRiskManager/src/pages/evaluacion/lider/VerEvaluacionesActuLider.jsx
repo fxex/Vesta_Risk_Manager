@@ -101,7 +101,7 @@ export default function VerEvaluacionesActuLider() {
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </Button>
                   </OverlayTrigger>
-                  <OverlayTrigger
+                  {/* <OverlayTrigger
                     placement="top"
                     overlay={
                       <Tooltip id="tooltip-edit">Eliminar</Tooltip>
@@ -117,7 +117,7 @@ export default function VerEvaluacionesActuLider() {
                     >
                       <FontAwesomeIcon icon={faTrashCan} />
                     </Button>
-                  </OverlayTrigger>
+                  </OverlayTrigger> */}
 
                 </td>
               </tr>

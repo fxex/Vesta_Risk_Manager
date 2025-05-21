@@ -212,4 +212,16 @@ class Plan{
         }
     }
 
+    public function eliminarPlan($id_plan){
+        $query = "DELETE from plan where id_plan = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_plan);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al eliminar el plan: " . $stmt->error);
+            return false;
+        }
+    }
+
 }

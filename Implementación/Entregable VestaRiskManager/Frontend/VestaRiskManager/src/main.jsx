@@ -14,7 +14,6 @@ import CrearIncidencia from "./pages/Incidencia/CrearIncidencia.jsx";
 import {
   obtenerUsuarios as userLoader,
   obtenerPerfiles as perfilLoader,
-  obtenerPermisos as permisoLoader,
 } from "./services/usuarios.js";
 import RutaProtegida from "./utils/RutaProtegida.jsx";
 import VerUsuario from "./pages/usuarios/VerUsuario.jsx";
@@ -34,7 +33,6 @@ import ListaProyecto from "./pages/proyecto/ListaProyecto.jsx";
 import CrearProyecto from "./pages/proyecto/CrearProyecto.jsx";
 import {
   obtenerCategoriaGeneral,
-  obtenerProyectos as proyectoLoader,
 } from "./services/proyectos.js";
 import VerProyecto from "./pages/proyecto/VerProyecto.jsx";
 import ModificarProyecto from "./pages/proyecto/ModificarProyecto.jsx";
@@ -46,9 +44,7 @@ import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
 import CrearEvaluacionLider from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
 
 import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/CrearEvaluacionDesarrollador.jsx";
-import CrearPlanLider, {
-  planCreacionLoader,
-} from "./pages/plan/lider/crearPlanLider.jsx";
+import CrearPlanLider from "./pages/plan/lider/crearPlanLider.jsx";
 import CrearPlanDesarrollador from "./pages/plan/desarrollador/CrearPlanDesarrollador.jsx";
 import EditarRiesgo from "./pages/riesgos/EditarRiesgo.jsx";
 import MonitoreoLider from "./pages/monitoreo/lider/MonitoreoLider.jsx";
@@ -69,8 +65,7 @@ import VerEvaluacionesActualesDesarrollador from "./pages/evaluacion/desarrollad
 import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollador/VerEvaluacionesPasadasDesarrollador.jsx";
 import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
 import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
-import VerEvaluacion from "./pages/evaluacion/lider/VerEvaluacion.jsx";
-import VerPlanLider from "./pages/plan/lider/VerPlanLider.jsx";
+import VerEvaluacion from "./pages/evaluacion/VerEvaluacion.jsx";
 
 import { 
   cargarUsuario,  
@@ -90,14 +85,14 @@ import {
   evaluacionCreacionLoader,
   planesLoader,
   planLoader,
+  planCreacionLoader,
   planesAntiguosLoader,
   TareaLoader,
   incidenciaLoader,
-  cargarIncidencia,
   evaluacionesPasadasLoader,
   evaluacionLoader
 } from "./utils/loaders.js";
-
+import VerPlan from "./pages/plan/VerPlan.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -223,6 +218,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/:id_riesgo/plan/crear",
       element: <RutaProtegida element={<CrearPlanLider />} />,
       loader: planCreacionLoader,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/:id_plan",
+      element: <RutaProtegida element={<VerPlan />}/>,
+      loader: planLoader
     },
     {
       path:"/inicio/proyecto/lider/:id_proyecto/monitoreo/seguimiento",

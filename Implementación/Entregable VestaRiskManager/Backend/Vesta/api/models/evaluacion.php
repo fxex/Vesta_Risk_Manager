@@ -213,7 +213,7 @@ class Evaluacion {
     }
 
     public function obtenerEvaluacionId($id_evaluacion){
-        $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion FROM evaluacion e 
+        $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion, i.fecha_inicio as fecha_inicio_iteracion, i.fecha_fin as fecha_fin_iteracion FROM evaluacion e 
         inner join riesgo r on e.id_riesgo = r.id_riesgo 
         inner join iteracion i on e.id_iteracion = i.id_iteracion 
         where e.id_evaluacion = ?";
@@ -223,4 +223,5 @@ class Evaluacion {
         $resultado = $stmt->get_result()->fetch_assoc(); 
         return $resultado;
     }
+    
 }

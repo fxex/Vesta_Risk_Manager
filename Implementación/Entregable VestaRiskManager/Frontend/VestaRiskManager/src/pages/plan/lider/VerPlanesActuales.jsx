@@ -7,7 +7,7 @@ import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPenToSquare, faSearch, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
-import { obtenerPlanesProyectoPaginado } from "../../../services/planes";
+import { eliminarPlan, obtenerPlanesProyectoPaginado } from "../../../services/planes";
 import Paginado from "../../../components/Paginado";
 
 
@@ -104,7 +104,10 @@ export default function VerPlanesActuales() {
                               variant="outline-primary"
                               onClick={() => {
                                 navigate(
-                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`
+                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
+                                  {
+                                    state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/planes` }
+                                  }
                                 );
                               }}
                             >
@@ -181,10 +184,13 @@ export default function VerPlanesActuales() {
         </Modal.Body>
         <Modal.Footer>
           <Button
+            type="button"
             variant="outline-success"
             onClick={async() => {
-              // await eliminarRiesgo(id_proyecto, riesgoSeleccionado)
-              window.location.reload()
+              await eliminarPlan(proyecto.id_proyecto, planSeleccionado)
+              navigate(0);
+              setEliminar(false)
+              setPlanSeleccionado(0)
             }}
           >
             <FontAwesomeIcon
