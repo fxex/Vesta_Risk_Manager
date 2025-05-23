@@ -3,7 +3,7 @@ import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
-import {obtenerCantidadPlanTipo, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
+import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
@@ -154,6 +154,11 @@ export const TareaLoader = async ({ params }) => {
   const {tareas, totalPaginas} = await obtenerTareasProyectoPaginado(params.id_proyecto, params.id_usuario, 1);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { tareas, totalPaginas, iteracion};
+};
+
+export const verTareaLoader = async ({ params }) => {
+  const tarea = await obtenerDatosTareaId(params.id_tarea);
+  return { tarea };
 };
 
 // Loader de Incidencias

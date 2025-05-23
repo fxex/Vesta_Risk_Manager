@@ -168,4 +168,20 @@ class Tarea{
         }
     }
 
+    public function obtenerTareaId($id_tarea){
+        $query = "SELECT t.*, p.tipo as tipo_plan, GROUP_CONCAT(distinct u.nombre order by u.nombre separator ', ') as responsables
+        FROM tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        inner join participante_tarea pt on t.id_tarea = pt.id_tarea 
+        inner join usuario u on pt.id_usuario = u.id_usuario
+        where t.id_tarea = ?
+        GROUP BY t.id_tarea
+        ";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_tarea);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc(); 
+        return $resultado;
+    }
+
 }

@@ -668,6 +668,11 @@ $router->add("GET", "proyecto/{id_proyecto}/tareas/{id_usuario}/{pagina}", funct
     echo json_encode($resultado);
 });
 
+$router->add("GET", "tarea/{id_tarea}", function($id_tarea) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerTareaId($id_tarea);
+    echo json_encode($resultado);
+});
+
 $router->add("PUT", "tarea/{id_tarea}", function($id_tarea) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->completarTarea($id_tarea);
     echo json_encode(["modificado"=>$resultado]);

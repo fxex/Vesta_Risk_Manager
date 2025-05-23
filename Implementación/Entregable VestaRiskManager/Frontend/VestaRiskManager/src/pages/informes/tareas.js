@@ -84,45 +84,51 @@ export const informeTarea = (datos) => {
             text:(riesgo.id_riesgo > 9 ? "RK"+riesgo.id_riesgo : "RK0"+riesgo.id_riesgo) + " - " + riesgo.descripcion  
           }, 
           riesgo.planes.flatMap(plan =>[
-            {
-              layout: 'customLayout', // optional
-              table: {
-                // headers are automatically repeated if the table spans over multiple pages
-                // you can declare how many rows should be treated as headers
-                headerRows: 1,
-                widths: [ 20, 140, 80, 80, 130],
-                heights: ['*', 20, 20,20],
-        
-                body: [
-                  [ {text: 'Plan de '+ plan.tipo , colSpan:5, fillColor:"#8DB3E2", color:"#FFF", bold:true}, "","","",""], 
-                  [ 
-                    {text: "", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
-                    {text: "Tarea", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  
-                    {text: "Inicio", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
-                    {text: "Fin", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
-                    {text: "Responsables", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
-                  ],
-                  ...(plan.tareas?.length > 0 ?
-                    
-                      plan.tareas.flatMap(tarea => [
-                        [
-                          (tarea.fecha_fin_real ? { image: "check", width:15, height:15, alignment:"center", margin:[0,3,0,0]} : { text: ""}),
-                          {text:tarea.nombre, alignment:"center", margin:[0,3,0,0]}, 
-                          {text:tarea.fecha_inicio, alignment:"center", margin:[0,3,0,0]},
-                          {text:tarea.fecha_fin_real ? tarea.fecha_fin_real : tarea.fecha_fin, alignment:"center", margin:[0,3,0,0]},
-                          {text:tarea.responsables, alignment:"center", margin:[0,3,0,0]},
-                        ],
-                      ])
-                    :
-                    [
-                      [{text: "Este plan no tiene tareas asignadas", colSpan: 5, italics: true, alignment: "center", margin: [0, 6, 0, 6] },
-                      "", "", "", ""]
-                    ]
-                  )
-                ]
-              },
-              margin:[0,0,0,20]
-            },
+            (
+              plan.tareas?.length > 0 ?
+              {
+                layout: 'customLayout', // optional
+                table: {
+                  // headers are automatically repeated if the table spans over multiple pages
+                  // you can declare how many rows should be treated as headers
+                  headerRows: 1,
+                  widths: [ 20, 140, 80, 80, 130],
+                  heights: ['*', 20, 20,20],
+          
+                  body: [
+                    [ {text: 'Plan de '+ plan.tipo , colSpan:5, fillColor:"#8DB3E2", color:"#FFF", bold:true}, "","","",""], 
+                    [ 
+                      {text: "", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
+                      {text: "Tarea", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},  
+                      {text: "Inicio", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
+                      {text: "Fin", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
+                      {text: "Responsables", fillColor:"#cccccc", alignment:"center", margin:[0,3,0,0]},
+                    ],
+                    ...(plan.tareas?.length > 0 ?
+                      
+                        plan.tareas.flatMap(tarea => [
+                          [
+                            (tarea.fecha_fin_real ? { image: "check", width:15, height:15, alignment:"center", margin:[0,3,0,0]} : { text: ""}),
+                            {text:tarea.nombre, alignment:"center", margin:[0,3,0,0]}, 
+                            {text:tarea.fecha_inicio, alignment:"center", margin:[0,3,0,0]},
+                            {text:tarea.fecha_fin_real ? tarea.fecha_fin_real : tarea.fecha_fin, alignment:"center", margin:[0,3,0,0]},
+                            {text:tarea.responsables, alignment:"center", margin:[0,3,0,0]},
+                          ],
+                        ])
+                      :
+                      [
+                        [{text: "Este plan no tiene tareas asignadas", colSpan: 5, italics: true, alignment: "center", margin: [0, 6, 0, 6] },
+                        "", "", "", ""]
+                      ]
+                    )
+                  ]
+                },
+                margin:[0,0,0,20]
+              } :
+              {
+                text: "", margin:[0,2,0,0]
+              }
+            )
           ])
         ]),
       ],

@@ -513,4 +513,9 @@ class GestorRiesgo {
             return false;
         }
     }
+
+    public function obtenerTareaId($id_tarea){
+        $resultado = $this->tarea->obtenerTareaId($id_tarea);
+        return $resultado;
+    }
 }

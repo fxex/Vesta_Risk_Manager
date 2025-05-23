@@ -88,6 +88,7 @@ import {
   planCreacionLoader,
   planesAntiguosLoader,
   TareaLoader,
+  verTareaLoader,
   incidenciaLoader,
   evaluacionesPasadasLoader,
   evaluacionLoader,
@@ -95,6 +96,7 @@ import {
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
+import VerTarea from "./pages/tarea/VerTarea.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -182,6 +184,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tareas",
       element: <RutaProtegida element={<ListaTarea />} />,
       loader: TareaLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/:id_usuario/tarea/:id_tarea",
+      element: <RutaProtegida element={<VerTarea />} />,
+      loader: verTareaLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/plan/editar/:id_plan",

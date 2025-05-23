@@ -109,7 +109,7 @@ export default function ListaTarea() {
               </tr>
             </thead>
             <tbody>
-              {tareas && tareas.length > 0 ? tareas.map((tarea, key) => (
+              {tareasCargadas && tareasCargadas.length > 0 ? tareasCargadas.map((tarea, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
                   <td>{tarea.nombre}</td>
                   <td style={{textWrap:"wrap"}}>{tarea.descripcion}</td>
@@ -140,7 +140,11 @@ export default function ListaTarea() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
+                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
+                              state: {
+                                ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/" + usuario.id_usuario + "/tareas"
+                              }
+                            })
                           }}
                         >
                           <FontAwesomeIcon icon={faSearch} />

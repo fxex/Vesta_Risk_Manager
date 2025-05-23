@@ -181,3 +181,19 @@ export const eliminarPlan = async (id_proyecto, id_plan) => {
 
   return json;
 };
+
+
+export const obtenerDatosTareaId = async (id_tarea) => {
+  const respuesta = await fetch(
+    `${URL}/tarea/${id_tarea}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const json = await respuesta.json();
+
+  return json;
+};
