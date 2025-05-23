@@ -1,39 +1,44 @@
-import React from "react";
-import Navegador from "../../components/Navegador";
-import Footer from "../../components/Footer";
-import Contenedor from "../../components/Contenedor";
-import BotonSalir from "../../components/BotonSalir";
-import { useLoaderData } from "react-router-dom";
+import React from 'react'
+import NavegadorLider from '../../components/NavegadorLider'
+import Footer from '../../components/Footer'
+import Contenedor from '../../components/Contenedor'
+import { useLoaderData, useLocation } from 'react-router-dom';
+import BotonSalir from '../../components/BotonSalir';
+import { formatearFecha, formatearFechaHora } from '../../utils/funciones';
 
 export default function VerIncidencia() {
-  const { incidencia } = useLoaderData();
+    const location = useLocation();
+    const { incidencia, iteracion } = useLoaderData();
+    
+    const ruta = location.state?.ruta;
+    const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   return (
     <>
-      <Navegador />
-      <Contenedor>
-        <h3>Propiedades de la incidencia</h3>
+    <NavegadorLider/>
+    <Contenedor>
         <>
-          <h4>Identificador del riesgo</h4>
-          <p>{incidencia.id_riesgo}</p>
-          <hr />
-          <h4>Descripc&iacute;a</h4>
-          <p>{incidencia.descripcion}</p>
-          <hr />
-          <h4>Responsable</h4>
-          <p>{incidencia.responsable}</p>
-          <hr />
-          <h4>Gravedad</h4>
-          <p>{incidencia.gravedad}</p>
-          <hr />
-          <h4>Fecha de ocurrencia</h4>
-          <p>{incidencia.fecha_ocurrencia}</p>
-          <hr />
-          <h5>Opciones</h5>
-          <BotonSalir ruta={"/inicio/categorias"} />
+            <h3>{proyecto.nombre} - Incidencia del Riesgo {incidencia.id_riesgo < 9 ? "RK0" + incidencia.id_riesgo : "RK" + incidencia.id_riesgo}</h3>
+            <h4>{iteracion.nombre} - {formatearFecha(iteracion.fecha_inicio)} al {formatearFecha(iteracion.fecha_fin)}</h4>
         </>
-      </Contenedor>
-      <Footer />
+        <>
+        <h4>Descripción de la incidencia</h4>
+        <p>{incidencia.descripcion}</p>
+        <hr />
+        <h4>Gravedad</h4>
+        <p>{incidencia.gravedad}</p>
+        <hr />
+        <h4>Fecha de ocurrencia</h4>
+        <p>{formatearFechaHora(new Date(incidencia.fecha_ocurrencia))}</p>
+        <hr />
+        <h4>Responsable</h4>
+        <p>{incidencia.responsable_nombre}</p>
+        <hr />
+        <h4>Opciones</h4>
+        <BotonSalir ruta={ruta}/>
+        </>
+    </Contenedor>
+    <Footer />
     </>
-  );
+  )
 }

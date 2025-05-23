@@ -647,8 +647,19 @@ $router->add("POST", "proyecto/{id_proyecto}/incidencia", function($id_proyecto)
     }
 });
 
+$router->add("GET", "incidencia/{id_incidencia}/informe", function($id_incidencia) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerInformeIncidencia($id_incidencia);
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "incidencia/{id_incidencia}", function($id_incidencia) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerIncidenciaId($id_incidencia);
+    echo json_encode($resultado);
+});
+
+
+$router->add("DELETE", "incidencia/{id_incidencia}", function($id_incidencia) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->eliminarIncidencia($id_incidencia);
     echo json_encode($resultado);
 });
 

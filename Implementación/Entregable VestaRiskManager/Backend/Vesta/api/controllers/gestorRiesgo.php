@@ -364,7 +364,7 @@ class GestorRiesgo {
         return $resultado;
     }
 
-    public function obtenerIncidenciaId($id_incidencia){
+    public function obtenerInformeIncidencia($id_incidencia){
         $resultado = $this->incidencia->obtenerDatosIncidencia($id_incidencia);
         return $resultado;
     }
@@ -514,8 +514,18 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerIncidenciaId($id_incidencia){
+        $resultado = $this->incidencia->obtenerIncidenciaId($id_incidencia);
+        return $resultado;
+    }
+
     public function obtenerTareaId($id_tarea){
         $resultado = $this->tarea->obtenerTareaId($id_tarea);
+        return $resultado;
+    }
+
+    public function eliminarIncidencia($id_incidencia){
+        $resultado = $this->incidencia->eliminarIncidencia($id_incidencia);
         return $resultado;
     }
 }

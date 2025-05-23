@@ -11,6 +11,7 @@ export default function VerPlan() {
   const {  iteracion, plan  } = useLoaderData();
   const location = useLocation();
   const ruta = location.state?.ruta;
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
   return (
     <>
@@ -23,7 +24,7 @@ export default function VerPlan() {
       ) : null}
       <Contenedor>
         <>
-        <h3>Plan de {plan.tipo} del riesgo {plan.id_riesgo > 9 ? "RK" : "RK0"}{plan.id_riesgo}</h3>
+        <h3>{proyecto.nombre} - Plan de {plan.tipo} del riesgo {plan.id_riesgo > 9 ? "RK" : "RK0"}{plan.id_riesgo}</h3>
         {iteracion ? (
             <>
               <h4>

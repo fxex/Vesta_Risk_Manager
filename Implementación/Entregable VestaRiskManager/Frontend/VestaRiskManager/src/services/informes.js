@@ -1,7 +1,7 @@
 import { URL } from "../utils/funciones";
 
-export const obtenerIncidenciaId = async (id_incidencia) => {
-    const respuesta = await fetch(`${URL}/incidencia/${id_incidencia}`, {
+export const obtenerInformeIncidencia = async (id_incidencia) => {
+    const respuesta = await fetch(`${URL}/incidencia/${id_incidencia}/informe`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

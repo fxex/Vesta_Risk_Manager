@@ -5,6 +5,7 @@ import Footer from "../../../components/Footer";
 import {
   Alert,
   Button,
+  Modal,
   OverlayTrigger,
   Table,
   Tooltip,
@@ -14,7 +15,9 @@ import {
   faSearch,
   faPlus,
   faTrashCan,
-  faFilePdf
+  faFilePdf,
+  faCheck,
+  faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
@@ -22,19 +25,22 @@ import {
 } from "react-router-dom";
 import { formatearFecha, formatearFechaHora, filtrarYFormatear } from "../../../utils/funciones";
 import { informeIncidencia } from "../../informes/incidencia";
-import { obtenerIncidenciaId } from "../../../services/informes";
+import { obtenerInformeIncidencia } from "../../../services/informes";
 import BotonSalir from "../../../components/BotonSalir";
 import "./../../../styles/ListaRiesgo.css";
-import { obtenerIncidenciasProyectoPaginado } from "../../../services/incidencia";
+import { eliminarIncidencia, obtenerIncidenciasProyectoPaginado } from "../../../services/incidencia";
 import Paginado from "../../../components/Paginado";
 
 export default function ListaIncidencia() {
   const { incidencias, totalPaginas, iteracion } = useLoaderData();
   
+  
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const [paginaActual, setPaginaActual] = useState(1);
   const [incidenciasCargadas, setIncidenciasCargadas] = useState(incidencias);
+  const [eliminar, setEliminar] = useState(false);
+  const [incidenciaSeleccionada, setIncidenciaSeleccionada] = useState(0);
 
   useEffect(() => {
     obtenerIncidenciasProyectoPaginado(proyecto.id_proyecto, paginaActual).then(
@@ -111,7 +117,7 @@ export default function ListaIncidencia() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            
+                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/incidencia/${incidencia.id_incidencia}`, {state: {ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/incidencias"}})
                           }}
                         >
                           <FontAwesomeIcon icon={faSearch} />
@@ -125,7 +131,7 @@ export default function ListaIncidencia() {
                           style={{ marginLeft: "5px" }}
                           variant="outline-dark"
                           onClick={async() => {
-                            const respuesta = await obtenerIncidenciaId(incidencia.id_incidencia) 
+                            const respuesta = await obtenerInformeIncidencia(incidencia.id_incidencia) 
                             const iteracionExiste = iteracion ? iteracion : {}                                          
                             const datos = {
                               id_riesgo: `RK${incidencia.id_riesgo < 10 ? '0':''}${incidencia.id_riesgo}`,
@@ -156,6 +162,10 @@ export default function ListaIncidencia() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-danger"
+                          onClick={() => {
+                            setEliminar(true)
+                            setIncidenciaSeleccionada(incidencia.id_incidencia)
+                          }}
                         >
                           <FontAwesomeIcon icon={faTrashCan} />
                         </Button>
@@ -174,6 +184,54 @@ export default function ListaIncidencia() {
           <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
         </>
       </Contenedor>
+
+      <Modal
+        show={eliminar}
+        onHide={() => {
+          setEliminar(false)
+          setIncidenciaSeleccionada(0)
+        }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>¿Está seguro?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Una vez eliminada la incidencia, será irrecuperable.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            variant="outline-success"
+            onClick={async() => {
+              await eliminarIncidencia(incidenciaSeleccionada)
+              navigate(0);
+              setEliminar(false)
+              setIncidenciaSeleccionada(0)
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faCheck}
+              style={{ marginRight: "5px" }}
+            />
+            Eliminar
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={() => {
+              setEliminar(false)
+              setIncidenciaSeleccionada(0)
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faXmark}
+              style={{ marginRight: "5px" }}
+            />
+            Cancelar
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Footer />
     </>
   );

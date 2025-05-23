@@ -113,4 +113,29 @@ class Incidencia{
         }
         return $resultado;
     }
+
+    public function eliminarIncidencia($id_incidencia){
+        $query = "DELETE from incidencia where id_incidencia = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_incidencia);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al eliminar la incidencia: " . $stmt->error);
+            return false;
+        }
+    }
+
+    public function obtenerIncidenciaId($id_incidencia){
+        $query = "SELECT i.*, u.nombre as responsable_nombre 
+        FROM incidencia i 
+        inner join usuario u on i.id_usuario = u.id_usuario
+        where i.id_incidencia = ?
+        ";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_incidencia);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc(); 
+        return $resultado;
+    }
 }

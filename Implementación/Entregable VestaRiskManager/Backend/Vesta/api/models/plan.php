@@ -207,7 +207,7 @@ class Plan{
         if ($stmt->execute()) {
             return true;
         } else {
-            throw new Exception("Error al crear el usuario: " . $stmt->error);
+            throw new Exception("Error al actualizar el plan: " . $stmt->error);
             return false;
         }
     }

@@ -161,7 +161,7 @@ class Tarea{
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ssi", $this->estado, $this->fecha_fin_real, $id_tarea);
         if (!$stmt->execute()) {
-            throw new Exception("Error al eliminar el usuario: " . $stmt->error);
+            throw new Exception("Error al completar la tarea: " . $stmt->error);
             return false;
         }else{
             return true;
@@ -169,7 +169,7 @@ class Tarea{
     }
 
     public function obtenerTareaId($id_tarea){
-        $query = "SELECT t.*, p.tipo as tipo_plan, GROUP_CONCAT(distinct u.nombre order by u.nombre separator ', ') as responsables
+        $query = "SELECT t.*,p.id_riesgo, p.tipo as tipo_plan, GROUP_CONCAT(distinct u.nombre order by u.nombre separator ', ') as responsables
         FROM tarea t 
         inner join plan p on t.id_plan = p.id_plan
         inner join participante_tarea pt on t.id_tarea = pt.id_tarea 

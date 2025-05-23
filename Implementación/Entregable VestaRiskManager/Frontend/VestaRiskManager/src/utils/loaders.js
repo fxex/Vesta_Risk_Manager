@@ -1,10 +1,10 @@
 import { obtenerCategoriaId } from "../services/categorias";
-import { obtenerDatosInformeSeguimiento, obtenerIncidenciaId } from "../services/informes";
+import { obtenerDatosInformeSeguimiento } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
-import { obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
+import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
 // Loaders de Usuarios
@@ -158,7 +158,8 @@ export const TareaLoader = async ({ params }) => {
 
 export const verTareaLoader = async ({ params }) => {
   const tarea = await obtenerDatosTareaId(params.id_tarea);
-  return { tarea };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { tarea, iteracion };
 };
 
 // Loader de Incidencias
@@ -169,9 +170,10 @@ export const incidenciaLoader = async ({ params }) => {
 };
 
 
-export async function cargarIncidencia({ params }) {
+export async function verIncidenciaLoader({ params }) {
   const incidencia = await obtenerIncidenciaId(params.id_incidencia);
-  return { incidencia };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { incidencia, iteracion };
 }
 
 // Loader de Iteraciones

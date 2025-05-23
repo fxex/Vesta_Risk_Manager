@@ -203,7 +203,7 @@ export default function VerProyectoLider() {
                   responsive:false,
                   plugins:{
                     legend:{display:false},
-                    tooltip:{enabled:true}
+                    tooltip:{enabled:false}
                   },
                   scales:{
                     r:{

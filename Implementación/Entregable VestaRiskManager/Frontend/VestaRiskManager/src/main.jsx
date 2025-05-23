@@ -90,6 +90,7 @@ import {
   TareaLoader,
   verTareaLoader,
   incidenciaLoader,
+  verIncidenciaLoader,
   evaluacionesPasadasLoader,
   evaluacionLoader,
   iteracionLoader
@@ -97,6 +98,7 @@ import {
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
 import VerTarea from "./pages/tarea/VerTarea.jsx";
+import VerIncidencia from "./pages/Incidencia/VerIncidencia.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -198,6 +200,11 @@ const App = () => {
     {
       path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencia/crear",
       element: <RutaProtegida element={<CrearIncidencia />} />,
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/monitoreo/incidencia/:id_incidencia",
+      element: <RutaProtegida element={<VerIncidencia />} />,
+      loader: verIncidenciaLoader,
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgo/crear",

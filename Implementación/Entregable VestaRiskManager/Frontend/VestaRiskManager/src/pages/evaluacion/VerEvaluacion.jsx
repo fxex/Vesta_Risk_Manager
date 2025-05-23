@@ -10,8 +10,9 @@ import { Alert } from "react-bootstrap";
 export default function VerEvaluacion() {
   const location = useLocation();
   const ruta = location.state?.ruta;
-
   const { evaluacion, iteracion } = useLoaderData();
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+
 
   return (
     <>
@@ -24,7 +25,7 @@ export default function VerEvaluacion() {
       ) : null}
       <Contenedor>
         <>
-          <h3>Evaluacion - {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}</h3>
+          <h3>{proyecto.nombre} - Evaluacion del riesgo {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}</h3>
           {iteracion ? (
             <>
               <h4>

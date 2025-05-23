@@ -77,7 +77,7 @@ export default function EditarEvaluacion() {
         <Contenedor>
           <>
             <h3>
-              {proyecto.nombre} - Editar Evaluación del Riesgo {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}
+              {proyecto.nombre} - Editar evaluación del riesgo {evaluacion.id_riesgo > 9 ? "RK" : "RK0"}{evaluacion.id_riesgo}
             </h3>
           </>
           <Form>

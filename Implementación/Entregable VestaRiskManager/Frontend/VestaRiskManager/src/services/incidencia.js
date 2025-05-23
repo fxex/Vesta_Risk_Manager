@@ -37,3 +37,28 @@ export const obtenerIncidenciasProyectoPaginado = async (id_proyecto, pagina) =>
 
   return json;
 };
+
+
+export const obtenerIncidenciaId = async (id_incidencia) => {
+  const respuesta = await fetch(`${URL}/incidencia/${id_incidencia}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const eliminarIncidencia = async (id_incidencia) => {
+  const respuesta = await fetch(`${URL}/incidencia/${id_incidencia}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
