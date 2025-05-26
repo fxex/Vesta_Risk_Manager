@@ -113,11 +113,23 @@ $router->add("GET","usuario/{parametro}", function($parametro) use($controladorU
         if ($validado) {
             $autorizacion = getAuthorizationHeader();
             $resultado = $controladorUsuario->obtenerUsuarioId($parametro, $autorizacion);
+        }else {
+            header('HTTP/1.1 403 Forbidden');
+            echo json_encode([
+                "error" => "No tienes permisos para realizar esta acción o el token es inválido."
+            ]);
+            return;
         }
     }elseif (filter_var($parametro, FILTER_VALIDATE_EMAIL)) {
         $resultado = $controladorUsuario->obtenerUsuarioCorreo($parametro);
-    }else{
-        //TODO Modificar
+    }
+
+    if ($resultado == null) {
+        header('HTTP/1.1 404 Not Found');
+        echo json_encode([
+            "error" => "Usuario no encontrado."
+        ]);
+        return;
     }
     echo json_encode($resultado);
     
@@ -130,9 +142,21 @@ $router->add("POST","usuario", function() use($controladorUsuario){
         if (!empty($body)) {
             $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
             $resultado = $controladorUsuario->crearUsuario($data);
+            if(!$resultado){
+                http_response_code(400);
+                echo json_encode([
+                    "error" => "Los datos no son correctos."
+                ]);
+                return;
+            }
             echo json_encode(["creacion"=>$resultado]); 
+            http_response_code(201); // Código de estado 201 Created
         } else {
-            echo json_encode(["creacion"=>false]);
+            http_response_code(400);
+                echo json_encode([
+                    "error" => "Los datos no son correctos."
+                ]);
+                return;
         }
     }else{
         header('HTTP/1.1 403 Forbidden');
