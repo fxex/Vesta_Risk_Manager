@@ -98,6 +98,11 @@ class GestorUsuario {
     public function eliminarUsuario($id){
         if (is_numeric($id)) {
             vincularTabla::eliminarVinculo($this->conexion, "usuario_perfil", "id_usuario", $id);
+            vincularTabla::eliminarVinculo($this->conexion, "proyecto_participante", "id_usuario", $id);
+            vincularTabla::eliminarVinculo($this->conexion, "participante_riesgo", "id_usuario", $id);
+            vincularTabla::eliminarVinculo($this->conexion, "participante_tarea", "id_usuario", $id);
+            vincularTabla::modificarVinculo($this->conexion, "evaluacion", "id_usuario", "id_usuario", $id, NULL);
+            vincularTabla::modificarVinculo($this->conexion, "incidencia", "id_usuario", "id_usuario", $id, NULL);
             $this->usuario->setNombre(null);
             $this->usuario->setEmail(null);
             $resultado = $this->usuario->eliminarUsuario($id);

@@ -156,6 +156,48 @@ class Tarea{
         return $totalPaginas;
     }
 
+    public function obtenerTareasDesarrolladorPaginado($id_proyecto, $id_iteracion, $id_usuario, $pagina){
+        $cantidad_tareas = 10;
+        $offset = 0;
+        
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_tareas;
+        }
+
+        $query = "SELECT t.* 
+        from tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        inner join participante_tarea pt on t.id_tarea = pt.id_tarea and pt.id_usuario = ? 
+        where p.id_proyecto = ? and p.id_iteracion = ?
+        order by estado asc, t.fecha_inicio asc
+        limit $cantidad_tareas offset $offset";
+        
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii",$id_usuario, $id_proyecto, $id_iteracion);
+        $stmt->execute();
+        
+        $tareas = $stmt->get_result();
+        $resultados = [];
+        
+        while ($fila = $tareas->fetch_assoc()) {
+            $resultados[] = $fila;
+        }
+
+        $totalPaginas = $this->obtenerCantidadDesarrolladorPaginas($cantidad_tareas, $id_proyecto, $id_iteracion, $id_usuario);
+        return ["tareas"=>$resultados, "totalPaginas"=>$totalPaginas];
+    }
+
+    private function obtenerCantidadDesarrolladorPaginas($cantidadTareas, $id_proyecto, $id_iteracion, $id_usuario){
+        $totalQuery = $this->conexion->query("select count(*) as total from tarea t 
+        inner join plan p on t.id_plan = p.id_plan
+        inner join participante_tarea pt on t.id_tarea = pt.id_tarea and pt.id_usuario = $id_usuario 
+        where p.id_proyecto = $id_proyecto and p.id_iteracion = $id_iteracion");
+        $totalTareas = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalTareas / $cantidadTareas);
+
+        return $totalPaginas;
+    }
+
     public function completarTarea($id_tarea){
         $query="UPDATE tarea set estado = ?, fecha_fin_real = ? where id_tarea = ?";
         $stmt = $this->conexion->prepare($query);

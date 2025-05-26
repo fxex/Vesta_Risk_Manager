@@ -474,6 +474,14 @@ class GestorRiesgo {
         return $resultado;
     }
 
+    public function obtenerTareasDesarrolladorPaginado($id_proyecto, $id_usuario, $pagina){
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $resultado = $this->tarea->obtenerTareasDesarrolladorPaginado($id_proyecto, $iteracion_utilizada, $id_usuario, $pagina);
+        return $resultado;
+    }
+
 
     public function completarTarea($id_tarea){
         $this->tarea->setEstado(1);

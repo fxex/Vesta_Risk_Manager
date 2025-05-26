@@ -94,12 +94,15 @@ import {
   evaluacionLoader,
   iteracionLoader,
   evaluacionesActualesDesarrolladorLoader,
-  evaluacionesPasadasDesarrolladorLoader
+  evaluacionesPasadasDesarrolladorLoader,
+  TareaDesarrolladorLoader
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
 import VerTarea from "./pages/tarea/VerTarea.jsx";
 import VerIncidencia from "./pages/Incidencia/VerIncidencia.jsx";
+import ListaIncidenciaDesarrollador from "./pages/Incidencia/desarrollador/ListaIncidenciaDesarrollador.jsx";
+import ListaTareaDesarrollador from "./pages/tarea/desarrollador/ListaTareaDesarrollador.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -132,11 +135,11 @@ const App = () => {
       element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>,
       loader: evaluacionesPasadasDesarrolladorLoader
     },
-    {
-      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
-      element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
-      loader: planCreacionLoader,
-    },
+    // {
+    //   path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+    //   element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
+    //   loader: planCreacionLoader,
+    // },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
       element: <RutaProtegida element={<MonitoreoDesarrollador />} />,
@@ -146,6 +149,30 @@ const App = () => {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/evaluacion/:id_evaluacion",
       element: <RutaProtegida element={<VerEvaluacion />}/>,
       loader: evaluacionLoader
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/incidencias",
+      element: <RutaProtegida element={<ListaIncidenciaDesarrollador />} />,
+      loader: incidenciaLoader
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/incidencia/crear",
+      element: <RutaProtegida element={<CrearIncidencia />} />,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/incidencia/:id_incidencia",
+      element: <RutaProtegida element={<VerIncidencia />} />,
+      loader: verIncidenciaLoader,
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/:id_usuario/tareas",
+      element: <RutaProtegida element={<ListaTareaDesarrollador />} />,
+      loader: TareaDesarrolladorLoader
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/:id_usuario/tarea/:id_tarea",
+      element: <RutaProtegida element={<VerTarea />} />,
+      loader: verTareaLoader
     },
   ]
 

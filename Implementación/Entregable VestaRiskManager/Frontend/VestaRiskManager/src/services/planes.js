@@ -139,6 +139,18 @@ export const obtenerTareasProyectoPaginado = async (id_proyecto, id_usuario, pag
   return json;
 };
 
+export const obtenerTareasDesarrolladorProyectoPaginado = async (id_proyecto, id_usuario, pagina) => {
+  let paginaUsada = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/tareas/desarrollador/${id_usuario}/${paginaUsada}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
 
 export const completarTarea = async (id_tarea) => {
   const respuesta = await fetch(

@@ -186,7 +186,7 @@ export default function ListaTarea() {
                 onClick={async () => {
                   await completarTarea(tareaSeleccionada)
                   setCompletar(false);
-                  window.location.reload()
+                  navigate(0)
                 }}
               >
                 <FontAwesomeIcon

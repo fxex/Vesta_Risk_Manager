@@ -3,7 +3,7 @@ import { obtenerDatosInformeSeguimiento } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoDesarrolladorPaginado, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
-import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
+import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasDesarrolladorProyectoPaginado, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
 
@@ -166,6 +166,12 @@ export const planesAntiguosLoader = async ({ params }) => {
 
 export const TareaLoader = async ({ params }) => {
   const {tareas, totalPaginas} = await obtenerTareasProyectoPaginado(params.id_proyecto, params.id_usuario, 1);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { tareas, totalPaginas, iteracion};
+};
+
+export const TareaDesarrolladorLoader = async ({ params }) => {
+  const {tareas, totalPaginas} = await obtenerTareasDesarrolladorProyectoPaginado(params.id_proyecto, params.id_usuario, 1);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { tareas, totalPaginas, iteracion};
 };

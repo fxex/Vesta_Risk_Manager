@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Row, Col, Card, Table, Pagination, InputGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -16,6 +16,10 @@ export default function CrearIncidencia() {
   const navigate = useNavigate();
   const id_proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado")).id_proyecto;
   const { usuario } = useUsuario();
+
+  const location = useLocation()
+
+  const ruta = location.state?.ruta
   
   const [formData, setFormData] = useState({
     descripcion: "",
@@ -80,7 +84,7 @@ export default function CrearIncidencia() {
       const resultado = await crearIncidencia(id_proyecto, formData);
 
       if (resultado) {
-        navigate(`/inicio/proyecto/lider/${id_proyecto}/monitoreo/incidencias`, {
+        navigate(ruta, {
           state: { mensaje: "Incidencia creada con éxito" },
         });
       }
@@ -282,7 +286,7 @@ const handleRiesgoSelection = (id_riesgo) => {
             <Button
               variant="outline-danger"
               className="mx-1"
-              onClick={() => navigate(`/inicio/proyecto/lider/${id_proyecto}/monitoreo/incidencias`)}
+              onClick={() => navigate(ruta)}
             >
               × Cancelar
             </Button>

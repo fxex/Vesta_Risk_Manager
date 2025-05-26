@@ -678,6 +678,11 @@ $router->add("GET", "proyecto/{id_proyecto}/tareas/informe", function($id_proyec
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/tareas/desarrollador/{id_usuario}/{pagina}", function($id_proyecto, $id_usuario, $pagina) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerTareasDesarrolladorPaginado($id_proyecto, $id_usuario, $pagina);
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/tareas/{id_usuario}", function($id_proyecto, $id_usuario) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerTareas($id_proyecto, $id_usuario);
     echo json_encode($resultado);

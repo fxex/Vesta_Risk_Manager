@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Contenedor from "../../components/Contenedor";
-import NavegadorLider from "../../components/NavegadorLider";
-import Footer from "../../components/Footer";
+import Contenedor from "../../../components/Contenedor";
+import NavegadorLider from "../../../components/NavegadorLider";
+import Footer from "../../../components/Footer";
 import {
   Alert,
   Button,
@@ -20,13 +20,12 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
-import { useUsuario } from "../../context/usuarioContext";
-import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
-import { informeTarea } from "../informes/tareas";
-import BotonSalir from "../../components/BotonSalir";
-import "./../../styles/ListaRiesgo.css";
-import Paginado from "../../components/Paginado";
+import { formatearFecha } from "../../../utils/funciones";
+import { useUsuario } from "../../../context/usuarioContext";
+import { completarTarea, obtenerTareasProyectoPaginado } from "../../../services/planes";
+import BotonSalir from "../../../components/BotonSalir";
+import "./../../../styles/ListaRiesgo.css";
+import Paginado from "../../../components/Paginado";
 
 export default function ListaTareaDesarrollador() {
   const { tareas,totalPaginas, iteracion } = useLoaderData();
@@ -74,25 +73,6 @@ export default function ListaTareaDesarrollador() {
           ) : null}
         </>
         <>
-          <Button
-            variant="success"
-            onClick={async () => {
-              const resultado = await obtenerDatosTareasInforme(proyecto.id_proyecto)
-              const iteracionExiste = iteracion ? iteracion : {}
-              
-              const datos = {
-                nombre_proyecto: proyecto.nombre,
-                iteracion_nombre: iteracionExiste.nombre ? iteracionExiste.nombre : null,
-                lideres_proyecto: filtrarYFormatear(proyecto.participantes, "Lider del proyecto"),
-                desarrolladores_proyecto: filtrarYFormatear(proyecto.participantes, "Desarrollador"),
-                riesgos: resultado
-              }
-              informeTarea(datos)
-            }}
-            disabled={tareas.length == 0}
-          >
-            Generar Informe
-          </Button>
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
@@ -140,9 +120,9 @@ export default function ListaTareaDesarrollador() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
+                            navigate(`/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
                               state: {
-                                ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/" + usuario.id_usuario + "/tareas"
+                                ruta: "/inicio/proyecto/desarrollador/" + proyecto.id_proyecto + "/monitoreo/" + usuario.id_usuario + "/tareas"
                               }
                             })
                           }}
@@ -164,7 +144,7 @@ export default function ListaTareaDesarrollador() {
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+          <BotonSalir ruta={"/inicio/proyecto/desarrollador/" + proyecto.id_proyecto + "/monitoreo"} />
           <Modal
             show={completar}
             onHide={() => {
@@ -186,7 +166,7 @@ export default function ListaTareaDesarrollador() {
                 onClick={async () => {
                   await completarTarea(tareaSeleccionada)
                   setCompletar(false);
-                  window.location.reload()
+                  navigate(0)
                 }}
               >
                 <FontAwesomeIcon
