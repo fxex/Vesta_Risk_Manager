@@ -10,12 +10,14 @@ import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-ico
 import { useLocation } from "react-router-dom";
 import BotonSalir from "../../components/BotonSalir";
 import Paginado from "../../components/Paginado";
-import { obtenerProyectosPaginado } from "../../services/proyectos";
+import { obtenerProyectosId, obtenerProyectosPaginado } from "../../services/proyectos";
 
 export default function ListaProyecto() {
+  
   const navigate = useNavigate();
   const {proyectos, totalPaginas} = useLoaderData();
   const location = useLocation();
+  const comprobacionEspectador = location.pathname.includes("espectador");
 
   const [paginaActual, setPaginaActual] = useState(1);
   const [proyectosCargados, setProyectosCargados] = useState(proyectos);
@@ -45,7 +47,6 @@ export default function ListaProyecto() {
       return () => clearTimeout(timeoutId);
     }
   }, [location.state]);
-
   return (
     <>
       <Navegador />
@@ -57,16 +58,20 @@ export default function ListaProyecto() {
       <Contenedor>
         <h3>Proyectos</h3>
         <div style={{ minHeight: "40vh" }}>
-        <Button
-          variant="success"
-          className="mb-3"
-          onClick={() => {
-            navigate("/inicio/proyecto/crear");
-          }}
-        >
-          <FontAwesomeIcon icon={faPlus} className="mx-1" />
-          Nuevo Proyecto
-        </Button>
+          {
+            !comprobacionEspectador && (
+              <Button
+                variant="success"
+                className="mb-3"
+                onClick={() => {
+                  navigate("/inicio/proyecto/crear");
+                }}
+              >
+                <FontAwesomeIcon icon={faPlus} className="mx-1" />
+                Nuevo Proyecto
+              </Button>
+            )
+          }
           {proyectosCargados && proyectosCargados.length > 0 ? (
             proyectosCargados.map((item, key) => (
               <Button
@@ -77,29 +82,37 @@ export default function ListaProyecto() {
               <div className="w-25 d-flex justify-content-end gap-1 align-items-center">
                 <OverlayTrigger
                       placement="top"
-                      overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
+                      overlay={<Tooltip id="tooltip-edit">{comprobacionEspectador ? "Espectear" : "Ver"}</Tooltip>}
                     >
                 <FontAwesomeIcon
                   icon={faSearch}
                   className="fw-bold fs-3 me-2 icono"
-                  onClick={() => {
-                    navigate(`/inicio/proyecto/${item.id_proyecto}`);
+                  onClick={async() => {
+                    const proyecto = await obtenerProyectosId(item.id_proyecto);
+                    localStorage.setItem(
+                        "proyecto_seleccionado",
+                        JSON.stringify(proyecto)
+                      );
+                    navigate(comprobacionEspectador? `/inicio/espectador/proyecto/${item.id_proyecto}`:`/inicio/proyecto/${item.id_proyecto}`);
                   }}
                 />
                       
                     </OverlayTrigger>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
-                >
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className="fw-bold fs-3 me-2 icono"
-                    onClick={() => {
-                      navigate(`/inicio/proyecto/modificar/${item.id_proyecto}`);
-                    }}
-                  />
-                </OverlayTrigger>
+                {!comprobacionEspectador && (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                  >
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className="fw-bold fs-3 me-2 icono"
+                      onClick={() => {
+                        navigate(`/inicio/proyecto/modificar/${item.id_proyecto}`);
+                      }}
+                    />
+                  </OverlayTrigger>
+                )
+                }
                 
               </div>
             </Button>

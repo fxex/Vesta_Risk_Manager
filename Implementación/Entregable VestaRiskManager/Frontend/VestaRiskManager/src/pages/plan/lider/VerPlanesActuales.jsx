@@ -10,6 +10,7 @@ import BotonSalir from "../../../components/BotonSalir";
 import { eliminarPlan, obtenerPlanesProyectoPaginado } from "../../../services/planes";
 import Paginado from "../../../components/Paginado";
 import { formatearFecha } from "../../../utils/funciones";
+import { useUsuario } from "../../../context/usuarioContext";
 
 
 export default function VerPlanesActuales() {
@@ -50,9 +51,18 @@ export default function VerPlanesActuales() {
       }
     }, [location.state]);
 
+    const {usuario} = useUsuario();
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {mensaje ? (
         <Alert variant="success" className="text-center fs-4">
           {mensaje}
@@ -124,9 +134,9 @@ export default function VerPlanesActuales() {
                               variant="outline-primary"
                               onClick={() => {
                                 navigate(
-                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
+                                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
                                   {
-                                    state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/planes` }
+                                    state: { ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/planes` }
                                   }
                                 );
                               }}
@@ -139,7 +149,7 @@ export default function VerPlanesActuales() {
                             overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                           >
                             <Button
-                              disabled={iteracion === null}
+                              disabled={iteracion === null || comprobacionEspectador}
                               variant="outline-warning"
                               style={{ marginLeft: "5px" }}
 
@@ -159,7 +169,7 @@ export default function VerPlanesActuales() {
                             }
                           >
                             <Button
-                              disabled={iteracion === null}
+                              disabled={iteracion === null || comprobacionEspectador}
                               style={{ marginLeft: "5px" }}
                               onClick={()=>{
                                 setEliminar(true)
@@ -184,7 +194,7 @@ export default function VerPlanesActuales() {
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+          <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo`} />
         </>
       </Contenedor>
       <Footer />

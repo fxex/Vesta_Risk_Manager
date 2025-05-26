@@ -6,6 +6,7 @@ import BotonSalir from "../../components/BotonSalir";
 import { formatearFecha } from "../../utils/funciones";
 import NavegadorLider from "../../components/NavegadorLider";
 import { Alert } from "react-bootstrap";
+import { useUsuario } from "../../context/usuarioContext";
 
 export default function VerPlan() {
   const {  iteracion, plan  } = useLoaderData();
@@ -13,9 +14,17 @@ export default function VerPlan() {
   const ruta = location.state?.ruta;
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
+  const {usuario} = useUsuario();
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite

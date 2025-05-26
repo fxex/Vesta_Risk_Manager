@@ -22,6 +22,7 @@ import MantrizTonji from "../../../components/MatrizTonji";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import "../../../styles/BotonDescarga.css";
+import { useUsuario } from "../../../context/usuarioContext";
 
 ChartJS.register(
   RadialLinearScale,
@@ -94,10 +95,18 @@ export default function VerProyectoLider() {
     link.download = `grafico_matriz_tongji_${proyecto.nombre}.png`;
     link.click();
   }
+
+  const {usuario} = useUsuario()
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
   
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -111,7 +120,7 @@ export default function VerProyectoLider() {
             <Card style={{maxHeight:"50vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Evolución de cantidad de riesgo
-                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoEvolucion}/>
+                {!comprobacionEspectador && <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoEvolucion}/>}
               </Card.Header>
               <Card.Body >
                 <Bar
@@ -180,7 +189,7 @@ export default function VerProyectoLider() {
             <Card style={{maxHeight:"55vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Resumen de riesgos
-                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoTelaraña}/>
+                {!comprobacionEspectador && <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoTelaraña}/>}
               </Card.Header>
               <Card.Body>
                 <Radar 
@@ -221,7 +230,7 @@ export default function VerProyectoLider() {
         </Row>
         <Row className="d-flex flex-nowrap">
           <Col xs={9}>
-            <h2 className="text-center fs-4" style={{position:"absolute", top:iteracion ?"66%":"77%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
+            <h2 className="text-center fs-4" style={{position:"absolute", top:(iteracion && !comprobacionEspectador) ?"60%":"70%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
             <Row className="mb-3">
               <Col xs={3}>
                 <Card>
@@ -269,7 +278,7 @@ export default function VerProyectoLider() {
             <Card style={{maxHeight:"65vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Matriz tongji
-                <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarMatrizTongji}/>
+                {!comprobacionEspectador && <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarMatrizTongji}/>}
               </Card.Header>
               <Card.Body>
                 <MantrizTonji puntos={puntos} ref={grafico_matriz} />

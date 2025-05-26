@@ -25,7 +25,8 @@ export default function NavegadorLider() {
 
   const { usuario } = useUsuario();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
-  return (
+  if (usuario.perfil === "Espectador" || usuario.perfil === "Administrador") {
+    return (
     <Navbar
       expand="lg"
       bg="dark"
@@ -41,28 +42,23 @@ export default function NavegadorLider() {
         <Navbar.Collapse>
           <Nav className="me-auto" >
             <Nav.Link 
-            style={comprobacionLider ? {} : {display: "none"}}
-              href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
+              href={`/inicio/espectador/proyecto/${proyecto.id_proyecto}`}
             >
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
               Inicio
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/${
-                comprobacionLider ? "lider" : "desarrollador"
-              }/${proyecto.id_proyecto}/riesgos`}
+              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/riesgos`}
             >
               Lista de Riesgos
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/${
-                comprobacionLider ? "lider" : "desarrollador"
-              }/${proyecto.id_proyecto}/monitoreo`}
+              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/monitoreo`}
             >
               Monitoreo
             </Nav.Link>
 
-            <Nav.Link href={`/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
+            <Nav.Link href={usuario.perfil == "Administrador" ? `/inicio/proyecto/${proyecto.id_proyecto}` : `/inicio/espectador/proyectos`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className="mx-2"
@@ -82,4 +78,63 @@ export default function NavegadorLider() {
       </Container>
     </Navbar>
   );
+  }else {
+    return (
+      <Navbar
+        expand="lg"
+        bg="dark"
+        variant="dark"
+        className="gradient-border-bottom"
+      >
+        <Container className="d-flex align-items-center">
+          <Navbar.Brand href="/inicio" className="d-flex align-items-center">
+            <Figure.Image src={logoVesta} width={60} />
+            Vesta Risk Manager
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse>
+            <Nav className="me-auto" >
+              <Nav.Link 
+              style={comprobacionLider ? {} : {display: "none"}}
+                href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
+              >
+                <FontAwesomeIcon icon={faHouse} className="mx-2" />
+                Inicio
+              </Nav.Link>
+              <Nav.Link
+                href={`/inicio/proyecto/${
+                  comprobacionLider ? "lider" : "desarrollador"
+                }/${proyecto.id_proyecto}/riesgos`}
+              >
+                Lista de Riesgos
+              </Nav.Link>
+              <Nav.Link
+                href={`/inicio/proyecto/${
+                  comprobacionLider ? "lider" : "desarrollador"
+                }/${proyecto.id_proyecto}/monitoreo`}
+              >
+                Monitoreo
+              </Nav.Link>
+  
+              <Nav.Link href={`/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
+                <FontAwesomeIcon
+                  icon={faArrowRightFromBracket}
+                  className="mx-2"
+                />
+                Salir
+              </Nav.Link>
+  
+              <Nav.Link href={`/salir`}>
+                <FontAwesomeIcon
+                  icon={faArrowRightFromBracket}
+                  className="mx-2"
+                />
+                Cerrar Sesión
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    );
+  }
 }

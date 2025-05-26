@@ -8,11 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function Salir() {
   const navigate = useNavigate();
   useEffect(() => {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("pagina_riesgo")
-    localStorage.removeItem("orden_riesgo")
-    localStorage.removeItem("proyecto_seleccionado")
+    localStorage.clear()
   }, []);
   return (
     <>

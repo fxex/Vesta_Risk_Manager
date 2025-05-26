@@ -382,6 +382,36 @@ const App = () => {
     },
   ]
   const routerEspectador = [
+    {
+      path: "/inicio/espectador/proyectos",
+      element: <RutaProtegida element={<ListaProyecto />} />,
+      loader: cargarProyectos,
+    },
+    {
+      path: "/inicio/espectador/proyecto/:id_proyecto",
+      element: <RutaProtegida element={<VerProyectoLider />} />,
+      loader: dashboardLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/riesgos",
+      element: <RutaProtegida element={<ListaRiesgos />} />,
+      loader: riesgoLoaderPage,
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo",
+      element: <RutaProtegida element={<MonitoreoLider />} />,
+      loader: iteracionLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/planes",
+      element: <RutaProtegida element={<VerPlanesActuales />}/>,
+      loader: planesLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/planes/pasados",
+      element: <RutaProtegida element={<VerPlanesPasados />} />,
+      loader: planesAntiguosLoader,
+    },
 
   ]
 

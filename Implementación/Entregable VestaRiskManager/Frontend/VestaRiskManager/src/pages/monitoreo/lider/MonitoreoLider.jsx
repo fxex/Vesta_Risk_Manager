@@ -14,9 +14,17 @@ export default function MonitoreoLider() {
   const { id_proyecto } = useParams();
   const { usuario } = useUsuario();  
 
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+  
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+              <Alert variant="primary" className="text-center">
+                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+              </Alert>
+            ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -45,7 +53,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${id_proyecto}/monitoreo/planes`
+                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/monitoreo/planes`
                 );
               }}
             >
@@ -55,7 +63,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${id_proyecto}/monitoreo/planes/pasados`
+                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/monitoreo/planes/pasados`
                 );
               }}
             >
@@ -65,7 +73,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${id_proyecto}/evaluaciones/actual`
+                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/evaluaciones/actual`
                 );
               }}
             >
@@ -75,7 +83,7 @@ export default function MonitoreoLider() {
               className="boton_2"
               onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${id_proyecto}/evaluaciones/pasada`
+                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/evaluaciones/pasada`
                 );
               }}
             >
@@ -87,19 +95,19 @@ export default function MonitoreoLider() {
           <div className="d-flex gap-3" style={{ minHeight: "10vh" }}>
             <Button className="boton_2" onClick={() =>{
               navigate(
-                `/inicio/proyecto/lider/${id_proyecto}/monitoreo/incidencias`
+                `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/monitoreo/incidencias`
               );
             }
             }>Incidencias</Button>
             <Button className="boton_2" onClick={()=>{
               navigate(
-                `/inicio/proyecto/lider/${id_proyecto}/monitoreo/${usuario.id_usuario}/tareas`
+                `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/monitoreo/${usuario.id_usuario}/tareas`
               );
             }
             }>Tareas a realizar</Button>
             <Button className="boton_2" onClick={() => {
                 navigate(
-                  `/inicio/proyecto/lider/${id_proyecto}/monitoreo/seguimiento`
+                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${id_proyecto}/monitoreo/seguimiento`
                 );
               }
             }>Seguimiento de riesgo</Button>

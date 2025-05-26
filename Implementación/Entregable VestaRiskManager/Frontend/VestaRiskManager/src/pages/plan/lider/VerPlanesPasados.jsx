@@ -10,6 +10,7 @@ import BotonSalir from "../../../components/BotonSalir";
 import { obtenerPlanesAnterioresProyectoPaginado } from "../../../services/planes";
 import Paginado from "../../../components/Paginado";
 import { formatearFecha } from "../../../utils/funciones";
+import { useUsuario } from "../../../context/usuarioContext";
 
 export default function VerPlanesPasados() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -28,9 +29,17 @@ export default function VerPlanesPasados() {
     );
   }, [paginaActual]);
 
+  const {usuario} = useUsuario();
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+              <Alert variant="primary" className="text-center">
+                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+              </Alert>
+            ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -98,10 +107,10 @@ export default function VerPlanesPasados() {
                               variant="outline-primary"
                               onClick={() => {
                                 navigate(
-                                  `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
+                                  `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
                                   {
                                     state: {
-                                      ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/plan/" + plan.id_plan,
+                                      ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
                                     },
                                   }
                                 );
@@ -124,7 +133,7 @@ export default function VerPlanesPasados() {
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+          <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo`} />
         </>
       </Contenedor>
       <Footer />

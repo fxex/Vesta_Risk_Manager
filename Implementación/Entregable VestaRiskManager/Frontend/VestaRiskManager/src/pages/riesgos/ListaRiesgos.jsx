@@ -39,6 +39,7 @@ import escudoCritico from "../../assets/img/Escudo critico.png";
 import escudoVerde from "../../assets/img/escudo verde.png";
 import { formatearFecha } from "../../utils/funciones";
 import Paginado from "../../components/Paginado";
+import { useUsuario } from "../../context/usuarioContext";
 
 export default function ListaRiesgos() {
   const { id_proyecto } = useParams();
@@ -88,9 +89,17 @@ export default function ListaRiesgos() {
     }
   }, [location.state]);
 
+  const {usuario} = useUsuario()
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -128,7 +137,7 @@ export default function ListaRiesgos() {
                 }/${id_proyecto}/riesgo/crear`
               );
             }}
-            disabled={iteracion === null}
+            disabled={iteracion === null || comprobacionEspectador}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo Riesgo
@@ -180,9 +189,9 @@ export default function ListaRiesgos() {
                       >
                         <Figure.Image
                           src={escudoAmarillo}
-                          style={iteracion ? { cursor: "pointer" } : null}
+                          style={(iteracion && !comprobacionEspectador) ? { cursor: "pointer" } : null}
                           onClick={() => {
-                            if (iteracion) {
+                            if (iteracion && !comprobacionEspectador) {
                               navigate(
                                 `/inicio/proyecto/${
                                   comprobacionLider ? "lider" : "desarrollador"
@@ -227,9 +236,9 @@ export default function ListaRiesgos() {
                         >
                           <Figure.Image 
                             src={escudoRojo}
-                            style={iteracion ? { cursor: "pointer" } : null} 
+                            style={(iteracion && !comprobacionEspectador) ? { cursor: "pointer" } : null} 
                             onClick={() => {
-                              if (iteracion) {
+                              if (iteracion && !comprobacionEspectador) {
                                 navigate(
                                   `/inicio/proyecto/${
                                     comprobacionLider ? "lider" : "desarrollador"
@@ -267,9 +276,9 @@ export default function ListaRiesgos() {
                       >
                         <Figure.Image
                           src={escudoCritico}
-                          style={iteracion ? { cursor: "pointer" } : null}
+                          style={(iteracion && !comprobacionEspectador) ? { cursor: "pointer" } : null}
                           onClick={() => {
-                            if (iteracion) {
+                            if (iteracion && !comprobacionEspectador) {
                               navigate(
                                 `/inicio/proyecto/${
                                   comprobacionLider ? "lider" : "desarrollador"
@@ -313,16 +322,16 @@ export default function ListaRiesgos() {
                   </td>
                   <td className="td">
                     {
-                      comprobacionLider ? (
+                      comprobacionLider || comprobacionEspectador ? (
                         <>
-                        <div className={`${comprobacionLider ? "" : "d-none"}`}>
+                        <div className={`${comprobacionLider || comprobacionEspectador ? "" : "d-none"}`}>
                           <OverlayTrigger
                             placement="top"
                             overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                           >
                             <Button
                               variant="outline-warning"
-                              disabled={iteracion === null}
+                              disabled={iteracion === null || comprobacionEspectador}
                               onClick={() => {
                                 if (riesgo.factor_riesgo) {
                                   setConfirmarEdicion({ confirmar: true, riesgo });
@@ -343,7 +352,7 @@ export default function ListaRiesgos() {
                             <Button
                               style={{ marginLeft: "5px" }}
                               variant="outline-danger"
-                              disabled={iteracion === null}
+                              disabled={iteracion === null || comprobacionEspectador} 
                               onClick={()=>{
                                 setEliminar(true)
                                 setRiesgoSeleccionado(riesgo.id_riesgo)
@@ -365,7 +374,7 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-primary"
-                          disabled={iteracion === null || riesgo.evaluado > 0}
+                          disabled={iteracion === null || riesgo.evaluado > 0 || comprobacionEspectador}
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${
@@ -389,7 +398,7 @@ export default function ListaRiesgos() {
                           disabled={
                             iteracion === null ||
                             riesgo.factor_riesgo < 9 ||
-                            riesgo.evaluado <= 0
+                            riesgo.evaluado <= 0 || comprobacionEspectador
                           }
                           onClick={() => {
                             navigate(

@@ -108,7 +108,7 @@ export default function ListaTareaDesarrollador() {
                             setCompletar(true)
                             setTareaSeleccionada(tarea.id_tarea)
                           }}
-                          className={tarea.estado == '1' || tarea.pertenece == 0 ? "d-none":""}
+                          className={tarea.estado == '1' ? "d-none":""}
                         >
                           <FontAwesomeIcon icon={faCheck} />
                         </Button>
