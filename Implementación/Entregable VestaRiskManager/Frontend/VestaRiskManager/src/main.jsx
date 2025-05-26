@@ -412,6 +412,51 @@ const App = () => {
       element: <RutaProtegida element={<VerPlanesPasados />} />,
       loader: planesAntiguosLoader,
     },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/plan/:id_plan",
+      element: <RutaProtegida element={<VerPlan />}/>,
+      loader: planLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/evaluaciones/actual",
+      element: <RutaProtegida element={<VerEvaluacionesActuLider />} />,
+      loader: evaluacionesActualesLoader,
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/evaluaciones/pasada",
+      element: <RutaProtegida element={<VerEvaluacionesPasadasLider />}/>,
+      loader: evaluacionesPasadasLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/evaluacion/:id_evaluacion",
+      element: <RutaProtegida element={<VerEvaluacion />}/>,
+      loader: evaluacionLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/incidencias",
+      element: <RutaProtegida element={<ListaIncidencia />} />,
+      loader: incidenciaLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/incidencia/:id_incidencia",
+      element: <RutaProtegida element={<VerIncidencia />} />,
+      loader: verIncidenciaLoader,
+    },
+    {
+      path:"/inicio/proyecto/espectador/:id_proyecto/monitoreo/seguimiento",
+      element: <RutaProtegida element={<SeguimientoRiesgo />} />,
+      loader: seguimientoLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/:id_usuario/tareas",
+      element: <RutaProtegida element={<ListaTarea />} />,
+      loader: TareaLoader
+    },
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/monitoreo/:id_usuario/tarea/:id_tarea",
+      element: <RutaProtegida element={<VerTarea />} />,
+      loader: verTareaLoader
+    },
 
   ]
 

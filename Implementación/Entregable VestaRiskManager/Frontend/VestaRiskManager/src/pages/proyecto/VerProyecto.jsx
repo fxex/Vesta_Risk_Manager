@@ -3,10 +3,12 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { formatearFecha } from "../../utils/funciones";
+import { Button } from "react-bootstrap";
 
 export default function VerProyecto() {
+  const navigate = useNavigate();
   const { proyecto } = useLoaderData();
 
   return (
@@ -63,6 +65,9 @@ export default function VerProyecto() {
           <hr />
           <h5>Opciones</h5>
           <BotonSalir ruta={"/inicio/proyectos"} />
+          <Button className="m-1" onClick={()=>{
+            navigate(`/inicio/espectador/proyecto/${proyecto.id_proyecto}`)
+          }}>Espectear Proyecto</Button>
         </>
       </Contenedor>
       <Footer />

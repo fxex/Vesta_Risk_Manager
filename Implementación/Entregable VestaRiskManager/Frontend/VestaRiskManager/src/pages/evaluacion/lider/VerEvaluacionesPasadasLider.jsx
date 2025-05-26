@@ -16,6 +16,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { obtenerEvaluacionesAnterioresProyectoPaginado } from "../../../services/evaluacion";
 import Paginado from "../../../components/Paginado";
 import { formatearFecha } from "../../../utils/funciones";
+import { useUsuario } from "../../../context/usuarioContext";
 
 export default function VerEvaluacionesPasadasLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -32,9 +33,17 @@ export default function VerEvaluacionesPasadasLider() {
     );
   }, [paginaActual]);
 
+  const {usuario} = useUsuario();
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -84,8 +93,8 @@ export default function VerEvaluacionesPasadasLider() {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
-                          state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/evaluaciones/pasadas` }
+                        navigate(`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
+                          state: { ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/evaluaciones/pasada` }
                         })
                       }}
                     >
@@ -102,7 +111,7 @@ export default function VerEvaluacionesPasadasLider() {
           </tbody>
         </Table>
         <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-        <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+        <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo`} />
         </>
       </Contenedor>
       <Footer />

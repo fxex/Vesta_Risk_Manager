@@ -298,7 +298,7 @@ class Evaluacion {
         $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion, i.fecha_inicio as fecha_inicio_iteracion, i.fecha_fin as fecha_fin_iteracion, u.nombre as nombre_usuario FROM evaluacion e 
         inner join riesgo r on e.id_riesgo = r.id_riesgo 
         inner join iteracion i on e.id_iteracion = i.id_iteracion
-        inner join usuario u on e.id_usuario = u.id_usuario
+        left join usuario u on e.id_usuario = u.id_usuario
         where e.id_evaluacion = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_evaluacion);

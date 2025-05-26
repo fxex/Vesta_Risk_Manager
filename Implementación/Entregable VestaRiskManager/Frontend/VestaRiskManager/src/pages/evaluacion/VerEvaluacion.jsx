@@ -6,6 +6,7 @@ import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData, useLocation } from "react-router-dom";
 import { formatearFecha, formatearFechaHora, modificarImpacto, modificarProbabilidad } from "../../utils/funciones";
 import { Alert } from "react-bootstrap";
+import { useUsuario } from "../../context/usuarioContext";
 
 export default function VerEvaluacion() {
   const location = useLocation();
@@ -13,10 +14,18 @@ export default function VerEvaluacion() {
   const { evaluacion, iteracion } = useLoaderData();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
+  const {usuario} = useUsuario();
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
 
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -46,7 +55,7 @@ export default function VerEvaluacion() {
           <p>{evaluacion.descripcion}</p>
           <hr />
           <h4>Responsable</h4>
-          <p>{evaluacion.nombre_usuario}</p>
+          <p>{evaluacion.nombre_usuario ? evaluacion.nombre_usuario : "No posee responsable"}</p>
           <hr />
           <h4>Impacto</h4>
           <p>{modificarImpacto(evaluacion.impacto)}</p>

@@ -16,6 +16,7 @@ import BotonSalir from "../../../components/BotonSalir";
 import { formatearFecha, modificarImpacto, modificarProbabilidad } from "../../../utils/funciones";
 import Paginado from "../../../components/Paginado";
 import { obtenerEvaluacionesActualesProyectoPaginado } from "../../../services/evaluacion";
+import { useUsuario } from "../../../context/usuarioContext";
 
 export default function VerEvaluacionesActuLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -51,9 +52,17 @@ export default function VerEvaluacionesActuLider() {
     }
   }, [location.state]);
 
+  const {usuario} = useUsuario();
+    const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+        <Alert variant="primary" className="text-center">
+          Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+        </Alert>
+      ) : null}
       {mensaje ? (
         <Alert variant="success" className="text-center fs-4">
           {mensaje}
@@ -109,8 +118,8 @@ export default function VerEvaluacionesActuLider() {
                     <Button
                       variant="outline-primary"
                       onClick={() => {
-                        navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
-                          state: { ruta: `/inicio/proyecto/lider/${proyecto.id_proyecto}/evaluaciones/actual` }
+                        navigate(`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/evaluacion/${evaluacion.id_evaluacion}`, {
+                          state: { ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/evaluaciones/actual` }
                         })
                       }}
                     >
@@ -122,7 +131,7 @@ export default function VerEvaluacionesActuLider() {
                     overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                   >
                     <Button
-                      disabled={iteracion === null}
+                      disabled={iteracion === null || comprobacionEspectador}
                       variant="outline-warning"
                       style={{ marginLeft: "5px" }}
 
@@ -163,7 +172,7 @@ export default function VerEvaluacionesActuLider() {
           </tbody>
         </Table>
         <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-        <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+        <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo`} />
         </>
       </Contenedor>
       <Footer />

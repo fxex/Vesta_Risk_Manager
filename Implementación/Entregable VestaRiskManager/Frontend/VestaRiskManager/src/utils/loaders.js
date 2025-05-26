@@ -105,7 +105,7 @@ export const evaluacionesActualesDesarrolladorLoader = async ({ params }) => {
 };
 
 export const evaluacionesPasadasLoader = async ({ params }) => {
-  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresProyectoPaginado(params.id_proyecto);
+  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresProyectoPaginado(params.id_proyecto);  
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { evaluaciones, totalPaginas, iteracion };
 };

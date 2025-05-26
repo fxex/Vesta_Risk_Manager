@@ -308,7 +308,7 @@ class GestorRiesgo {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
-        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada, $pagina);
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyectoPaginado($id_proyecto, $iteracion_utilizada, $pagina);
         return $evaluaciones;
     }
 

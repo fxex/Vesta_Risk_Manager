@@ -30,6 +30,7 @@ import BotonSalir from "../../../components/BotonSalir";
 import "./../../../styles/ListaRiesgo.css";
 import { eliminarIncidencia, obtenerIncidenciasProyectoPaginado } from "../../../services/incidencia";
 import Paginado from "../../../components/Paginado";
+import { useUsuario } from "../../../context/usuarioContext";
 
 export default function ListaIncidencia() {
   const { incidencias, totalPaginas, iteracion } = useLoaderData();
@@ -49,9 +50,17 @@ export default function ListaIncidencia() {
       }
     );
   }, [paginaActual]);
+
+  const { usuario } = useUsuario();
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+              <Alert variant="primary" className="text-center">
+                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+              </Alert>
+            ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -83,7 +92,7 @@ export default function ListaIncidencia() {
                 }
               );
             }}
-            disabled={iteracion === null}
+            disabled={iteracion === null || comprobacionEspectador} 
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nueva incidencia
@@ -121,7 +130,7 @@ export default function ListaIncidencia() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/incidencia/${incidencia.id_incidencia}`, {state: {ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/incidencias"}})
+                            navigate(`/inicio/proyecto/${comprobacionEspectador ? "espectador":"lider"}/${proyecto.id_proyecto}/monitoreo/incidencia/${incidencia.id_incidencia}`, {state: {ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador":"lider"}/${proyecto.id_proyecto}/monitoreo/incidencias`}})
                           }}
                         >
                           <FontAwesomeIcon icon={faSearch} />
@@ -134,6 +143,7 @@ export default function ListaIncidencia() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-dark"
+                          disabled={comprobacionEspectador}
                           onClick={async() => {
                             const respuesta = await obtenerInformeIncidencia(incidencia.id_incidencia) 
                             const iteracionExiste = iteracion ? iteracion : {}                                          
@@ -166,6 +176,7 @@ export default function ListaIncidencia() {
                         <Button
                           style={{ marginLeft: "5px" }}
                           variant="outline-danger"
+                          disabled={iteracion === null || comprobacionEspectador}
                           onClick={() => {
                             setEliminar(true)
                             setIncidenciaSeleccionada(incidencia.id_incidencia)
@@ -185,7 +196,7 @@ export default function ListaIncidencia() {
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+          <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador": "lider"}/${proyecto.id_proyecto}/monitoreo`} />
         </>
       </Contenedor>
 

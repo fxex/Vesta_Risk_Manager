@@ -10,6 +10,7 @@ import { filtrarYFormatear } from '../../utils/funciones'
 import BotonSalir from '../../components/BotonSalir'
 import { useState } from 'react'
 import Paginado from '../../components/Paginado'
+import { useUsuario } from '../../context/usuarioContext'
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function SeguimientoRiesgo() {
@@ -28,10 +29,18 @@ export default function SeguimientoRiesgo() {
     const indice_inicio = (paginaActual - 1) * riesgos_por_pagina;
     const indice_fin = indice_inicio + riesgos_por_pagina;
     const riesgos_cargados = riesgos.slice(indice_inicio, indice_fin);
+
+    const { usuario } = useUsuario();
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
     
   return (
     <>
         <NavegadorLider />
+        {comprobacionEspectador ? (
+              <Alert variant="primary" className="text-center">
+                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+              </Alert>
+            ) : null}
         {iteracion_actual === null ? (
             <Alert variant="danger" className="text-center">
                 No existe una iteración activa del proyecto. Sólo se permite
@@ -113,7 +122,7 @@ export default function SeguimientoRiesgo() {
             </Row>
             <Button
             variant="success"
-            disabled={riesgos_cargados.length === 0 || iteracion_actual === null}
+            disabled={riesgos_cargados.length === 0 || iteracion_actual === null || comprobacionEspectador}
             onClick={() => {
                 const grafico_estado = resumen_estado.current.toBase64Image();
                 const grafico_prioridad = resumen_prioridad.current.toBase64Image();

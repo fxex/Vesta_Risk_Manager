@@ -5,6 +5,8 @@ import Contenedor from '../../components/Contenedor'
 import { useLoaderData, useLocation } from 'react-router-dom';
 import BotonSalir from '../../components/BotonSalir';
 import { formatearFecha, formatearFechaHora } from '../../utils/funciones';
+import { Alert } from 'react-bootstrap';
+import { useUsuario } from '../../context/usuarioContext';
 
 export default function VerIncidencia() {
     const location = useLocation();
@@ -13,9 +15,23 @@ export default function VerIncidencia() {
     const ruta = location.state?.ruta;
     const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
+    const { usuario } = useUsuario();
+      const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+
   return (
     <>
     <NavegadorLider/>
+    {comprobacionEspectador ? (
+              <Alert variant="primary" className="text-center">
+                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+              </Alert>
+            ) : null}
+      {iteracion === null ? (
+        <Alert variant="danger" className="text-center">
+          No existe una iteración activa del proyecto. Sólo se permite
+          visualizar.
+        </Alert>
+      ) : null}
     <Contenedor>
         <>
             <h3>{proyecto.nombre} - Incidencia del Riesgo {incidencia.id_riesgo < 9 ? "RK0" + incidencia.id_riesgo : "RK" + incidencia.id_riesgo}</h3>

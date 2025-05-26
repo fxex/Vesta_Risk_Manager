@@ -47,11 +47,17 @@ export default function ListaTarea() {
       setTareasCargadas(tareas)
     })
   }, [paginaActual])
+    
+  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
   
-
   return (
     <>
       <NavegadorLider />
+      {comprobacionEspectador ? (
+                    <Alert variant="primary" className="text-center">
+                      Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+                    </Alert>
+                  ) : null}
       {iteracion === null ? (
         <Alert variant="danger" className="text-center">
           No existe una iteración activa del proyecto. Sólo se permite
@@ -89,7 +95,7 @@ export default function ListaTarea() {
               }
               informeTarea(datos)
             }}
-            disabled={tareas.length == 0}
+            disabled={tareas.length == 0 || comprobacionEspectador}
           >
             Generar Informe
           </Button>
@@ -128,7 +134,7 @@ export default function ListaTarea() {
                             setCompletar(true)
                             setTareaSeleccionada(tarea.id_tarea)
                           }}
-                          className={tarea.estado == '1' || tarea.pertenece == 0 ? "d-none":""}
+                          className={tarea.estado == '1' || tarea.pertenece == 0 || comprobacionEspectador ? "d-none":""}
                         >
                           <FontAwesomeIcon icon={faCheck} />
                         </Button>
@@ -140,9 +146,9 @@ export default function ListaTarea() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
+                            navigate(`/inicio/proyecto/${comprobacionEspectador ? "espectador": "lider"}/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
                               state: {
-                                ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/" + usuario.id_usuario + "/tareas"
+                                ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador": "lider"}/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tareas`
                               }
                             })
                           }}
@@ -164,7 +170,7 @@ export default function ListaTarea() {
             </tbody>
           </Table>
           <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
-          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
+          <BotonSalir ruta={`/inicio/proyecto/${comprobacionEspectador ? "espectador": "lider"}/${proyecto.id_proyecto}/monitoreo`} />
           <Modal
             show={completar}
             onHide={() => {
