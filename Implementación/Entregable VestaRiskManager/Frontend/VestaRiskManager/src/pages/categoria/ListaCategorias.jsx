@@ -3,7 +3,7 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { Table, Button, Modal, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Alert, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -85,37 +85,54 @@ export default function ListaCategorias() {
                   <td>{item.nombre}</td>
                   <td>{item.descripcion}</td>
                   <td style={{ minWidth: "12em", textAlign: "center" }}>
-                    <Button
-                      variant="outline-primary"
-                      className="mx-1"
-                      onClick={() => {
-                        navigate(`/inicio/categoria/${item.id_categoria}`);
-                      }}
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
                     >
-                      <FontAwesomeIcon icon={faSearch} />
-                    </Button>
-                    <Button
-                      variant="outline-warning"
-                      className="mx-1"
-                      onClick={() => {
-                        navigate(
-                          `/inicio/categoria/modificar/${item.id_categoria}`
-                        );
-                      }}
+                      <Button
+                        variant="outline-primary"
+                        className="mx-1"
+                        onClick={() => {
+                          navigate(`/inicio/categoria/${item.id_categoria}`);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faSearch} />
+                      </Button>
+
+                    </OverlayTrigger>
+
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                     >
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </Button>
-                    <Button
-                      variant="outline-danger"
-                      className="mx-1"
-                      disabled={null}
-                      onClick={() => {
-                        setCategoriaSeleccionada(item.id_categoria)
-                        setEliminar(true)
-                      }}
+                      <Button
+                        variant="outline-warning"
+                        className="mx-1"
+                        onClick={() => {
+                          navigate(
+                            `/inicio/categoria/modificar/${item.id_categoria}`
+                          );
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
                     >
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </Button>
+                      <Button
+                        variant="outline-danger"
+                        className="mx-1"
+                        disabled={null}
+                        onClick={() => {
+                          setCategoriaSeleccionada(item.id_categoria)
+                          setEliminar(true)
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </Button>
+                    </OverlayTrigger>
                   </td>
                 </tr>
               ))}

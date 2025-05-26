@@ -3,7 +3,7 @@ import Navegador from "../../components/Navegador";
 import Footer from "../../components/Footer";
 import Contenedor from "../../components/Contenedor";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { Table, Button, Alert, Modal } from "react-bootstrap";
+import { Table, Button, Alert, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -87,26 +87,41 @@ export default function ListaUsuarios() {
                     {item.email}
                   </td>
                   <td>
-                    <Button
-                      variant="outline-primary"
-                      className="mx-1"
-                      onClick={() => {
-                        navigate(`/inicio/usuario/${item.id_usuario}`);
-                      }}
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
                     >
-                      <FontAwesomeIcon icon={faSearch} />
-                    </Button>
-                    <Button
-                      variant="outline-warning"
-                      className="mx-1"
-                      onClick={() => {
-                        navigate(
-                          `/inicio/usuario/modificar/${item.id_usuario}`
-                        );
-                      }}
+                      <Button
+                        variant="outline-primary"
+                        className="mx-1"
+                        onClick={() => {
+                          navigate(`/inicio/usuario/${item.id_usuario}`);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faSearch} />
+                      </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                     >
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </Button>
+                      <Button
+                        variant="outline-warning"
+                        className="mx-1"
+                        onClick={() => {
+                          navigate(
+                            `/inicio/usuario/modificar/${item.id_usuario}`
+                          );
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </Button>
+
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                    >
                     <Button
                       variant="outline-danger"
                       className="mx-1"
@@ -118,6 +133,8 @@ export default function ListaUsuarios() {
                     >
                       <FontAwesomeIcon icon={faTrashCan} />
                     </Button>
+
+                    </OverlayTrigger>
                   </td>
                 </tr>
               ))}

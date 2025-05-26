@@ -4,7 +4,7 @@ import Footer from "../../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Contenedor from "../../../components/Contenedor";
 import "./../../../styles/Home.css";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   obtenerProyectosId,
@@ -52,19 +52,25 @@ export default function ListaProyectoLider() {
                 className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
             >
               {item.nombre}
-              <FontAwesomeIcon
-                icon={faSearch}
-                className="fw-bold fs-3 me-2 icono"
-                onClick={async () => {
-                  const proyecto = await obtenerProyectosId(item.id_proyecto);
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip id="tooltip-edit">Ingresar</Tooltip>}
+              >
 
-                  localStorage.setItem(
-                    "proyecto_seleccionado",
-                    JSON.stringify(proyecto)
-                  );
-                  navigate(`/inicio/proyecto/lider/${item.id_proyecto}`);
-                }}
-              />
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="fw-bold fs-3 me-2 icono"
+                  onClick={async () => {
+                    const proyecto = await obtenerProyectosId(item.id_proyecto);
+
+                    localStorage.setItem(
+                      "proyecto_seleccionado",
+                      JSON.stringify(proyecto)
+                    );
+                    navigate(`/inicio/proyecto/lider/${item.id_proyecto}`);
+                  }}
+                />
+              </OverlayTrigger>
             </Button>
             ))
           ) : (

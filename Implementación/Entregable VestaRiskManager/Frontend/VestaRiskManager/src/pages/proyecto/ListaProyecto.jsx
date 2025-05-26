@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Contenedor from "../../components/Contenedor";
 import "./../../styles/Home.css";
-import { Alert, Button } from "react-bootstrap";
+import { Alert, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
@@ -75,13 +75,10 @@ export default function ListaProyecto() {
             >
               {item.nombre}
               <div className="w-25 d-flex justify-content-end gap-1 align-items-center">
-                <FontAwesomeIcon
-                  icon={faPenToSquare}
-                  className="fw-bold fs-3 me-2 icono"
-                  onClick={() => {
-                    navigate(`/inicio/proyecto/modificar/${item.id_proyecto}`);
-                  }}
-                />
+                <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip id="tooltip-edit">Ver</Tooltip>}
+                    >
                 <FontAwesomeIcon
                   icon={faSearch}
                   className="fw-bold fs-3 me-2 icono"
@@ -89,6 +86,21 @@ export default function ListaProyecto() {
                     navigate(`/inicio/proyecto/${item.id_proyecto}`);
                   }}
                 />
+                      
+                    </OverlayTrigger>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                >
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    className="fw-bold fs-3 me-2 icono"
+                    onClick={() => {
+                      navigate(`/inicio/proyecto/modificar/${item.id_proyecto}`);
+                    }}
+                  />
+                </OverlayTrigger>
+                
               </div>
             </Button>
           ))
