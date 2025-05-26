@@ -41,6 +41,19 @@ export const obtenerEvaluacionesActualesProyectoPaginado = async (id_proyecto, p
   return json;
 };
 
+export const obtenerEvaluacionesActualesProyectoDesarrolladorPaginado = async (id_proyecto, id_usuario, pagina) => {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones/${paginaActual}/${id_usuario}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
 export const obtenerEvaluacionesAnterioresProyecto = async (id_proyecto) => {
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones/antiguos`, {
     method: "GET",
@@ -56,6 +69,19 @@ export const obtenerEvaluacionesAnterioresProyecto = async (id_proyecto) => {
 export const obtenerEvaluacionesAnterioresProyectoPaginado = async (id_proyecto, pagina) => {
   const paginaActual = pagina ? pagina : 1;
   const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones/antiguos/${paginaActual}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json;
+};
+
+export const obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado = async (id_proyecto, id_usuario, pagina) => {
+  const paginaActual = pagina ? pagina : 1;
+  const respuesta = await fetch(`${URL}/proyecto/${id_proyecto}/evaluaciones/antiguos/${paginaActual}/${id_usuario}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -567,9 +567,18 @@ $router->add("GET", "proyecto/{id_proyecto}/evaluaciones/antiguos/{pagina}", fun
     $resultado = $controladorRiesgo->obtenerEvaluacionesAnterioresPaginado($id_proyecto, $pagina);
     echo json_encode($resultado);
 });
+$router->add("GET", "proyecto/{id_proyecto}/evaluaciones/antiguos/{pagina}/{id_usuario}", function($id_proyecto, $pagina, $id_usuario) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado($id_proyecto, $pagina, $id_usuario);
+    echo json_encode($resultado);
+});
 
 $router->add("GET", "proyecto/{id_proyecto}/evaluaciones/{pagina}", function($id_proyecto, $pagina) use ($controladorRiesgo){ 
     $resultado = $controladorRiesgo->obtenerEvaluacionesActualesPaginado($id_proyecto, $pagina);
+    echo json_encode($resultado);
+});
+
+$router->add("GET", "proyecto/{id_proyecto}/evaluaciones/{pagina}/{id_usuario}", function($id_proyecto, $pagina, $id_usuario) use ($controladorRiesgo){ 
+    $resultado = $controladorRiesgo->obtenerEvaluacionesActualesDesarrolladorPaginado($id_proyecto, $pagina, $id_usuario);
     echo json_encode($resultado);
 });
 

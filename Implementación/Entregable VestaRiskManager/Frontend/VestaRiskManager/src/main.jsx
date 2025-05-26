@@ -77,7 +77,6 @@ import {
   obtenerListaProyectoLider,
   obtenerListaProyectoDesarrollador,
   dashboardLoader,
-  riesgoLoader,
   riesgoLoaderPage,
   cargarRiesgo,
   seguimientoLoader,
@@ -93,7 +92,9 @@ import {
   verIncidenciaLoader,
   evaluacionesPasadasLoader,
   evaluacionLoader,
-  iteracionLoader
+  iteracionLoader,
+  evaluacionesActualesDesarrolladorLoader,
+  evaluacionesPasadasDesarrolladorLoader
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
@@ -109,7 +110,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgos",
       element: <RutaProtegida element={<ListaRiesgos />} />,
-      loader: riesgoLoader,
+      loader: riesgoLoaderPage,
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/crear",
@@ -124,10 +125,12 @@ const App = () => {
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/actual",
       element: <RutaProtegida element={<VerEvaluacionesActualesDesarrollador />} />,
+      loader: evaluacionesActualesDesarrolladorLoader
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/evaluaciones/pasada",
-      element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>
+      element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>,
+      loader: evaluacionesPasadasDesarrolladorLoader
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
@@ -137,7 +140,13 @@ const App = () => {
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
       element: <RutaProtegida element={<MonitoreoDesarrollador />} />,
-    }
+      loader: iteracionLoader
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/evaluacion/:id_evaluacion",
+      element: <RutaProtegida element={<VerEvaluacion />}/>,
+      loader: evaluacionLoader
+    },
   ]
 
   const routerLider = [

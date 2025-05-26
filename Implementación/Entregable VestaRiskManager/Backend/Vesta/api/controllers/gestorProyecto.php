@@ -190,7 +190,7 @@ class GestorProyecto {
     }
 
     public function obtenerUltimasIteraciones($id_proyecto){
-        $resultado = $this->proyecto->obtenerUltimasIteraciones($id_proyecto);
+        $resultado = $this->proyecto->obtenerUltimasIteraciones($id_proyecto, date("Y-m-d"));
         return $resultado;
     }
 }

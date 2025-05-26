@@ -176,7 +176,7 @@ export default function VerProyectoLider() {
               </Card.Body>
             </Card>
           </Col>
-          <Col xs={5}>
+          <Col xs={5} style={{width:"40%"}}>
             <Card style={{maxHeight:"55vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Resumen de riesgos
@@ -265,7 +265,7 @@ export default function VerProyectoLider() {
               </Col>
             </Row>
           </Col>
-          <Col xs={5}>
+          <Col xs={5} style={{width:"40%"}}>
             <Card style={{maxHeight:"65vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Matriz tongji

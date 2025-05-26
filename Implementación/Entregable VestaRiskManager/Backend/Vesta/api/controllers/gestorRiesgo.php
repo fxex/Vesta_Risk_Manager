@@ -281,6 +281,16 @@ class GestorRiesgo {
         }
     }
 
+    public function obtenerEvaluacionesActualesDesarrolladorPaginado ($id_proyecto, $pagina, $id_usuario) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        if (!empty($iteracion)) {
+            $evaluaciones = $this->evaluacion->obtenerEvaluacionesActualesDesarrolladorProyectoPaginado($id_proyecto, $iteracion["id_iteracion"], $pagina, $id_usuario);
+            return $evaluaciones;
+        }else{
+            return ["evaluaciones"=>[], "totalPaginas"=>0];
+        }
+    }
+
     public function obtenerEvaluacionId($id_evaluacion){
         $resultado = $this->evaluacion->obtenerEvaluacionId($id_evaluacion);
         return $resultado;
@@ -298,7 +308,15 @@ class GestorRiesgo {
         $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
         $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
         $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
-        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada);
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresProyecto($id_proyecto, $iteracion_utilizada, $pagina);
+        return $evaluaciones;
+    }
+
+    public function obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado ($id_proyecto, $pagina, $id_usuario) {
+        $iteracion = json_decode($this->obtenerIteracionActual($id_proyecto), true);
+        $ultima_iteracion = json_decode($this->obtenerIteracionUltima($id_proyecto), true);
+        $iteracion_utilizada = empty($iteracion) ? empty($ultima_iteracion) ? 0 : $ultima_iteracion["id_iteracion"] : $iteracion["id_iteracion"];
+        $evaluaciones = $this->evaluacion->obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado($id_proyecto, $iteracion_utilizada, $pagina, $id_usuario);
         return $evaluaciones;
     }
 

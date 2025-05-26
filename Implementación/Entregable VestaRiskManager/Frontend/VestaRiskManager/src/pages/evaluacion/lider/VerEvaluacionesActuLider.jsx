@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faSearch, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faSearch} from "@fortawesome/free-solid-svg-icons";
 import BotonSalir from "../../../components/BotonSalir";
 import { formatearFecha, modificarImpacto, modificarProbabilidad } from "../../../utils/funciones";
 import Paginado from "../../../components/Paginado";

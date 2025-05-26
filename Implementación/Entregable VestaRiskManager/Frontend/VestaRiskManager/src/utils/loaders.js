@@ -2,7 +2,7 @@ import { obtenerCategoriaId } from "../services/categorias";
 import { obtenerDatosInformeSeguimiento } from "../services/informes";
 import { obtenerIteracionActual, obtenerProyectosId, obtenerProyectosPaginado, obtenerProyectosUsuarioDesarrollador, obtenerProyectosUsuarioDesarrolladorPaginado, obtenerProyectosUsuarioLider, obtenerProyectosUsuarioLiderPaginado } from "../services/proyectos";
 import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRiesgosProyectoPaginado} from "../services/riesgos";
-import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
+import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoDesarrolladorPaginado, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
@@ -97,8 +97,22 @@ export const evaluacionesActualesLoader = async ({ params }) => {
   return { evaluaciones, totalPaginas, iteracion };
 };
 
+export const evaluacionesActualesDesarrolladorLoader = async ({ params }) => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesActualesProyectoDesarrolladorPaginado(params.id_proyecto, usuario.id_usuario);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { evaluaciones, totalPaginas, iteracion };
+};
+
 export const evaluacionesPasadasLoader = async ({ params }) => {
   const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresProyectoPaginado(params.id_proyecto);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { evaluaciones, totalPaginas, iteracion };
+};
+
+export const evaluacionesPasadasDesarrolladorLoader = async ({ params }) => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado(params.id_proyecto, usuario.id_usuario);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { evaluaciones, totalPaginas, iteracion };
 };

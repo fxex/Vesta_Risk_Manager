@@ -312,45 +312,52 @@ export default function ListaRiesgos() {
                     {riesgo.evaluado > 0 ? riesgo.factor_riesgo : null}
                   </td>
                   <td className="td">
-                    <div className={`${comprobacionLider ? "" : "d-none"}`}>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
-                      >
-                        <Button
-                          variant="outline-warning"
-                          disabled={iteracion === null}
-                          onClick={() => {
-                            if (riesgo.factor_riesgo) {
-                              setConfirmarEdicion({ confirmar: true, riesgo });
-                            } else {
-                              navigate(
-                                `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}`
-                              );
-                            }
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </Button>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
-                      >
-                        <Button
-                          style={{ marginLeft: "5px" }}
-                          variant="outline-danger"
-                          disabled={iteracion === null}
-                          onClick={()=>{
-                            setEliminar(true)
-                            setRiesgoSeleccionado(riesgo.id_riesgo)
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} />
-                        </Button>
-                      </OverlayTrigger>
-                    </div>
-                    <br />
+                    {
+                      comprobacionLider ? (
+                        <>
+                        <div className={`${comprobacionLider ? "" : "d-none"}`}>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                          >
+                            <Button
+                              variant="outline-warning"
+                              disabled={iteracion === null}
+                              onClick={() => {
+                                if (riesgo.factor_riesgo) {
+                                  setConfirmarEdicion({ confirmar: true, riesgo });
+                                } else {
+                                  navigate(
+                                    `/inicio/proyecto/lider/${id_proyecto}/riesgo/modificar/${riesgo.id_riesgo}`
+                                  );
+                                }
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                          >
+                            <Button
+                              style={{ marginLeft: "5px" }}
+                              variant="outline-danger"
+                              disabled={iteracion === null}
+                              onClick={()=>{
+                                setEliminar(true)
+                                setRiesgoSeleccionado(riesgo.id_riesgo)
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
+                          </OverlayTrigger>
+                      </div>
+                      <br />
+                        </>  
+                      ) : null
+                    }
+                    
                     <div>
                       <OverlayTrigger
                         placement={comprobacionLider ? "bottom" : "top"}

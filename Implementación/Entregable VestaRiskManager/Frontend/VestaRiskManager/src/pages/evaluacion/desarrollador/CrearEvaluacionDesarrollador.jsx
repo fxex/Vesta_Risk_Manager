@@ -3,12 +3,11 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { crearEvaluacion } from "../../../services/evaluacion";
 import { useUsuario } from "../../../context/usuarioContext";
-import BotonSalir from "../../../components/BotonSalir";
 import { verificarError, formatearFecha } from "../../../utils/funciones";
 
 export default function CrearEvaluacionDesarrollador() {

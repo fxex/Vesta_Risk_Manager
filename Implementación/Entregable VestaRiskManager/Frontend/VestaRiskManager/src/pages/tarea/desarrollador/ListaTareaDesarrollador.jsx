@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import NavegadorLider from "../../components/NavegadorLider";
 import Footer from "../../components/Footer";
 import {
   Alert,
   Button,
-  Figure,
   Modal,
   OverlayTrigger,
   Table,
@@ -14,42 +13,41 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
-  faPlus,
-  faTrashCan,
-  faFilePdf,
   faCheck,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
-  useLocation,
   useNavigate,
-  useParams,
 } from "react-router-dom";
-import { obtenerTareasProyecto } from "../../services/planes";
-import "./../../styles/ListaRiesgo.css";
-import { formatearFecha } from "../../utils/funciones";
-import { obtenerIteracionActual } from "../../services/proyectos";
-import { informeIncidencia } from "../informes/incidencia";
+import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
 import { useUsuario } from "../../context/usuarioContext";
-import { obtenerIncidenciaId } from "../../services/informes";
-import { completarTarea } from "../../services/planes";
+import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
+import BotonSalir from "../../components/BotonSalir";
+import "./../../styles/ListaRiesgo.css";
+import Paginado from "../../components/Paginado";
 
-export const TareaLoader = async ({ params }) => {
-  const tareas = await obtenerTareasProyecto(params.id_proyecto);
-  const iteracion = await obtenerIteracionActual(params.id_proyecto);
-  return { tareas, iteracion};
-};
-
-export default function ListaTarea() {
-  const { tareas, iteracion } = useLoaderData();
+export default function ListaTareaDesarrollador() {
+  const { tareas,totalPaginas, iteracion } = useLoaderData();
+  
   const navigate = useNavigate();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const { usuario } = useUsuario();  
 
   const [completar, setCompletar] = useState(false)
   const [tareaSeleccionada, setTareaSeleccionada] = useState(0)
+
+  const [tareasCargadas, setTareasCargadas] = useState(tareas)
+  const [paginaActual, setPaginaActual] = useState(1)
+
+  useEffect(() => {
+    obtenerTareasProyectoPaginado(proyecto.id_proyecto, usuario.id_usuario, paginaActual).then((data) => {
+      const {tareas, _} = data;
+      setTareasCargadas(tareas)
+    })
+  }, [paginaActual])
+  
 
   return (
     <>
@@ -78,35 +76,28 @@ export default function ListaTarea() {
         <>
           <Button
             variant="success"
-            onClick={() => {
+            onClick={async () => {
+              const resultado = await obtenerDatosTareasInforme(proyecto.id_proyecto)
+              const iteracionExiste = iteracion ? iteracion : {}
+              
               const datos = {
                 nombre_proyecto: proyecto.nombre,
-                riesgos: [{id_riesgo:"RK01"}, {id_riesgo:"RK02"},{id_riesgo:"RK03"},{id_riesgo:"RK04"},{id_riesgo:"RK05"}, {id_riesgo:"RK06"}, {id_riesgo:"RK07"}]
+                iteracion_nombre: iteracionExiste.nombre ? iteracionExiste.nombre : null,
+                lideres_proyecto: filtrarYFormatear(proyecto.participantes, "Lider del proyecto"),
+                desarrolladores_proyecto: filtrarYFormatear(proyecto.participantes, "Desarrollador"),
+                riesgos: resultado
               }
               informeTarea(datos)
             }}
-            // disabled={iteracion === null}
+            disabled={tareas.length == 0}
           >
             Generar Informe
           </Button>
-          {/* <Button
-            variant="success"
-            onClick={() => {
-              // navigate(
-              //   `/inicio/proyecto/${
-              //     comprobacionLider ? "lider" : "desarrollador"
-              //   }/${id_proyecto}/incidencia/crear`
-              // );
-            }}
-            // disabled={iteracion === null}
-          >
-            Generar Informe completo
-          </Button> */}
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
                 <th style={{ maxWidth: "5em" }} className="th">Nombre</th>
-                <th style={{ width: "20em" }} className="th">Descripcion</th>
+                <th style={{ width: "20em" }} className="th">Descripción</th>
                 <th style={{ width: "10em" }} className="th">
                   Fecha de inicio
                 </th>
@@ -118,7 +109,7 @@ export default function ListaTarea() {
               </tr>
             </thead>
             <tbody>
-              {tareas.map((tarea, key) => (
+              {tareasCargadas && tareasCargadas.length > 0 ? tareasCargadas.map((tarea, key) => (
                 <tr key={key} style={{textAlign:"center"}}>
                   <td>{tarea.nombre}</td>
                   <td style={{textWrap:"wrap"}}>{tarea.descripcion}</td>
@@ -137,7 +128,7 @@ export default function ListaTarea() {
                             setCompletar(true)
                             setTareaSeleccionada(tarea.id_tarea)
                           }}
-                          className={tarea.estado == '1'? "d-none":""}
+                          className={tarea.estado == '1' || tarea.pertenece == 0 ? "d-none":""}
                         >
                           <FontAwesomeIcon icon={faCheck} />
                         </Button>
@@ -149,7 +140,11 @@ export default function ListaTarea() {
                         <Button
                           variant="outline-primary"
                           onClick={() => {
-                            navigate(`inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`)
+                            navigate(`/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/${usuario.id_usuario}/tarea/${tarea.id_tarea}`, {
+                              state: {
+                                ruta: "/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo/" + usuario.id_usuario + "/tareas"
+                              }
+                            })
                           }}
                         >
                           <FontAwesomeIcon icon={faSearch} />
@@ -159,10 +154,17 @@ export default function ListaTarea() {
                       
                   </td>
                 </tr>
-              ))}
+              )) : 
+              <tr>
+                <td colSpan="6" className="text-center fs-5">
+                  No hay tareas registradas.
+                </td>
+              </tr>
+              }
             </tbody>
           </Table>
-
+          <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
+          <BotonSalir ruta={"/inicio/proyecto/lider/" + proyecto.id_proyecto + "/monitoreo"} />
           <Modal
             show={completar}
             onHide={() => {

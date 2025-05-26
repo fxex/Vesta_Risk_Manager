@@ -311,10 +311,38 @@ class Proyecto{
         return $resultado;
     }
 
-    public function obtenerUltimasIteraciones($id_proyecto){
-        $query = "select i.id_iteracion, i.nombre from iteracion i where i.id_proyecto = ? order by i.fecha_fin desc limit 5";
+    public function obtenerUltimasIteraciones($id_proyecto, $fecha_actual){
+        $query = "
+            (SELECT * FROM (
+            SELECT i.id_iteracion, i.nombre, i.fecha_inicio
+            FROM iteracion i
+            WHERE i.id_proyecto = ?
+                AND i.fecha_inicio < ?
+            ORDER BY i.fecha_inicio DESC
+            LIMIT 2
+        ) AS anteriores)
+
+        UNION
+
+        (SELECT i.id_iteracion, i.nombre, i.fecha_inicio
+        FROM iteracion i
+        WHERE i.id_proyecto = ?
+            AND ? BETWEEN i.fecha_inicio AND i.fecha_fin)
+
+        UNION
+
+        (SELECT * FROM (
+            SELECT i.id_iteracion, i.nombre, i.fecha_inicio
+            FROM iteracion i
+            WHERE i.id_proyecto = ?
+                AND i.fecha_inicio > ?
+            ORDER BY i.fecha_inicio ASC
+            LIMIT 2
+        ) AS siguientes)
+
+        ORDER BY fecha_inicio DESC";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_proyecto);
+        $stmt->bind_param("isisis", $id_proyecto, $fecha_actual, $id_proyecto, $fecha_actual, $id_proyecto, $fecha_actual);
         $stmt->execute();
         $iteraciones   = $stmt->get_result();
         

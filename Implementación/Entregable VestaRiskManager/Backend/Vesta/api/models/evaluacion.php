@@ -150,10 +150,45 @@ class Evaluacion {
         return ["evaluaciones"=>$resultado, "totalPaginas"=>$totalPaginas];
     }
 
+    public function obtenerEvaluacionesActualesDesarrolladorProyectoPaginado($id_proyecto, $id_iteracion, $pagina, $id_usuario){
+        $cantidad_evaluaciones = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_evaluaciones;
+        }
+
+        $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
+                FROM evaluacion e 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                where e.id_iteracion = ? and e.id_proyecto = ? and e.id_usuario = ?
+                limit $cantidad_evaluaciones offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii",$id_iteracion, $id_proyecto, $id_usuario);
+        $stmt->execute();
+        $evaluaciones = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $evaluaciones->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasActualesDesarrollador($cantidad_evaluaciones, $id_proyecto, $id_iteracion, $id_usuario);
+        return ["evaluaciones"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+
     private function obtenerCantidadPaginasActuales($cantidadEvaluaciones, $id_proyecto, $id_iteracion){
-        $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
+        $totalQuery = $this->conexion->query("SELECT count(*) as total from evaluacion e 
         inner join riesgo r on e.id_riesgo = r.id_riesgo 
         where e.id_proyecto = $id_proyecto and e.id_iteracion = $id_iteracion");
+        $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
+
+        return $totalPaginas;
+    }
+
+    private function obtenerCantidadPaginasActualesDesarrollador($cantidadEvaluaciones, $id_proyecto, $id_iteracion, $id_usuario){
+        $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        where e.id_proyecto = $id_proyecto and e.id_iteracion = $id_iteracion and e.id_usuario = $id_usuario");
         $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
 
@@ -183,6 +218,41 @@ class Evaluacion {
         }
         $totalPaginas = $this->obtenerCantidadPaginasAntiguas($cantidad_evaluaciones, $id_proyecto, $id_iteracion);
         return ["evaluaciones"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+
+    public function obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado($id_proyecto, $id_iteracion, $pagina, $id_usuario){
+        $cantidad_evaluaciones = 10;
+        $offset = 0;
+
+        if($pagina > 1){
+            $offset = ($pagina - 1) * $cantidad_evaluaciones;
+        }
+
+        $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
+                FROM evaluacion e 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                where e.id_iteracion < ? and e.id_proyecto = ? and e.id_usuario = ?
+                limit $cantidad_evaluaciones offset $offset";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii",$id_iteracion, $id_proyecto, $id_usuario);
+        $stmt->execute();
+        $evaluaciones = $stmt->get_result(); 
+        $resultado = [];
+        while ($fila = $evaluaciones->fetch_assoc()) {
+            $resultado[] = $fila;
+        }
+        $totalPaginas = $this->obtenerCantidadPaginasAntiguasDesarrollador($cantidad_evaluaciones, $id_proyecto, $id_iteracion, $id_usuario);
+        return ["evaluaciones"=>$resultado, "totalPaginas"=>$totalPaginas];
+    }
+
+    private function obtenerCantidadPaginasAntiguasDesarrollador($cantidadEvaluaciones, $id_proyecto, $id_iteracion, $id_usuario){
+        $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        where e.id_proyecto = $id_proyecto and e.id_iteracion < $id_iteracion and e.id_usuario = $id_usuario");
+        $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
+        $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
+
+        return $totalPaginas;
     }
 
     private function obtenerCantidadPaginasAntiguas($cantidadEvaluaciones, $id_proyecto, $id_iteracion){

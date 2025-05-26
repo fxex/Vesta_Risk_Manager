@@ -39,8 +39,9 @@ export default function NavegadorLider() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse>
-          <Nav className="me-auto">
+          <Nav className="me-auto" >
             <Nav.Link 
+            style={comprobacionLider ? {} : {display: "none"}}
               href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
             >
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
