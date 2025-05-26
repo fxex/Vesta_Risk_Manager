@@ -61,7 +61,8 @@ export default function CrearRiesgo() {
     navigate(
       `/inicio/proyecto/${
         location.pathname.includes("lider") ? "lider" : "desarrollador"
-      }/${proyecto.id_proyecto}/riesgos`
+      }/${proyecto.id_proyecto}/riesgos`,
+      {state: {mensaje: "Riesgo creado con exito"}}
     );
   }
 

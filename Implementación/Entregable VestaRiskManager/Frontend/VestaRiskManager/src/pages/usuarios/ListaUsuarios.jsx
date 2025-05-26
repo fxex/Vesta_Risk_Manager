@@ -149,7 +149,7 @@ export default function ListaUsuarios() {
             variant="outline-success"
             onClick={async() => {
               await eliminarUsuario(usuarioSeleccionado)
-              window.location.reload()
+              navigate(0)
             }}
           >
             <FontAwesomeIcon

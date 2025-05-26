@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Button, Form, Modal, Table } from "react-bootstrap";
+import { Button, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,6 +36,8 @@ export default function ModificarProyecto() {
   const [mostrarParticipante, setMostrarParticipante] = useState(false);
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
   const [modificarIteracion, setModificarIteracion] = useState(false);
+  const [modificarParticipante, setModificarParticipante] = useState(false);
+  
   const [seguro, setSeguro] = useState(false);
 
   // Estados relacionados a los errores.
@@ -124,6 +126,16 @@ export default function ModificarProyecto() {
       [name]: value,
     });
   };
+
+  const handleModificarParticipante = () => {
+    setErrorParticipante({
+      nombre: false,
+      usuarioElegido: false,
+      rol: false,
+    })
+    setModificarParticipante(!modificarParticipante);
+  };
+
 
   const handleMostrarParticipante = () => {
     setMostrarParticipante(!mostrarParticipante);
@@ -257,6 +269,38 @@ export default function ModificarProyecto() {
     }
     setBotonPresionado(false);
   };
+
+  const handleClickModificarParticipante = () => {
+      setBotonPresionado(true);
+      const comprobarError = {
+        rol: formDataParticipante.rol.length === 0,
+      };
+  
+      setErrorParticipante(comprobarError);
+  
+      const comprobacion = verificarError(comprobarError);
+      if (!comprobacion) {
+        setErrorParticipante({
+          nombre: false,
+          usuarioElegido: false,
+          rol: false,
+        });
+        setFormData((prevFormData) => {
+          return {
+            ...prevFormData,
+            participantes: prevFormData.participantes.map((p)=> p.id_usuario == formDataParticipante.id_usuario ? formDataParticipante : p)
+          };
+        });
+        setFormDataParticipante({
+          nombre: "",
+          rol: "",
+        });
+        setParticipantesTotal([]);
+        setParticipantesMostrado([]);
+        handleModificarParticipante();
+      }
+      setBotonPresionado(false);
+    };
 
   const handlePageChange = (nuevaPagina) => {
     if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
@@ -572,24 +616,47 @@ export default function ModificarProyecto() {
                         </td>
                         <td>{item.rol}</td>
                         <td>
-                          <Button
-                            variant="outline-danger"
-                            className="mx-1"
-                            onClick={() => {
-                              setFormData((prevFormData) => {
-                                return {
-                                  ...prevFormData,
-                                  participantes:
-                                    prevFormData.participantes.filter(
-                                      (participante) =>
-                                        participante.nombre !== item.nombre
-                                    ),
-                                };
-                              });
-                            }}
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                           >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </Button>
+                            <Button
+                                variant="outline-warning"
+                                className="mx-1"
+                                onClick={() => {
+                                  console.log(item);
+                                  
+                                  setFormDataParticipante({...item, key:key});
+                                  handleModificarParticipante();
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                          >
+                            <Button
+                              variant="outline-danger"
+                              className="mx-1"
+                              onClick={() => {
+                                setFormData((prevFormData) => {
+                                  return {
+                                    ...prevFormData,
+                                    participantes:
+                                      prevFormData.participantes.filter(
+                                        (participante) =>
+                                          participante.nombre !== item.nombre
+                                      ),
+                                  };
+                                });
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
+
+                          </OverlayTrigger>
                         </td>
                       </tr>
                     ))
@@ -625,56 +692,68 @@ export default function ModificarProyecto() {
                           <td>{formatearFecha(item.fecha_inicio)}</td>
                           <td>{formatearFecha(item.fecha_fin)}</td>
                           <td>
-                            <Button
-                              variant="outline-danger"
-                              className="mx-1"
-                              onClick={() => {
-                                if (item.id_iteracion) {
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                            >
+                              <Button
+                                variant="outline-warning"
+                                className="mx-1"
+                                onClick={() => {
+                                  setFormDataIteracion({ ...item, key: key });
+                                  handleModificarIteracion();
+                                }}
+                                disabled={
+                                  item.id_iteracion
+                                    ? new Date() > new Date(item.fecha_inicio)
+                                    : false
+                                }
+                              >
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </Button>
+                            </OverlayTrigger>
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                            >
+                              <Button
+                                variant="outline-danger"
+                                className="mx-1"
+                                onClick={() => {
+                                  if (item.id_iteracion) {
+                                    setFormData((prevFormData) => {
+                                      return {
+                                        ...prevFormData,
+                                        iteraciones_eliminadas: [
+                                          ...prevFormData.iteraciones_eliminadas,
+                                          item,
+                                        ],
+                                      };
+                                    });
+                                  }
                                   setFormData((prevFormData) => {
                                     return {
                                       ...prevFormData,
-                                      iteraciones_eliminadas: [
-                                        ...prevFormData.iteraciones_eliminadas,
-                                        item,
-                                      ],
+                                      iteraciones:
+                                        prevFormData.iteraciones.filter(
+                                          (iteracion) =>
+                                            iteracion.nombre !== item.nombre
+                                        ),
                                     };
                                   });
+                                }}
+                                disabled={
+                                  item.id_iteracion
+                                    ? new Date() > new Date(item.fecha_inicio)
+                                    : false
                                 }
-                                setFormData((prevFormData) => {
-                                  return {
-                                    ...prevFormData,
-                                    iteraciones:
-                                      prevFormData.iteraciones.filter(
-                                        (iteracion) =>
-                                          iteracion.nombre !== item.nombre
-                                      ),
-                                  };
-                                });
-                              }}
-                              disabled={
-                                item.id_iteracion
-                                  ? new Date() > new Date(item.fecha_inicio)
-                                  : false
-                              }
-                            >
-                              <FontAwesomeIcon icon={faTrashCan} />
-                            </Button>
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </Button>
 
-                            <Button
-                              variant="outline-warning"
-                              className="mx-1"
-                              onClick={() => {
-                                setFormDataIteracion({ ...item, key: key });
-                                handleModificarIteracion();
-                              }}
-                              disabled={
-                                item.id_iteracion
-                                  ? new Date() > new Date(item.fecha_inicio)
-                                  : false
-                              }
-                            >
-                              <FontAwesomeIcon icon={faPenToSquare} />
-                            </Button>
+                            </OverlayTrigger>
+
+                            
                           </td>
                         </tr>
                       </>
@@ -689,16 +768,11 @@ export default function ModificarProyecto() {
               <b>Categorías</b>
             </Form.Label>
             <br></br>
-            {/* <Button variant="success" onClick={() => {}}>
-                <FontAwesomeIcon icon={faPlus} className="mx-1" />
-                Agregar Categoria
-              </Button> */}
             <Table size="sm" hover className="mt-2">
               <thead className="table-info">
                 <tr>
                   <th>Nombre</th>
                   <th>Descripción</th>
-                  {/* <th>Opciones</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -707,25 +781,6 @@ export default function ModificarProyecto() {
                       <tr key={key}>
                         <td>{item.nombre}</td>
                         <td>{item.descripcion}</td>
-                        {/* <td>
-                            <Button
-                              variant="outline-danger"
-                              className="mx-1"
-                              onClick={() => {
-                                setFormData((prevFormData) => {
-                                  return {
-                                    ...prevFormData,
-                                    categorias: prevFormData.categorias.filter(
-                                      (categoria) =>
-                                        categoria.nombre !== item.nombre
-                                    ),
-                                  };
-                                });
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faTrashCan} />
-                            </Button>
-                          </td> */}
                       </tr>
                     ))
                   : null}
@@ -814,14 +869,16 @@ export default function ModificarProyecto() {
                   );
                   const json = JSON.parse(data);
                   // Crear un conjunto con los nombres en formData.participantes
-                  const nombresFormData = new Set(
-                    formData.participantes.map((item) => item.nombre_usuario)
+                  const participantesFormData = new Set(
+                    formData.participantes.map((p) => p.id_usuario)
                   );
+                  console.log(formData);
+                  
 
                   const participantesFiltrados = json.filter(
                     (item) =>
-                      !nombresFormData.has(
-                        item.nombre_usuario ? item.nombre_usuario : item.nombre
+                      !participantesFormData.has(
+                        item.id_usuario
                       )
                   );
 
@@ -1143,6 +1200,59 @@ export default function ModificarProyecto() {
           </Form.Group>
         </Form>
       </ModalPersonalizado>
+
+      <ModalPersonalizado
+              title={"Modificar participante"}
+              show={modificarParticipante}
+              setShow={setModificarParticipante}
+              onConfirm={handleClickModificarParticipante}
+              datosDefecto={() => {
+                setFormDataParticipante({
+                  usuarioElegido:{},
+                  nombre: "",
+                  rol: "",
+                });
+              }}
+              modificado={true}
+            >
+              <Form>
+                <Form.Group>
+                  <Form.Label>
+                    <b>Nombre del participante</b>
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    disabled
+                    className="w-75"
+                    value={formDataParticipante.nombre? formDataParticipante.nombre : formDataParticipante.nombre_usuario}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <h5>Rol</h5>
+                  <Form.Check
+                    type="radio"
+                    name="rol"
+                    label="Líder del proyecto"
+                    value="Lider del proyecto"
+                    checked={formDataParticipante.rol == "Lider del proyecto"}
+                    onChange={handleChangeParticipante}
+                    isInvalid={errorParticipante.rol}
+                  />
+                  <Form.Check
+                    type="radio"
+                    name="rol"
+                    label="Desarrollador"
+                    value="Desarrollador"
+                    checked={formDataParticipante.rol == "Desarrollador"}
+                    onChange={handleChangeParticipante}
+                    isInvalid={errorParticipante.rol}
+                  />
+                  {errorParticipante.rol && (
+                    <Form.Text className="text-danger">Seleccione un rol.</Form.Text>
+                  )}
+                </Form.Group>
+              </Form>
+            </ModalPersonalizado>
 
       <Modal show={seguro} onHide={handleSeguro}>
         <Modal.Body>

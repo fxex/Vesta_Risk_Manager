@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Alert, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import {
   crearUsuario,
@@ -10,7 +10,6 @@ import {
   obtenerUsuariosCorreo,
 } from "../../services/usuarios";
 import { useNavigate } from "react-router-dom";
-import BotonSalir from "../../components/BotonSalir";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { verificarCorreo, verificarError } from "../../utils/funciones";
@@ -23,7 +22,6 @@ export default function CrearUsuario() {
     correo: "",
     perfil: 1,
   });
-  const [creado, setCreado] = useState(null);
   const [error, setError] = useState({
     nombre: false,
     correo: false,
@@ -76,12 +74,13 @@ export default function CrearUsuario() {
 
     if (!comprobacion) {
       const resultado = await crearUsuario(formData);
-      setCreado(resultado);
+      if(resultado){
+        navigate("/inicio/usuarios", {state:{mensaje: "Usuario creado con éxito"}})
+      }
     }
     setBotonPresionado(false);
   };
 
-  if (creado === null) {
     return (
       <>
         <Navegador />
@@ -187,24 +186,5 @@ export default function CrearUsuario() {
         <Footer />
       </>
     );
-  } else {
-    return (
-      <>
-        <Navegador />
-        <Contenedor>
-          <h3>Crear Usuario</h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir ruta={"/inicio/usuarios"} />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+  
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Button, Form, Modal, Table } from "react-bootstrap";
+import { Button, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,6 +36,7 @@ export default function CrearProyecto() {
   const [mostrarParticipante, setMostrarParticipante] = useState(false);
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
   const [modificarIteracion, setModificarIteracion] = useState(false);
+  const [modificarParticipante, setModificarParticipante] = useState(false);
   const [seguro, setSeguro] = useState(false);
 
   // Estados relacionados a los errores.
@@ -166,6 +167,15 @@ export default function CrearProyecto() {
       nombreIgual: false,
     });
     setModificarIteracion(!modificarIteracion);
+  };
+
+  const handleModificarParticipante = () => {
+    setErrorParticipante({
+      nombre: false,
+      usuarioElegido: false,
+      rol: false,
+    })
+    setModificarParticipante(!modificarParticipante);
   };
 
   const handleSeguro = () => {
@@ -321,6 +331,37 @@ export default function CrearProyecto() {
       handleMostrarParticipante();
       setTotalPaginas(0);
       setPagina(1);
+    }
+    setBotonPresionado(false);
+  };
+   const handleClickModificarParticipante = () => {
+    setBotonPresionado(true);
+    const comprobarError = {
+      rol: formDataParticipante.rol.length === 0,
+    };
+
+    setErrorParticipante(comprobarError);
+
+    const comprobacion = verificarError(comprobarError);
+    if (!comprobacion) {
+      setErrorParticipante({
+        nombre: false,
+        usuarioElegido: false,
+        rol: false,
+      });
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          participantes: prevFormData.participantes.map((p)=> p.id_usuario == formDataParticipante.id_usuario ? formDataParticipante : p)
+        };
+      });
+      setFormDataParticipante({
+        nombre: "",
+        rol: "",
+      });
+      setParticipantesTotal([]);
+      setParticipantesMostrado([]);
+      handleModificarParticipante();
     }
     setBotonPresionado(false);
   };
@@ -637,25 +678,48 @@ export default function CrearProyecto() {
                         <td>{item.nombre_usuario}</td>
                         <td>{item.rol}</td>
                         <td>
-                          <Button
-                            variant="outline-danger"
-                            className="mx-1"
-                            onClick={() => {
-                              setFormData((prevFormData) => {
-                                return {
-                                  ...prevFormData,
-                                  participantes:
-                                    prevFormData.participantes.filter(
-                                      (participante) =>
-                                        participante.nombre_usuario !==
-                                        item.nombre_usuario
-                                    ),
-                                };
-                              });
-                            }}
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                           >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </Button>
+                            <Button
+                                variant="outline-warning"
+                                className="mx-1"
+                                onClick={() => {
+                                  
+                                  setFormDataParticipante({...item, key:key});
+                                  handleModificarParticipante();
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </Button>
+                          </OverlayTrigger>
+
+                          <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                          >
+                            <Button
+                              variant="outline-danger"
+                              className="mx-1"
+                              onClick={() => {
+                                setFormData((prevFormData) => {
+                                  return {
+                                    ...prevFormData,
+                                    participantes:
+                                      prevFormData.participantes.filter(
+                                        (participante) =>
+                                          participante.nombre_usuario !==
+                                          item.nombre_usuario
+                                      ),
+                                  };
+                                });
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
+
+                          </OverlayTrigger>
                         </td>
                       </tr>
                     ))
@@ -691,35 +755,45 @@ export default function CrearProyecto() {
                           <td>{formatearFecha(item.fecha_inicio)}</td>
                           <td>{formatearFecha(item.fecha_fin)}</td>
                           <td>
-                            <Button
-                              variant="outline-danger"
-                              className="mx-1"
-                              onClick={() => {
-                                setFormData((prevFormData) => {
-                                  return {
-                                    ...prevFormData,
-                                    iteraciones:
-                                      prevFormData.iteraciones.filter(
-                                        (iteracion) =>
-                                          iteracion.nombre !== item.nombre
-                                      ),
-                                  };
-                                });
-                              }}
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
                             >
-                              <FontAwesomeIcon icon={faTrashCan} />
-                            </Button>
+                              <Button
+                                variant="outline-warning"
+                                className="mx-1"
+                                onClick={() => {
+                                  setFormDataIteracion({ ...item, key: key });
+                                  handleModificarIteracion();
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </Button>
+                            </OverlayTrigger>
+                            <OverlayTrigger
+                              placement="top"
+                              overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                            >
+                              <Button
+                                variant="outline-danger"
+                                className="mx-1"
+                                onClick={() => {
+                                  setFormData((prevFormData) => {
+                                    return {
+                                      ...prevFormData,
+                                      iteraciones:
+                                        prevFormData.iteraciones.filter(
+                                          (iteracion) =>
+                                            iteracion.nombre !== item.nombre
+                                        ),
+                                    };
+                                  });
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </Button>
 
-                            <Button
-                              variant="outline-warning"
-                              className="mx-1"
-                              onClick={() => {
-                                setFormDataIteracion({ ...item, key: key });
-                                handleModificarIteracion();
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faPenToSquare} />
-                            </Button>
+                            </OverlayTrigger>
                           </td>
                         </tr>
                       </>
@@ -792,7 +866,7 @@ export default function CrearProyecto() {
             variant="outline-danger"
             className="mx-1"
             onClick={() => {
-              navigate("/inicio");
+              navigate("/inicio/proyectos");
             }}
           >
             <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
@@ -1135,6 +1209,60 @@ export default function CrearProyecto() {
                 .
               </Form.Text>
             ) : null}
+          </Form.Group>
+        </Form>
+      </ModalPersonalizado>
+
+      <ModalPersonalizado
+        title={"Modificar participante"}
+        show={modificarParticipante}
+        setShow={setModificarParticipante}
+        onConfirm={handleClickModificarParticipante}
+        datosDefecto={() => {
+          setFormDataParticipante({
+            usuarioElegido:{},
+            nombre: "",
+            rol: "",
+          });
+        }}
+        modificado={true}
+      >
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              <b>Nombre del participante</b>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              disabled
+              placeholder="Ingrese el nombre de la iteración"
+              className="w-75"
+              value={formDataParticipante.nombre_usuario}
+            />
+          </Form.Group>
+          <Form.Group>
+            <h5>Rol</h5>
+            <Form.Check
+              type="radio"
+              name="rol"
+              label="Líder del proyecto"
+              value="Lider del proyecto"
+              checked={formDataParticipante.rol == "Lider del proyecto"}
+              onChange={handleChangeParticipante}
+              isInvalid={errorParticipante.rol}
+            />
+            <Form.Check
+              type="radio"
+              name="rol"
+              label="Desarrollador"
+              value="Desarrollador"
+              checked={formDataParticipante.rol == "Desarrollador"}
+              onChange={handleChangeParticipante}
+              isInvalid={errorParticipante.rol}
+            />
+            {errorParticipante.rol && (
+              <Form.Text className="text-danger">Seleccione un rol.</Form.Text>
+            )}
           </Form.Group>
         </Form>
       </ModalPersonalizado>
