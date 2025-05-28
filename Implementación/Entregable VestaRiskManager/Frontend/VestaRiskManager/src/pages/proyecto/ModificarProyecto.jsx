@@ -2,7 +2,14 @@ import React, { useState, useEffect } from "react";
 import Contenedor from "../../components/Contenedor";
 import Footer from "./../../components/Footer";
 import Navegador from "../../components/Navegador";
-import { Button, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Table,
+  Tooltip,
+} from "react-bootstrap";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +28,7 @@ import {
 import {
   comprobarFechasNuevaIteracion,
   formatearFecha,
-  verificarError
+  verificarError,
 } from "../../utils/funciones";
 import ModalPersonalizado from "../../components/ModalPersonalizado";
 import Paginado from "../../components/Paginado";
@@ -37,8 +44,14 @@ export default function ModificarProyecto() {
   const [mostrarIteracion, setMostrarIteracion] = useState(false);
   const [modificarIteracion, setModificarIteracion] = useState(false);
   const [modificarParticipante, setModificarParticipante] = useState(false);
-  
+
   const [seguro, setSeguro] = useState(false);
+
+  const [eliminarParticipante, setEliminarParticipante] = useState(false);
+  const [participanteEliminado, setParticipanteEliminado] = useState("");
+
+  const [eliminarIteracion, setEliminarIteracion] = useState(false);
+  const [iteracionEliminada, setIteracionEliminada] = useState(null);
 
   // Estados relacionados a los errores.
   const [errorPrincipal, setErrorPrincipal] = useState({
@@ -132,10 +145,9 @@ export default function ModificarProyecto() {
       nombre: false,
       usuarioElegido: false,
       rol: false,
-    })
+    });
     setModificarParticipante(!modificarParticipante);
   };
-
 
   const handleMostrarParticipante = () => {
     setMostrarParticipante(!mostrarParticipante);
@@ -271,36 +283,40 @@ export default function ModificarProyecto() {
   };
 
   const handleClickModificarParticipante = () => {
-      setBotonPresionado(true);
-      const comprobarError = {
-        rol: formDataParticipante.rol.length === 0,
-      };
-  
-      setErrorParticipante(comprobarError);
-  
-      const comprobacion = verificarError(comprobarError);
-      if (!comprobacion) {
-        setErrorParticipante({
-          nombre: false,
-          usuarioElegido: false,
-          rol: false,
-        });
-        setFormData((prevFormData) => {
-          return {
-            ...prevFormData,
-            participantes: prevFormData.participantes.map((p)=> p.id_usuario == formDataParticipante.id_usuario ? formDataParticipante : p)
-          };
-        });
-        setFormDataParticipante({
-          nombre: "",
-          rol: "",
-        });
-        setParticipantesTotal([]);
-        setParticipantesMostrado([]);
-        handleModificarParticipante();
-      }
-      setBotonPresionado(false);
+    setBotonPresionado(true);
+    const comprobarError = {
+      rol: formDataParticipante.rol.length === 0,
     };
+
+    setErrorParticipante(comprobarError);
+
+    const comprobacion = verificarError(comprobarError);
+    if (!comprobacion) {
+      setErrorParticipante({
+        nombre: false,
+        usuarioElegido: false,
+        rol: false,
+      });
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData,
+          participantes: prevFormData.participantes.map((p) =>
+            p.id_usuario == formDataParticipante.id_usuario
+              ? formDataParticipante
+              : p
+          ),
+        };
+      });
+      setFormDataParticipante({
+        nombre: "",
+        rol: "",
+      });
+      setParticipantesTotal([]);
+      setParticipantesMostrado([]);
+      handleModificarParticipante();
+    }
+    setBotonPresionado(false);
+  };
 
   const handlePageChange = (nuevaPagina) => {
     if (nuevaPagina > 0 && nuevaPagina <= totalPaginas) {
@@ -618,44 +634,41 @@ export default function ModificarProyecto() {
                         <td>
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                            overlay={
+                              <Tooltip id="tooltip-edit">Editar</Tooltip>
+                            }
                           >
                             <Button
-                                variant="outline-warning"
-                                className="mx-1"
-                                onClick={() => {
-                                  console.log(item);
-                                  
-                                  setFormDataParticipante({...item, key:key});
-                                  handleModificarParticipante();
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                              </Button>
+                              variant="outline-warning"
+                              className="mx-1"
+                              onClick={() => {
+                                setFormDataParticipante({ ...item, key: key });
+                                handleModificarParticipante();
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                            overlay={
+                              <Tooltip id="tooltip-edit">Eliminar</Tooltip>
+                            }
                           >
                             <Button
                               variant="outline-danger"
                               className="mx-1"
                               onClick={() => {
-                                setFormData((prevFormData) => {
-                                  return {
-                                    ...prevFormData,
-                                    participantes:
-                                      prevFormData.participantes.filter(
-                                        (participante) =>
-                                          participante.nombre !== item.nombre
-                                      ),
-                                  };
-                                });
+                                setEliminarParticipante(true);
+                                setParticipanteEliminado(
+                                  item.nombre
+                                    ? item.nombre
+                                    : item.nombre_usuario
+                                );
                               }}
                             >
                               <FontAwesomeIcon icon={faTrashCan} />
                             </Button>
-
                           </OverlayTrigger>
                         </td>
                       </tr>
@@ -694,7 +707,9 @@ export default function ModificarProyecto() {
                           <td>
                             <OverlayTrigger
                               placement="top"
-                              overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                              overlay={
+                                <Tooltip id="tooltip-edit">Editar</Tooltip>
+                              }
                             >
                               <Button
                                 variant="outline-warning"
@@ -714,33 +729,16 @@ export default function ModificarProyecto() {
                             </OverlayTrigger>
                             <OverlayTrigger
                               placement="top"
-                              overlay={<Tooltip id="tooltip-edit">Eliminar</Tooltip>}
+                              overlay={
+                                <Tooltip id="tooltip-edit">Eliminar</Tooltip>
+                              }
                             >
                               <Button
                                 variant="outline-danger"
                                 className="mx-1"
                                 onClick={() => {
-                                  if (item.id_iteracion) {
-                                    setFormData((prevFormData) => {
-                                      return {
-                                        ...prevFormData,
-                                        iteraciones_eliminadas: [
-                                          ...prevFormData.iteraciones_eliminadas,
-                                          item,
-                                        ],
-                                      };
-                                    });
-                                  }
-                                  setFormData((prevFormData) => {
-                                    return {
-                                      ...prevFormData,
-                                      iteraciones:
-                                        prevFormData.iteraciones.filter(
-                                          (iteracion) =>
-                                            iteracion.nombre !== item.nombre
-                                        ),
-                                    };
-                                  });
+                                  setEliminarIteracion(true);
+                                  setIteracionEliminada(item);
                                 }}
                                 disabled={
                                   item.id_iteracion
@@ -750,10 +748,7 @@ export default function ModificarProyecto() {
                               >
                                 <FontAwesomeIcon icon={faTrashCan} />
                               </Button>
-
                             </OverlayTrigger>
-
-                            
                           </td>
                         </tr>
                       </>
@@ -873,13 +868,9 @@ export default function ModificarProyecto() {
                     formData.participantes.map((p) => p.id_usuario)
                   );
                   console.log(formData);
-                  
 
                   const participantesFiltrados = json.filter(
-                    (item) =>
-                      !participantesFormData.has(
-                        item.id_usuario
-                      )
+                    (item) => !participantesFormData.has(item.id_usuario)
                   );
 
                   setParticipantesTotal(participantesFiltrados);
@@ -927,7 +918,11 @@ export default function ModificarProyecto() {
                 Seleccione un participante.
               </Form.Text>
             )}
-            <Paginado paginaActual={pagina} setPaginaActual={setPagina} totalPaginas={totalPaginas} />
+            <Paginado
+              paginaActual={pagina}
+              setPaginaActual={setPagina}
+              totalPaginas={totalPaginas}
+            />
           </Form.Group>
           <Form.Group>
             <h5>Rol</h5>
@@ -1202,57 +1197,61 @@ export default function ModificarProyecto() {
       </ModalPersonalizado>
 
       <ModalPersonalizado
-              title={"Modificar participante"}
-              show={modificarParticipante}
-              setShow={setModificarParticipante}
-              onConfirm={handleClickModificarParticipante}
-              datosDefecto={() => {
-                setFormDataParticipante({
-                  usuarioElegido:{},
-                  nombre: "",
-                  rol: "",
-                });
-              }}
-              modificado={true}
-            >
-              <Form>
-                <Form.Group>
-                  <Form.Label>
-                    <b>Nombre del participante</b>
-                  </Form.Label>
-                  <Form.Control
-                    type="text"
-                    disabled
-                    className="w-75"
-                    value={formDataParticipante.nombre? formDataParticipante.nombre : formDataParticipante.nombre_usuario}
-                  />
-                </Form.Group>
-                <Form.Group>
-                  <h5>Rol</h5>
-                  <Form.Check
-                    type="radio"
-                    name="rol"
-                    label="Líder del proyecto"
-                    value="Lider del proyecto"
-                    checked={formDataParticipante.rol == "Lider del proyecto"}
-                    onChange={handleChangeParticipante}
-                    isInvalid={errorParticipante.rol}
-                  />
-                  <Form.Check
-                    type="radio"
-                    name="rol"
-                    label="Desarrollador"
-                    value="Desarrollador"
-                    checked={formDataParticipante.rol == "Desarrollador"}
-                    onChange={handleChangeParticipante}
-                    isInvalid={errorParticipante.rol}
-                  />
-                  {errorParticipante.rol && (
-                    <Form.Text className="text-danger">Seleccione un rol.</Form.Text>
-                  )}
-                </Form.Group>
-              </Form>
-            </ModalPersonalizado>
+        title={"Modificar participante"}
+        show={modificarParticipante}
+        setShow={setModificarParticipante}
+        onConfirm={handleClickModificarParticipante}
+        datosDefecto={() => {
+          setFormDataParticipante({
+            usuarioElegido: {},
+            nombre: "",
+            rol: "",
+          });
+        }}
+        modificado={true}
+      >
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              <b>Nombre del participante</b>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              disabled
+              className="w-75"
+              value={
+                formDataParticipante.nombre
+                  ? formDataParticipante.nombre
+                  : formDataParticipante.nombre_usuario
+              }
+            />
+          </Form.Group>
+          <Form.Group>
+            <h5>Rol</h5>
+            <Form.Check
+              type="radio"
+              name="rol"
+              label="Líder del proyecto"
+              value="Lider del proyecto"
+              checked={formDataParticipante.rol == "Lider del proyecto"}
+              onChange={handleChangeParticipante}
+              isInvalid={errorParticipante.rol}
+            />
+            <Form.Check
+              type="radio"
+              name="rol"
+              label="Desarrollador"
+              value="Desarrollador"
+              checked={formDataParticipante.rol == "Desarrollador"}
+              onChange={handleChangeParticipante}
+              isInvalid={errorParticipante.rol}
+            />
+            {errorParticipante.rol && (
+              <Form.Text className="text-danger">Seleccione un rol.</Form.Text>
+            )}
+          </Form.Group>
+        </Form>
+      </ModalPersonalizado>
 
       <Modal show={seguro} onHide={handleSeguro}>
         <Modal.Body>
@@ -1282,6 +1281,120 @@ export default function ModificarProyecto() {
             onClick={() => {
               handleSeguro();
               handleModificarIteracion();
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={eliminarParticipante}
+        onHide={() => {
+          setEliminarParticipante(!eliminarParticipante);
+        }}
+      >
+        <Modal.Body>
+          <>
+            <h1>¿Está seguro?</h1>
+            <p>
+              Esta acción podría afectar el seguimiento del proyecto si esta
+              persona tiene tareas asignadas. Por favor, confirmá si querés
+              continuar.
+            </p>
+          </>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-success"
+            onClick={() => {
+              setBotonPresionado(true);
+              setFormData((prevFormData) => {
+                return {
+                  ...prevFormData,
+                  participantes: prevFormData.participantes.filter(
+                    (participante) =>
+                      participante.nombre !== participanteEliminado
+                  ),
+                };
+              });
+              setEliminarParticipante(false);
+              setParticipanteEliminado("");
+              setBotonPresionado(false);
+            }}
+            disabled={botonPresionado}
+          >
+            <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
+            Si
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={() => {
+              setEliminarParticipante(false);
+              setParticipanteEliminado("");
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={eliminarIteracion}
+        onHide={() => {
+          setEliminarIteracion(!eliminarIteracion);
+        }}
+      >
+        <Modal.Body>
+          <>
+            <h1>¿Está seguro?</h1>
+            <p>
+              Esta acción es permanente y eliminará todos los datos asociados a esta iteración.
+              Asegurate de que no se necesite más antes de continuar.
+            </p>
+          </>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="outline-success"
+            onClick={() => {
+              setBotonPresionado(true);
+              if (iteracionEliminada.id_iteracion) {
+                setFormData((prevFormData) => {
+                  return {
+                    ...prevFormData,
+                    iteraciones_eliminadas: [
+                      ...prevFormData.iteraciones_eliminadas,
+                      iteracionEliminada,
+                    ],
+                  };
+                });
+              }
+              setFormData((prevFormData) => {
+                return {
+                  ...prevFormData,
+                  iteraciones: prevFormData.iteraciones.filter(
+                    (iteracion) =>
+                      iteracion.nombre !== iteracionEliminada.nombre
+                  ),
+                };
+              });
+              setEliminarIteracion(false);
+              setIteracionEliminada(null);
+              setBotonPresionado(false);
+            }}
+            disabled={botonPresionado}
+          >
+            <FontAwesomeIcon icon={faCheck} style={{ marginRight: "5px" }} />
+            Si
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={() => {
+              setEliminarIteracion(false);
+              setIteracionEliminada(null);
             }}
           >
             <FontAwesomeIcon icon={faXmark} style={{ marginRight: "5px" }} />

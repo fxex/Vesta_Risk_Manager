@@ -22,7 +22,7 @@ import {
 } from "react-router-dom";
 import { formatearFecha } from "../../../utils/funciones";
 import { useUsuario } from "../../../context/usuarioContext";
-import { completarTarea, obtenerTareasProyectoPaginado } from "../../../services/planes";
+import { completarTarea, obtenerTareasDesarrolladorProyectoPaginado } from "../../../services/planes";
 import BotonSalir from "../../../components/BotonSalir";
 import "./../../../styles/ListaRiesgo.css";
 import Paginado from "../../../components/Paginado";
@@ -41,7 +41,7 @@ export default function ListaTareaDesarrollador() {
   const [paginaActual, setPaginaActual] = useState(1)
 
   useEffect(() => {
-    obtenerTareasProyectoPaginado(proyecto.id_proyecto, usuario.id_usuario, paginaActual).then((data) => {
+    obtenerTareasDesarrolladorProyectoPaginado(proyecto.id_proyecto, usuario.id_usuario, paginaActual).then((data) => {
       const {tareas, _} = data;
       setTareasCargadas(tareas)
     })
