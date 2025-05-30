@@ -1,5 +1,0 @@
-Factores entorno:
-	Mejor caso: E5: 4, E6: 5, E8: 3
-	Caso probable: E1: 3, E2: 4, E5: 3, E6: 4, E8: 4
-	Peor caso: E1: 2, E2: 3
-	
