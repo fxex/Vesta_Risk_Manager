@@ -18,7 +18,7 @@ import {
 import RutaProtegida from "./utils/RutaProtegida.jsx";
 import VerUsuario from "./pages/usuarios/VerUsuario.jsx";
 import ModificarUsuario from "./pages/usuarios/ModificarUsuario.jsx";
-import EliminarUsuario from "./pages/usuarios/EliminarUsuario.jsx";
+// import EliminarUsuario from "./pages/usuarios/EliminarUsuario.jsx";
 import { UsuarioProvider } from "./context/usuarioContext.jsx";
 import ListaPerfiles from "./pages/perfiles/ListaPerfiles.jsx";
 // import CrearPerfil from "./pages/perfiles/CrearPerfil.jsx";
@@ -310,11 +310,11 @@ const App = () => {
       element: <RutaProtegida element={<ModificarUsuario />} isAdmin={true} />,
       loader: cargarModificarUsuario,
     },
-    {
-      path: "/inicio/usuario/eliminar/:id_usuario",
-      element: <RutaProtegida element={<EliminarUsuario />} isAdmin={true} />,
-      loader: cargarEliminarUsuario,
-    },
+    // {
+    //   path: "/inicio/usuario/eliminar/:id_usuario",
+    //   element: <RutaProtegida element={<EliminarUsuario />} isAdmin={true} />,
+    //   loader: cargarEliminarUsuario,
+    // },
     {
       path: "/inicio/perfiles",
       element: <RutaProtegida element={<ListaPerfiles />} isAdmin={true} />,

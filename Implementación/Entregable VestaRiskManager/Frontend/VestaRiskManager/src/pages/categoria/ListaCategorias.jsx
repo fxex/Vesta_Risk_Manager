@@ -164,7 +164,7 @@ export default function ListaCategorias() {
                 variant="outline-success"
                 onClick={async() => {
                   await eliminarCategoria(categoriaSeleccionada)
-                  window.location.reload()
+                  navigate(0)
                 }}
               >
                 <FontAwesomeIcon

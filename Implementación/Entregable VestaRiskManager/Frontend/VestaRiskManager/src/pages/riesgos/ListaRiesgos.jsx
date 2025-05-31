@@ -488,9 +488,7 @@ export default function ListaRiesgos() {
                 variant="outline-success"
                 onClick={async() => {
                   await eliminarRiesgo(id_proyecto, riesgoSeleccionado)
-                  navigate(
-                    `/inicio/proyecto/lider/${id_proyecto}/riesgos`
-                  );
+                  navigate(0);
                   setEliminar(false)
                   setRiesgoSeleccionado(0)
                 }}
