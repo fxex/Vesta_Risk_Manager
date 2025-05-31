@@ -92,7 +92,7 @@ class Plan{
         UNION ALL
         SELECT 'Minimización'
         UNION ALL
-        SELECT 'Contigencia'
+        SELECT 'Contingencia'
     ) AS tipos
     LEFT JOIN plan p 
         ON p.tipo = tipos.tipo

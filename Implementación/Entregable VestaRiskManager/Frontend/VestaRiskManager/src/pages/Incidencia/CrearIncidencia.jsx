@@ -163,7 +163,8 @@ const handleRiesgoSelection = (id_riesgo) => {
           <Form.Group className="mb-3">
             <Form.Label>Descripción</Form.Label>
             <Form.Control
-              type="text"
+              as="textarea"
+              rows={3}
               placeholder="Ingrese la descripción de la incidencia"
               name="descripcion"
               onChange={handleChange}
