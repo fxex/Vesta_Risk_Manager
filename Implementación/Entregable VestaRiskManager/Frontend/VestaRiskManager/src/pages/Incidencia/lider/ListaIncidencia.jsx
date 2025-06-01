@@ -101,7 +101,7 @@ export default function ListaIncidencia() {
             <thead className="cabecera">
               <tr>
                 <th style={{ maxWidth: "5em" }} className="th">Identificador del riesgo</th>
-                <th className="th">Descripcion</th>
+                <th className="th">Descripción</th>
                 <th className="th">Responsable</th>
                 <th style={{ maxWidth: "4em" }} className="th">
                   Gravedad

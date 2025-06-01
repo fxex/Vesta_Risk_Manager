@@ -58,7 +58,7 @@ export default function ListaCategorias() {
               </Alert>
             ) : null}
       <Contenedor>
-        <h3>Categorias</h3>
+        <h3>Categorías</h3>
         <>
           <Button
             variant="success"
@@ -67,7 +67,7 @@ export default function ListaCategorias() {
             }}
           >
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
-            Nueva categoria
+            Nueva categoría
           </Button>
           <Table size="sm" hover className="mt-2">
             <thead className="table-info">
@@ -156,7 +156,7 @@ export default function ListaCategorias() {
             </Modal.Header>
             <Modal.Body>
               <p>
-                Una vez eliminada la categoria no se podra utilizar en futuros proyectos.
+                Una vez eliminada la categoría no se podra utilizar en futuros proyectos.
               </p>
             </Modal.Body>
             <Modal.Footer>

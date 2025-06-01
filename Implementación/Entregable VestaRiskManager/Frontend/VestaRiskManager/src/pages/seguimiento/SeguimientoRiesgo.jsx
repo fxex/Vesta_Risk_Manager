@@ -52,7 +52,7 @@ export default function SeguimientoRiesgo() {
                 <Col xs={6}>
                     <Card>
                         <Card.Header>
-                            Resumen de Estado
+                            Resúmen de Estado
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
                             {estado && estado.some(p => p > 0)  ? (
@@ -87,7 +87,7 @@ export default function SeguimientoRiesgo() {
                 <Col xs={6}>
                     <Card>
                         <Card.Header>
-                            Resumen de Prioridad
+                            Resúmen de Prioridad
                         </Card.Header>
                         <Card.Body className='d-flex justify-content-center'>
                             {prioridad && prioridad.some(p => p > 0) ? (

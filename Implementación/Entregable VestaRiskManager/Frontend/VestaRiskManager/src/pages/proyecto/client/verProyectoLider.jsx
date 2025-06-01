@@ -188,7 +188,7 @@ export default function VerProyectoLider() {
           <Col xs={5} style={{width:"40%"}}>
             <Card style={{maxHeight:"55vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
-                Resumen de riesgos
+                Resúmen de riesgos
                 {!comprobacionEspectador && <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoTelaraña}/>}
               </Card.Header>
               <Card.Body>

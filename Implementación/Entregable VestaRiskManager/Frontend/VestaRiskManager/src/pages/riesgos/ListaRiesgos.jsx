@@ -142,17 +142,20 @@ export default function ListaRiesgos() {
             <FontAwesomeIcon icon={faPlus} className="mx-1" />
             Nuevo Riesgo
           </Button>
-          <DropdownButton variant="success" title="Ordenar segun" disabled={iteracion === null}>
+          <DropdownButton variant="success" title="Ordenar según" disabled={iteracion === null}>
               <Dropdown.Item onClick={()=>{
                 setOrden(1)
+                setPaginaActual(1)
                 localStorage.setItem("orden_riesgo", 1)
               }} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
               <Dropdown.Item onClick={()=>{
                 setOrden(2)
+                setPaginaActual(1)
                 localStorage.setItem("orden_riesgo", 2)
                 }} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
               <Dropdown.Item onClick={()=>{
                 setOrden(3)
+                setPaginaActual(1)
                 localStorage.setItem("orden_riesgo", 3)
                 }} className={orden == 3 ? "active" : ""}>Falta evaluación</Dropdown.Item>
           </DropdownButton>
