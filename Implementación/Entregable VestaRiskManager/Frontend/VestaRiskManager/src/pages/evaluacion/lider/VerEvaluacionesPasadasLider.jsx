@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { obtenerEvaluacionesAnterioresProyectoPaginado } from "../../../services/evaluacion";
 import Paginado from "../../../components/Paginado";
-import { formatearFecha } from "../../../utils/funciones";
+import { formatearFecha, modificarImpacto, modificarProbabilidad } from "../../../utils/funciones";
 import { useUsuario } from "../../../context/usuarioContext";
 
 export default function VerEvaluacionesPasadasLider() {
@@ -72,18 +72,18 @@ export default function VerEvaluacionesPasadasLider() {
           <thead className="cabecera">
             <tr>
               <th style={{ width: "5em" }} className="th">Riesgo</th>
-              <th style={{ width: "5em" }} className="th">Impacto</th>
-              <th style={{ width: "5em" }} className="th">Probabilidad</th>
+              <th style={{ width: "10em" }} className="th">Impacto</th>
+              <th style={{ width: "10em" }} className="th">Probabilidad</th>
               <th style={{ maxWidth: "20em" }} className="th">Justificaci&oacute;n</th>
-              <th className="th">Acciones</th>
+              <th className="th" style={{width:"14em"}}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {evaluacionesCargadas && evaluacionesCargadas.length > 0 ? evaluacionesCargadas.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
-                <td className="td">{evaluacion.id_riesgo}</td>
-                <td className="td">{evaluacion.impacto}</td>
-                <td className="td">{evaluacion.probabilidad}</td>
+                <td className="td">{evaluacion.id_riesgo < 9 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
+                <td className="td">{modificarImpacto(evaluacion.impacto)}</td>
+                <td className="td">{modificarProbabilidad(evaluacion.probabilidad)}</td>
                 <td className="td">{evaluacion.descripcion}</td>
                 <td className="td">
                 <OverlayTrigger

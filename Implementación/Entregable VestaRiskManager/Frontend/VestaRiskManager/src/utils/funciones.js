@@ -103,25 +103,25 @@ export const modificarImpacto = (valor) => {
 export const modificarProbabilidad = (valor) => {
   switch (parseInt(valor)) {
     case 1:
-      return valor + " - 0 ~ 10%";
+      return valor + " (0 ~ 10%)";
     case 2:
-      return valor + " - 10 ~ 20%";
+      return valor + " (10 ~ 20%)";
     case 3:
-      return valor + " - 20 ~ 30%";
+      return valor + " (20 ~ 30%)";
     case 4:
-      return valor + " - 30 ~ 40%";
+      return valor + " (30 ~ 40%)";
     case 5:
-      return valor + " - 40 ~ 50%";
+      return valor + " (40 ~ 50%)";
     case 6:
-      return valor + " - 50 ~ 60%";
+      return valor + " (50 ~ 60%)";
     case 7:
-      return valor + " - 60 ~ 70%";
+      return valor + " (60 ~ 70%)";
     case 8:
-      return valor + " - 70 ~ 80%";
+      return valor + " (70 ~ 80%)";
     case 9:
-      return valor + " - 80 ~ 90%";
+      return valor + " (80 ~ 90%)";
     case 10:
-      return valor + " - 90 ~ 100%";
+      return valor + " (90 ~ 100%)";
     default:
       return valor;
   }
