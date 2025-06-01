@@ -17,7 +17,7 @@ export default function VerCategoria() {
           <h4>Nombre</h4>
           <p>{categoria.nombre}</p>
           <hr />
-          <h4>Descripc&iacute;a</h4>
+          <h4>Descripci&oacute;n</h4>
           <p>{categoria.descripcion}</p>
 
           <hr />

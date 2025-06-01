@@ -134,7 +134,7 @@ class Plan{
             $offset = ($pagina - 1) * $cantidad_planes;
         }
 
-        $query = "SELECT p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
+        $query = "SELECT p.id_plan, p.descripcion, p.tipo, r.id_riesgo, r.factor_riesgo FROM plan p 
                 inner join riesgo r on p.id_riesgo = r.id_riesgo 
                 where p.id_iteracion < ? and p.id_proyecto = ?
                 limit $cantidad_planes offset $offset";

@@ -29,8 +29,8 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
       const xScale = chart.scales.x;
       const yScale = chart.scales.y;
   
-      for (let x = 1; x <= 10; x++) {
-        for (let y = 1; y <= 10; y++) {
+      for (let x = 0; x <= 10; x++) {
+        for (let y = 0; y <= 10; y++) {
           const color = getRiskColor(x, y);
   
           const xStart = xScale.getPixelForValue(x);
@@ -50,13 +50,13 @@ ChartJS.register(PointElement, LinearScale, Title, Tooltip, Legend);
     responsive: false,
     scales: {
       x: {
-        min: 1,
+        min: 0,
         max: 11,
         ticks: { stepSize: 1 },
         title: { display: true, text: 'Impacto' },
       },
       y: {
-        min: 1,
+        min: 0,
         max: 11,
         ticks: { stepSize: 1 },
         title: { display: true, text: 'Probabilidad' },

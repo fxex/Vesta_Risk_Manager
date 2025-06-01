@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Row, Col, Card, Table, Pagination, InputGroup } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -11,10 +11,13 @@ import { obtenerRiesgosProyecto } from "../../services/riesgos";
 import { crearIncidencia } from "../../services/incidencia";
 import NavegadorLider from "../../components/NavegadorLider";
 import { useUsuario } from "../../context/usuarioContext";
+import { formatearFecha } from "../../utils/funciones";
 
 export default function CrearIncidencia() {
   const navigate = useNavigate();
-  const id_proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado")).id_proyecto;
+  const { iteracion } = useLoaderData();
+  const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
+  const id_proyecto = proyecto.id_proyecto;
   const { usuario } = useUsuario();
 
   const location = useLocation()
@@ -49,6 +52,7 @@ export default function CrearIncidencia() {
     }));
     
   };
+
 
   // Selección de gravedad
   const handleSeveritySelect = (gravedad) => {
@@ -150,7 +154,8 @@ const handleRiesgoSelection = (id_riesgo) => {
       <NavegadorLider />
       <Contenedor>
         <>
-          <h3>Crear Incidencia</h3>
+          <h3>{proyecto.nombre} - Crear Incidencia</h3>
+          <h4>{iteracion.nombre} - {formatearFecha(iteracion.fecha_inicio)} al {formatearFecha(iteracion.fecha_fin)}</h4>
           <p>
             Complete los campos a continuaci&oacute;n. Luego, presione el
             bot&oacute;n <b>Confirmar</b>.<br />

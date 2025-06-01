@@ -67,7 +67,7 @@ export default function VerProyecto() {
           <BotonSalir ruta={"/inicio/proyectos"} />
           <Button className="m-1" onClick={()=>{
             navigate(`/inicio/espectador/proyecto/${proyecto.id_proyecto}`)
-          }}>Espectear Proyecto</Button>
+          }}>Supervisar Proyecto</Button>
         </>
       </Contenedor>
       <Footer />

@@ -27,7 +27,7 @@ export default function VerPlanesPasados() {
         setPlanesCargados(data.planes);
       }
     );
-  }, [paginaActual]);
+  }, [paginaActual]);  
 
   const {usuario} = useUsuario();
   const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
@@ -37,7 +37,7 @@ export default function VerPlanesPasados() {
       <NavegadorLider />
       {comprobacionEspectador ? (
               <Alert variant="primary" className="text-center">
-                Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+                Usted es espectador del proyecto {proyecto.nombre}. Sólo se permite la visualización.
               </Alert>
             ) : null}
       {iteracion === null ? (
@@ -110,7 +110,7 @@ export default function VerPlanesPasados() {
                                   `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
                                   {
                                     state: {
-                                      ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/plan/${plan.id_plan}`,
+                                      ruta: `/inicio/proyecto/${comprobacionEspectador ? "espectador" : "lider"}/${proyecto.id_proyecto}/monitoreo/planes/pasados`,
                                     },
                                   }
                                 );

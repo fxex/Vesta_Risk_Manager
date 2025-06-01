@@ -55,7 +55,7 @@ export default function ListaTarea() {
       <NavegadorLider />
       {comprobacionEspectador ? (
                     <Alert variant="primary" className="text-center">
-                      Usted es espectador del proyecto {proyecto.nombre}. Solo se permite la visualización.
+                      Usted es espectador del proyecto {proyecto.nombre}. Sólo se permite la visualización.
                     </Alert>
                   ) : null}
       {iteracion === null ? (
