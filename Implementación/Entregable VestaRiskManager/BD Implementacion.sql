@@ -169,6 +169,20 @@ END;
 //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_evaluacion
+BEFORE INSERT ON evaluacion
+FOR EACH ROW
+BEGIN
+	UPDATE riesgo
+	SET factor_riesgo = NEW.impacto * NEW.probabilidad
+	WHERE id_riesgo = NEW.id_riesgo and id_proyecto = NEW.id_proyecto;
+END;
+//
+
+DELIMITER ;
 CREATE INDEX idx_riesgo_proyecto ON riesgo (id_proyecto);
 CREATE INDEX idx_riesgo_categoria ON riesgo (id_categoria);
 CREATE INDEX idx_participante_riesgo ON participante_riesgo (id_riesgo, id_usuario);
