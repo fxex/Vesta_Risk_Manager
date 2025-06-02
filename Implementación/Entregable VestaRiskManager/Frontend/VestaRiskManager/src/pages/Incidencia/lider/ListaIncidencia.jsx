@@ -109,7 +109,7 @@ export default function ListaIncidencia() {
                 <th style={{ maxWidth: "4em" }} className="th">
                   Fecha
                 </th>
-                <th className="th">Acciones</th>
+                <th className="th" style={{width:"5em"}}>Acciones</th>
               </tr>
             </thead>
             <tbody>

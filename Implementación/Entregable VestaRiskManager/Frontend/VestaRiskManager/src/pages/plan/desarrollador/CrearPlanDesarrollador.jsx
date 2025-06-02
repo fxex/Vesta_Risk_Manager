@@ -3,10 +3,10 @@ import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import {
-  crearPlan
+  crearPlan,
 } from "../../../services/planes";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { Alert, Button, Form, Table } from "react-bootstrap";
+import { Button, Form, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -17,7 +17,6 @@ import {
 import { useState } from "react";
 import ModalPersonalizado from "../../../components/ModalPersonalizado";
 import { formatearFecha, verificarError } from "../../../utils/funciones";
-import BotonSalir from "../../../components/BotonSalir";
 
 export default function CrearPlanDesarrollador() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
@@ -29,7 +28,6 @@ export default function CrearPlanDesarrollador() {
   const { id_proyecto, id_riesgo } = useParams();
 
   const [mostrarTarea, setMostrarTarea] = useState(false);
-  const [creado, setCreado] = useState(null);
 
   const [formData, setFormData] = useState({
     tipo: "",
@@ -137,7 +135,13 @@ export default function CrearPlanDesarrollador() {
     if (!resultado) {
       formData.id_iteracion = iteracion.id_iteracion;
       const creacion = await crearPlan(id_proyecto, id_riesgo, formData);
-      setCreado(creacion);
+      if(creacion){
+        navigate(
+          `/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`, {
+            state: { mensaje: "Plan creado con éxito" },
+          }
+        );
+      }
     }
   };
 
@@ -184,16 +188,24 @@ export default function CrearPlanDesarrollador() {
       errorPrincipal.tareas = false;
     }
   };
-  if (creado === null) {
     return (
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>
-            {proyecto.nombre} - Planificar Riesgo{" "}
-            {id_riesgo < 10 ? "0" : ""}
-            {id_riesgo}
-          </h3>
+          <>
+                      <h3>
+                        {proyecto.nombre} - Planificar Riesgo{" "}
+                        {id_riesgo < 10 ? "RK0" : "RK"}
+                        {id_riesgo}
+                      </h3>
+                      <h4>
+                        {iteracion.nombre}
+                        {" - "}
+                        {formatearFecha(iteracion.fecha_inicio)}
+                        {" al "}
+                        {formatearFecha(iteracion.fecha_fin)}
+                      </h4>
+                    </>
           <Form>
             <Form.Group>
               <Form.Label>Id del riesgo</Form.Label>
@@ -492,29 +504,5 @@ export default function CrearPlanDesarrollador() {
         </ModalPersonalizado>
         <Footer />
       </>
-    );
-  } else {
-    return (
-      <>
-        <NavegadorLider />
-        <Contenedor>
-          <h3>
-            {proyecto.nombre} - Planificar Riesgo {id_riesgo}
-          </h3>
-          <>
-            {creado ? (
-              <Alert variant="success">Operación realizada con éxito.</Alert>
-            ) : (
-              <Alert variant="danger">Ha ocurrido un error.</Alert>
-            )}
-            <hr />
-            <h5>Opciones</h5>
-            <BotonSalir
-              ruta={`/inicio/proyecto/desarrollador/${proyecto.id_proyecto}/riesgos`}
-            />
-          </>
-        </Contenedor>
-      </>
-    );
-  }
+    ); 
 }

@@ -656,7 +656,7 @@ export default function CrearProyecto() {
           </Form.Group>
           <Form.Group>
             <Form.Label>
-              <b>Participante</b>
+              <b>Participantes</b>
             </Form.Label>
             <br></br>
             <Button variant="success" onClick={handleMostrarParticipante}>

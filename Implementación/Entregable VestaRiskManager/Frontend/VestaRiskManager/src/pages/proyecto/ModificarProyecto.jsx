@@ -608,7 +608,7 @@ export default function ModificarProyecto() {
           </Form.Group>
           <Form.Group>
             <Form.Label>
-              <b>Participante</b>
+              <b>Participantes</b>
             </Form.Label>
             <br></br>
             <Button variant="success" onClick={handleMostrarParticipante}>
@@ -1299,9 +1299,8 @@ export default function ModificarProyecto() {
           <>
             <h1>¿Está seguro?</h1>
             <p>
-              Esta acción podría afectar el seguimiento del proyecto si esta
-              persona tiene tareas asignadas. Por favor, confirmá si querés
-              continuar.
+              Esta acción es permanente.  
+              Por favor, confirmá si querés continuar.
             </p>
           </>
         </Modal.Body>
@@ -1352,7 +1351,6 @@ export default function ModificarProyecto() {
             <h1>¿Está seguro?</h1>
             <p>
               Esta acción es permanente y eliminará todos los datos asociados a esta iteración.
-              Asegurate de que no se necesite más antes de continuar.
             </p>
           </>
         </Modal.Body>

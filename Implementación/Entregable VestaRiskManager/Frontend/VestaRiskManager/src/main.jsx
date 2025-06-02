@@ -135,11 +135,11 @@ const App = () => {
       element: <RutaProtegida element={<VerEvaluacionesPasadasDesarrollador />}/>,
       loader: evaluacionesPasadasDesarrolladorLoader
     },
-    // {
-    //   path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
-    //   element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
-    //   loader: planCreacionLoader,
-    // },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/riesgo/:id_riesgo/plan/crear",
+      element: <RutaProtegida element={<CrearPlanDesarrollador />} />,
+      loader: planCreacionLoader,
+    },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo",
       element: <RutaProtegida element={<MonitoreoDesarrollador />} />,

@@ -192,11 +192,20 @@ export default function CrearPlanLider() {
       <>
         <NavegadorLider />
         <Contenedor>
-          <h3>
-            {proyecto.nombre} - Planificar Riesgo{" "}
-            {id_riesgo < 10 ? "0" : ""}
-            {id_riesgo}
-          </h3>
+          <>
+            <h3>
+              {proyecto.nombre} - Planificar Riesgo{" "}
+              {id_riesgo < 10 ? "RK0" : "RK"}
+              {id_riesgo}
+            </h3>
+            <h4>
+              {iteracion.nombre}
+              {" - "}
+              {formatearFecha(iteracion.fecha_inicio)}
+              {" al "}
+              {formatearFecha(iteracion.fecha_fin)}
+            </h4>
+          </>
           <Form>
             <Form.Group>
               <Form.Label>Id del riesgo</Form.Label>
