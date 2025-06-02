@@ -11,13 +11,15 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * @see https://es.wikipedia.org/wiki/Singleton
  * 
  */
-class BDConexion extends mysqli {
+class BDConexion extends mysqli
+{
 
     private $host, $usuario, $contrasenia, $schema;
     public static $instancia;
-    
-    function __construct() {
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__."/..");
+
+    function __construct()
+    {
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
         $dotenv->load();
         $this->host = $_ENV['DB_HOST'];
         $this->usuario = $_ENV['DB_USER'];
@@ -30,12 +32,13 @@ class BDConexion extends mysqli {
             throw new Exception("Error de Conexion a la Base de Datos", $this->connect_errno);
         }
     }
-    
-       /**
-        * 
-        * @return BDConexion
-        */
-      public static function getInstancia() {
+
+    /**
+     * 
+     * @return BDConexion
+     */
+    public static function getInstancia()
+    {
         if (self::$instancia === null) {
             try {
                 self::$instancia = new self();

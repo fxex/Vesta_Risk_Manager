@@ -1,40 +1,49 @@
 <?php
-class Riesgo {
+class Riesgo
+{
     private $descripcion, $factor_riesgo, $fecha_creacion;
     private $conexion;
 
-    function __construct($conexion, $descripcion = null, $factor_riesgo = null, $fecha_creacion = null) {
+    function __construct($conexion, $descripcion = null, $factor_riesgo = null, $fecha_creacion = null)
+    {
         $this->conexion = $conexion;
         $this->descripcion = $descripcion;
         $this->factor_riesgo = $factor_riesgo;
         $this->fecha_creacion = $fecha_creacion;
     }
-    
-    public function getDescripcion(){
+
+    public function getDescripcion()
+    {
         return $this->descripcion;
     }
 
-    public function getFactorRiesgo(){
+    public function getFactorRiesgo()
+    {
         return $this->factor_riesgo;
     }
-    
-    public function getFechaCreacion(){
+
+    public function getFechaCreacion()
+    {
         return $this->fecha_creacion;
     }
 
-    public function setDescripcion($descripcion){
+    public function setDescripcion($descripcion)
+    {
         $this->descripcion = $descripcion;
     }
 
-    public function setFactorRiesgo($factor_riesgo){
+    public function setFactorRiesgo($factor_riesgo)
+    {
         $this->factor_riesgo = $factor_riesgo;
     }
 
-    public function setFechaCreacion($fecha_creacion){
+    public function setFechaCreacion($fecha_creacion)
+    {
         $this->fecha_creacion = $fecha_creacion;
     }
 
-    public function obtenerRiesgoProyecto($id_proyecto, $id_iteracion){
+    public function obtenerRiesgoProyecto($id_proyecto, $id_iteracion)
+    {
         $query = "SELECT 
                         r.id_riesgo, 
                         r.descripcion, 
@@ -53,7 +62,7 @@ class Riesgo {
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmt->execute();
-        $riesgos = $stmt->get_result(); 
+        $riesgos = $stmt->get_result();
         $resultado = [];
         while ($fila = $riesgos->fetch_assoc()) {
             $resultado[] = $fila;
@@ -61,8 +70,9 @@ class Riesgo {
         return $resultado;
     }
 
-    private function obtenerOrden($orden){
-        switch($orden){
+    private function obtenerOrden($orden)
+    {
+        switch ($orden) {
             case 1:
                 return "r.id_riesgo asc";
             case 2:
@@ -74,17 +84,18 @@ class Riesgo {
         }
     }
 
-    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $id_iteracion, $pagina, $orden){
+    public function obtenerRiesgoProyectoPorPagina($id_proyecto, $id_iteracion, $pagina, $orden)
+    {
         $cantidad_riesgos = 5;
         $offset = 0;
-        if($pagina > 1){
+        if ($pagina > 1) {
             $offset = ($pagina - 1) * $cantidad_riesgos;
         }
 
         $ordenado = $this->obtenerOrden($orden);
-        
+
         $ids = [];
-        
+
         $queryIds = "SELECT r.id_riesgo FROM riesgo r 
         WHERE r.id_proyecto = ? 
         ORDER BY $ordenado 
@@ -99,7 +110,7 @@ class Riesgo {
             $ids[] = $fila['id_riesgo'];
         }
         if (count($ids) == 0) {
-            return ["riesgos"=>[], "totalPaginas"=>0];
+            return ["riesgos" => [], "totalPaginas" => 0];
         }
 
         $ids_string = implode(',', $ids);
@@ -116,13 +127,13 @@ class Riesgo {
                     LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
-                    WHERE r.id_riesgo in ($ids_string)
+                    WHERE r.id_riesgo in ($ids_string) and r.id_proyecto = ?
                     GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre
                     ORDER BY $ordenado
                     ";
 
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_iteracion);
+        $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmt->execute();
         $riesgos = $stmt->get_result();
         $resultado = [];
@@ -131,10 +142,11 @@ class Riesgo {
         }
         $totalPaginas = $this->obtenerCantidadPaginas($cantidad_riesgos, $id_proyecto);
 
-        return ["riesgos"=>$resultado, "totalPaginas"=>$totalPaginas];
+        return ["riesgos" => $resultado, "totalPaginas" => $totalPaginas];
     }
 
-    private function obtenerCantidadPaginas($cantidadRiesgos, $id_proyecto){
+    private function obtenerCantidadPaginas($cantidadRiesgos, $id_proyecto)
+    {
         $totalQuery = $this->conexion->query("select count(*) as total from riesgo where id_proyecto = $id_proyecto");
         $totalRiesgo = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalRiesgo / $cantidadRiesgos);
@@ -142,13 +154,14 @@ class Riesgo {
         return $totalPaginas;
     }
 
-    public function obtenerParticipantesRiesgo($id_riesgo){
+    public function obtenerParticipantesRiesgo($id_riesgo)
+    {
         $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_riesgo);
         $stmt->execute();
-        $participantes   = $stmt->get_result();
-        
+        $participantes = $stmt->get_result();
+
         $resultado = [];
         while ($fila = $participantes->fetch_assoc()) {
             $resultado[] = $fila;
@@ -156,7 +169,8 @@ class Riesgo {
         return $resultado;
     }
 
-    public function crearRiesgo($id_proyecto, $id_categoria){
+    public function crearRiesgo($id_proyecto, $id_categoria)
+    {
         $query = "INSERT INTO riesgo (descripcion, id_categoria, id_proyecto) VALUES (?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("sii", $this->descripcion, $id_categoria, $id_proyecto);
@@ -175,7 +189,8 @@ class Riesgo {
         }
     }
 
-    public function actualizarRiesgo($id_riesgo, $id_categoria, $id_proyecto){
+    public function actualizarRiesgo($id_riesgo, $id_categoria, $id_proyecto)
+    {
         $query = "UPDATE riesgo set descripcion = ?, id_categoria = ? where id_riesgo = ? and id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("siii", $this->descripcion, $id_categoria, $id_riesgo, $id_proyecto);
@@ -187,7 +202,8 @@ class Riesgo {
         }
     }
 
-    public function eliminarRiesgo($id_proyecto, $id_riesgo){
+    public function eliminarRiesgo($id_proyecto, $id_riesgo)
+    {
         $query = "DELETE from riesgo where id_proyecto = ? and id_riesgo = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_proyecto, $id_riesgo);
@@ -200,31 +216,34 @@ class Riesgo {
     }
 
 
-    public function obtenerRiesgoId($id_riesgo){
+    public function obtenerRiesgoId($id_riesgo)
+    {
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 
         where r.id_riesgo = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_riesgo);
         $stmt->execute();
-        $resultado = $stmt->get_result()->fetch_assoc(); 
+        $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado;
     }
 
-    public function actualizarFactorRiesgo($id_riesgo, $id_proyecto) {
+    public function actualizarFactorRiesgo($id_riesgo, $id_proyecto)
+    {
         $query = "UPDATE riesgo SET factor_riesgo= ? WHERE id_riesgo = ? and id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("iii", $this->factor_riesgo, $id_riesgo, $id_proyecto);
         if ($stmt->execute()) {
             return true;
-        }else{
+        } else {
             throw new Exception("Error al actualizar el factor de riesgo: " . $stmt->error);
             return false;
-        }   
+        }
     }
 
 
-    public function obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion){
+    public function obtenerCantidadPlanes($id_proyecto, $id_riesgo, $id_iteracion)
+    {
         $query = "SELECT r.id_riesgo,
                 SUM(CASE WHEN p.tipo = 'minimizacion' THEN 1 ELSE 0 END) AS total_minimizacion,
                 SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,
@@ -232,33 +251,34 @@ class Riesgo {
                 FROM riesgo r
                 LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo
                 where p.id_iteracion = ? and r.id_riesgo = ? and r.id_proyecto = ?
-                GROUP BY r.id_riesgo"; 
-         $stmt = $this->conexion->prepare($query);
-         $stmt->bind_param("iii",$id_iteracion, $id_riesgo, $id_proyecto);
-         $stmt->execute();
-         $resultado = $stmt->get_result()->fetch_assoc(); 
-         return $resultado;
+                GROUP BY r.id_riesgo";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("iii", $id_iteracion, $id_riesgo, $id_proyecto);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
     }
 
-    public function obtenerDatosRiesgo($id_proyecto, $id_iteracion){
+    public function obtenerDatosRiesgo($id_proyecto, $id_iteracion)
+    {
         $consultas = [
             // "total_riesgos"=>[
             //     "query" => "Select count(DISTINCT id_riesgo) from riesgo where id_proyecto = ?",
             //     "params"=>["i", $id_proyecto]
             // ], 
-            "riesgos_activos" =>[
+            "riesgos_activos" => [
                 "query" => "Select count(Distinct e.id_evaluacion) from evaluacion e inner join riesgo r on r.id_riesgo = e.id_riesgo where e.id_proyecto = ? and e.id_iteracion = ? and r.factor_riesgo > 9",
-                "params"=>["ii", $id_proyecto, $id_iteracion]
+                "params" => ["ii", $id_proyecto, $id_iteracion]
             ],
-            "evaluaciones_pendientes" =>[
+            "evaluaciones_pendientes" => [
                 "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r LEFT join evaluacion e on r.id_riesgo = e.id_riesgo and e.id_iteracion = ? where r.id_proyecto = ? and e.id_evaluacion is null",
-                "params" =>["ii", $id_iteracion, $id_proyecto]
+                "params" => ["ii", $id_iteracion, $id_proyecto]
             ],
-            "planes_accion" =>[
+            "planes_accion" => [
                 "query" => "select count(DISTINCT p.id_plan) from riesgo r inner join plan p on p.id_riesgo = r.id_riesgo and p.id_iteracion = ? where r.id_proyecto = ?",
-                "params" =>["ii", $id_iteracion, $id_proyecto]
+                "params" => ["ii", $id_iteracion, $id_proyecto]
             ],
-            "riesgos_atencion"=>[
+            "riesgos_atencion" => [
                 "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r
                             INNER JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                             WHERE r.factor_riesgo > 35 and r.id_proyecto = ?
@@ -268,24 +288,24 @@ class Riesgo {
                                 WHERE p.id_riesgo = r.id_riesgo 
                                 AND p.id_iteracion = ?
                             )",
-                "params" =>["iii", $id_iteracion, $id_proyecto, $id_iteracion]
+                "params" => ["iii", $id_iteracion, $id_proyecto, $id_iteracion]
             ],
             "cantidad_categoria" => [
                 "query" => "SELECT COUNT(c.id_categoria) FROM categoria c inner join proyecto_categoria pc on c.id_categoria = pc.id_categoria WHERE pc.id_proyecto = ?",
-                "params" =>["i", $id_proyecto]
+                "params" => ["i", $id_proyecto]
             ]
-            
+
         ];
 
         $resultados = [];
         foreach ($consultas as $clave => $consulta) {
             $stmt = $this->conexion->prepare($consulta["query"]);
-        
+
             // Si hay parámetros, los vinculamos
             if (!empty($consulta["params"])) {
                 $stmt->bind_param(...$consulta["params"]);
             }
-        
+
             $stmt->execute();
             $stmt->bind_result($total);
             $stmt->fetch();
@@ -296,7 +316,8 @@ class Riesgo {
     }
 
 
-    public function obtenerDatosInformeSeguimiento($id_proyecto){
+    public function obtenerDatosInformeSeguimiento($id_proyecto)
+    {
         $query = "SELECT r.id_riesgo, r.descripcion, r.factor_riesgo,
         CASE
             WHEN r.factor_riesgo is null then 'No se ha iniciado'
@@ -321,9 +342,9 @@ class Riesgo {
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
 
-        $riesgos   = $stmt->get_result();
+        $riesgos = $stmt->get_result();
 
-        $resultado = ["riesgos"=>[]];
+        $resultado = ["riesgos" => []];
         while ($fila = $riesgos->fetch_assoc()) {
             $resultado["riesgos"][] = $fila;
         }
@@ -334,7 +355,8 @@ class Riesgo {
         return $resultado;
     }
 
-    private function obtenerCantidadEstado($id_proyecto){
+    private function obtenerCantidadEstado($id_proyecto)
+    {
         $query = "SELECT COUNT(r.id_riesgo) AS total
         FROM (
             SELECT 'No se ha iniciado' AS estado
@@ -359,7 +381,7 @@ class Riesgo {
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
-        $riesgos   = $stmt->get_result();
+        $riesgos = $stmt->get_result();
         $resultado = [];
         while ($fila = $riesgos->fetch_assoc()) {
             $resultado[] = $fila["total"];
@@ -367,7 +389,8 @@ class Riesgo {
         return $resultado;
     }
 
-    private function obtenerCantidadPrioridad($id_proyecto){
+    private function obtenerCantidadPrioridad($id_proyecto)
+    {
         $query = "SELECT COUNT(r.id_riesgo) AS total
         FROM (
             SELECT 'Desconocida' AS prioridad
@@ -398,7 +421,7 @@ class Riesgo {
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
-        $riesgos   = $stmt->get_result();
+        $riesgos = $stmt->get_result();
         $resultado = [];
         while ($fila = $riesgos->fetch_assoc()) {
             $resultado[] = $fila["total"];

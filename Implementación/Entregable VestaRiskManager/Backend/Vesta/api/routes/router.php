@@ -4,7 +4,8 @@
  * Clase Router para manejar el enrutamiento de rutas HTTP en una aplicación PHP.
  */
 
-class Router {
+class Router
+{
     /** @var array $routes Lista de rutas registradas */
     private $routes = [];
 
@@ -16,7 +17,8 @@ class Router {
      *
      * @param string $base Ruta base para todas las rutas añadidas
      */
-    public function setBase($base) {
+    public function setBase($base)
+    {
         $this->base = trim($base, '/');
     }
 
@@ -27,7 +29,8 @@ class Router {
      * @param string $path Ruta relativa al prefijo base, acepta parámetros en formato {param}
      * @param callable|array $callback Callback o controlador que se ejecutará cuando la ruta coincida
      */
-    public function add($method, $path, $callback) {
+    public function add($method, $path, $callback)
+    {
         // Añade la base a cada ruta si está configurada
         $path = ($this->base ? $this->base . '/' : '') . trim($path, '/');
         $this->routes[] = [
@@ -43,7 +46,8 @@ class Router {
      * @param string $path Ruta que contiene parámetros entre llaves, como `{id}`
      * @return string Expresión regular para coincidir y capturar parámetros en la URL
      */
-    private function convertPathToRegex($path) {
+    private function convertPathToRegex($path)
+    {
         return "#^" . str_replace(['{', '}'], ['(?P<', '>[^/]+)'], $path) . "$#";
     }
 
@@ -51,7 +55,8 @@ class Router {
      * Ejecuta el enrutador, verificando si alguna ruta coincide con la URL actual
      * y el método HTTP. Si coincide, ejecuta el callback asociado.
      */
-    public function run() {
+    public function run()
+    {
         $url = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); // Obtiene la URL solicitada
         $method = $_SERVER['REQUEST_METHOD']; // Obtiene el método HTTP
         // Verifica si el método de solicitud es OPTIONS y responde con estado 200

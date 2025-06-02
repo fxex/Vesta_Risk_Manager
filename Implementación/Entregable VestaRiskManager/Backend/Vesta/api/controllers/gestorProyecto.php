@@ -4,47 +4,56 @@ require_once __DIR__ . "/../models/iteracion.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
-class GestorProyecto {
+class GestorProyecto
+{
     private $conexion, $proyecto, $iteracion;
 
-    function __construct() {
+    function __construct()
+    {
         $this->conexion = BDConexion::getInstancia();
         $this->proyecto = new Proyecto($this->conexion);
         $this->conexion->set_charset("utf8");
         $this->iteracion = new Iteracion($this->conexion);
     }
 
-    public function obtenerTodosProyecto(){
+    public function obtenerTodosProyecto()
+    {
         $resultado = $this->proyecto->obtenerTodosProyecto();
         return $resultado;
     }
 
-    public function obtenerTodosProyectoPaginado($pagina){
+    public function obtenerTodosProyectoPaginado($pagina)
+    {
         $resultado = $this->proyecto->obtenerTodosProyectoPaginado($pagina);
         return $resultado;
     }
 
-    public function obtenerTodosProyectoLider($correo){
+    public function obtenerTodosProyectoLider($correo)
+    {
         $resultado = $this->proyecto->obtenerTodosProyectoLider($correo);
         return $resultado;
     }
 
-    public function obtenerTodosProyectoLiderPaginado($correo, $pagina){
+    public function obtenerTodosProyectoLiderPaginado($correo, $pagina)
+    {
         $resultado = $this->proyecto->obtenerTodosProyectoLiderPaginado($correo, $pagina);
         return $resultado;
     }
 
-    public function obtenerTodosProyectoDesarrollador($correo){
+    public function obtenerTodosProyectoDesarrollador($correo)
+    {
         $resultado = $this->proyecto->obtenerTodosProyectoDesarrollador($correo);
         return $resultado;
     }
 
-    public function obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina){
+    public function obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina)
+    {
         $resultado = $this->proyecto->obtenerTodosProyectoDesarrolladorPaginado($correo, $pagina);
         return $resultado;
     }
 
-    public function obtenerProyectoId($id_proyecto){
+    public function obtenerProyectoId($id_proyecto)
+    {
         $resultado = $this->proyecto->obtenerProyectoId($id_proyecto);
         $categorias = $this->proyecto->obtenerCategoriaProyectoId($id_proyecto);
         $participantes = $this->proyecto->obtenerParticipanteProyectoId($id_proyecto);
@@ -55,9 +64,10 @@ class GestorProyecto {
         return $resultado;
     }
 
-    public function obtenerParticipanteNombre($nombre){
-        $url = "http://localhost/Vesta/participante/". $nombre;
-        
+    public function obtenerParticipanteNombre($nombre)
+    {
+        $url = "http://localhost/Vesta/participante/" . $nombre;
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
 
@@ -66,7 +76,7 @@ class GestorProyecto {
 
         // 7. Verificar si hubo un error
         if (curl_errno($ch)) {
-           return curl_error($ch);
+            return curl_error($ch);
         } else {
             return $response;
         }
@@ -75,24 +85,26 @@ class GestorProyecto {
         curl_close($ch);
     }
 
-    public function obtenerCategoriasGenerales(){
+    public function obtenerCategoriasGenerales()
+    {
         $url = "http://localhost/Vesta/categoria/generales";
-        
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
 
         $response = curl_exec($ch);
-        
+
         if (curl_errno($ch)) {
             return ['error' => curl_error($ch)];
         } else {
             return json_decode($response, true);
         }
-        
+
         curl_close($ch);
     }
 
-    public function crearProyecto($data){
+    public function crearProyecto($data)
+    {
         $this->proyecto->setFechaInicio(null);
         $this->proyecto->setFechaFin(null);
         $comprobar = !empty($data["nombre"] && !empty($data["descripcion"])) && !empty($data["estado"]);
@@ -107,13 +119,13 @@ class GestorProyecto {
             $id_proyecto = $this->proyecto->crearProyecto();
             if (!empty($data["participantes"])) {
                 foreach ($data["participantes"] as $participante) {
-                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$participante["id_usuario"],$participante["rol"]);                    
+                    vincularTabla::crearVinculoAtributo($this->conexion, "proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto, $participante["id_usuario"], $participante["rol"]);
                 }
             }
             if (!empty($data["categorias"])) {
                 foreach ($data["categorias"] as $categoria) {
                     $id_categoria = $categoria["id_categoria"];
-                    vincularTabla::crearVinculo($this->conexion,"proyecto_categoria", "id_proyecto", "id_categoria", $id_proyecto, $id_categoria);                    
+                    vincularTabla::crearVinculo($this->conexion, "proyecto_categoria", "id_proyecto", "id_categoria", $id_proyecto, $id_categoria);
                 }
             }
 
@@ -131,16 +143,17 @@ class GestorProyecto {
         }
     }
 
-    public function actualizarProyecto($id_proyecto, $data){
+    public function actualizarProyecto($id_proyecto, $data)
+    {
         $this->proyecto->setFechaInicio(null);
         $this->proyecto->setFechaFin(null);
         $comprobar = !empty($data["nombre"] && !empty($data["descripcion"])) && !empty($data["estado"]);
         if ($comprobar) {
-            vincularTabla::eliminarVinculo($this->conexion,"proyecto_participante", "id_proyecto", $id_proyecto);
+            vincularTabla::eliminarVinculo($this->conexion, "proyecto_participante", "id_proyecto", $id_proyecto);
             $this->proyecto->setNombre($data["nombre"]);
             $this->proyecto->setDescripcion($data["descripcion"]);
             $this->proyecto->setEstado($data["estado"]);
-            
+
             if (!empty($data["fecha_inicio"])) {
                 $this->proyecto->setFechaInicio($data["fecha_inicio"]);
                 $this->proyecto->setFechaFin($data["fecha_fin"]);
@@ -149,7 +162,7 @@ class GestorProyecto {
             $resultado = $this->proyecto->actualizarProyecto($id_proyecto);
             if (!empty($data["participantes"])) {
                 foreach ($data["participantes"] as $participante) {
-                    vincularTabla::crearVinculoAtributo($this->conexion,"proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto,$participante["id_usuario"],$participante["rol"]);                    
+                    vincularTabla::crearVinculoAtributo($this->conexion, "proyecto_participante", "id_proyecto", "id_usuario", "rol", $id_proyecto, $participante["id_usuario"], $participante["rol"]);
                 }
             }
 
@@ -165,31 +178,33 @@ class GestorProyecto {
                     $this->iteracion->setFechaInicio($iteracion["fecha_inicio"]);
                     $this->iteracion->setFechaFin($iteracion["fecha_fin"]);
                     if (!empty($iteracion["id_iteracion"])) {
-                        $this->iteracion->actualizarIteracion($iteracion["id_iteracion"],$id_proyecto);
-                    }else{
+                        $this->iteracion->actualizarIteracion($iteracion["id_iteracion"], $id_proyecto);
+                    } else {
                         $this->iteracion->crearIteracion($id_proyecto);
                     }
                 }
             }
             return $resultado;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-    public function obtenerIteracionActual($id_proyecto){
+    public function obtenerIteracionActual($id_proyecto)
+    {
         $fecha_actual = date("Y-m-d");
         $resultado = $this->proyecto->obtenerIteracionActual($id_proyecto, $fecha_actual);
         return $resultado;
     }
 
-    public function obtenerUltimaIteracion($id_proyecto){
+    public function obtenerUltimaIteracion($id_proyecto)
+    {
         $resultado = $this->proyecto->obtenerUltimaIteracion($id_proyecto);
         return $resultado;
     }
 
-    public function obtenerUltimasIteraciones($id_proyecto){
+    public function obtenerUltimasIteraciones($id_proyecto)
+    {
         $resultado = $this->proyecto->obtenerUltimasIteraciones($id_proyecto, date("Y-m-d"));
         return $resultado;
     }

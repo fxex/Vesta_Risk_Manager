@@ -6,17 +6,20 @@ require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../models/bloquearModificacion.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
 
-class GestorUsuario {
+class GestorUsuario
+{
     private $conexion, $usuario, $perfil, $permiso;
-    function __construct() {
+    function __construct()
+    {
         $this->conexion = BDConexion::getInstancia();
         $this->conexion->set_charset("utf8");
 
-        $this->usuario = New Usuario(null,null,$this->conexion);
-        $this->perfil = New Perfil(null,$this->conexion);
-        $this->permiso = New Permiso(null,$this->conexion);
+        $this->usuario = new Usuario(null, null, $this->conexion);
+        $this->perfil = new Perfil(null, $this->conexion);
+        $this->permiso = new Permiso(null, $this->conexion);
     }
-    private function verificarCorreo($correo){
+    private function verificarCorreo($correo)
+    {
         // Expresión regular para validar correos de Gmail y UNPA
         $gmailPattern = "/^[a-zA-Z0-9._%+-]+@gmail\.com$/";
         $uargPattern = "/^[a-zA-Z0-9._%+-]+@uarg\.unpa\.edu\.ar$/";
@@ -31,12 +34,14 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerTodosUsuarios($pagina){
+    public function obtenerTodosUsuarios($pagina)
+    {
         $resultado = $this->usuario->obtenerTodosUsuarios($pagina);
         return $resultado;
     }
 
-    public function obtenerUsuarioCorreo($correo){
+    public function obtenerUsuarioCorreo($correo)
+    {
         $comprobar = $this->verificarCorreo($correo);
         if ($comprobar) {
             $this->usuario->setEmail($correo);
@@ -47,18 +52,21 @@ class GestorUsuario {
         }
     }
 
-    public function bloquearModificacion($nombre, $id_nombre, $token){
+    public function bloquearModificacion($nombre, $id_nombre, $token)
+    {
         $resultado = Bloquear::bloquearModificacion($nombre, $id_nombre, $token);
         return $resultado;
     }
-    public function desbloquearModificacionUsuario($id_nombre){
+    public function desbloquearModificacionUsuario($id_nombre)
+    {
         $resultado = Bloquear::bloquearModificacion("usuario", $id_nombre);
         return $resultado;
     }
 
-    public function obtenerUsuarioId($id, $token){
+    public function obtenerUsuarioId($id, $token)
+    {
         if (is_numeric($id)) {
-            $bloqueado = $this->bloquearModificacion("usuario",$id, $token);
+            $bloqueado = $this->bloquearModificacion("usuario", $id, $token);
             $resultado = $this->usuario->obtenerUsuarioId($id);
             $this->perfil->setNombre($resultado["nombre_perfil"]);
             $resultado["bloqueado"] = $bloqueado["bloqueado"];
@@ -67,9 +75,10 @@ class GestorUsuario {
             return null;
         }
     }
-    
 
-    public function crearUsuario($data){
+
+    public function crearUsuario($data)
+    {
         $comprobar = $this->verificarCorreo($data["correo"]) && !empty($data["nombre"] && !empty($data["perfil"]));
         if ($comprobar) {
             $this->usuario->setNombre($data["nombre"]);
@@ -82,7 +91,8 @@ class GestorUsuario {
         }
     }
 
-    public function actualizarUsuario($id, $data){
+    public function actualizarUsuario($id, $data)
+    {
         $comprobar = $this->verificarCorreo($data["correo"]) && !empty($data["nombre"] && !empty($data["perfil"]));
         if ($comprobar) {
             $this->usuario->setNombre($data["nombre"]);
@@ -95,7 +105,8 @@ class GestorUsuario {
         }
     }
 
-    public function eliminarUsuario($id){
+    public function eliminarUsuario($id)
+    {
         if (is_numeric($id)) {
             vincularTabla::eliminarVinculo($this->conexion, "usuario_perfil", "id_usuario", $id);
             vincularTabla::eliminarVinculo($this->conexion, "proyecto_participante", "id_usuario", $id);
@@ -112,13 +123,15 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerTodosPerfiles(){
+    public function obtenerTodosPerfiles()
+    {
         $resultado = $this->perfil->obtenerTodosPerfiles();
 
         return $resultado;
     }
 
-    public function obtenerPerfilId($id){
+    public function obtenerPerfilId($id)
+    {
         if (is_numeric($id)) {
             $resultado = $this->perfil->obtenerPerfilId($id);
             $permisos = $this->perfil->obtenerPermisosPerfil();
@@ -128,10 +141,11 @@ class GestorUsuario {
             return null;
         }
     }
-    
 
-    public function crearPerfil($data){
-        $comprobar =  !empty($data["nombre"] && !empty($data["permisos"]));
+
+    public function crearPerfil($data)
+    {
+        $comprobar = !empty($data["nombre"] && !empty($data["permisos"]));
         if ($comprobar) {
             $this->perfil->setNombre($data["nombre"]);
             $this->perfil->setPermisos($data["permisos"]);
@@ -145,8 +159,9 @@ class GestorUsuario {
         }
     }
 
-    public function actualizarPerfil($id, $data){
-        $comprobar =  !empty($data["nombre"] && !empty($data["permisos"]));
+    public function actualizarPerfil($id, $data)
+    {
+        $comprobar = !empty($data["nombre"] && !empty($data["permisos"]));
         if ($comprobar) {
             $this->perfil->setNombre($data["nombre"]);
             $resultado = $this->perfil->actualizarPerfil($id);
@@ -160,7 +175,8 @@ class GestorUsuario {
         }
     }
 
-    public function eliminarPerfil($id){
+    public function eliminarPerfil($id)
+    {
         if (is_numeric($id)) {
             vincularTabla::eliminarVinculo($this->conexion, "perfil_permiso", "id_perfil", $id);
             vincularTabla::eliminarVinculo($this->conexion, "usuario_perfil", "id_perfil", $id);
@@ -173,32 +189,36 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerTodosPermisos(){
+    public function obtenerTodosPermisos()
+    {
         $resultado = $this->permiso->obtenerTodosPermisos();
         return $resultado;
     }
 
-    public function obtenerUsuariosNombre($nombre){
+    public function obtenerUsuariosNombre($nombre)
+    {
         if (!empty($nombre)) {
             $this->usuario->setNombre($nombre);
             $resultado = $this->usuario->obtenerUsuariosNombre();
             return $resultado;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public function obtenerUsuariosNombreEqual($nombre){
+    public function obtenerUsuariosNombreEqual($nombre)
+    {
         if (!empty($nombre)) {
             $this->usuario->setNombre($nombre);
             $resultado = $this->usuario->obtenerUsuariosNombreEqual();
             return $resultado;
-        }else{
+        } else {
             return null;
         }
     }
 
-    public function obtenerIdUsuarioNombre($nombre){
+    public function obtenerIdUsuarioNombre($nombre)
+    {
         $comprobar = !empty($nombre);
         if ($comprobar) {
             $this->usuario->setNombre($nombre);
@@ -209,13 +229,14 @@ class GestorUsuario {
         }
     }
 
-    public function obtenerPerfilNombre($nombre){
+    public function obtenerPerfilNombre($nombre)
+    {
         $comprobar = !empty($nombre);
         if ($comprobar) {
             $this->perfil->setNombre($nombre);
             $resultado = $this->perfil->obtenerPerfilNombre();
             return $resultado;
-        }else{
+        } else {
             return null;
         }
     }

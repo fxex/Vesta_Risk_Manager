@@ -1,20 +1,25 @@
 <?php
-class Permiso{
+class Permiso
+{
     private $nombre, $conexion;
-    function __construct($nombre=null, $conexion) {
+    function __construct($nombre = null, $conexion)
+    {
         $this->nombre = $nombre;
         $this->conexion = $conexion;
     }
 
-    public function getNombre(){
+    public function getNombre()
+    {
         return $this->nombre;
     }
-    public function setNombre($nombre){
+    public function setNombre($nombre)
+    {
         $this->nombre = $nombre;
     }
 
 
-    public function obtenerTodosPermisos(){
+    public function obtenerTodosPermisos()
+    {
         $permisos = $this->conexion->query("select * from permiso");
         $resultado = [];
         while ($fila = $permisos->fetch_assoc()) {

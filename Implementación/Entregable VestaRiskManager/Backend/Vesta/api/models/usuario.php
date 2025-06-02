@@ -1,31 +1,38 @@
 <?php
 
-class Usuario {
+class Usuario
+{
     private $nombre, $email, $conexion;
-    
-    function __construct($nombre=null, $email=null, $conexion) {
+
+    function __construct($nombre = null, $email = null, $conexion)
+    {
         $this->nombre = $nombre;
         $this->email = $email;
         $this->conexion = $conexion;
     }
 
-    public function getNombre(){
+    public function getNombre()
+    {
         return $this->nombre;
     }
 
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setNombre($nombre){
+    public function setNombre($nombre)
+    {
         $this->nombre = $nombre;
     }
 
-    public function setEmail($email){
+    public function setEmail($email)
+    {
         $this->email = $email;
     }
 
-    public function crearUsuario(){
+    public function crearUsuario()
+    {
         $query = "INSERT INTO usuario (nombre, email) VALUES (?, ?)";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ss", $this->nombre, $this->email);
@@ -34,10 +41,11 @@ class Usuario {
         } else {
             throw new Exception("Error al crear el usuario: " . $stmt->error);
         }
-        
+
     }
 
-    public function obtenerTodosUsuarios($pagina){
+    public function obtenerTodosUsuarios($pagina)
+    {
         $usuariosPorPagina = 10;
         $offset = 0;
         if ($pagina > 1) {
@@ -50,10 +58,11 @@ class Usuario {
             $resultado[] = $fila;
         }
         $totalPaginas = $this->obtenerCantidadUsuario($usuariosPorPagina);
-        return ["usuarios"=>$resultado, "totalPaginas"=> $totalPaginas];
+        return ["usuarios" => $resultado, "totalPaginas" => $totalPaginas];
     }
 
-    private function obtenerCantidadUsuario($usuariosPorPagina){
+    private function obtenerCantidadUsuario($usuariosPorPagina)
+    {
         $totalQuery = $this->conexion->query("select count(*) as total from usuario");
         $totalUsuarios = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalUsuarios / $usuariosPorPagina);
@@ -63,7 +72,8 @@ class Usuario {
 
 
     // Obtener usuario por ID
-    public function obtenerUsuarioId($id) {
+    public function obtenerUsuarioId($id)
+    {
         $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.id_usuario = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id);
@@ -75,10 +85,11 @@ class Usuario {
         return $resultado; // Retorna el usuario
     }
 
-    public function obtenerUsuariosNombre() {
+    public function obtenerUsuariosNombre()
+    {
         $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre like ? and p.nombre != 'Administrador'";
         $stmt = $this->conexion->prepare($query);
-        $search = "%". $this->nombre ."%";
+        $search = "%" . $this->nombre . "%";
         $stmt->bind_param("s", $search);
         $stmt->execute();
         $usuarios = $stmt->get_result();
@@ -90,7 +101,8 @@ class Usuario {
         return $resultado; // Retorna el usuario
     }
 
-    public function obtenerUsuariosNombreEqual() {
+    public function obtenerUsuariosNombreEqual()
+    {
         $query = "SELECT u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.nombre = ?";
         $stmt = $this->conexion->prepare($query);
         $search = $this->nombre;
@@ -101,7 +113,8 @@ class Usuario {
         return $resultado; // Retorna el usuario
     }
     // Obtener usuario por Email
-    public function obtenerUsuarioEmail() {
+    public function obtenerUsuarioEmail()
+    {
         $query = "SELECT u.id_usuario, u.nombre as nombre_usuario, u.email,p.id_perfil, p.nombre as nombre_perfil FROM usuario u INNER JOIN usuario_perfil up on u.id_usuario = up.id_usuario INNER JOIN perfil p on up.id_perfil = p.id_perfil WHERE u.email = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $this->email);
@@ -116,7 +129,8 @@ class Usuario {
     }
 
     // Actualizar usuario
-    public function actualizarUsuario($id) {
+    public function actualizarUsuario($id)
+    {
         $query = "UPDATE usuario SET nombre = ?, email = ? WHERE id_usuario = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ssi", $this->nombre, $this->email, $id);
@@ -124,13 +138,14 @@ class Usuario {
         if (!$stmt->execute()) {
             throw new Exception("Error al actualizar el usuario: " . $stmt->error);
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     // Eliminar usuario
-    public function eliminarUsuario($id) {
+    public function eliminarUsuario($id)
+    {
         $query = "DELETE FROM usuario WHERE id_usuario = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id);
@@ -138,13 +153,14 @@ class Usuario {
         if (!$stmt->execute()) {
             throw new Exception("Error al eliminar el usuario: " . $stmt->error);
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     // Obtener id de un usuario por nombre
-    public function obtenerIdUsuarioNombre() {
+    public function obtenerIdUsuarioNombre()
+    {
         $query = "SELECT id_usuario FROM usuario WHERE nombre = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("s", $this->nombre);
