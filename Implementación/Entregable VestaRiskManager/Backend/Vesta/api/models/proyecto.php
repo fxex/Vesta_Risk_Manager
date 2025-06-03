@@ -103,7 +103,7 @@ class Proyecto
         if ($pagina > 1) {
             $offset = ($pagina - 1) * $cantidad_proyectos;
         }
-        $proyectos = $this->conexion->query("select * from proyecto limit $cantidad_proyectos offset $offset");
+        $proyectos = $this->conexion->query("select * from proyecto order by field (estado, 'activo', 'inactivo'), nombre asc limit $cantidad_proyectos offset $offset");
         $resultado = [];
         while ($fila = $proyectos->fetch_assoc()) {
             $resultado[] = $fila;

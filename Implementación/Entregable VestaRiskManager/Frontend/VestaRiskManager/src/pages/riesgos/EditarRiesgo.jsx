@@ -13,10 +13,10 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
   modificarRiesgo,
 } from "../../services/riesgos";
-import { verificarError } from "../../utils/funciones";
+import { formatearFecha, verificarError } from "../../utils/funciones";
 
 export default function EditarRiesgo() {
-  const { proyecto, riesgo } = useLoaderData();
+  const { proyecto, riesgo, iteracion } = useLoaderData();
 
   const { id_proyecto, id_riesgo } = useParams();
 
@@ -92,9 +92,18 @@ export default function EditarRiesgo() {
           <>
             <h3>
               {proyecto.nombre} - Editar Riesgo{" "}
-              {id_riesgo < 10 ? "0" : ""}
+              {id_riesgo < 10 ? "RK0" : "RK"}
               {id_riesgo}
             </h3>
+            <>
+              <h4>
+                {iteracion.nombre}
+                {" - "}
+                {formatearFecha(iteracion.fecha_inicio)}
+                {" al "}
+                {formatearFecha(iteracion.fecha_fin)}
+              </h4>
+            </>
             <p>
               Complete los campos a continuaci&oacute;n. Luego, presione el
               bot&oacute;n <b>Confirmar</b>.<br />

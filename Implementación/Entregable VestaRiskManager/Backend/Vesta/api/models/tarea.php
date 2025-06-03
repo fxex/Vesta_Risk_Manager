@@ -250,4 +250,18 @@ class Tarea
         return $resultado;
     }
 
+    public function actualizarTarea($id_tarea)
+    {
+        $query = "UPDATE tarea set nombre = ?, descripcion =?, estado = ?, fecha_inicio = ?, fecha_fin = ?,  fecha_fin_real = ?  where id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ssssssi", $this->nombre, $this->descripcion, $this->estado, $this->fecha_inicio, $this->fecha_fin, $this->fecha_fin_real, $id_tarea);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al actualizar la tarea: " . $stmt->error);
+            return false;
+        }
+    }
+
+
 }

@@ -34,7 +34,8 @@ export async function cargarCategoria({ params }) {
 // Loaders de Proyectos
 export async function cargarProyecto({ params }) {
   const proyecto = await obtenerProyectosId(params.id_proyecto);
-  return { proyecto };
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { proyecto, iteracion};
 }
 
 export async function cargarProyectos() {
@@ -79,8 +80,9 @@ export const riesgoLoaderPage = async ({ params }) => {
 export async function cargarRiesgo({ params }) {
   const id_riesgo= params.id_riesgo
   const proyecto = await obtenerProyectosId(params.id_proyecto);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
   const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
-  return { proyecto, riesgo };
+  return { proyecto, riesgo, iteracion };
 }
 
 export const seguimientoLoader = async ({params}) =>{
