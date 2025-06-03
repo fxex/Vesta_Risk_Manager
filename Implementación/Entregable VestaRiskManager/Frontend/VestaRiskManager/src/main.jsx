@@ -158,6 +158,7 @@ const App = () => {
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/incidencia/crear",
       element: <RutaProtegida element={<CrearIncidencia />} />,
+      loader: iteracionLoader
     },
     {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/incidencia/:id_incidencia",

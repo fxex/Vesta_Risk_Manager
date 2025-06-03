@@ -551,6 +551,39 @@ export default function ModificarProyecto() {
     }
   }, [pagina]);
 
+  const buscarParticipante = async () =>{
+    if (formDataParticipante.nombre.length === 0) {
+                  setErrorParticipante({
+                    ...errorParticipante,
+                    ["nombre"]: true,
+                  });
+                } else {
+                  const data = await obtenerParticipanteNombre(
+                    formDataParticipante.nombre
+                  );
+                  const json = JSON.parse(data);
+                  // Crear un conjunto con los nombres en formData.participantes
+                  const participantesFormData = new Set(
+                    formData.participantes.map((p) => p.id_usuario)
+                  );
+                  console.log(formData);
+
+                  const participantesFiltrados = json.filter(
+                    (item) => !participantesFormData.has(item.id_usuario)
+                  );
+
+                  setParticipantesTotal(participantesFiltrados);
+                  setParticipantesMostrado(
+                    participantesFiltrados.slice(pagina - 1, ITEMSPORPAGINA)
+                  );
+                  const cantidadPaginas = Math.ceil(
+                    participantesFiltrados.length / ITEMSPORPAGINA
+                  );
+                  setTotalPaginas(cantidadPaginas);
+                  setPagina(1);
+                }
+  }
+
   return (
     <>
       <Navegador />
@@ -563,7 +596,9 @@ export default function ModificarProyecto() {
             Si desea cancelar, presione el bot&oacute;n <b>Cancelar</b>.
           </p>
         </>
-        <Form>
+        <Form
+        onSubmit={(e)=>{e.preventDefault()}}
+        >
           <h4>Propiedades</h4>
           <Form.Group>
             <Form.Label>Nombre</Form.Label>
@@ -829,7 +864,9 @@ export default function ModificarProyecto() {
           });
         }}
       >
-        <Form>
+        <Form
+              onSubmit={(e)=>{e.preventDefault()}}
+        >
           <h5>Buscar Participante</h5>
           <Form.Group className="d-flex align-items-center mb-2">
             <Form.Control
@@ -842,6 +879,11 @@ export default function ModificarProyecto() {
                 setParticipantesTotal([]);
                 setParticipantesMostrado([]);
               }}
+              onKeyDown={(e)=>{
+                if (e.key == "Enter") {
+                  buscarParticipante()
+                }
+              }}
               isInvalid={errorParticipante.nombre}
             />
             <FontAwesomeIcon
@@ -852,37 +894,8 @@ export default function ModificarProyecto() {
                 fontSize: "20px",
                 cursor: "pointer",
               }}
-              onClick={async () => {
-                if (formDataParticipante.nombre.length === 0) {
-                  setErrorParticipante({
-                    ...errorParticipante,
-                    ["nombre"]: true,
-                  });
-                } else {
-                  const data = await obtenerParticipanteNombre(
-                    formDataParticipante.nombre
-                  );
-                  const json = JSON.parse(data);
-                  // Crear un conjunto con los nombres en formData.participantes
-                  const participantesFormData = new Set(
-                    formData.participantes.map((p) => p.id_usuario)
-                  );
-                  console.log(formData);
-
-                  const participantesFiltrados = json.filter(
-                    (item) => !participantesFormData.has(item.id_usuario)
-                  );
-
-                  setParticipantesTotal(participantesFiltrados);
-                  setParticipantesMostrado(
-                    participantesFiltrados.slice(pagina - 1, ITEMSPORPAGINA)
-                  );
-                  const cantidadPaginas = Math.ceil(
-                    participantesFiltrados.length / ITEMSPORPAGINA
-                  );
-                  setTotalPaginas(cantidadPaginas);
-                  setPagina(1);
-                }
+              onClick={() => {
+                buscarParticipante()
               }}
             />
           </Form.Group>
@@ -962,7 +975,9 @@ export default function ModificarProyecto() {
           });
         }}
       >
-        <Form>
+        <Form
+        onSubmit={(e)=>{e.preventDefault()}}
+        >
           <Form.Group>
             <Form.Label>
               <b>Nombre</b>
