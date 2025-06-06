@@ -111,7 +111,7 @@ export default function ListaTarea() {
                   Fecha de fin
                 </th>
                 <th style={{ maxWidth: "5em" }} className="th">Estado</th>
-                <th className="th">Acciones</th>
+                <th className="th" style={{ width: "5em" }}>Acciones</th>
               </tr>
             </thead>
             <tbody>

@@ -76,7 +76,7 @@ export default function ListaProyecto() {
             proyectosCargados.map((item, key) => (
               <Button
                 key={key}
-                className="w-100 d-flex justify-content-between align-items-center py-3 mb-2 boton_proyecto"
+                className={`w-100 d-flex justify-content-between align-items-center py-3 mb-2 ${item.estado === "activo" ? "boton_proyecto": "boton_proyecto_inactivo"}`}
             >
               {item.nombre}
               <div className="w-25 d-flex justify-content-end gap-1 align-items-center">

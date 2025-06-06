@@ -375,7 +375,18 @@ class GestorRiesgo
             }
             foreach ($data["tareas"] as $tarea) {
                 if (!empty($tarea["id_tarea"])) {
-                    //TODO debera permitir editar tarea en un futuro
+                    $this->tarea->setNombre($tarea["nombre"]);
+                    $this->tarea->setDescripcion($tarea["descripcion"]);
+                    $this->tarea->setEstado($tarea["estado"]);
+                    $this->tarea->setFechaInicio($tarea["fecha_inicio"]);
+                    $this->tarea->setFechaFin($tarea["fecha_fin"]);
+                    $this->tarea->setFechaFinReal($tarea["fecha_fin_real"]);
+                    $this->tarea->actualizarTarea($tarea["id_tarea"]);
+                    vincularTabla::eliminarVinculo($this->conexion, "participante_tarea", "id_tarea", $tarea["id_tarea"]);
+                    foreach ($tarea["responsables"] as $responsable) {
+                        vincularTabla::crearVinculo($this->conexion, "participante_tarea", "id_usuario", "id_tarea", $responsable["id_usuario"], $tarea["id_tarea"]);
+                    }
+
                 } else {
                     $this->tarea->setNombre($tarea["nombre"]);
                     $this->tarea->setDescripcion($tarea["descripcion"]);

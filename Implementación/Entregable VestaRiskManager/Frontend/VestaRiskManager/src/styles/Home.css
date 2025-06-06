@@ -10,6 +10,22 @@
     cursor: default !important;
 }
 
+.boton_proyecto_inactivo{
+    background: rgba(130, 130, 130, 0.5);
+background: linear-gradient(90deg, rgba(130, 130, 130, 0.5) 0%, rgba(110, 110, 110, 0.5) 100%);
+font-size: 18px;
+    border: none !important;
+    cursor: default !important;
+}
+
+.boton_proyecto_inactivo:hover{
+    background: rgba(130, 130, 130, 0.5);
+background: linear-gradient(90deg, rgba(130, 130, 130, 0.5) 0%, rgba(110, 110, 110, 0.5) 100%);
+font-size: 18px;
+    border: none !important;
+    cursor: default !important;
+}
+
 .boton_2{
     background: rgb(77,105,253);
     background: linear-gradient(90deg, rgba(77,105,253,1) 0%, rgba(93,155,182,1) 100%);

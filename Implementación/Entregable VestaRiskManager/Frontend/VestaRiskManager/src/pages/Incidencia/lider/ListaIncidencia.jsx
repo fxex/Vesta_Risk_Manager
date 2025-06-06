@@ -100,16 +100,16 @@ export default function ListaIncidencia() {
           <Table size="sm" hover className="mt-2" bordered>
             <thead className="cabecera">
               <tr>
-                <th style={{ maxWidth: "5em" }} className="th">Identificador del riesgo</th>
-                <th className="th">Descripción</th>
+                <th style={{width: "5em" }} className="th">Identificador del riesgo</th>
+                <th className="th" style={{ maxWidth: "5em" }}>Descripción</th>
                 <th className="th">Responsable</th>
-                <th style={{ maxWidth: "4em" }} className="th">
+                <th style={{ width: "4em" }} className="th">
                   Gravedad
                 </th>
                 <th style={{ maxWidth: "4em" }} className="th">
                   Fecha
                 </th>
-                <th className="th">Acciones</th>
+                <th className="th" style={{ width: "10em" }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
