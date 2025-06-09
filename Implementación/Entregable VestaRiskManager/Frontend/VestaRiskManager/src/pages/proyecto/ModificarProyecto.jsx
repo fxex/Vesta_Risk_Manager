@@ -528,6 +528,17 @@ export default function ModificarProyecto() {
             fecha_inicio: nuevaFechaInicio.toISOString().split("T")[0],
             fecha_fin: nuevaFechaFin.toISOString().split("T")[0],
           };
+          const siguiente = nuevasIteraciones[i + 1];
+          if (siguiente) {
+            const siguienteFechaInicio = new Date(siguiente.fecha_inicio);
+            const estaFechaFin = new Date(nuevasIteraciones[i].fecha_fin);
+
+            if (estaFechaFin < siguienteFechaInicio) {
+              break; // Ya hay espacio, se puede cortar la propagación
+            }
+          } else {
+            break; // No hay más iteraciones
+          }
         }
       }
 
@@ -551,38 +562,36 @@ export default function ModificarProyecto() {
     }
   }, [pagina]);
 
-  const buscarParticipante = async () =>{
+  const buscarParticipante = async () => {
     if (formDataParticipante.nombre.length === 0) {
-                  setErrorParticipante({
-                    ...errorParticipante,
-                    ["nombre"]: true,
-                  });
-                } else {
-                  const data = await obtenerParticipanteNombre(
-                    formDataParticipante.nombre
-                  );
-                  const json = JSON.parse(data);
-                  // Crear un conjunto con los nombres en formData.participantes
-                  const participantesFormData = new Set(
-                    formData.participantes.map((p) => p.id_usuario)
-                  );
-                  console.log(formData);
+      setErrorParticipante({
+        ...errorParticipante,
+        ["nombre"]: true,
+      });
+    } else {
+      const data = await obtenerParticipanteNombre(formDataParticipante.nombre);
+      const json = JSON.parse(data);
+      // Crear un conjunto con los nombres en formData.participantes
+      const participantesFormData = new Set(
+        formData.participantes.map((p) => p.id_usuario)
+      );
+      console.log(formData);
 
-                  const participantesFiltrados = json.filter(
-                    (item) => !participantesFormData.has(item.id_usuario)
-                  );
+      const participantesFiltrados = json.filter(
+        (item) => !participantesFormData.has(item.id_usuario)
+      );
 
-                  setParticipantesTotal(participantesFiltrados);
-                  setParticipantesMostrado(
-                    participantesFiltrados.slice(pagina - 1, ITEMSPORPAGINA)
-                  );
-                  const cantidadPaginas = Math.ceil(
-                    participantesFiltrados.length / ITEMSPORPAGINA
-                  );
-                  setTotalPaginas(cantidadPaginas);
-                  setPagina(1);
-                }
-  }
+      setParticipantesTotal(participantesFiltrados);
+      setParticipantesMostrado(
+        participantesFiltrados.slice(pagina - 1, ITEMSPORPAGINA)
+      );
+      const cantidadPaginas = Math.ceil(
+        participantesFiltrados.length / ITEMSPORPAGINA
+      );
+      setTotalPaginas(cantidadPaginas);
+      setPagina(1);
+    }
+  };
 
   return (
     <>
@@ -597,7 +606,9 @@ export default function ModificarProyecto() {
           </p>
         </>
         <Form
-        onSubmit={(e)=>{e.preventDefault()}}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
           <h4>Propiedades</h4>
           <Form.Group>
@@ -753,11 +764,6 @@ export default function ModificarProyecto() {
                                   setFormDataIteracion({ ...item, key: key });
                                   handleModificarIteracion();
                                 }}
-                                disabled={
-                                  item.id_iteracion
-                                    ? new Date() > new Date(item.fecha_inicio)
-                                    : false
-                                }
                               >
                                 <FontAwesomeIcon icon={faPenToSquare} />
                               </Button>
@@ -865,7 +871,9 @@ export default function ModificarProyecto() {
         }}
       >
         <Form
-              onSubmit={(e)=>{e.preventDefault()}}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
           <h5>Buscar Participante</h5>
           <Form.Group className="d-flex align-items-center mb-2">
@@ -879,9 +887,9 @@ export default function ModificarProyecto() {
                 setParticipantesTotal([]);
                 setParticipantesMostrado([]);
               }}
-              onKeyDown={(e)=>{
+              onKeyDown={(e) => {
                 if (e.key == "Enter") {
-                  buscarParticipante()
+                  buscarParticipante();
                 }
               }}
               isInvalid={errorParticipante.nombre}
@@ -895,7 +903,7 @@ export default function ModificarProyecto() {
                 cursor: "pointer",
               }}
               onClick={() => {
-                buscarParticipante()
+                buscarParticipante();
               }}
             />
           </Form.Group>
@@ -976,7 +984,9 @@ export default function ModificarProyecto() {
         }}
       >
         <Form
-        onSubmit={(e)=>{e.preventDefault()}}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
           <Form.Group>
             <Form.Label>
@@ -1314,8 +1324,8 @@ export default function ModificarProyecto() {
           <>
             <h1>¿Está seguro?</h1>
             <p>
-              Esta acción es permanente.  
-              Por favor, confirmá si querés continuar.
+              Esta acción es permanente. Por favor, confirmá si querés
+              continuar.
             </p>
           </>
         </Modal.Body>
@@ -1365,7 +1375,8 @@ export default function ModificarProyecto() {
           <>
             <h1>¿Está seguro?</h1>
             <p>
-              Esta acción es permanente y eliminará todos los datos asociados a esta iteración.
+              Esta acción es permanente y eliminará todos los datos asociados a
+              esta iteración.
             </p>
           </>
         </Modal.Body>

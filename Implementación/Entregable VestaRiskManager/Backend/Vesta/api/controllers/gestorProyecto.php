@@ -22,9 +22,9 @@ class GestorProyecto
         return $resultado;
     }
 
-    public function obtenerTodosProyectoPaginado($pagina)
+    public function obtenerTodosProyectoPaginado($pagina, $orden)
     {
-        $resultado = $this->proyecto->obtenerTodosProyectoPaginado($pagina);
+        $resultado = $this->proyecto->obtenerTodosProyectoPaginado($pagina, $orden);
         return $resultado;
     }
 
@@ -206,6 +206,31 @@ class GestorProyecto
     public function obtenerUltimasIteraciones($id_proyecto)
     {
         $resultado = $this->proyecto->obtenerUltimasIteraciones($id_proyecto, date("Y-m-d"));
+        return $resultado;
+    }
+
+    public function modificarEstadoProyecto($id_proyecto, $estado)
+    {
+        $iteracion = $this->proyecto->obtenerUltimaIteracion($id_proyecto);
+        switch ($estado) {
+            case 'activo':
+                $this->proyecto->setFechaFin($iteracion["fecha_fin"]??null);
+                break;
+            case 'inactivo':
+                $this->proyecto->setFechaFin($iteracion["fecha_fin"]??null);
+                break;
+            case 'abandonado':
+                $this->proyecto->setFechaFin(date("Y-m-d"));
+                break;
+            case 'finalizado':
+                $this->proyecto->setFechaFin(date("Y-m-d"));
+                break;
+            default:
+                $this->proyecto->setFechaFin($iteracion["fecha_fin"]);
+                break;
+        }
+        $this->proyecto->setEstado($estado);
+        $resultado = $this->proyecto->modificarEstadoProyecto($id_proyecto);
         return $resultado;
     }
 }

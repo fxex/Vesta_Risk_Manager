@@ -382,8 +382,8 @@ $router->add("POST", "proyectos/desarrollador/{pagina}", function ($pagina) use 
     }
 });
 
-$router->add("GET", "proyectos/{pagina}", function ($pagina) use ($controladorProyecto) {
-    $resultado = $controladorProyecto->obtenerTodosProyectoPaginado((int) $pagina);
+$router->add("GET", "proyectos/{pagina}/{orden}", function ($pagina, $orden) use ($controladorProyecto) {
+    $resultado = $controladorProyecto->obtenerTodosProyectoPaginado((int) $pagina, $orden);
     echo json_encode($resultado);
 });
 
@@ -435,6 +435,11 @@ $router->add("PUT", "proyecto/{id}", function ($id) use ($controladorProyecto) {
     } else {
         echo json_encode(["modificacion" => false]);
     }
+});
+
+$router->add("PUT", "proyecto/{id}/{estado}", function ($id, $estado) use ($controladorProyecto) {
+    $resultado = $controladorProyecto->modificarEstadoProyecto($id, $estado);
+    echo json_encode(["modificacion"=>$resultado]);
 });
 
 

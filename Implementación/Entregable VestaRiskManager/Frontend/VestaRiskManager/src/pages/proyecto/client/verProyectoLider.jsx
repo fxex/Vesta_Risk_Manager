@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import NavegadorLider from "../../../components/NavegadorLider";
 import Footer from "../../../components/Footer";
-import { Alert, Card, Col, Container, Row } from "react-bootstrap";
+import { Alert, Card, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 
 import {
   Chart as ChartJS,
@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import "../../../styles/BotonDescarga.css";
 import { useUsuario } from "../../../context/usuarioContext";
+import { useState } from "react";
 
 ChartJS.register(
   RadialLinearScale,
@@ -45,6 +46,7 @@ export default function VerProyectoLider() {
   const {datos_proyecto, iteraciones, categorias, datos_evaluacion, evaluacion_tongji, datos_telaraña} = datosRiesgos;  
   
   const ultimasIteraciones = (iteraciones??[]).map(item=>item.nombre).reverse()
+  const [iteracionesSeleccionadas, setIteracionesSeleccionadas] = useState(ultimasIteraciones)  
   
   const categoriasProyecto = (categorias??[]).map(item=>item.nombre)
   const datosTelarañaFormateados = (datos_telaraña??[]).map(item=>item.total_riesgo)
@@ -67,10 +69,64 @@ export default function VerProyectoLider() {
     return item[3].cantidad 
   })
 
+  const [datosBajos, setDatosBajos] = useState(datos_bajo);
+  const [datosMedio, setDatosMedio] = useState(datos_medio);
+  const [datosAlto, setDatosAlto] = useState(datos_alto);
+  const [datosCritico, setDatosCritico] = useState(datos_critico);
+
   const puntos = evaluacion_tongji.map(item => ({ x: parseInt(item.x), y: parseInt(item.y), label: item.label > 9 ? `RK${item.label}` : `RK0${item.label}`}));
 
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
+  const toggleIteracion = (nombreIteracion) => {
+  const index = iteracionesSeleccionadas.indexOf(nombreIteracion);
+  setIteracionesSeleccionadas((prevSeleccionadas) => {
+    const yaEsta = prevSeleccionadas.includes(nombreIteracion);
+    let nuevaSeleccionadas;
+    let nuevosDatosBajos = [...datosBajos];
+    let nuevosDatosMedio = [...datosMedio];
+    let nuevosDatosAlto = [...datosAlto];
+    let nuevosDatosCritico = [...datosCritico];
+
+    if (yaEsta) {
+      nuevaSeleccionadas = prevSeleccionadas.filter((i) => i !== nombreIteracion);
+      console.log(`Iteración ${nombreIteracion} deseleccionada`);
+      console.log(`index: ${index}`);
+      
+      nuevosDatosBajos.splice(index, 1);
+      nuevosDatosMedio.splice(index, 1);
+      nuevosDatosAlto.splice(index, 1);
+      nuevosDatosCritico.splice(index, 1);
+    } else {
+      nuevaSeleccionadas = [...prevSeleccionadas, nombreIteracion];
+      nuevaSeleccionadas = ultimasIteraciones.filter((iter) =>
+        nuevaSeleccionadas.includes(iter)
+      );
+
+      // Recalcular los datos según el orden
+      nuevosDatosBajos = nuevaSeleccionadas.map((iter) =>
+        datos_bajo[ultimasIteraciones.indexOf(iter)]
+      );
+      nuevosDatosMedio = nuevaSeleccionadas.map((iter) =>
+        datos_medio[ultimasIteraciones.indexOf(iter)]
+      );
+      nuevosDatosAlto = nuevaSeleccionadas.map((iter) =>
+        datos_alto[ultimasIteraciones.indexOf(iter)]
+      );
+      nuevosDatosCritico = nuevaSeleccionadas.map((iter) =>
+        datos_critico[ultimasIteraciones.indexOf(iter)]
+      );
+    }
+    
+    
+    setDatosBajos(nuevosDatosBajos);
+    setDatosMedio(nuevosDatosMedio);
+    setDatosAlto(nuevosDatosAlto);
+    setDatosCritico(nuevosDatosCritico);
+
+    return nuevaSeleccionadas;
+  });
+};
 
   const descargarGraficoEvolucion = () => {
     const url = grafico_evolucion.current.toBase64Image();
@@ -120,68 +176,112 @@ export default function VerProyectoLider() {
             <Card style={{maxHeight:"50vh"}}>
               <Card.Header className="d-flex justify-content-between align-items-center">
                 Evolución de cantidad de riesgo
+                <div className="d-flex align-items-center gap-2">
+                <Dropdown>
+                  <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    {"Seleccionar iteración"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu style={{maxHeight:"50vh", overflowY:"auto"}}>
+                    <Form.Check
+                     type="checkbox"
+                      id={`checkbox-all`}
+                      label={"Todas las iteraciones"}
+                      checked={iteracionesSeleccionadas.every((valor, i) => valor === ultimasIteraciones[i])}
+                      onChange={()=>{
+                        setIteracionesSeleccionadas(ultimasIteraciones);
+                        setDatosBajos(datos_bajo);
+                        setDatosMedio(datos_medio);
+                        setDatosAlto(datos_alto);
+                        setDatosCritico(datos_critico);
+                      }}
+                      className="mx-3"
+                    />
+                    {ultimasIteraciones.map((item, index) => (
+                      <Form.Check 
+                      key={index}
+                      type="checkbox"
+                      id={`checkbox-${index}`}
+                      label={item}
+                      checked={iteracionesSeleccionadas.includes(item)}
+                      onChange={() => toggleIteracion(item)}
+                      className="mx-3"
+
+                      >
+                      </Form.Check>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
                 {!comprobacionEspectador && <FontAwesomeIcon icon={faDownload} className="descargar" onClick={descargarGraficoEvolucion}/>}
+                </div>
               </Card.Header>
               <Card.Body >
-                <Bar
-                ref={grafico_evolucion} 
-                data={
-                  {
-                    labels:ultimasIteraciones,
-                    datasets:[
-                      {
-                        label:"Irrelevantes",
-                        data:datos_bajo,
-                        backgroundColor: '#2ecc71'
-                      },
-                      {
-                        label:"Necesitan reevaluación",
-                        data:datos_medio,
-                        backgroundColor: '#f1c40f'
-                      },
-                      {
-                        label:"Necesitan planificación",
-                        data:datos_alto,
-                        backgroundColor: '#f39c12'
-                      },
-                      {
-                        label:"Críticos",
-                        data:datos_critico,
-                        backgroundColor: '#e74c3c'
-                      }
-                    ]
-                  }
-                } 
-                options={{
-                  barThickness:20,
-                  responsive:false,
-                  plugins:{
-                    legend:{
-                      position:"right",
-                      reverse:true
+                <div style={{overflowX:'auto'}}>
+                  <Bar
+                  ref={grafico_evolucion} 
+                  data={
+                    {
+                      labels:iteracionesSeleccionadas.map((label) => label.length > 10 ? label.match(/.{1,10}/g) : label),
+                      datasets:[
+                        {
+                          label:"Irrelevantes",
+                          data:datosBajos,
+                          backgroundColor: '#2ecc71'
+                        },
+                        {
+                          label:"Necesitan reevaluación",
+                          data:datosMedio,
+                          backgroundColor: '#f1c40f'
+                        },
+                        {
+                          label:"Necesitan planificación",
+                          data:datosAlto,
+                          backgroundColor: '#f39c12'
+                        },
+                        {
+                          label:"Críticos",
+                          data:datosCritico,
+                          backgroundColor: '#e74c3c'
+                        }
+                      ]
                     }
-                  },
-                  scales:{
-                    x:{
-                      stacked:true,
-                      title:{
-                        display:true,
-                        text:"Iteraciones"
+                  } 
+                  options={{
+                    barThickness:20,
+                    responsive:false,
+                    plugins:{
+                      legend:{
+                        position:"right",
+                        reverse:true
                       }
                     },
-                    y:{
-                      stacked:true,
-                      beginAtZero:true,
-                      title:{
-                        display:true,
-                        text:"Cantidad de riesgos"
+                    scales:{
+                      x:{
+                        stacked:true,
+                        title:{
+                          display:true,
+                          text:"Iteraciones"
+                        },
+                        ticks:{
+                          autoSkip:false,
+                          maxRotation:0,
+                          minRotation:0
+                        }
+                      },
+                      y:{
+                        stacked:true,
+                        beginAtZero:true,
+                        title:{
+                          display:true,
+                          text:"Cantidad de riesgos"
+                        }
                       }
                     }
-                  }
-                }}
-                width={720}
-                height={200} 
-                />
+                  }}
+                  width={`${ultimasIteraciones.length * 100}px` }
+                  height={200} 
+                  />
+
+                </div>
               </Card.Body>
             </Card>
           </Col>

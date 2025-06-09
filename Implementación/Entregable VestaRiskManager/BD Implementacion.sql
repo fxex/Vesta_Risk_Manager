@@ -36,7 +36,7 @@ create table if not exists proyecto (
 	id_proyecto int not null auto_increment,
     nombre varchar(30) not null,
     descripcion text not null,
-    estado enum ("activo", "inactivo") not null,
+    estado enum ("activo", "inactivo", "finalizado", "abandonado") not null,
     fecha_inicio date, 
     fecha_fin date,
     primary key (id_proyecto)

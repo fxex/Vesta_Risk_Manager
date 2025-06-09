@@ -10,7 +10,7 @@
     cursor: default !important;
 }
 
-.boton_proyecto_inactivo{
+.boton_proyecto_abandonado{
     background: rgba(130, 130, 130, 0.5);
 background: linear-gradient(90deg, rgba(130, 130, 130, 0.5) 0%, rgba(110, 110, 110, 0.5) 100%);
 font-size: 18px;
@@ -18,10 +18,16 @@ font-size: 18px;
     cursor: default !important;
 }
 
-.boton_proyecto_inactivo:hover{
-    background: rgba(130, 130, 130, 0.5);
-background: linear-gradient(90deg, rgba(130, 130, 130, 0.5) 0%, rgba(110, 110, 110, 0.5) 100%);
+.boton_proyecto_inactivo{
+    background: #A9C5E0;
 font-size: 18px;
+    border: none !important;
+    cursor: default !important;
+}
+
+.boton_proyecto_finalizado{
+    background: #14b17b;
+    font-size: 18px;
     border: none !important;
     cursor: default !important;
 }

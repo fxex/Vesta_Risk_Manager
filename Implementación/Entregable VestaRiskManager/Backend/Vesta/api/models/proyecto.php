@@ -95,15 +95,32 @@ class Proyecto
         return $resultado;
     }
 
-    public function obtenerTodosProyectoPaginado($pagina)
+    private function obtenerOrden($orden)
     {
+        switch ($orden) {
+            case 1:
+                return "activo";
+            case 2:
+                return "inactivo";
+            case 3:
+                return "abandonado";
+            case 4:
+                return "finalizado";
+            default:
+                return "activo";
+        }
+    }
+
+    public function obtenerTodosProyectoPaginado($pagina, $orden)
+    {
+        $ordenado = $this->obtenerOrden($orden);
         $cantidad_proyectos = 10;
         $offset = 0;
 
         if ($pagina > 1) {
             $offset = ($pagina - 1) * $cantidad_proyectos;
         }
-        $proyectos = $this->conexion->query("select * from proyecto order by field (estado, 'activo', 'inactivo'), nombre asc limit $cantidad_proyectos offset $offset");
+        $proyectos = $this->conexion->query("select * from proyecto p where p.estado = '$ordenado' order by nombre asc limit $cantidad_proyectos offset $offset");
         $resultado = [];
         while ($fila = $proyectos->fetch_assoc()) {
             $resultado[] = $fila;
@@ -349,7 +366,6 @@ class Proyecto
             WHERE i.id_proyecto = ?
                 AND i.fecha_inicio < ?
             ORDER BY i.fecha_inicio DESC
-            LIMIT 2
         ) AS anteriores)
 
         UNION
@@ -381,5 +397,17 @@ class Proyecto
             $resultado[] = $fila;
         }
         return $resultado;
+    }
+
+    public function modificarEstadoProyecto($id_proyecto)
+    {
+        $query = "UPDATE proyecto SET estado = ?, fecha_fin = ? WHERE id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ssi", $this->estado, $this->fecha_fin, $id_proyecto);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al crear el proyecto: " . $stmt->error);
+        }
     }
 }

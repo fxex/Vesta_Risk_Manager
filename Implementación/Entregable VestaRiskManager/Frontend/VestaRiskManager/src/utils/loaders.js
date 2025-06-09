@@ -39,7 +39,7 @@ export async function cargarProyecto({ params }) {
 }
 
 export async function cargarProyectos() {
-  const {proyectos, totalPaginas} = await obtenerProyectosPaginado();
+  const {proyectos, totalPaginas} = await obtenerProyectosPaginado(1, localStorage.getItem("orden_proyecto")??1);
   return { proyectos, totalPaginas };
 }
 

@@ -5,7 +5,8 @@ import Contenedor from "../../components/Contenedor";
 import BotonSalir from "../../components/BotonSalir";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { formatearFecha } from "../../utils/funciones";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+import { abandonarProyecto, activarProyecto, finalizarProyecto, inactivarProyecto } from "../../services/proyectos";
 
 export default function VerProyecto() {
   const navigate = useNavigate();
@@ -64,10 +65,31 @@ export default function VerProyecto() {
           ))}
           <hr />
           <h5>Opciones</h5>
+          <div className="d-flex justify-content-start align-items-center">
+
           <BotonSalir ruta={"/inicio/proyectos"} />
           <Button className="m-1" onClick={()=>{
             navigate(`/inicio/espectador/proyecto/${proyecto.id_proyecto}`)
           }}>Supervisar Proyecto</Button>
+          <DropdownButton variant="success" title="Establecer estado">
+              <Dropdown.Item onClick={async()=>{
+                await activarProyecto(proyecto.id_proyecto);
+                navigate(0);
+              }} className={proyecto.estado == "activo" ? "active" : ""}>Activo</Dropdown.Item>
+              <Dropdown.Item onClick={async()=>{
+                await inactivarProyecto(proyecto.id_proyecto);
+                navigate(0);
+                }} className={proyecto.estado == "inactivo" ? "active" : ""}>Inactivo</Dropdown.Item>
+                <Dropdown.Item onClick={async()=>{
+                  await abandonarProyecto(proyecto.id_proyecto);
+                  navigate(0);
+                }} className={proyecto.estado == "abandonado" ? "active" : ""}>Abandonado</Dropdown.Item>
+              <Dropdown.Item onClick={async()=>{
+                await finalizarProyecto(proyecto.id_proyecto);
+                  navigate(0);
+                }} className={proyecto.estado == "finalizado" ? "active" : ""}>Finalizado</Dropdown.Item>
+          </DropdownButton>
+          </div>
         </>
       </Contenedor>
       <Footer />

@@ -11,9 +11,10 @@ export async function obtenerProyectos() {
   return json;
 }
 
-export async function obtenerProyectosPaginado(pagina) {
+export async function obtenerProyectosPaginado(pagina, orden) {
   const paginaActual = pagina ? pagina : 1;
-  const respuesta = await fetch(`${URL}/proyectos/${paginaActual}`);
+  const ordenado = orden ? orden : 1; // 1: Activos, 2: Inactivos, 3: Abandonados, 4: Finalizados
+  const respuesta = await fetch(`${URL}/proyectos/${paginaActual}/${ordenado}`);
   const json = await respuesta.json();
   return json;
 }
@@ -139,3 +140,51 @@ export const obtenerIteracionActual = async (id_proyecto) => {
 
   return json;
 };
+
+export async function activarProyecto(id) {
+  const respuesta = await fetch(`${URL}/proyecto/${id}/activo`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json.modificacion;
+}
+
+export async function inactivarProyecto(id) {
+  const respuesta = await fetch(`${URL}/proyecto/${id}/inactivo`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json.modificacion;
+}
+
+export async function abandonarProyecto(id) {
+  const respuesta = await fetch(`${URL}/proyecto/${id}/abandonado`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json.modificacion;
+}
+
+export async function finalizarProyecto(id) {
+  const respuesta = await fetch(`${URL}/proyecto/${id}/finalizado`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = await respuesta.json();
+
+  return json.modificacion;
+}

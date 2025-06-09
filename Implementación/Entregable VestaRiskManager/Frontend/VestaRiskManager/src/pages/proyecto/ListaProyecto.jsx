@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Contenedor from "../../components/Contenedor";
 import "./../../styles/Home.css";
-import { Alert, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Alert, Button, Dropdown, DropdownButton, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
@@ -23,14 +23,15 @@ export default function ListaProyecto() {
   const [proyectosCargados, setProyectosCargados] = useState(proyectos);
 
   const [mensaje, setMensaje] = useState("");
+  const [orden, setOrden] = useState(localStorage.getItem("orden_proyecto")??1)
 
   useEffect(() => {
-    obtenerProyectosPaginado(paginaActual).then(
+    obtenerProyectosPaginado(paginaActual, orden).then(
       ({proyectos, _}) => {
         setProyectosCargados(proyectos);
       }
     )
-  }, [paginaActual])
+  }, [paginaActual, orden])
   
 
   useEffect(() => {
@@ -58,11 +59,11 @@ export default function ListaProyecto() {
       <Contenedor>
         <h3>Proyectos</h3>
         <div style={{ minHeight: "40vh" }}>
-          {
+          <div className="d-flex justify-content-between align-items-center mb-3">
+{
             !comprobacionEspectador && (
               <Button
                 variant="success"
-                className="mb-3"
                 onClick={() => {
                   navigate("/inicio/proyecto/crear");
                 }}
@@ -72,11 +73,35 @@ export default function ListaProyecto() {
               </Button>
             )
           }
+          <DropdownButton variant="success" title="Ordenar según">
+              <Dropdown.Item onClick={()=>{
+                setOrden(1)
+                setPaginaActual(1)
+                localStorage.setItem("orden_proyecto", 1)
+              }} className={orden == 1 ? "active" : ""}>Activos</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(2)
+                setPaginaActual(1)
+                localStorage.setItem("orden_proyecto", 2)
+                }} className={orden == 2 ? "active" : ""}>Inactivos</Dropdown.Item>
+                <Dropdown.Item onClick={()=>{
+                setOrden(3)
+                setPaginaActual(1)
+                localStorage.setItem("orden_proyecto", 3)
+                }} className={orden == 3 ? "active" : ""}>Abandonados</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(4)
+                setPaginaActual(1)
+                localStorage.setItem("orden_proyecto", 4)
+                }} className={orden == 4 ? "active" : ""}>Finalizados</Dropdown.Item>
+          </DropdownButton>
+          </div>
+          
           {proyectosCargados && proyectosCargados.length > 0 ? (
             proyectosCargados.map((item, key) => (
-              <Button
+              <div
                 key={key}
-                className={`w-100 d-flex justify-content-between align-items-center py-3 mb-2 ${item.estado === "activo" ? "boton_proyecto": "boton_proyecto_inactivo"}`}
+                className={`w-100 rounded px-2 text-white d-flex justify-content-between align-items-center py-3 mb-2 ${item.estado == "activo" ? "boton_proyecto": item.estado == "inactivo"? "boton_proyecto_inactivo": item.estado == "finalizado" ? "boton_proyecto_finalizado": "boton_proyecto_abandonado"}`}
             >
               {item.nombre}
               <div className="w-25 d-flex justify-content-end gap-1 align-items-center">
@@ -98,7 +123,7 @@ export default function ListaProyecto() {
                 />
                       
                     </OverlayTrigger>
-                {!comprobacionEspectador && (
+                {(!comprobacionEspectador && orden != 4) && (
                   <OverlayTrigger
                     placement="top"
                     overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
@@ -115,7 +140,7 @@ export default function ListaProyecto() {
                 }
                 
               </div>
-            </Button>
+            </div>
           ))
           ) : (
             <p className="text-center fw-bold">No posee proyectos creados</p>
