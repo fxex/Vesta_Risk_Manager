@@ -58,6 +58,13 @@ export default function NavegadorLider() {
               Monitoreo
             </Nav.Link>
 
+            <Nav.Link
+              href={"https://drive.google.com/file/d/17jD3qgRCwOuyIaD1ygURmKoJ4vJ6ceCR/view?usp=sharing"}
+              target="_blank"
+            >
+              Ayuda
+            </Nav.Link>
+
             <Nav.Link href={usuario.perfil == "Administrador" ? `/inicio/proyecto/${proyecto.id_proyecto}` : `/inicio/espectador/proyectos`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
@@ -115,6 +122,13 @@ export default function NavegadorLider() {
               >
                 Monitoreo
               </Nav.Link>
+
+              <Nav.Link
+              href={"https://drive.google.com/file/d/17jD3qgRCwOuyIaD1ygURmKoJ4vJ6ceCR/view?usp=sharing"}
+              target="_blank"
+            >
+              Ayuda
+            </Nav.Link>
   
               <Nav.Link href={`/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
                 <FontAwesomeIcon
