@@ -1,0 +1,10 @@
+.descargar {
+    color:#666;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.descargar:hover{
+    color: #2A6EBB;
+}
