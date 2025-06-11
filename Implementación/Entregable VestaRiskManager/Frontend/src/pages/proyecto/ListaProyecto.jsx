@@ -73,7 +73,7 @@ export default function ListaProyecto() {
               </Button>
             )
           }
-          <DropdownButton variant="success" title="Ordenar según">
+          <DropdownButton variant="success" title="Estado del proyecto">
               <Dropdown.Item onClick={()=>{
                 setOrden(1)
                 setPaginaActual(1)

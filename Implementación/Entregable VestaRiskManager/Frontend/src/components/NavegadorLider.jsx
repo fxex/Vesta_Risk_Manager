@@ -59,7 +59,7 @@ export default function NavegadorLider() {
             </Nav.Link>
 
             <Nav.Link
-              href={"https://drive.google.com/file/d/17jD3qgRCwOuyIaD1ygURmKoJ4vJ6ceCR/view?usp=sharing"}
+              href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
               target="_blank"
             >
               Ayuda
@@ -124,7 +124,7 @@ export default function NavegadorLider() {
               </Nav.Link>
 
               <Nav.Link
-              href={"https://drive.google.com/file/d/17jD3qgRCwOuyIaD1ygURmKoJ4vJ6ceCR/view?usp=sharing"}
+              href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
               target="_blank"
             >
               Ayuda
