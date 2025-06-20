@@ -16,9 +16,9 @@ insert into perfil (nombre) VALUES
 ("Espectador");
 
 INSERT into usuario (nombre, email) VALUES 
-("Hugo Frey", "hugofrey202@gmail.com"), ("Hugo Antonio Frey", "hugoantoniofrey2003@gmail.com"),  
-("ardkrav", "ardkrav@gmail.com"), ("Agustin Collareda","collaredaagustinpmg@gmail.com"), 
-("Mijuku", "cintiasod2021@gmail.com"), ("Cintia Hernandez","cintiah378@gmail.com"),
+("Hugo", "hugofrey202@gmail.com"), ("Hugo Antonio Frey", "hugoantoniofrey2003@gmail.com"),  
+("Agustin", "ardkrav@gmail.com"), ("Agustin Collareda","collaredaagustinpmg@gmail.com"), 
+("Cintia", "cintiasod2021@gmail.com"), ("Cintia Hernandez","cintiah378@gmail.com"),
 ("Esteban Gesto", "egesto@uarg.unpa.edu.ar"), ("Karim Hallar", "khallar@uarg.unpa.edu.ar"), ("Osiris Sofia", "osofia@uarg.unpa.edu.ar");
 
 INSERT INTO usuario_perfil(id_usuario, id_perfil) VALUES 
