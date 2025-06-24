@@ -277,7 +277,7 @@ export default function VerProyectoLider() {
                       }
                     }
                   }}
-                  width={`${ultimasIteraciones.length * 100}px` }
+                  width={`${iteracionesSeleccionadas.length > 7 ? ultimasIteraciones.length * 100 : ultimasIteraciones.length > 4 ? ultimasIteraciones.length * 150 : ultimasIteraciones.length * 300}px` }
                   height={200} 
                   />
 
