@@ -13,7 +13,7 @@ export default function Ayuda() {
         <div className="d-flex flex-column justify-content-center align-items-center">
           <Figure.Image src={DiagramaEscudo} width={450} />
           <section>
-            <h4>Diagrama de Flujo: Estado de los Riesgos - Opción 1</h4>
+            <h4>Diagrama de Flujo: Estado de los Riesgos</h4>
             <h5>Descripción del proceso</h5>
             <p>
               Este diagrama representa el flujo de trabajo para gestionar
