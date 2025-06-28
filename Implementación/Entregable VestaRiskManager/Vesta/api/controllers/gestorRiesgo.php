@@ -158,10 +158,10 @@ class GestorRiesgo
         }
     }
 
-    public function obtenerRiesgoId($id_riesgo)
+    public function obtenerRiesgoId($id_riesgo, $id_proyecto)
     {
-        $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo);
-        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_riesgo);
+        $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo, $id_proyecto);
+        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_riesgo, $id_proyecto);
         foreach ($responsables as $responsable) {
             $resultado["responsables"][] = $responsable["id_usuario"];
         }

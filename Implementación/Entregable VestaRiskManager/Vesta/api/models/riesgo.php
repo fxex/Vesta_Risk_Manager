@@ -154,11 +154,11 @@ class Riesgo
         return $totalPaginas;
     }
 
-    public function obtenerParticipantesRiesgo($id_riesgo)
+    public function obtenerParticipantesRiesgo($id_riesgo, $id_proyecto)
     {
-        $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ?";
+        $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ? and pr.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_riesgo);
+        $stmt->bind_param("ii", $id_riesgo, $id_proyecto);
         $stmt->execute();
         $participantes = $stmt->get_result();
 
@@ -216,13 +216,13 @@ class Riesgo
     }
 
 
-    public function obtenerRiesgoId($id_riesgo)
+    public function obtenerRiesgoId($id_riesgo, $id_proyecto)
     {
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 
-        where r.id_riesgo = ?";
+        where r.id_riesgo = ? and r.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_riesgo);
+        $stmt->bind_param("ii", $id_riesgo, $id_proyecto);
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado;

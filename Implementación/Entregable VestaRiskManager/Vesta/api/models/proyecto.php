@@ -383,7 +383,6 @@ class Proyecto
             WHERE i.id_proyecto = ?
                 AND i.fecha_inicio > ?
             ORDER BY i.fecha_inicio ASC
-            LIMIT 2
         ) AS siguientes)
 
         ORDER BY fecha_inicio DESC";

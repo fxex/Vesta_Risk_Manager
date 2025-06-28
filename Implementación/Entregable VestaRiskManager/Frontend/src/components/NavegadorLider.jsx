@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 
 /**
  * Componente NavegadorLider
@@ -62,6 +63,7 @@ export default function NavegadorLider() {
               href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
               target="_blank"
             >
+              <FontAwesomeIcon icon={faCircleQuestion} className="mx-2" />
               Ayuda
             </Nav.Link>
 
@@ -127,6 +129,7 @@ export default function NavegadorLider() {
               href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
               target="_blank"
             >
+              <FontAwesomeIcon icon={faCircleQuestion} className="mx-1" />
               Ayuda
             </Nav.Link>
   

@@ -537,7 +537,7 @@ $router->add("DELETE", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function ($i
 });
 
 $router->add("GET", "proyecto/{id_proyecto}/riesgo/{id_riesgo}", function ($id_proyecto, $id_riesgo) use ($controladorRiesgo) {
-    $resultado = $controladorRiesgo->obtenerRiesgoId($id_riesgo);
+    $resultado = $controladorRiesgo->obtenerRiesgoId($id_riesgo, $id_proyecto);
     echo json_encode($resultado);
 });
 
