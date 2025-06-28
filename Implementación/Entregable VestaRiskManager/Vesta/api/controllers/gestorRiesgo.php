@@ -158,10 +158,10 @@ class GestorRiesgo
         }
     }
 
-    public function obtenerRiesgoId($id_riesgo, $id_proyecto)
+    public function obtenerRiesgoId($id_riesgo)
     {
-        $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo, $id_proyecto);
-        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_riesgo, $id_proyecto);
+        $resultado = $this->riesgo->obtenerRiesgoId($id_riesgo);
+        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_riesgo);
         foreach ($responsables as $responsable) {
             $resultado["responsables"][] = $responsable["id_usuario"];
         }
@@ -540,6 +540,14 @@ class GestorRiesgo
     {
         $this->tarea->setEstado(1);
         $this->tarea->setFechaFinReal(date("Y-m-d"));
+        $resultado = $this->tarea->completarTarea($id_tarea);
+        return $resultado;
+    }
+
+    public function desmarcarTarea($id_tarea)
+    {
+        $this->tarea->setEstado(0);
+        $this->tarea->setFechaFinReal(null);
         $resultado = $this->tarea->completarTarea($id_tarea);
         return $resultado;
     }

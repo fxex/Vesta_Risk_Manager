@@ -233,6 +233,19 @@ class Tarea
         }
     }
 
+    public function desmarcarTarea($id_tarea)
+    {
+        $query = "UPDATE tarea set estado = ?, fecha_fin_real = ? where id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ssi", $this->estado, $this->fecha_fin_real, $id_tarea);
+        if (!$stmt->execute()) {
+            throw new Exception("Error al desmarcar la tarea: " . $stmt->error);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function obtenerTareaId($id_tarea)
     {
         $query = "SELECT t.*,p.id_riesgo, p.tipo as tipo_plan, GROUP_CONCAT(distinct u.nombre order by u.nombre separator ', ') as responsables

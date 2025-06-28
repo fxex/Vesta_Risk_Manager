@@ -14,7 +14,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
   faCheck,
-  faXmark
+  faXmark,
+  faSquareCheck,
+  faSquareXmark
 } from "@fortawesome/free-solid-svg-icons";
 import {
   useLoaderData,
@@ -22,11 +24,12 @@ import {
 } from "react-router-dom";
 import { formatearFecha, filtrarYFormatear } from "../../utils/funciones";
 import { useUsuario } from "../../context/usuarioContext";
-import { completarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
+import { completarTarea, desmarcarTarea, obtenerDatosTareasInforme, obtenerTareasProyectoPaginado } from "../../services/planes";
 import { informeTarea } from "../informes/tareas";
 import BotonSalir from "../../components/BotonSalir";
 import "./../../styles/ListaRiesgo.css";
 import Paginado from "../../components/Paginado";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 
 export default function ListaTarea() {
   const { tareas,totalPaginas, iteracion } = useLoaderData();
@@ -36,6 +39,7 @@ export default function ListaTarea() {
   const { usuario } = useUsuario();  
 
   const [completar, setCompletar] = useState(false)
+  const [deshacer, setDeshacer] = useState(false)
   const [tareaSeleccionada, setTareaSeleccionada] = useState(0)
 
   const [tareasCargadas, setTareasCargadas] = useState(tareas)
@@ -110,8 +114,8 @@ export default function ListaTarea() {
                 <th style={{ width: "10em" }} className="th">
                   Fecha de fin
                 </th>
-                <th style={{ maxWidth: "5em" }} className="th">Estado</th>
-                <th className="th" style={{ width: "5em" }}>Acciones</th>
+                <th style={{ width: "8em" }} className="th">Estado</th>
+                <th className="th" style={{ width: "10em" }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -136,7 +140,23 @@ export default function ListaTarea() {
                           }}
                           className={tarea.estado == '1' || tarea.pertenece == 0 || comprobacionEspectador ? "d-none":""}
                         >
-                          <FontAwesomeIcon icon={faCheck} />
+                          <FontAwesomeIcon icon={faSquareCheck} />
+                        </Button>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip id="tooltip-edit">Deshacer</Tooltip>}
+                      >
+                        <Button
+                          style={{ marginRight: "5px" }}
+                          variant="outline-danger"
+                          onClick={async ()=>{
+                            setDeshacer(true)
+                            setTareaSeleccionada(tarea.id_tarea)
+                          }}
+                          className={tarea.estado == '0' || comprobacionEspectador ? "d-none":""}
+                        >
+                          <FontAwesomeIcon icon={faSquareXmark} />
                         </Button>
                       </OverlayTrigger>
                       <OverlayTrigger
@@ -156,7 +176,6 @@ export default function ListaTarea() {
                           <FontAwesomeIcon icon={faSearch} />
                         </Button>
                       </OverlayTrigger>
-                      
                       
                   </td>
                 </tr>
@@ -183,7 +202,7 @@ export default function ListaTarea() {
             </Modal.Header>
             <Modal.Body>
               <p>
-                La tarea será marcada como completada y no se podrá revertir la acción.
+                La tarea será marcada como completada. Esta acción puede ser revertida por el líder del proyecto.
               </p>
             </Modal.Body>
             <Modal.Footer>
@@ -205,6 +224,51 @@ export default function ListaTarea() {
                 variant="outline-danger"
                 onClick={() => {
                   setCompletar(false);
+                  setTareaSeleccionada(0)
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  style={{ marginRight: "5px" }}
+                />
+                Cancelar
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal
+            show={deshacer}
+            onHide={() => {
+              setDeshacer(false);
+              setTareaSeleccionada(0)
+            }}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>¿Está seguro?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                La tarea dejará de estar marcada como completada.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-success"
+                onClick={async () => {
+                  await desmarcarTarea(tareaSeleccionada)
+                  setDeshacer(false);
+                  navigate(0)
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  style={{ marginRight: "5px" }}
+                />
+                Marcar como incompletado
+              </Button>
+              <Button
+                variant="outline-danger"
+                onClick={() => {
+                  setDeshacer(false);
                   setTareaSeleccionada(0)
                 }}
               >
