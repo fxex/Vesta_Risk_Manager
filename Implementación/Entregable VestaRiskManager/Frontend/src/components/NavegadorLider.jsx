@@ -60,8 +60,7 @@ export default function NavegadorLider() {
             </Nav.Link>
 
             <Nav.Link
-              href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
-              target="_blank"
+              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/ayuda`}
             >
               <FontAwesomeIcon icon={faCircleQuestion} className="mx-2" />
               Ayuda
@@ -126,8 +125,9 @@ export default function NavegadorLider() {
               </Nav.Link>
 
               <Nav.Link
-              href={"https://drive.google.com/file/d/1qPd9atlI1tzKmVD5garIBb6eUoAr6R73/view?usp=sharing"}
-              target="_blank"
+              href={`/inicio/proyecto/${
+                  comprobacionLider ? "lider" : "desarrollador"
+                }/${proyecto.id_proyecto}/ayuda`}
             >
               <FontAwesomeIcon icon={faCircleQuestion} className="mx-1" />
               Ayuda

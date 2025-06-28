@@ -66,6 +66,7 @@ import VerEvaluacionesPasadasDesarrollador from "./pages/evaluacion/desarrollado
 import VerPlanesPasados from "./pages/plan/lider/VerPlanesPasados.jsx";
 import SeguimientoRiesgo from "./pages/seguimiento/SeguimientoRiesgo.jsx";
 import VerEvaluacion from "./pages/evaluacion/VerEvaluacion.jsx";
+import Ayuda from "./pages/Ayuda.jsx";
 
 import { 
   cargarUsuario,  
@@ -174,6 +175,10 @@ const App = () => {
       path: "/inicio/proyecto/desarrollador/:id_proyecto/monitoreo/:id_usuario/tarea/:id_tarea",
       element: <RutaProtegida element={<VerTarea />} />,
       loader: verTareaLoader
+    },
+    {
+      path: "/inicio/proyecto/desarrollador/:id_proyecto/ayuda",
+      element: <RutaProtegida element={<Ayuda />} />
     },
   ]
 
@@ -288,7 +293,11 @@ const App = () => {
       path:"/inicio/proyecto/lider/:id_proyecto/monitoreo/seguimiento",
       element: <RutaProtegida element={<SeguimientoRiesgo />} />,
       loader: seguimientoLoader
-    }
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/ayuda",
+      element: <RutaProtegida element={<Ayuda />} />
+    },
   ]
 
   const routerAdmin = [
@@ -459,7 +468,10 @@ const App = () => {
       element: <RutaProtegida element={<VerTarea />} />,
       loader: verTareaLoader
     },
-
+    {
+      path: "/inicio/proyecto/espectador/:id_proyecto/ayuda",
+      element: <RutaProtegida element={<Ayuda />} />
+    },
   ]
 
   const router = createBrowserRouter([
