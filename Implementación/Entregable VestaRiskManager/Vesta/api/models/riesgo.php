@@ -76,9 +76,9 @@ class Riesgo
             case 1:
                 return "r.id_riesgo asc";
             case 2:
-                return "r.factor_riesgo desc";
+                return "factor_riesgo desc";
             case 3:
-                return "r.factor_riesgo asc";
+                return "factor_riesgo asc";
             default:
                 return "r.id_riesgo asc";
         }
@@ -96,14 +96,28 @@ class Riesgo
 
         $ids = [];
 
-        $queryIds = "SELECT r.id_riesgo FROM riesgo r 
-        WHERE r.id_proyecto = ? 
-        ORDER BY $ordenado 
+        $queryIds = "SELECT id_riesgo, factor_riesgo
+            FROM (
+                SELECT r.id_riesgo,
+                    CAST(eval.impacto AS UNSIGNED) * CAST(eval.probabilidad AS UNSIGNED) AS factor_riesgo
+                FROM riesgo r
+                LEFT JOIN (
+                    SELECT e.id_riesgo,
+                        e.impacto,
+                        e.probabilidad,
+                        e.id_iteracion,
+                        ROW_NUMBER() OVER (PARTITION BY e.id_riesgo ORDER BY e.fecha_realizacion DESC) AS rn
+                    FROM evaluacion e
+                    where e.id_iteracion = ?
+                ) AS eval ON eval.id_riesgo = r.id_riesgo AND eval.rn = 1
+                WHERE r.id_proyecto = ?
+            ) AS r
+            ORDER BY $ordenado
         LIMIT $cantidad_riesgos OFFSET $offset
         ";
 
         $stmtId = $this->conexion->prepare($queryIds);
-        $stmtId->bind_param("i", $id_proyecto);
+        $stmtId->bind_param("ii", $id_iteracion, $id_proyecto);
         $stmtId->execute();
         $resultado = $stmtId->get_result();
         while ($fila = $resultado->fetch_assoc()) {
@@ -118,7 +132,7 @@ class Riesgo
         $query = "SELECT 
                         r.id_riesgo, 
                         r.descripcion, 
-                        r.factor_riesgo, 
+                        COALESCE(max(CAST(e.impacto AS UNSIGNED) * CAST(e.probabilidad AS UNSIGNED)), 0) AS factor_riesgo,
                         c.nombre AS nombre_categoria,
                         GROUP_CONCAT(DISTINCT u.nombre ORDER BY u.nombre SEPARATOR ', ') AS responsables,
                         COUNT(DISTINCT e.id_evaluacion) AS evaluado
@@ -128,8 +142,8 @@ class Riesgo
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                     WHERE r.id_riesgo in ($ids_string) and r.id_proyecto = ?
-                    GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, c.nombre
-                    ORDER BY $ordenado
+                    GROUP BY r.id_riesgo, r.descripcion, c.nombre
+                    order by $ordenado
                     ";
 
         $stmt = $this->conexion->prepare($query);

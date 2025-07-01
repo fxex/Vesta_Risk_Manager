@@ -216,70 +216,82 @@ export default function VerProyectoLider() {
               </Card.Header>
               <Card.Body >
                 <div style={{overflowX:'auto'}}>
-                  <Bar
-                  ref={grafico_evolucion} 
-                  data={
-                    {
-                      labels:iteracionesSeleccionadas.map((label) => label.length > 10 ? label.match(/.{1,10}/g) : label),
-                      datasets:[
-                        {
-                          label:"Irrelevantes",
-                          data:datosBajos,
-                          backgroundColor: '#2ecc71'
-                        },
-                        {
-                          label:"Necesitan reevaluación",
-                          data:datosMedio,
-                          backgroundColor: '#f1c40f'
-                        },
-                        {
-                          label:"Necesitan planificación",
-                          data:datosAlto,
-                          backgroundColor: '#f39c12'
-                        },
-                        {
-                          label:"Críticos",
-                          data:datosCritico,
-                          backgroundColor: '#e74c3c'
-                        }
-                      ]
-                    }
-                  } 
-                  options={{
-                    barThickness:20,
-                    responsive:false,
-                    plugins:{
-                      legend:{
-                        position:"right",
-                        reverse:true
+                  <div style={{ width: `${iteracionesSeleccionadas.length * 100}px`, minWidth: '100%' }}>
+                    <Bar
+                    ref={grafico_evolucion} 
+                    data={
+                      {
+                        labels:iteracionesSeleccionadas.map((label) => label.length > 10 ? label.match(/.{1,10}/g) : label),
+                        datasets:[
+                          {
+                            label:"Irrelevantes",
+                            data:datosBajos,
+                            backgroundColor: '#2ecc71'
+                          },
+                          {
+                            label:"Necesitan reevaluación",
+                            data:datosMedio,
+                            backgroundColor: '#f1c40f'
+                          },
+                          {
+                            label:"Necesitan planificación",
+                            data:datosAlto,
+                            backgroundColor: '#f39c12'
+                          },
+                          {
+                            label:"Críticos",
+                            data:datosCritico,
+                            backgroundColor: '#e74c3c'
+                          }
+                        ]
                       }
-                    },
-                    scales:{
-                      x:{
-                        stacked:true,
-                        title:{
-                          display:true,
-                          text:"Iteraciones"
+                    } 
+                    options={{
+                      barThickness:20,
+                      responsive:true,
+                      maintainAspectRatio:false,
+                      plugins:{
+                        legend:{
+                          position:"right",
+                          reverse:true
                         },
-                        ticks:{
-                          autoSkip:false,
-                          maxRotation:0,
-                          minRotation:0
+                        tooltip: {
+                          callbacks: {
+                            title: function(tooltipItems) {
+                              const originalLabel = tooltipItems[0].label;
+                              // Eliminamos comas, espacios dobles, etc. para que se vea limpio
+                              const limpio = originalLabel.replace(/,/g, '');
+                              return limpio;
+                            }
+                          }
                         }
                       },
-                      y:{
-                        stacked:true,
-                        beginAtZero:true,
-                        title:{
-                          display:true,
-                          text:"Cantidad de riesgos"
+                      scales:{
+                        x:{
+                          stacked:true,
+                          title:{
+                            display:true,
+                            text:"Iteraciones"
+                          },
+                          ticks:{
+                            autoSkip:false,
+                            maxRotation:0,
+                            minRotation:0
+                          }
+                        },
+                        y:{
+                          stacked:true,
+                          beginAtZero:true,
+                          title:{
+                            display:true,
+                            text:"Cantidad de riesgos"
+                          }
                         }
                       }
-                    }
-                  }}
-                  width={`${iteracionesSeleccionadas.length > 7 ? ultimasIteraciones.length * 100 : ultimasIteraciones.length > 3 ? ultimasIteraciones.length * 200 : ultimasIteraciones.length * 300}px` }
-                  height={200} 
-                  />
+                    }}
+                    height={220} 
+                    />
+                  </div>
 
                 </div>
               </Card.Body>
@@ -330,7 +342,7 @@ export default function VerProyectoLider() {
         </Row>
         <Row className="d-flex flex-nowrap">
           <Col xs={9}>
-            <h2 className="text-center fs-4" style={{position:"absolute", top:(iteracion && !comprobacionEspectador) ?"60%":"70%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
+            <h2 className="text-center fs-4" style={{position:"absolute", top:(iteracion && !comprobacionEspectador) ?"63%": (!iteracion && comprobacionEspectador) ? "80%": "70%" ,left:"25%", textDecoration:"underline"}}>Sobre el proyecto</h2>
             <Row className="mb-3">
               <Col xs={3}>
                 <Card>

@@ -1,6 +1,6 @@
 import pdfMake, { tableLayouts } from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
-import { formatearFechaHora } from "../../utils/funciones";
+import { formatearFecha, formatearFechaHora } from "../../utils/funciones";
 
 export const informeTarea = (datos) => {
     pdfMake.tableLayouts = {
@@ -111,8 +111,8 @@ export const informeTarea = (datos) => {
                             ? { image: "check", width: 15, height: 15, alignment: "center", margin: [0, 3, 0, 0] }
                             : { text: "" },
                           { text: tarea.nombre, alignment: "center", margin: [0, 3, 0, 0] },
-                          { text: tarea.fecha_inicio, alignment: "center", margin: [0, 3, 0, 0] },
-                          { text: tarea.fecha_fin_real ? tarea.fecha_fin_real : tarea.fecha_fin, alignment: "center", margin: [0, 3, 0, 0] },
+                          { text: formatearFecha(tarea.fecha_inicio), alignment: "center", margin: [0, 3, 0, 0] },
+                          { text: tarea.fecha_fin_real ? formatearFecha(tarea.fecha_fin_real) : formatearFecha(tarea.fecha_fin), alignment: "center", margin: [0, 3, 0, 0] },
                           { text: tarea.responsables, alignment: "center", margin: [0, 3, 0, 0] }
                         ]))
                       ]

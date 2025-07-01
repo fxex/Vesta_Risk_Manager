@@ -16,26 +16,42 @@ insert into perfil (nombre) VALUES
 ("Espectador");
 
 INSERT into usuario (nombre, email) VALUES 
-("Hugo", "hugofrey202@gmail.com"), ("Hugo Antonio Frey", "hugoantoniofrey2003@gmail.com"),  
+("Hugo", "hugofrey202@gmail.com"), ("Hugo Frey", "hugoantoniofrey2003@gmail.com"),  
 ("Agustin", "ardkrav@gmail.com"), ("Agustin Collareda","collaredaagustinpmg@gmail.com"), 
 ("Cintia", "cintiasod2021@gmail.com"), ("Cintia Hernandez","cintiah378@gmail.com"),
-("Esteban Gesto", "egesto@uarg.unpa.edu.ar"), ("Karim Hallar", "khallar@uarg.unpa.edu.ar"), ("Osiris Sofia", "osofia@uarg.unpa.edu.ar");
+("Esteban Gesto", "egesto@uarg.unpa.edu.ar"), ("Karim Hallar", "khallar@uarg.unpa.edu.ar"), ("Osiris Sofia", "osofia@uarg.unpa.edu.ar"),
+("Diego Portillo", "dportillo@gmail.com"), ("Franco Rosas", "frosas@gmail.com"), ("Glenda Flores", "gflores@gmail.com"),
+("Eduardo Sly", "esly@gmail.com"), ("Valeria Ojeda", "vojeda@gmail.com"), ("Malena Oyarzo", "moyarzo@gmail.com"), ("Emilio", "emilio@gmail.com");
 
 INSERT INTO usuario_perfil(id_usuario, id_perfil) VALUES 
 (1,1), (2,2), 
 (3,1), (4,2), 
 (5,1), (6,2),
-(7,1), (8,1), (9,1);
+(7,1), (8,1), (9,1),
+(10,2), (11,2), (12,2),
+(13,2), (14,2), (15,2), (16,2);
 
 Insert Into proyecto (nombre, descripcion, estado, fecha_inicio) values
 ("Vesta Risk Manager", "Es una aplicación que optimiza la identificación, analisis y monitereo de los diferentes 
 riesgos que se presentan a la hora de desarrollar un software con el fin de asistir al usuario en la toma de 
-decisiones y mitigar los riesgos", "activo", "2024-08-24");
+decisiones y mitigar los riesgos", "activo", "2024-08-24"), 
+("Testify", "Es una aplicación que optimiza el proceso de pruebas que se presentan a la hora de desarrollar 
+un software con el fin de asistir al usuario en la toma de 
+decisiones.", "activo", "2024-08-24"),
+("Planificacion", "Es una aplicación que optimiza la estimaciones que se presentan a la hora de desarrollar un software 
+con el fin de asistir al usuario en la toma de decisiones", "inactivo", "2024-08-24");
 
 insert into proyecto_participante (id_proyecto, id_usuario, rol) values
 (1, 2, "Desarrollador"), 
 (1, 6, "Desarrollador"),
-(1, 4, "Lider del Proyecto");
+(1, 4, "Lider del Proyecto"),
+(2, 13, "Desarrollador"), 
+(2, 15, "Desarrollador"),
+(2, 14, "Lider del Proyecto"),
+(2, 16, "Desarrollador"),
+(3, 10, "Desarrollador"), 
+(3, 11, "Desarrollador"),
+(3, 12, "Lider del Proyecto");
 
 insert into proyecto_categoria (id_proyecto, id_categoria) values
 (1,1),
@@ -47,7 +63,27 @@ insert into proyecto_categoria (id_proyecto, id_categoria) values
 (1,7),
 (1,8),
 (1,9),
-(1,10);
+(1,10),
+(2,1),
+(2,2),
+(2,3),
+(2,4),
+(2,5),
+(2,6),
+(2,7),
+(2,8),
+(2,9),
+(2,10),
+(3,1),
+(3,2),
+(3,3),
+(3,4),
+(3,5),
+(3,6),
+(3,7),
+(3,8),
+(3,9),
+(3,10);
 
 insert into iteracion (nombre, fecha_inicio, fecha_fin, id_proyecto) values 
 ("Etapa Inicio - Iteración 1", "2024-08-27", "2024-09-10", 1),
@@ -62,7 +98,34 @@ insert into iteracion (nombre, fecha_inicio, fecha_fin, id_proyecto) values
 ("Etapa Construcción - Iteración 7", "2025-03-24", "2025-04-06", 1),
 ("Etapa Construcción - Iteración 8", "2025-04-24", "2025-05-09", 1),
 ("Etapa Construcción - Iteración 9", "2025-05-10", "2025-05-28", 1),
-("Etapa Cierre - Iteración 1", "2025-05-29", "2025-06-12", 1);
+("Etapa Cierre - Iteración 1", "2025-05-29", "2025-06-12", 1),
+("Etapa Inicio - Iteración 1", "2024-08-27", "2024-09-10", 2),
+("Etapa Elaboración - Iteración 1", "2024-09-11", "2024-09-24", 2),
+("Etapa Elaboración - Iteración 2", "2024-09-25", "2024-10-11", 2),
+("Etapa Construcción - Iteración 1", "2024-10-12", "2024-10-29", 2),
+("Etapa Construcción - Iteración 2", "2024-10-30", "2024-11-08", 2),
+("Etapa Construcción - Iteración 3", "2024-11-09", "2024-11-19", 2),
+("Etapa Construcción - Iteración 4", "2025-01-18", "2025-01-27", 2),
+("Etapa Construcción - Iteración 5", "2025-01-28", "2025-02-11", 2),
+("Etapa Construcción - Iteración 6", "2025-03-06", "2025-03-23", 2),
+("Etapa Construcción - Iteración 7", "2025-03-24", "2025-04-06", 2),
+("Etapa Construcción - Iteración 8", "2025-04-24", "2025-05-09", 2),
+("Etapa Construcción - Iteración 9", "2025-05-10", "2025-05-28", 2),
+("Etapa Cierre - Iteración 1", "2025-05-29", "2025-06-12", 2), 
+("Etapa Inicio - Iteración 1", "2024-08-27", "2024-09-10", 3),
+("Etapa Elaboración - Iteración 1", "2024-09-11", "2024-09-24", 3),
+("Etapa Elaboración - Iteración 2", "2024-09-25", "2024-10-11", 3),
+("Etapa Construcción - Iteración 1", "2024-10-12", "2024-10-29", 3),
+("Etapa Construcción - Iteración 2", "2024-10-30", "2024-11-08", 3),
+("Etapa Construcción - Iteración 3", "2024-11-09", "2024-11-19", 3),
+("Etapa Construcción - Iteración 4", "2025-01-18", "2025-01-27", 3),
+("Etapa Construcción - Iteración 5", "2025-01-28", "2025-02-11", 3),
+("Etapa Construcción - Iteración 6", "2025-03-06", "2025-03-23", 3),
+("Etapa Construcción - Iteración 7", "2025-03-24", "2025-04-06", 3),
+("Etapa Construcción - Iteración 8", "2025-04-24", "2025-05-09", 3),
+("Etapa Construcción - Iteración 9", "2025-05-10", "2025-05-28", 3),
+("Etapa Cierre - Iteración 1", "2025-05-29", "2025-06-12", 3),
+("Etapa Cierre - Iteración 2", "2025-06-27", "2025-07-7", 1);
 
 -- Riesgos de Cronograma (Categoría 3)
 INSERT INTO riesgo (descripcion, id_categoria, id_proyecto) VALUES ('Dada una enfermedad, podría ocurrir la ausencia de un integrante del grupo en ocasiones importantes, lo que podría causar un impacto negativo en la moral del equipo, generando incertidumbre o sobrecarga de trabajo en los otros miembros.', 3, 1);

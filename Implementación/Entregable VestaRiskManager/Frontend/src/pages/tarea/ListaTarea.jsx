@@ -263,7 +263,7 @@ export default function ListaTarea() {
                   icon={faCheck}
                   style={{ marginRight: "5px" }}
                 />
-                Marcar como incompletado
+                Marcar como no completado
               </Button>
               <Button
                 variant="outline-danger"
