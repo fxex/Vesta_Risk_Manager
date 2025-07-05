@@ -143,7 +143,7 @@ export default function ListaProyecto() {
             </div>
           ))
           ) : (
-            <p className="text-center fw-bold">No posee proyectos creados</p>
+            <p className="text-center fw-bold">No posee proyectos en esta categoria</p>
           )}
           <Paginado
             paginaActual={paginaActual}
