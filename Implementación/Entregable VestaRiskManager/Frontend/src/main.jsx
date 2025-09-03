@@ -44,7 +44,7 @@ import CrearRiesgo from "./pages/riesgos/CrearRiesgo.jsx";
 import CrearEvaluacionLider from "./pages/evaluacion/lider/CrearEvaluacionLider.jsx";
 
 import CrearEvaluacionDesarrollador from "./pages/evaluacion/desarrollador/CrearEvaluacionDesarrollador.jsx";
-import CrearPlanLider from "./pages/plan/lider/crearPlanLider.jsx";
+import CrearPlanLider from "./pages/plan/lider/CrearPlanLider.jsx";
 import CrearPlanDesarrollador from "./pages/plan/desarrollador/CrearPlanDesarrollador.jsx";
 import EditarRiesgo from "./pages/riesgos/EditarRiesgo.jsx";
 import MonitoreoLider from "./pages/monitoreo/lider/MonitoreoLider.jsx";
