@@ -31,12 +31,12 @@ import {
 import { eliminarRiesgo, obtenerRiesgosProyectoPaginado } from "../../services/riesgos";
 import "./../../styles/ListaRiesgo.css";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons/faClipboardList";
-import escudoAmarillo from "../../assets/img/escudo amarillo.png";
-import escudoGris from "../../assets/img/escudo gris.png";
-import escudoAzul from "../../assets/img/Escudo azul.png";
-import escudoRojo from "../../assets/img/escudo rojo.png";
-import escudoCritico from "../../assets/img/Escudo critico.png";
-import escudoVerde from "../../assets/img/escudo verde.png";
+import escudoAmarillo from "../../assets/img/Escudo_amarillo.png";
+import escudoGris from "../../assets/img/Escudo_gris.png";
+import escudoAzul from "../../assets/img/Escudo_azul.png";
+import escudoRojo from "../../assets/img/Escudo_rojo.png";
+import escudoCritico from "../../assets/img/Escudo_critico.png";
+import escudoVerde from "../../assets/img/Escudo_verde.png";
 import { formatearFecha } from "../../utils/funciones";
 import Paginado from "../../components/Paginado";
 import { useUsuario } from "../../context/usuarioContext";
