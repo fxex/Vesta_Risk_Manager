@@ -11,7 +11,7 @@
 [[redirects]]
   from = "/api/*"
   to = "http://lds02.uarg.unpa.edu.ar/Vesta/:splat"
-  status = 200!
+  status = 200
   force = true
 
 [[redirects]]
