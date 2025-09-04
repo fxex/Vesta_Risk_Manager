@@ -1,5 +1,5 @@
 
-export const URL = "http://localhost/Vesta";
+export const URL = "http://lds02.uarg.unpa.edu.ar/Vesta";
 
 /**
  * Valida si un correo electrónico tiene un formato válido y pertenece a los dominios permitidos.
