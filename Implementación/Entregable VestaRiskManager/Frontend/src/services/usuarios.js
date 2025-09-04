@@ -18,7 +18,9 @@ export async function obtenerUsuarios(pagina) {
 export async function obtenerUsuariosCorreo(correo) {
   const respuesta = await fetch(`${URL}/usuario/${correo}`);
   if(!respuesta.ok) return
-  const json = await respuesta.json();
+  const json = await respuesta.text();
+  console.log(json);
+  
   return json;
 }
 
