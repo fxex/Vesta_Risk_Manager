@@ -12,3 +12,9 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "http://lds02.uarg.unpa.edu.ar/Vesta/:splat"
+  status = 200
+  force = true
