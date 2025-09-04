@@ -5,9 +5,14 @@ import { obtenerDatosRiesgos, obtenerRiesgoId, obtenerRiesgosProyecto, obtenerRi
 import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyectoDesarrolladorPaginado, obtenerEvaluacionesActualesProyectoPaginado, obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado, obtenerEvaluacionesAnterioresProyecto, obtenerEvaluacionesAnterioresProyectoPaginado, obtenerEvaluacionId} from "../services/evaluacion"
 import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasDesarrolladorProyectoPaginado, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
-import { obtenerPerfiles, obtenerUsuariosId } from "../services/usuarios";
+import { obtenerPerfiles, obtenerUsuarios, obtenerUsuariosId } from "../services/usuarios";
 
 // Loaders de Usuarios
+export async function cargarUsuarios(){
+  const usuarios = obtenerUsuarios(1)
+  return {usuarios}
+}
+
 export async function cargarUsuario({ params }) {
   const usuario = await obtenerUsuariosId(params.id_usuario);
   return { usuario };

@@ -12,7 +12,6 @@ import Salir from "./pages/Salir.jsx";
 import CrearIncidencia from "./pages/Incidencia/CrearIncidencia.jsx";
 
 import {
-  obtenerUsuarios as userLoader,
   obtenerPerfiles as perfilLoader,
 } from "./services/usuarios.js";
 import RutaProtegida from "./utils/RutaProtegida.jsx";
@@ -69,6 +68,7 @@ import VerEvaluacion from "./pages/evaluacion/VerEvaluacion.jsx";
 import Ayuda from "./pages/Ayuda.jsx";
 
 import { 
+  cargarUsuarios,
   cargarUsuario,  
   cargarModificarUsuario,
   cargarEliminarUsuario,
@@ -304,7 +304,7 @@ const App = () => {
     {
       path: "/inicio/usuarios",
       element: <RutaProtegida element={<ListaUsuarios />} isAdmin={true} />,
-      loader: userLoader,
+      loader: cargarUsuarios,
     },
     {
       path: "/inicio/usuario/crear",
