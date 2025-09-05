@@ -9,8 +9,8 @@ import { obtenerPerfiles, obtenerUsuarios, obtenerUsuariosId } from "../services
 
 // Loaders de Usuarios
 export async function cargarUsuarios(){
-  const usuarios = obtenerUsuarios(1)
-  return {usuarios}
+  const usuarios = await obtenerUsuarios(1)
+  return usuarios
 }
 
 export async function cargarUsuario({ params }) {
