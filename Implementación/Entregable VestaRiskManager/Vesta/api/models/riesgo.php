@@ -138,7 +138,7 @@ class Riesgo
                         COUNT(DISTINCT e.id_evaluacion) AS evaluado
                     FROM riesgo r
                     INNER JOIN categoria c ON r.id_categoria = c.id_categoria
-                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo
+                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo and r.id_proyecto = pr.id_proyecto
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                     WHERE r.id_riesgo in ($ids_string) and r.id_proyecto = ?
@@ -168,11 +168,11 @@ class Riesgo
         return $totalPaginas;
     }
 
-    public function obtenerParticipantesRiesgo($id_riesgo)
+    public function obtenerParticipantesRiesgo($id_proyecto, $id_riesgo)
     {
-        $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ?";
+        $query = "SELECT u.* FROM participante_riesgo pr inner join usuario u on pr.id_usuario = u.id_usuario WHERE pr.id_riesgo = ? and pr.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_riesgo);
+        $stmt->bind_param("ii", $id_riesgo, $id_proyecto);
         $stmt->execute();
         $participantes = $stmt->get_result();
 
@@ -230,13 +230,13 @@ class Riesgo
     }
 
 
-    public function obtenerRiesgoId($id_riesgo)
+    public function obtenerRiesgoId($id_proyecto, $id_riesgo)
     {
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 
-        where r.id_riesgo = ?";
+        where  r.id_proyecto = ? and r.id_riesgo = ? ";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id_riesgo);
+        $stmt->bind_param("ii", $id_proyecto, $id_riesgo);
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado;
@@ -263,7 +263,7 @@ class Riesgo
                 SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,
                 SUM(CASE WHEN p.tipo = 'contingencia' THEN 1 ELSE 0 END) AS total_contingencia
                 FROM riesgo r
-                LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo
+                LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo and p.id_proyecto = r.id_proyecto
                 where p.id_iteracion = ? and r.id_riesgo = ? and r.id_proyecto = ?
                 GROUP BY r.id_riesgo";
         $stmt = $this->conexion->prepare($query);

@@ -1,5 +1,5 @@
 
-export const URL = "/api/";
+export const URL = "http://localhost/Vesta";
 
 /**
  * Valida si un correo electrónico tiene un formato válido y pertenece a los dominios permitidos.
