@@ -17,7 +17,7 @@ export default function VerProyecto() {
       <Navegador />
       <Contenedor>
         <h3>Propiedades del Proyecto</h3>
-        <>
+        <div style={{height:"50vh", overflow:"auto"}}>
           <h4>Nombre</h4>
           <p>{proyecto.nombre}</p>
           <hr />
@@ -65,7 +65,8 @@ export default function VerProyecto() {
           ))}
           <hr />
           <h5>Opciones</h5>
-          <div className="d-flex justify-content-start align-items-center">
+        </div>
+        <div className="d-flex justify-content-start align-items-center">
 
           <BotonSalir ruta={"/inicio/proyectos"} />
           <Button className="m-1" onClick={()=>{
@@ -90,7 +91,6 @@ export default function VerProyecto() {
                 }} className={proyecto.estado == "finalizado" ? "active" : ""}>Finalizado</Dropdown.Item>
           </DropdownButton>
           </div>
-        </>
       </Contenedor>
       <Footer />
     </>
