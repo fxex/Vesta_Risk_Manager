@@ -377,7 +377,7 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-primary"
-                          disabled={iteracion === null || riesgo.evaluado > 0 || comprobacionEspectador}
+                          disabled={iteracion === null || comprobacionEspectador}
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${

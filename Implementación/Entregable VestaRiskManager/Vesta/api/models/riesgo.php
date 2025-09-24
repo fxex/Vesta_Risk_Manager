@@ -138,7 +138,7 @@ class Riesgo
                         COUNT(DISTINCT e.id_evaluacion) AS evaluado
                     FROM riesgo r
                     INNER JOIN categoria c ON r.id_categoria = c.id_categoria
-                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo and r.id_proyecto = pr.id_proyecto
+                    LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo and pr.id_proyecto = r.id_proyecto
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
                     LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                     WHERE r.id_riesgo in ($ids_string) and r.id_proyecto = ?
@@ -234,9 +234,9 @@ class Riesgo
     {
         $query = "SELECT r.*, c.nombre as nombre_categoria FROM riesgo r 
         inner join categoria c on r.id_categoria = c.id_categoria 
-        where  r.id_proyecto = ? and r.id_riesgo = ? ";
+        where r.id_riesgo = ? and r.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("ii", $id_proyecto, $id_riesgo);
+        $stmt->bind_param("ii", $id_riesgo, $id_proyecto);
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
         return $resultado;
@@ -263,7 +263,7 @@ class Riesgo
                 SUM(CASE WHEN p.tipo = 'mitigacion' THEN 1 ELSE 0 END) AS total_mitigacion,
                 SUM(CASE WHEN p.tipo = 'contingencia' THEN 1 ELSE 0 END) AS total_contingencia
                 FROM riesgo r
-                LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo and p.id_proyecto = r.id_proyecto
+                LEFT JOIN plan p ON r.id_riesgo = p.id_riesgo
                 where p.id_iteracion = ? and r.id_riesgo = ? and r.id_proyecto = ?
                 GROUP BY r.id_riesgo";
         $stmt = $this->conexion->prepare($query);
@@ -281,20 +281,20 @@ class Riesgo
             //     "params"=>["i", $id_proyecto]
             // ], 
             "riesgos_activos" => [
-                "query" => "Select count(Distinct e.id_evaluacion) from evaluacion e inner join riesgo r on r.id_riesgo = e.id_riesgo and e.id_proyecto = r.id_proyecto where e.id_proyecto = ? and e.id_iteracion = ? and r.factor_riesgo > 9",
+                "query" => "Select count(Distinct e.id_evaluacion) from evaluacion e inner join riesgo r on r.id_riesgo = e.id_riesgo where e.id_proyecto = ? and e.id_iteracion = ? and r.factor_riesgo > 9",
                 "params" => ["ii", $id_proyecto, $id_iteracion]
             ],
             "evaluaciones_pendientes" => [
-                "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r LEFT join evaluacion e on r.id_riesgo = e.id_riesgo and e.id_proyecto = r.id_proyecto and e.id_iteracion = ? where r.id_proyecto = ? and e.id_evaluacion is null",
+                "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r LEFT join evaluacion e on r.id_riesgo = e.id_riesgo and e.id_iteracion = ? where r.id_proyecto = ? and e.id_evaluacion is null",
                 "params" => ["ii", $id_iteracion, $id_proyecto]
             ],
             "planes_accion" => [
-                "query" => "select count(DISTINCT p.id_plan) from riesgo r inner join plan p on p.id_riesgo = r.id_riesgo and p.id_proyecto = r.id_proyecto and p.id_iteracion = ? where r.id_proyecto = ?",
+                "query" => "select count(DISTINCT p.id_plan) from riesgo r inner join plan p on p.id_riesgo = r.id_riesgo and p.id_iteracion = ? where r.id_proyecto = ?",
                 "params" => ["ii", $id_iteracion, $id_proyecto]
             ],
             "riesgos_atencion" => [
                 "query" => "SELECT COUNT(DISTINCT r.id_riesgo) FROM riesgo r
-                            INNER JOIN evaluacion e ON r.id_riesgo = e.id_riesgo and r.id_proyecto = e.id_proyecto AND e.id_iteracion = ?
+                            INNER JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
                             WHERE r.factor_riesgo > 35 and r.id_proyecto = ?
                             AND NOT EXISTS (
                                 SELECT 1 
@@ -347,7 +347,7 @@ class Riesgo
         END as prioridad,
         GROUP_CONCAT(DISTINCT u.nombre ORDER BY u.nombre SEPARATOR ', ') AS responsables
         from riesgo r
-        left join participante_riesgo pr on r.id_riesgo = pr.id_riesgo
+        left join participante_riesgo pr on r.id_riesgo = pr.id_riesgo and pr.id_proyecto = r.id_proyecto
         left join usuario u on pr.id_usuario = u.id_usuario
         where r.id_proyecto = ?
         GROUP BY r.id_riesgo, r.descripcion, r.factor_riesgo, estado, prioridad

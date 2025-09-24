@@ -6,6 +6,7 @@ import { obtenerEvaluacionesActualesProyecto, obtenerEvaluacionesActualesProyect
 import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresProyecto, obtenerPlanesAnterioresProyectoPaginado, obtenerPlanesProyecto, obtenerPlanesProyectoPaginado, obtenerPlanId, obtenerTareasDesarrolladorProyectoPaginado, obtenerTareasProyecto, obtenerTareasProyectoPaginado} from "../services/planes"
 import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuarios, obtenerUsuariosId } from "../services/usuarios";
+import { obtenerIteracionesPaginada } from "../services/iteraciones";
 
 // Loaders de Usuarios
 export async function cargarUsuarios(){
@@ -124,6 +125,14 @@ export const evaluacionesPasadasDesarrolladorLoader = async ({ params }) => {
   return { evaluaciones, totalPaginas, iteracion };
 };
 
+export const iteracionesLoader = async ({ params }) => {
+  const {iteraciones, totalPaginas} = await obtenerIteracionesPaginada(params.id_proyecto);
+  const iteracion = await obtenerIteracionActual(params.id_proyecto);
+  return { iteraciones, totalPaginas, iteracion };
+};
+
+
+
 export const evaluacionLoader = async ({ params }) => {
   const evaluacion = await obtenerEvaluacionId(params.id_proyecto, params.id_evaluacion);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
@@ -131,7 +140,7 @@ export const evaluacionLoader = async ({ params }) => {
 };
 
 export const evaluacionCreacionLoader = async ({ params }) => {
-  const id_riesgo= params.id_riesgo
+  const id_riesgo = params.id_riesgo
   const riesgo = await obtenerRiesgoId(params.id_proyecto, id_riesgo);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { riesgo, iteracion };

@@ -123,6 +123,12 @@ export default function NavegadorLider() {
               >
                 Monitoreo
               </Nav.Link>
+              <Nav.Link 
+              style={comprobacionLider ? {} : {display: "none"}}
+                href={`/inicio/proyecto/lider/${proyecto.id_proyecto}/iteraciones`}
+              >
+                Iteraciones
+              </Nav.Link>
 
               <Nav.Link
               href={`/inicio/proyecto/${

@@ -161,7 +161,7 @@ class GestorRiesgo
     public function obtenerRiesgoId($id_proyecto, $id_riesgo)
     {
         $resultado = $this->riesgo->obtenerRiesgoId($id_proyecto, $id_riesgo);
-        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_proyecto,$id_riesgo);
+        $responsables = $this->riesgo->obtenerParticipantesRiesgo($id_proyecto, $id_riesgo);
         foreach ($responsables as $responsable) {
             $resultado["responsables"][] = $responsable["id_usuario"];
         }
@@ -351,7 +351,7 @@ class GestorRiesgo
     public function obtenerPlanId($id_plan, $id_proyecto)
     {
         $resultado = $this->plan->obtenerPlanId($id_plan);
-        $resultado["riesgo"] = $this->obtenerRiesgoId($resultado["id_proyecto"],$resultado["id_riesgo"]);
+        $resultado["riesgo"] = $this->obtenerRiesgoId($resultado["id_proyecto"], $resultado["id_riesgo"]);
         $resultado["planes_realizado"] = $this->obtenerCantidadPlanes($id_proyecto, $resultado["id_riesgo"], $resultado["id_iteracion"]);
         $resultado["tareas"] = $this->plan->obtenerTareasPlan($id_plan);
         foreach ($resultado["tareas"] as &$tarea) {

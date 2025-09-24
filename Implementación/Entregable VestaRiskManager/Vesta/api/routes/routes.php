@@ -424,6 +424,22 @@ $router->add("GET", "proyecto/{id}/iteracion", function ($id) use ($controladorP
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/iteraciones/{pagina}", function ($id_proyecto, $pagina) use ($controladorProyecto) {
+    $resultado = $controladorProyecto->obtenerIteracionesPaginado($id_proyecto, $pagina);
+    echo json_encode($resultado);
+});
+
+$router->add("POST", "proyecto/{id_proyecto}/iteraciones", function ($id_proyecto) use ($controladorProyecto) {
+    $body = file_get_contents('php://input');
+    if (!empty($body)) {
+        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $resultado = $controladorProyecto->crearIteracion($id_proyecto, $data);
+        echo json_encode(["creacion" => $resultado]);
+    } else {
+        echo json_encode(["creacion" => false]);
+    }
+});
+
 
 
 $router->add("PUT", "proyecto/{id}", function ($id) use ($controladorProyecto) {

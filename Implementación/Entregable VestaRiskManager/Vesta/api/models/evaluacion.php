@@ -126,7 +126,7 @@ class Evaluacion
     {
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
                 FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
                 where e.id_iteracion = ? and e.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
@@ -150,7 +150,7 @@ class Evaluacion
 
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
                 FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and r.id_proyecto = e.id_proyecto 
                 where e.id_iteracion = ? and e.id_proyecto = ?
                 limit $cantidad_evaluaciones offset $offset";
         $stmt = $this->conexion->prepare($query);
@@ -176,7 +176,7 @@ class Evaluacion
 
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
                 FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and r.id_proyecto = e.id_proyecto 
                 where e.id_iteracion = ? and e.id_proyecto = ? and e.id_usuario = ?
                 limit $cantidad_evaluaciones offset $offset";
         $stmt = $this->conexion->prepare($query);
@@ -194,7 +194,7 @@ class Evaluacion
     private function obtenerCantidadPaginasActuales($cantidadEvaluaciones, $id_proyecto, $id_iteracion)
     {
         $totalQuery = $this->conexion->query("SELECT count(*) as total from evaluacion e 
-        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
         where e.id_proyecto = $id_proyecto and e.id_iteracion = $id_iteracion");
         $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
@@ -205,7 +205,7 @@ class Evaluacion
     private function obtenerCantidadPaginasActualesDesarrollador($cantidadEvaluaciones, $id_proyecto, $id_iteracion, $id_usuario)
     {
         $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
-        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
         where e.id_proyecto = $id_proyecto and e.id_iteracion = $id_iteracion and e.id_usuario = $id_usuario");
         $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
@@ -224,7 +224,7 @@ class Evaluacion
 
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
                 FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and r.id_proyecto = e.id_proyecto 
                 where e.id_iteracion < ? and e.id_proyecto = ?
                 limit $cantidad_evaluaciones offset $offset";
         $stmt = $this->conexion->prepare($query);
@@ -250,7 +250,7 @@ class Evaluacion
 
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad 
                 FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
                 where e.id_iteracion < ? and e.id_proyecto = ? and e.id_usuario = ?
                 limit $cantidad_evaluaciones offset $offset";
         $stmt = $this->conexion->prepare($query);
@@ -268,7 +268,7 @@ class Evaluacion
     private function obtenerCantidadPaginasAntiguasDesarrollador($cantidadEvaluaciones, $id_proyecto, $id_iteracion, $id_usuario)
     {
         $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
-        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
         where e.id_proyecto = $id_proyecto and e.id_iteracion < $id_iteracion and e.id_usuario = $id_usuario");
         $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
@@ -279,7 +279,7 @@ class Evaluacion
     private function obtenerCantidadPaginasAntiguas($cantidadEvaluaciones, $id_proyecto, $id_iteracion)
     {
         $totalQuery = $this->conexion->query("select count(*) as total from evaluacion e 
-        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
         where e.id_proyecto = $id_proyecto and e.id_iteracion < $id_iteracion");
         $totalEvaluaciones = $totalQuery->fetch_assoc()['total'];
         $totalPaginas = ceil($totalEvaluaciones / $cantidadEvaluaciones);
@@ -289,7 +289,7 @@ class Evaluacion
     public function obtenerMatrizTongji($id_proyecto, $id_iteracion)
     {
         $query = "SELECT r.id_riesgo as label, e.impacto as x, e.probabilidad as y FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
                 where e.id_iteracion = ? and e.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
@@ -305,7 +305,7 @@ class Evaluacion
     public function obtenerEvaluacionesAnterioresProyecto($id_proyecto, $id_iteracion)
     {
         $query = "SELECT r.id_riesgo, e.id_evaluacion, e.descripcion, e.impacto, e.probabilidad FROM evaluacion e 
-                inner join riesgo r on e.id_riesgo = r.id_riesgo 
+                inner join riesgo r on e.id_riesgo = r.id_riesgo and e.id_proyecto = r.id_proyecto 
                 where e.id_iteracion < ? and e.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_iteracion, $id_proyecto);
@@ -321,7 +321,7 @@ class Evaluacion
     public function obtenerEvaluacionId($id_evaluacion)
     {
         $query = "SELECT e.*, r.id_riesgo, r.descripcion as descripcion_riesgo,i.nombre as nombre_iteracion, i.fecha_inicio as fecha_inicio_iteracion, i.fecha_fin as fecha_fin_iteracion, u.nombre as nombre_usuario FROM evaluacion e 
-        inner join riesgo r on e.id_riesgo = r.id_riesgo 
+        inner join riesgo r on e.id_riesgo = r.id_riesgo and r.id_proyecto = e.id_proyecto 
         inner join iteracion i on e.id_iteracion = i.id_iteracion
         left join usuario u on e.id_usuario = u.id_usuario
         where e.id_evaluacion = ?";

@@ -77,6 +77,7 @@ export default function CrearEvaluacionLider() {
           <>
             <h3>
               {proyecto.nombre} - Evaluar Riesgo{" "}
+              RK
               {id_riesgo < 10 ? "0" : ""}
               {id_riesgo}
             </h3>

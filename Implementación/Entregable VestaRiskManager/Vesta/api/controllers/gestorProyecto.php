@@ -197,6 +197,21 @@ class GestorProyecto
         return $resultado;
     }
 
+    public function obtenerIteracionesPaginado($id_proyecto, $pagina)
+    {
+        $resultado = $this->iteracion->obtenerIteracionesPaginado($id_proyecto, $pagina);
+        return $resultado;
+    }
+
+    public function crearIteracion($id_proyecto, $data)
+    {
+        $this->iteracion->setNombre($data["nombre"]);
+        $this->iteracion->setFechaInicio($data["fecha_inicio"]);
+        $this->iteracion->setFechaFin($data["fecha_fin"]);
+        $resultado = $this->iteracion->crearIteracion($id_proyecto);
+        return $resultado;
+    }
+
     public function obtenerUltimaIteracion($id_proyecto)
     {
         $resultado = $this->proyecto->obtenerUltimaIteracion($id_proyecto);

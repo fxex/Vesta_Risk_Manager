@@ -96,7 +96,8 @@ import {
   iteracionLoader,
   evaluacionesActualesDesarrolladorLoader,
   evaluacionesPasadasDesarrolladorLoader,
-  TareaDesarrolladorLoader
+  TareaDesarrolladorLoader,
+  iteracionesLoader
 } from "./utils/loaders.js";
 import VerPlan from "./pages/plan/VerPlan.jsx";
 import EditarEvaluacion from "./pages/evaluacion/lider/EditarEvaluacion.jsx";
@@ -104,6 +105,7 @@ import VerTarea from "./pages/tarea/VerTarea.jsx";
 import VerIncidencia from "./pages/Incidencia/VerIncidencia.jsx";
 import ListaIncidenciaDesarrollador from "./pages/Incidencia/desarrollador/ListaIncidenciaDesarrollador.jsx";
 import ListaTareaDesarrollador from "./pages/tarea/desarrollador/ListaTareaDesarrollador.jsx";
+import ListaIteraciones from "./pages/iteracion/ListaIteraciones.jsx";
 const App = () => {
   const routerDesarrollador = [
     {
@@ -193,6 +195,11 @@ const App = () => {
       path: "/inicio/proyecto/lider/:id_proyecto",
       element: <RutaProtegida element={<VerProyectoLider />} />,
       loader: dashboardLoader
+    },
+    {
+      path: "/inicio/proyecto/lider/:id_proyecto/iteraciones",
+      element: <RutaProtegida element={<ListaIteraciones />} />,
+      loader: iteracionesLoader
     },
     {
       path: "/inicio/proyecto/lider/:id_proyecto/riesgos",
