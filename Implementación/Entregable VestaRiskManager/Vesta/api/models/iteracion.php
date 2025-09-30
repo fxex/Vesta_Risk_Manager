@@ -47,7 +47,7 @@ class Iteracion
             $offset = ($pagina - 1) * $cantidad_iteraciones;
         }
         
-        $query = "SELECT * from iteracion where id_proyecto = ? limit $cantidad_iteraciones offset $offset";
+        $query = "SELECT * from iteracion where id_proyecto = ? order by id_iteracion desc limit $cantidad_iteraciones offset $offset";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();

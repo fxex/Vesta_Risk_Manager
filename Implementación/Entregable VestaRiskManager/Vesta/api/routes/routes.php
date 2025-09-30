@@ -440,6 +440,17 @@ $router->add("POST", "proyecto/{id_proyecto}/iteraciones", function ($id_proyect
     }
 });
 
+$router->add("PUT", "proyecto/{id_proyecto}/iteraciones", function ($id_proyecto) use ($controladorProyecto) {
+    $body = file_get_contents('php://input');
+    if (!empty($body)) {
+        $data = json_decode($body, true); // Genera un vector asociativo del json obtenido. Si no se pone el true, actua como un objeto
+        $resultado = $controladorProyecto->actualizarIteracion($id_proyecto, $data);
+        echo json_encode(["creacion" => $resultado]);
+    } else {
+        echo json_encode(["creacion" => false]);
+    }
+});
+
 
 
 $router->add("PUT", "proyecto/{id}", function ($id) use ($controladorProyecto) {

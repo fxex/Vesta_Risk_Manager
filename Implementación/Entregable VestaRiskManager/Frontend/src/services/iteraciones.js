@@ -23,3 +23,19 @@ export const crearIteracion = async (id_proyecto, data) => {
 
   return json;
 };
+
+export const actualizarIteracion = async (id_proyecto, data) => {
+  const respuesta = await fetch(
+    `${URL}/proyecto/${id_proyecto}/iteraciones`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const json = await respuesta.json();  
+
+  return json;
+};

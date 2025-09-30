@@ -9,6 +9,7 @@ import { formatearFecha } from "../../utils/funciones.js"
 import Paginado from '../../components/Paginado';
 import { obtenerIteracionesPaginada } from '../../services/iteraciones.js';
 import CrearIteracion from './CrearIteracion.jsx';
+import ModificarIteracion from "./ModificarIteracion.jsx"
 
 export default function ListaIteraciones() {
     const navigate = useNavigate();
@@ -17,6 +18,11 @@ export default function ListaIteraciones() {
     const { iteraciones, totalPaginas, iteracion } = useLoaderData();
     const [paginaActual, setPaginaActual] = useState(1)
     const [iteracionesCargadas, setIteracionesCargadas] = useState(iteraciones);
+    const [iteracionSeleccionada, setIteracionSeleccionada] = useState({
+        nombre: "",
+        fecha_inicio:"",
+        fecha_fin: ""
+    })
 
     useEffect(() => {
       obtenerIteracionesPaginada(proyecto.id_proyecto, paginaActual).then(
@@ -27,6 +33,7 @@ export default function ListaIteraciones() {
     }, [paginaActual])
 
     const crearIteracionRef = useRef()
+    const modificarIteracionRef = useRef()
 
 
   return (
@@ -55,14 +62,12 @@ export default function ListaIteraciones() {
             </>
             <>
                 <div>
-                    <CrearIteracion ref={crearIteracionRef} iteraciones={proyecto.iteraciones} id_proyecto={proyecto.id_proyecto} navigate={navigate} />     
-
+                    <CrearIteracion ref={crearIteracionRef} iteraciones={proyecto.iteraciones} id_proyecto={proyecto.id_proyecto} navigate={navigate} />  
+                    <ModificarIteracion ref={modificarIteracionRef} iteraciones={proyecto.iteraciones} id_proyecto={proyecto.id_proyecto} navigate={navigate} iteracionSeleccionada={iteracionSeleccionada} />
                     <Button
                         variant="success"
                         onClick={() => {
-                            crearIteracionRef.current.abrir_modal()
-
-                            
+                            crearIteracionRef.current.abrir_modal()                            
                         }}
                     >
                         <FontAwesomeIcon icon={faPlus} className="mx-1" />
@@ -108,9 +113,8 @@ export default function ListaIteraciones() {
                                 style={{ marginLeft: "5px" }}
 
                                 onClick={() => {
-                                    navigate(
-                                    `/inicio/proyecto/lider/${proyecto.id_proyecto}/monitoreo/evaluacion/editar/${iteracionCargada.id_evaluacion}`,
-                                    );
+                                    setIteracionSeleccionada(iteracionCargada)
+                                    modificarIteracionRef.current.abrir_modal()
                                 }}
                                 >
                                 <FontAwesomeIcon icon={faPenToSquare} />

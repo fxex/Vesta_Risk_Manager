@@ -190,6 +190,20 @@ class GestorProyecto
         }
     }
 
+    public function actualizarIteracion($id_proyecto, $data){
+        $comprobar = !empty($data["nombre"]) && !empty($data["fecha_inicio"]) && !empty($data["fecha_fin"]) && !empty($data["id_iteracion"]);
+        if ($comprobar) {
+            $this->iteracion->setNombre($data["nombre"]);
+            $this->iteracion->setFechaInicio($data["fecha_inicio"]);
+            $this->iteracion->setFechaFin($data["fecha_fin"]);
+            $this->iteracion->actualizarIteracion($data["id_iteracion"], $id_proyecto);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public function obtenerIteracionActual($id_proyecto)
     {
         $fecha_actual = date("Y-m-d");
@@ -205,11 +219,17 @@ class GestorProyecto
 
     public function crearIteracion($id_proyecto, $data)
     {
-        $this->iteracion->setNombre($data["nombre"]);
-        $this->iteracion->setFechaInicio($data["fecha_inicio"]);
-        $this->iteracion->setFechaFin($data["fecha_fin"]);
-        $resultado = $this->iteracion->crearIteracion($id_proyecto);
-        return $resultado;
+        $comprobar = !empty($data["nombre"] && !empty($data["fecha_inicio"])) && !empty($data["fecha_fin"]);
+        if ($comprobar) {
+            $this->iteracion->setNombre($data["nombre"]);
+            $this->iteracion->setFechaInicio($data["fecha_inicio"]);
+            $this->iteracion->setFechaFin($data["fecha_fin"]);
+            $resultado = $this->iteracion->crearIteracion($id_proyecto);
+            return $resultado;
+        }else {
+            return -1;
+        }
+
     }
 
     public function obtenerUltimaIteracion($id_proyecto)
