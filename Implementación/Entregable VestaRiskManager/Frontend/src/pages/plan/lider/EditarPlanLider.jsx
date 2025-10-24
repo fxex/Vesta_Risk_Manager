@@ -4,7 +4,14 @@ import Footer from "../../../components/Footer";
 import Contenedor from "../../../components/Contenedor";
 import { modificarPlan } from "../../../services/planes";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import { Button, Form, Modal, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Modal,
+  OverlayTrigger,
+  Table,
+  Tooltip,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheck,
@@ -20,7 +27,7 @@ import { formatearFecha, verificarError } from "../../../utils/funciones";
 export default function EditarPlanLider() {
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
   const { iteracion, plan } = useLoaderData();
-  
+
   const navigate = useNavigate();
 
   const { id_proyecto, id_plan } = useParams();
@@ -177,6 +184,7 @@ export default function EditarPlanLider() {
     const resultado = verificarError(comprobacionError);
     if (!resultado) {
       formDataTarea.estado = 0;
+      formDataTarea.id_tarea = `temp-${Date.now()}`;
       setFormData((prevFormData) => {
         return {
           ...prevFormData,
@@ -191,7 +199,15 @@ export default function EditarPlanLider() {
   const handleClickModificarTarea = () => {
     const nombre_igual =
       formData.tareas.length > 0
-        ? formDataTarea.id_tarea ? formData.tareas.some((tarea) => tarea.nombre === formDataTarea.nombre && tarea.id_tarea != formDataTarea.id_tarea ) : formData.tareas.some((tarea) => tarea.nombre === formDataTarea.nombre)
+        ? formDataTarea.id_tarea
+          ? formData.tareas.some(
+              (tarea) =>
+                tarea.nombre === formDataTarea.nombre &&
+                tarea.id_tarea != formDataTarea.id_tarea
+            )
+          : formData.tareas.some(
+              (tarea) => tarea.nombre === formDataTarea.nombre
+            )
         : false;
     const comprobacionError = {
       nombre:
@@ -221,7 +237,7 @@ export default function EditarPlanLider() {
         return {
           ...prevFormData,
           tareas: prevFormData.tareas.map((tarea) =>
-            tarea.nombre === formDataTarea.nombre ? formDataTarea : tarea
+            tarea.id_tarea === formDataTarea.id_tarea ? formDataTarea : tarea
           ),
         };
       });
@@ -240,14 +256,14 @@ export default function EditarPlanLider() {
             {plan.id_riesgo}
           </h3>
           <>
-              <h4>
-                {iteracion.nombre}
-                {" - "}
-                {formatearFecha(iteracion.fecha_inicio)}
-                {" al "}
-                {formatearFecha(iteracion.fecha_fin)}
-              </h4>
-            </>
+            <h4>
+              {iteracion.nombre}
+              {" - "}
+              {formatearFecha(iteracion.fecha_inicio)}
+              {" al "}
+              {formatearFecha(iteracion.fecha_fin)}
+            </h4>
+          </>
         </>
 
         <Form>
@@ -362,36 +378,37 @@ export default function EditarPlanLider() {
                         <td>
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="tooltip-edit">Editar</Tooltip>}
+                            overlay={
+                              <Tooltip id="tooltip-edit">Editar</Tooltip>
+                            }
                           >
                             <Button
-                                variant="outline-warning"
-                                className="mx-1"
-                                onClick={() => {
-                                  setFormDataTarea(
-                                    tarea
-                                  )
-                                  setModificarTarea(true)
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                              </Button>
+                              variant="outline-warning"
+                              className="mx-1"
+                              onClick={() => {
+                                setFormDataTarea(tarea);
+                                setModificarTarea(true);
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            </Button>
                           </OverlayTrigger>
                           <OverlayTrigger
                             placement="top"
-                            overlay={<Tooltip id="tooltip-delete">Eliminar</Tooltip>}
+                            overlay={
+                              <Tooltip id="tooltip-delete">Eliminar</Tooltip>
+                            }
                           >
-                          <Button
-                            variant="outline-danger"
-                            className="mx-1"
-                            onClick={() => {
-                              setEliminarTarea(true);
-                              setTareaSeleccionada(tarea);
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </Button>
-
+                            <Button
+                              variant="outline-danger"
+                              className="mx-1"
+                              onClick={() => {
+                                setEliminarTarea(true);
+                                setTareaSeleccionada(tarea);
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrashCan} />
+                            </Button>
                           </OverlayTrigger>
                         </td>
                       </tr>
@@ -445,7 +462,9 @@ export default function EditarPlanLider() {
         show={mostrarTarea}
       >
         <Form
-        onSubmit={(e)=>{e.preventDefault()}}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
           <Form.Group>
             <Form.Label>Nombre</Form.Label>
@@ -583,7 +602,9 @@ export default function EditarPlanLider() {
         show={modificarTarea}
       >
         <Form
-        onSubmit={(e)=>{e.preventDefault()}}
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
         >
           <Form.Group>
             <Form.Label>Nombre</Form.Label>
@@ -686,20 +707,22 @@ export default function EditarPlanLider() {
                   <Form.Check
                     key={key}
                     label={participante.nombre}
-                    value={formDataTarea.responsables[key]?.id_usuario === participante?.id_usuario  ? 
-                      JSON.stringify(formDataTarea.responsables[key]) 
-                      : JSON.stringify({
-                      id_usuario: participante.id_usuario,
-                      nombre: participante.nombre,
-                    })} 
+                    value={
+                      formDataTarea.responsables[key]?.id_usuario ===
+                      participante?.id_usuario
+                        ? JSON.stringify(formDataTarea.responsables[key])
+                        : JSON.stringify({
+                            id_usuario: participante.id_usuario,
+                            nombre: participante.nombre,
+                          })
+                    }
                     name="responsables"
-                    onChange={(e)=>{
-                      handleChangeCheckTarea(e)                      
+                    onChange={(e) => {
+                      handleChangeCheckTarea(e);
                     }}
                     checked={formDataTarea.responsables.some(
                       (responsable) =>
-                        responsable.id_usuario ===
-                        participante.id_usuario
+                        responsable.id_usuario === participante.id_usuario
                     )}
                     isInvalid={errorTarea.responsables}
                   />
@@ -733,7 +756,10 @@ export default function EditarPlanLider() {
           <Button
             variant="outline-success"
             onClick={() => {
-              if (tareaSeleccionada.id_tarea) {
+              if (
+                tareaSeleccionada.id_tarea &&
+                !tareaSeleccionada.id_tarea.includes("temp")
+              ) {
                 setFormData((prevFormData) => {
                   return {
                     ...prevFormData,

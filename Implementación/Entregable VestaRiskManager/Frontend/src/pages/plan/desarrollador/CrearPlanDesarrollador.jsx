@@ -177,6 +177,7 @@ export default function CrearPlanDesarrollador() {
     const resultado = verificarError(comprobacionError);
     if (!resultado) {
       formDataTarea.estado = 0;
+      formDataTarea.id_tarea = `temp-${Date.now()}`
       setFormData((prevFormData) => {
         return {
           ...prevFormData,
@@ -189,7 +190,7 @@ export default function CrearPlanDesarrollador() {
   };
 
   const handleClickModificarTarea = () => {
-      const indexEditing = formData.tareas.findIndex(t => t.nombre == tareaModificada);      
+      const indexEditing = formData.tareas.findIndex(t => t.nombre == tareaModificada.nombre);      
 
       const nombre_igual = formData.tareas.some((tarea, idx) =>
         tarea.nombre === formDataTarea.nombre && idx !== indexEditing
@@ -217,17 +218,17 @@ export default function CrearPlanDesarrollador() {
   
       const resultado = verificarError(comprobacionError);
       if (!resultado) {
-        formDataTarea.estado = formDataTarea.id_tarea ? formDataTarea.estado : 0;
+        formDataTarea.estado = 0;
         setFormData((prevFormData) => {
           return {
             ...prevFormData,
             tareas: prevFormData.tareas.map((tarea) =>
-              tarea.nombre === tareaModificada ? formDataTarea : tarea
+              tarea.id_tarea === tareaModificada.id_tarea ? formDataTarea : tarea
             ),
           };
         });
         setModificarTarea(false);
-        setTareaModificada("");
+        setTareaModificada(null);
         errorPrincipal.tareas = false;
       }
     };
@@ -367,7 +368,7 @@ export default function CrearPlanDesarrollador() {
                               onClick={() => {
                                 setFormDataTarea(tarea);
                                 setModificarTarea(true);
-                                setTareaModificada(tarea.nombre);
+                                setTareaModificada(tarea);
                               }}
                             >
                               <FontAwesomeIcon icon={faPenToSquare} />

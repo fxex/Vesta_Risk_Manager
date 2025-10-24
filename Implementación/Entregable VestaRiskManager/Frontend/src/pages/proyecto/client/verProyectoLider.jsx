@@ -115,8 +115,6 @@ export default function VerProyectoLider() {
         nuevaSeleccionadas = prevSeleccionadas.filter(
           (i) => i !== nombreIteracion
         );
-        console.log(`Iteración ${nombreIteracion} deseleccionada`);
-        console.log(`index: ${index}`);
 
         nuevosDatosBajos.splice(index, 1);
         nuevosDatosMedio.splice(index, 1);

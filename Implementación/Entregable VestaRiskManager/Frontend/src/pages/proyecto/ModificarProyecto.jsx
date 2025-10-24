@@ -575,7 +575,6 @@ export default function ModificarProyecto() {
       const participantesFormData = new Set(
         formData.participantes.map((p) => p.id_usuario)
       );
-      console.log(formData);
 
       const participantesFiltrados = json.filter(
         (item) => !participantesFormData.has(item.id_usuario)
