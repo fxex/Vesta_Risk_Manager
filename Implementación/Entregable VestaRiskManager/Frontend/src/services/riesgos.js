@@ -87,7 +87,7 @@ export const obtenerDatosRiesgos = async (id_proyecto) => {
       "Content-Type": "application/json",
     },
   });
-  const json = await respuesta.json();
+  const json = await respuesta.json();  
 
   return json;
 };

@@ -49,6 +49,7 @@ export default function ListaRiesgos() {
   const [riesgoSeleccionado, setRiesgoSeleccionado] = useState(0)
 
   const [riesgosCargados, setRiesgosCargados] = useState(riesgos)
+  
   const [paginaActual, setPaginaActual] = useState(localStorage.getItem("pagina_riesgo")??1)
 
   const [orden, setOrden] = useState(localStorage.getItem("orden_riesgo")??1)
@@ -144,15 +145,15 @@ export default function ListaRiesgos() {
           </Button>
           <DropdownButton variant="success" title="Ordenar según" disabled={iteracion === null}>
               <Dropdown.Item onClick={()=>{
-                setOrden(1)
-                setPaginaActual(1)
-                localStorage.setItem("orden_riesgo", 1)
-              }} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
-              <Dropdown.Item onClick={()=>{
                 setOrden(2)
                 setPaginaActual(1)
                 localStorage.setItem("orden_riesgo", 2)
-                }} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
+              }} className={orden == 2 ? "active" : ""}>Escudos</Dropdown.Item>
+              <Dropdown.Item onClick={()=>{
+                setOrden(1)
+                setPaginaActual(1)
+                localStorage.setItem("orden_riesgo", 1)
+                }} className={orden == 1 ? "active" : ""}>Identificador</Dropdown.Item>
               <Dropdown.Item onClick={()=>{
                 setOrden(3)
                 setPaginaActual(1)
@@ -377,7 +378,7 @@ export default function ListaRiesgos() {
                       >
                         <Button
                           variant="outline-primary"
-                          disabled={iteracion === null || comprobacionEspectador}
+                          disabled={iteracion === null || comprobacionEspectador || riesgo.evaluado > 0}
                           onClick={() => {
                             navigate(
                               `/inicio/proyecto/${
@@ -491,6 +492,8 @@ export default function ListaRiesgos() {
                 variant="outline-success"
                 onClick={async() => {
                   await eliminarRiesgo(id_proyecto, riesgoSeleccionado)
+                  setPaginaActual(1)
+                  localStorage.setItem("pagina_riesgo", 1)
                   navigate(0);
                   setEliminar(false)
                   setRiesgoSeleccionado(0)

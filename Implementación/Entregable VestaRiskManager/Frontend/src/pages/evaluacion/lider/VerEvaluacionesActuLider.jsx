@@ -105,7 +105,7 @@ export default function VerEvaluacionesActuLider() {
           <tbody>
             {evaluacionesCargadas.length > 0 ? evaluacionesCargadas.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
-                <td style={{ textWrap: "wrap" }}>{evaluacion.id_riesgo < 9 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
+                <td style={{ textWrap: "wrap" }}>{evaluacion.id_riesgo < 10 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
                 <td>{modificarImpacto(evaluacion.impacto)}</td>
                 <td>{modificarProbabilidad(evaluacion.probabilidad)}</td>
                 <td style={{ textWrap: "wrap" }}>{evaluacion.descripcion}</td>

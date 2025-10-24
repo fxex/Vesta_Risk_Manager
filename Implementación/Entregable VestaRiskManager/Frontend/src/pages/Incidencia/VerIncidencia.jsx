@@ -34,7 +34,7 @@ export default function VerIncidencia() {
       ) : null}
     <Contenedor>
         <>
-            <h3>{proyecto.nombre} - Incidencia del Riesgo {incidencia.id_riesgo < 9 ? "RK0" + incidencia.id_riesgo : "RK" + incidencia.id_riesgo}</h3>
+            <h3>{proyecto.nombre} - Incidencia del Riesgo {incidencia.id_riesgo < 10 ? "RK0" + incidencia.id_riesgo : "RK" + incidencia.id_riesgo}</h3>
             <h4>{iteracion.nombre} - {formatearFecha(iteracion.fecha_inicio)} al {formatearFecha(iteracion.fecha_fin)}</h4>
         </>
         <>

@@ -502,7 +502,9 @@ const App = () => {
       path: "*",
       element: <NoEncontrada />,
     },
-  ]);
+  ], {
+    basename: "/frontend"
+  });
 
   return <RouterProvider router={router}></RouterProvider>;
 };

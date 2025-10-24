@@ -1,5 +1,6 @@
 
-export const URL = "http://localhost/Vesta";
+export const URL = "https://c2871312.ferozo.com/Vesta";
+export const URL_BASE = "/frontend";
 
 /**
  * Valida si un correo electrónico tiene un formato válido y pertenece a los dominios permitidos.

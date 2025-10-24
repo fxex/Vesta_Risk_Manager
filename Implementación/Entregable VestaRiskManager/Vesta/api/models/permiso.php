@@ -2,7 +2,7 @@
 class Permiso
 {
     private $nombre, $conexion;
-    function __construct($nombre = null, $conexion)
+    function __construct($conexion, $nombre = null)
     {
         $this->nombre = $nombre;
         $this->conexion = $conexion;

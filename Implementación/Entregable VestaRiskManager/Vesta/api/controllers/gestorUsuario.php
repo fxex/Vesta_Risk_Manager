@@ -14,9 +14,9 @@ class GestorUsuario
         $this->conexion = BDConexion::getInstancia();
         $this->conexion->set_charset("utf8");
 
-        $this->usuario = new Usuario(null, null, $this->conexion);
-        $this->perfil = new Perfil(null, $this->conexion);
-        $this->permiso = new Permiso(null, $this->conexion);
+        $this->usuario = new Usuario($this->conexion);
+        $this->perfil = new Perfil($this->conexion);
+        $this->permiso = new Permiso($this->conexion);
     }
     private function verificarCorreo($correo)
     {

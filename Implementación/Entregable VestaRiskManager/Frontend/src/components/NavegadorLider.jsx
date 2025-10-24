@@ -10,6 +10,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { URL_BASE } from "../utils/funciones";
 
 /**
  * Componente NavegadorLider
@@ -35,7 +36,7 @@ export default function NavegadorLider() {
       className="gradient-border-bottom"
     >
       <Container className="d-flex align-items-center">
-        <Navbar.Brand href="/inicio" className="d-flex align-items-center">
+        <Navbar.Brand href="/frontend/inicio" className="d-flex align-items-center">
           <Figure.Image src={logoVesta} width={60} />
           Vesta Risk Manager
         </Navbar.Brand>
@@ -43,30 +44,30 @@ export default function NavegadorLider() {
         <Navbar.Collapse>
           <Nav className="me-auto" >
             <Nav.Link 
-              href={`/inicio/espectador/proyecto/${proyecto.id_proyecto}`}
+              href={`${URL_BASE}/inicio/espectador/proyecto/${proyecto.id_proyecto}`}
             >
               <FontAwesomeIcon icon={faHouse} className="mx-2" />
               Inicio
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/riesgos`}
+              href={`${URL_BASE}/inicio/proyecto/espectador/${proyecto.id_proyecto}/riesgos`}
             >
               Lista de Riesgos
             </Nav.Link>
             <Nav.Link
-              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/monitoreo`}
+              href={`${URL_BASE}/inicio/proyecto/espectador/${proyecto.id_proyecto}/monitoreo`}
             >
               Monitoreo
             </Nav.Link>
 
             <Nav.Link
-              href={`/inicio/proyecto/espectador/${proyecto.id_proyecto}/ayuda`}
+              href={`${URL_BASE}/inicio/proyecto/espectador/${proyecto.id_proyecto}/ayuda`}
             >
               <FontAwesomeIcon icon={faCircleQuestion} className="mx-2" />
               Ayuda
             </Nav.Link>
 
-            <Nav.Link href={usuario.perfil == "Administrador" ? `/inicio/proyecto/${proyecto.id_proyecto}` : `/inicio/espectador/proyectos`}>
+            <Nav.Link href={usuario.perfil == "Administrador" ? `${URL_BASE}/inicio/proyecto/${proyecto.id_proyecto}` : `${URL_BASE}/inicio/espectador/proyectos`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className="mx-2"
@@ -74,7 +75,7 @@ export default function NavegadorLider() {
               Salir
             </Nav.Link>
 
-            <Nav.Link href={`/salir`}>
+            <Nav.Link href={`${URL_BASE}/salir`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className="mx-2"
@@ -95,7 +96,7 @@ export default function NavegadorLider() {
         className="gradient-border-bottom"
       >
         <Container className="d-flex align-items-center">
-          <Navbar.Brand href="/inicio" className="d-flex align-items-center">
+          <Navbar.Brand href={`${URL_BASE}/inicio`} className="d-flex align-items-center">
             <Figure.Image src={logoVesta} width={60} />
             Vesta Risk Manager
           </Navbar.Brand>
@@ -104,20 +105,20 @@ export default function NavegadorLider() {
             <Nav className="me-auto" >
               <Nav.Link 
               style={comprobacionLider ? {} : {display: "none"}}
-                href={`/inicio/proyecto/lider/${proyecto.id_proyecto}`}
+                href={`${URL_BASE}/inicio/proyecto/lider/${proyecto.id_proyecto}`}
               >
                 <FontAwesomeIcon icon={faHouse} className="mx-2" />
                 Inicio
               </Nav.Link>
               <Nav.Link
-                href={`/inicio/proyecto/${
+                href={`${URL_BASE}/inicio/proyecto/${
                   comprobacionLider ? "lider" : "desarrollador"
                 }/${proyecto.id_proyecto}/riesgos`}
               >
                 Lista de Riesgos
               </Nav.Link>
               <Nav.Link
-                href={`/inicio/proyecto/${
+                href={`${URL_BASE}/inicio/proyecto/${
                   comprobacionLider ? "lider" : "desarrollador"
                 }/${proyecto.id_proyecto}/monitoreo`}
               >
@@ -125,13 +126,13 @@ export default function NavegadorLider() {
               </Nav.Link>
               <Nav.Link 
               style={comprobacionLider ? {} : {display: "none"}}
-                href={`/inicio/proyecto/lider/${proyecto.id_proyecto}/iteraciones`}
+                href={`${URL_BASE}/inicio/proyecto/lider/${proyecto.id_proyecto}/iteraciones`}
               >
                 Iteraciones
               </Nav.Link>
 
               <Nav.Link
-              href={`/inicio/proyecto/${
+              href={`${URL_BASE}/inicio/proyecto/${
                   comprobacionLider ? "lider" : "desarrollador"
                 }/${proyecto.id_proyecto}/ayuda`}
             >
@@ -139,7 +140,7 @@ export default function NavegadorLider() {
               Ayuda
             </Nav.Link>
   
-              <Nav.Link href={`/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
+              <Nav.Link href={`${URL_BASE}/inicio/proyectos/${comprobacionLider ? "lider" : "desarrollador"}`}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mx-2"
@@ -147,7 +148,7 @@ export default function NavegadorLider() {
                 Salir
               </Nav.Link>
   
-              <Nav.Link href={`/salir`}>
+              <Nav.Link href={`${URL_BASE}/salir`}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mx-2"

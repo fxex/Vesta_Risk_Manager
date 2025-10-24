@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 import { useUsuario } from "../context/usuarioContext";
+import { URL_BASE } from "../utils/funciones"; 
 
 /**
  * Componente Navegador
@@ -33,14 +34,14 @@ export default function Navegador() {
         className="gradient-border-bottom"
       >
         <Container className="d-flex align-items-center">
-          <Navbar.Brand href="/inicio" className="d-flex align-items-center">
+          <Navbar.Brand href={`${URL_BASE}/inicio`} className="d-flex align-items-center">
             <Figure.Image src={logoVesta} width={60} />
             Vesta Risk Manager
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse>
             <Nav className="me-auto">
-              <Nav.Link href="/inicio">
+              <Nav.Link href={`${URL_BASE}/inicio`}>
                 <FontAwesomeIcon icon={faHouse} className="mx-2" />
                 Inicio
               </Nav.Link>
@@ -50,16 +51,16 @@ export default function Navegador() {
                 menuVariant="dark"
                 className={usuario.perfil == "Administrador" ? "" : "d-none"}
               >
-                <NavDropdown.Item href="/inicio/usuarios">
+                <NavDropdown.Item href={`${URL_BASE}/inicio/usuarios`}>
                   <FontAwesomeIcon icon={faUser} className="mx-2" />
                   Usuarios
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/inicio/perfiles">
+                <NavDropdown.Item href={`${URL_BASE}/inicio/perfiles`}>
                   <FontAwesomeIcon icon={faUserGear} className="mx-2" />
                   Perfiles
                 </NavDropdown.Item>
               </NavDropdown>
-              <Nav.Link href="/salir">
+              <Nav.Link href={`${URL_BASE}/salir`}>
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mx-2"
@@ -80,7 +81,7 @@ export default function Navegador() {
         className="gradient-border-bottom"
       >
         <Container>
-          <Navbar.Brand href="/" className="d-flex align-items-center">
+          <Navbar.Brand href={`${URL_BASE}/`} className="d-flex align-items-center">
             <Figure.Image src={logoVesta} width={100} />
             Vesta Risk Manager
           </Navbar.Brand>

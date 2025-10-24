@@ -44,7 +44,7 @@ export async function cargarProyecto({ params }) {
   return { proyecto, iteracion};
 }
 
-export async function cargarProyectos() {
+export async function cargarProyectos() {  
   const {proyectos, totalPaginas} = await obtenerProyectosPaginado(1, localStorage.getItem("orden_proyecto")??1);
   return { proyectos, totalPaginas };
 }
@@ -64,6 +64,7 @@ export const obtenerListaProyectoDesarrollador = async () => {
 
 // Loaders de Riesgos
 export const dashboardLoader = async ({ params }) => {
+  
   const datosRiesgos = await obtenerDatosRiesgos(params.id_proyecto);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return {datosRiesgos, iteracion};

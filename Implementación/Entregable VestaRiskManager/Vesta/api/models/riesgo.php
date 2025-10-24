@@ -185,21 +185,26 @@ class Riesgo
 
     public function crearRiesgo($id_proyecto, $id_categoria)
     {
-        $query = "INSERT INTO riesgo (descripcion, id_categoria, id_proyecto) VALUES (?, ?, ?)";
+        $query_max = "SELECT MAX(id_riesgo) FROM riesgo WHERE id_proyecto = ?";
+        $stmt_max = $this->conexion->prepare($query_max);
+        $stmt_max->bind_param("i", $id_proyecto);
+        $stmt_max->execute();
+        $stmt_max->bind_result($id_riesgo);
+        $stmt_max->fetch();
+        $stmt_max->close();
+
+        if ($id_riesgo === null) {
+            $id_riesgo = 0;
+        }
+        $query = "INSERT INTO riesgo (id_riesgo, descripcion, id_categoria, id_proyecto) VALUES (?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("sii", $this->descripcion, $id_categoria, $id_proyecto);
+        $nuevo_id = $id_riesgo + 1;
+        $stmt->bind_param("isii", $nuevo_id, $this->descripcion, $id_categoria, $id_proyecto);
+
         if ($stmt->execute()) {
-            $query_max = "SELECT MAX(id_riesgo) FROM riesgo WHERE id_proyecto = ?";
-            $stmt_max = $this->conexion->prepare($query_max);
-            $stmt_max->bind_param("i", $id_proyecto);
-            $stmt_max->execute();
-            $stmt_max->bind_result($id_riesgo);
-            $stmt_max->fetch();
-            $stmt_max->close();
-            return $id_riesgo;
+            return $nuevo_id;
         } else {
-            throw new Exception("Error al crear el usuario: " . $stmt->error);
-            return -1;
+            throw new Exception("Error al crear el riesgo: " . $stmt->error);
         }
     }
 

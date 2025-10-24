@@ -7,6 +7,7 @@ require_once __DIR__ . "/../models/tarea.php";
 require_once __DIR__ . "/../models/incidencia.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
+require_once __DIR__ . "/../../config/URL.php";
 
 class GestorRiesgo
 {
@@ -108,7 +109,7 @@ class GestorRiesgo
 
     public function crearEvaluacion($id_proyecto, $id_riesgo, $data)
     {
-        $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty("responsable") && !empty($data["id_iteracion"]);
+        $comprobar = !empty($data["descripcion"]) && !empty($data["impacto"]) && !empty($data["probabilidad"]) && is_numeric($data["impacto"]) && is_numeric($data["probabilidad"]) && !empty($data["responsable"]) && !empty($data["id_iteracion"]);
         if ($comprobar) {
             $this->evaluacion->setDescripcion($data["descripcion"]);
             $this->evaluacion->setImpacto($data["impacto"]);
@@ -172,7 +173,7 @@ class GestorRiesgo
 
     public function obtenerIteracionActual($id_proyecto)
     {
-        $url = "http://localhost/Vesta/proyecto/" . $id_proyecto . "/iteracion";
+        $url = URL_BASE . "/proyecto/" . $id_proyecto . "/iteracion";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
@@ -190,7 +191,7 @@ class GestorRiesgo
 
     public function obtenerIteracionUltima($id_proyecto)
     {
-        $url = "http://localhost/Vesta/proyecto/" . $id_proyecto . "/iteracion/ultima";
+        $url = URL_BASE . "/proyecto/" . $id_proyecto . "/iteracion/ultima";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
@@ -554,7 +555,7 @@ class GestorRiesgo
 
     public function obtenerUltimasIteraciones($id_proyecto)
     {
-        $url = "http://localhost/Vesta/proyecto/" . $id_proyecto . "/iteracion/ultimas";
+        $url = URL_BASE . "/proyecto/" . $id_proyecto . "/iteracion/ultimas";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string

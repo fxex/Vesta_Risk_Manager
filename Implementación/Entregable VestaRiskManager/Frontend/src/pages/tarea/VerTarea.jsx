@@ -17,7 +17,7 @@ export default function VerTarea() {
     <NavegadorLider/>
     <Contenedor>
         <>
-            <h3>{proyecto.nombre} - Tarea del plan de {tarea.tipo_plan} del Riesgo {tarea.id_riesgo < 9 ? "RK0" + tarea.id_riesgo : "RK" + tarea.id_riesgo}</h3>
+            <h3>{proyecto.nombre} - Tarea del plan de {tarea.tipo_plan} del Riesgo {tarea.id_riesgo < 10 ? "RK0" + tarea.id_riesgo : "RK" + tarea.id_riesgo}</h3>
             <h4>{iteracion.nombre} - {formatearFecha(iteracion.fecha_inicio)} al {formatearFecha(iteracion.fecha_fin)}</h4>
         </>
         <>

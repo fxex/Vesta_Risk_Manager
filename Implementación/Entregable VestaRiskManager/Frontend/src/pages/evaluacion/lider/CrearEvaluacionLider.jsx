@@ -55,7 +55,7 @@ export default function CrearEvaluacionLider() {
     setError(comprobacionError);
 
     const comprobacion = verificarError(comprobacionError);
-    if (!comprobacion) {
+    if (!comprobacion) {      
       formData.id_iteracion = iteracion.id_iteracion;
       formData.responsable = usuario.id_usuario;
       const resultado = await crearEvaluacion(

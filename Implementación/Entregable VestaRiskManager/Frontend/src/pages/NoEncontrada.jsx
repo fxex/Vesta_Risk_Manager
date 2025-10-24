@@ -2,6 +2,7 @@ import React from "react";
 import Navegador from "../components/Navegador";
 import LogoVesta from "./../assets/img/Logo-VestaRiskManager1.png";
 import { Figure } from "react-bootstrap";
+import { URL_BASE } from "../utils/funciones";
 
 export default function NoEncontrada() {
   return (
@@ -15,7 +16,7 @@ export default function NoEncontrada() {
         <h3>Página no encontrada</h3>
         <p>
           Por favor, compruebe la <b>URL</b> o acceda desde aquí{" "}
-          <a href="http://localhost:5173/inicio">Presione aquí</a>
+          <a href={`${URL_BASE}/`}>Presione aquí</a>
         </p>
       </div>
       {/* <Footer /> */}

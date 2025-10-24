@@ -3,6 +3,7 @@ require_once __DIR__ . "/../models/proyecto.php";
 require_once __DIR__ . "/../models/iteracion.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
+require_once __DIR__ . "/../../config/URL.php";
 
 class GestorProyecto
 {
@@ -66,7 +67,7 @@ class GestorProyecto
 
     public function obtenerParticipanteNombre($nombre)
     {
-        $url = "http://localhost/Vesta/participante/" . $nombre;
+        $url = URL_BASE . "/participante/" . $nombre;
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
@@ -87,7 +88,7 @@ class GestorProyecto
 
     public function obtenerCategoriasGenerales()
     {
-        $url = "http://localhost/Vesta/categoria/generales";
+        $url = URL_BASE . "/categoria/generales";
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string

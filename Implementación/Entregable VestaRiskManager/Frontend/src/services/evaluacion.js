@@ -11,8 +11,9 @@ export const crearEvaluacion = async (id_proyecto, id_riesgo, data) => {
       body: JSON.stringify(data),
     }
   );
-  const json = await respuesta.json();  
-
+  const json = await respuesta.text();  
+  console.log(json);
+  
   return json;
 };
 

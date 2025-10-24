@@ -81,7 +81,7 @@ export default function VerEvaluacionesPasadasLider() {
           <tbody>
             {evaluacionesCargadas && evaluacionesCargadas.length > 0 ? evaluacionesCargadas.map((evaluacion, key) => (
               <tr key={key} style={{ textAlign: "center" }}>
-                <td className="td">{evaluacion.id_riesgo < 9 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
+                <td className="td">{evaluacion.id_riesgo < 10 ? "RK0" : "RK" }{evaluacion.id_riesgo}</td>
                 <td className="td">{modificarImpacto(evaluacion.impacto)}</td>
                 <td className="td">{modificarProbabilidad(evaluacion.probabilidad)}</td>
                 <td className="td">{evaluacion.descripcion}</td>

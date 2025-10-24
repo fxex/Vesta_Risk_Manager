@@ -4,7 +4,7 @@ class Perfil
     private $nombre, $conexion;
     private $permisos;
 
-    function __construct($nombre = null, $conexion, $permisos = null)
+    function __construct($conexion, $nombre = null, $permisos = null)
     {
         $this->nombre = $nombre;
         $this->conexion = $conexion;
