@@ -423,7 +423,9 @@ export default function VerProyectoLider() {
                 </Col>
                 <Col xs={3}>
                   <Card>
-                    <Card.Header style={{ minHeight: 65, textAlign: "center" }}>
+                    <Card.Header
+                      className="d-flex justify-content-center align-items-center"
+                    style={{ minHeight: 65, textAlign: "center" }}>
                       Evaluaciones pendientes
                     </Card.Header>
                     <Card.Body>

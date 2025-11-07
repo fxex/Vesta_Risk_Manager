@@ -112,4 +112,16 @@ class Iteracion
         }
     }
 
+    public function obtenerIteracionSiguiente($id_proyecto, $id_iteracion){
+        $query = "SELECT * from iteracion 
+        WHERE id_proyecto = ? and id_iteracion > ?
+        ORDER BY id_iteracion ASC 
+        limit 1";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii", $id_proyecto, $id_iteracion);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
+    }
+
 }

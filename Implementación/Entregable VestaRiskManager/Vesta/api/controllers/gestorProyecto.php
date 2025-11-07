@@ -212,6 +212,12 @@ class GestorProyecto
         return $resultado;
     }
 
+    public function obtenerIteracionSiguiente($id_proyecto, $id_iteracion)
+    {
+        $resultado = $this->iteracion->obtenerIteracionSiguiente($id_proyecto, $id_iteracion);
+        return $resultado;
+    }
+
     public function obtenerIteracionesPaginado($id_proyecto, $pagina)
     {
         $resultado = $this->iteracion->obtenerIteracionesPaginado($id_proyecto, $pagina);

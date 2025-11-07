@@ -140,7 +140,7 @@ class Riesgo
                     INNER JOIN categoria c ON r.id_categoria = c.id_categoria
                     LEFT JOIN participante_riesgo pr ON r.id_riesgo = pr.id_riesgo and pr.id_proyecto = r.id_proyecto
                     LEFT JOIN usuario u ON pr.id_usuario = u.id_usuario
-                    LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion = ?
+                    LEFT JOIN evaluacion e ON r.id_riesgo = e.id_riesgo AND e.id_iteracion >= ?
                     WHERE r.id_riesgo in ($ids_string) and r.id_proyecto = ?
                     GROUP BY r.id_riesgo, r.descripcion, c.nombre
                     order by $ordenado

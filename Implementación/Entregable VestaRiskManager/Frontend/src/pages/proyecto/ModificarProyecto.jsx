@@ -233,6 +233,7 @@ export default function ModificarProyecto() {
       }
 
       const resultado = await actualizarProyecto(id_proyecto, formData);
+      
       if (resultado) {
         navigate("/inicio/proyectos", {
           state: { mensaje: "Proyecto modificado con éxito" },

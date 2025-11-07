@@ -424,6 +424,11 @@ $router->add("GET", "proyecto/{id}/iteracion", function ($id) use ($controladorP
     echo json_encode($resultado);
 });
 
+$router->add("GET", "proyecto/{id_proyecto}/iteracion/{id_iteracion}/siguiente", function ($id_proyecto, $id_iteracion) use ($controladorProyecto) {
+    $resultado = $controladorProyecto->obtenerIteracionSiguiente($id_proyecto, $id_iteracion);
+    echo json_encode($resultado);
+});
+
 $router->add("GET", "proyecto/{id_proyecto}/iteraciones/{pagina}", function ($id_proyecto, $pagina) use ($controladorProyecto) {
     $resultado = $controladorProyecto->obtenerIteracionesPaginado($id_proyecto, $pagina);
     echo json_encode($resultado);
