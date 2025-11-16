@@ -591,4 +591,10 @@ class GestorRiesgo
         $resultado = $this->incidencia->eliminarIncidencia($id_incidencia);
         return $resultado;
     }
+
+    public function obtenerIdProyecto($id_tarea){
+        $resultado = $this->tarea->obtenerIdProyecto($id_tarea);
+        if(!$resultado) return null;
+        return $resultado["id_proyecto"];
+    }
 }

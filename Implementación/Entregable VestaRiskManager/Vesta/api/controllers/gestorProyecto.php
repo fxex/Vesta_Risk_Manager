@@ -175,6 +175,15 @@ class GestorProyecto
             $this->iteracion->setFechaInicio($data["fecha_inicio"]);
             $this->iteracion->setFechaFin($data["fecha_fin"]);
             $this->iteracion->actualizarIteracion($data["id_iteracion"], $id_proyecto);
+            $ultima_iteracion = $this->obtenerUltimaIteracion($id_proyecto);
+            $fecha      = new DateTime($data["fecha_fin"]);
+            $inicio     = new DateTime($ultima_iteracion["fecha_inicio"]);
+            $fin        = new DateTime($ultima_iteracion["fecha_fin"]);
+            if (!($fecha >= $inicio && $fecha <= $fin)){
+                $this->proyecto->setEstado("activo");
+                $this->proyecto->setFechaFin($data["fecha_fin"]);
+                $this->proyecto->actualizarEstadoFechaFin($id_proyecto);
+            }
             return true;
         } else {
             return false;
@@ -203,6 +212,9 @@ class GestorProyecto
             $this->iteracion->setFechaInicio($data["fecha_inicio"]);
             $this->iteracion->setFechaFin($data["fecha_fin"]);
             $resultado = $this->iteracion->crearIteracion($id_proyecto);
+            $this->proyecto->setEstado("activo");
+            $this->proyecto->setFechaFin($data["fecha_fin"]);
+            $this->proyecto->actualizarEstadoFechaFin($id_proyecto);
             return $resultado;
         }else {
             return -1;
@@ -245,5 +257,11 @@ class GestorProyecto
         $this->proyecto->setEstado($estado);
         $resultado = $this->proyecto->modificarEstadoProyecto($id_proyecto);
         return $resultado;
+    }
+
+    public function obtenerRolUsuarioProyecto($id_proyecto, $id_usuario){
+        $resultado = $this->proyecto->obtenerRolUsuarioProyecto($id_proyecto, $id_usuario);
+        if(!$resultado) return null;
+        return $resultado["rol"];
     }
 }

@@ -276,5 +276,13 @@ class Tarea
         }
     }
 
+    public function obtenerIdProyecto($id_tarea){
+        $query = "select p.id_proyecto from tarea t inner join plan p on t.id_plan = p.id_plan where t.id_tarea = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_tarea);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
+    }
 
 }

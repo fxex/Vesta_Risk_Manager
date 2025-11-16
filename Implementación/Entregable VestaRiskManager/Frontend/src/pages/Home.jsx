@@ -8,8 +8,6 @@ import "./../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
   const { usuario } = useUsuario();
-  console.log(usuario);
-  
   
   const navigate = useNavigate();
   return (

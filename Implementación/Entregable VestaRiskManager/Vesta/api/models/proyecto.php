@@ -332,8 +332,18 @@ class Proyecto
         if ($stmt->execute()) {
             return true;
         } else {
-            throw new Exception("Error al crear el proyecto: " . $stmt->error);
-            return false;
+            throw new Exception("Error al actualizar el proyecto: " . $stmt->error);
+        }
+    }
+
+    public function actualizarEstadoFechaFin($id_proyecto){
+        $query = "UPDATE proyecto SET estado = ?, fecha_fin = ? WHERE id_proyecto = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ssi", $this->estado, $this->fecha_fin, $id_proyecto);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new Exception("Error al actualizar el proyecto: " . $stmt->error);
         }
     }
 
@@ -408,5 +418,14 @@ class Proyecto
         } else {
             throw new Exception("Error al crear el proyecto: " . $stmt->error);
         }
+    }
+
+    public function obtenerRolUsuarioProyecto($id_proyecto, $id_usuario){
+        $query = "SELECT rol from proyecto_participante where id_proyecto = ? and id_usuario = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii", $id_proyecto, $id_usuario);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+        return $resultado;
     }
 }
