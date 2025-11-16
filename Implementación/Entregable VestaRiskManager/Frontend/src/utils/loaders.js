@@ -7,6 +7,7 @@ import {obtenerCantidadPlanTipo, obtenerDatosTareaId, obtenerPlanesAnterioresPro
 import { obtenerIncidenciaId, obtenerIncidenciasProyecto, obtenerIncidenciasProyectoPaginado } from "../services/incidencia";
 import { obtenerPerfiles, obtenerUsuarios, obtenerUsuariosId } from "../services/usuarios";
 import { obtenerIteracionesPaginada } from "../services/iteraciones";
+import { jwtDecode } from "jwt-decode";
 
 // Loaders de Usuarios
 export async function cargarUsuarios(){
@@ -50,13 +51,13 @@ export async function cargarProyectos() {
 }
 
 export const obtenerListaProyectoLider = async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const usuario = jwtDecode(localStorage.getItem("usuario"));
   const {proyectos, totalPaginas} = await obtenerProyectosUsuarioLiderPaginado(usuario.email);
   return { proyectos, totalPaginas };
 };
 
 export const obtenerListaProyectoDesarrollador = async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const usuario = jwtDecode(localStorage.getItem("usuario"));
   const {proyectos, totalPaginas} = await obtenerProyectosUsuarioDesarrolladorPaginado(usuario.email);
   return { proyectos, totalPaginas };
 };
@@ -107,7 +108,7 @@ export const evaluacionesActualesLoader = async ({ params }) => {
 };
 
 export const evaluacionesActualesDesarrolladorLoader = async ({ params }) => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const usuario = jwtDecode(localStorage.getItem("usuario"));
   const {evaluaciones, totalPaginas} = await obtenerEvaluacionesActualesProyectoDesarrolladorPaginado(params.id_proyecto, usuario.id_usuario);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { evaluaciones, totalPaginas, iteracion };
@@ -120,7 +121,7 @@ export const evaluacionesPasadasLoader = async ({ params }) => {
 };
 
 export const evaluacionesPasadasDesarrolladorLoader = async ({ params }) => {
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const usuario = jwtDecode(localStorage.getItem("usuario"));
   const {evaluaciones, totalPaginas} = await obtenerEvaluacionesAnterioresDesarrolladorProyectoPaginado(params.id_proyecto, usuario.id_usuario);
   const iteracion = await obtenerIteracionActual(params.id_proyecto);
   return { evaluaciones, totalPaginas, iteracion };

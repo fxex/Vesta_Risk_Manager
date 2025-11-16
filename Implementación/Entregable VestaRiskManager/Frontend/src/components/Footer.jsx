@@ -37,9 +37,9 @@ export default function Footer() {
             icon={faUser}
             style={{ marginRight: "5px", fontSize: "20px" }}
           />
-          {usuario.nombre + " "}
+          {usuario.nombre_usuario + " "}
           <a
-            href="/"
+            href="/frontend"
             onClick={() => {
               localStorage.removeItem("usuario");
             }}

@@ -3,7 +3,8 @@ require_once __DIR__ . "/../models/proyecto.php";
 require_once __DIR__ . "/../models/iteracion.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
-require_once __DIR__ . "/../../config/URL.php";
+require_once __DIR__ . "/gestorUsuario.php";
+require_once __DIR__ . "/gestorRiesgo.php";
 
 class GestorProyecto
 {
@@ -67,41 +68,17 @@ class GestorProyecto
 
     public function obtenerParticipanteNombre($nombre)
     {
-        $url = URL_BASE . "/participante/" . $nombre;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
-
-        // 6. Ejecutar la solicitud y obtener la respuesta
-        $response = curl_exec($ch);
-
-        // 7. Verificar si hubo un error
-        if (curl_errno($ch)) {
-            return curl_error($ch);
-        } else {
+        $controladorUsuario = new GestorUsuario();
+        $response = $controladorUsuario->obtenerUsuariosNombre($nombre);
             return $response;
-        }
 
-        // 8. Cerrar la conexión cURL
-        curl_close($ch);
     }
 
     public function obtenerCategoriasGenerales()
     {
-        $url = URL_BASE . "/categoria/generales";
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Para obtener la respuesta como string
-
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            return ['error' => curl_error($ch)];
-        } else {
-            return json_decode($response, true);
-        }
-
-        curl_close($ch);
+        $controladorRiesgo = new GestorRiesgo();
+        $response = $controladorRiesgo->obtenerCategoriasGenerales();
+        return $response;
     }
 
     public function crearProyecto($data)
@@ -209,12 +186,6 @@ class GestorProyecto
     {
         $fecha_actual = date("Y-m-d");
         $resultado = $this->proyecto->obtenerIteracionActual($id_proyecto, $fecha_actual);
-        return $resultado;
-    }
-
-    public function obtenerIteracionSiguiente($id_proyecto, $id_iteracion)
-    {
-        $resultado = $this->iteracion->obtenerIteracionSiguiente($id_proyecto, $id_iteracion);
         return $resultado;
     }
 

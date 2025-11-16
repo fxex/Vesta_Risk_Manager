@@ -8,13 +8,16 @@ import "./../styles/Home.css";
 import { useNavigate } from "react-router-dom";
 export default function Home() {
   const { usuario } = useUsuario();
+  console.log(usuario);
+  
+  
   const navigate = useNavigate();
   return (
     <>
       <Navegador />
       <Contenedor>
         <h3>Bienvenido</h3>
-        {usuario && (usuario.perfil === "Administrador" || usuario.perfil === "Espectador") ? (
+        {usuario && (usuario.nombre_perfil === "Administrador" || usuario.nombre_perfil === "Espectador") ? (
           <div style={{ minHeight: "40vh" }}>
             <p>
               Le damos la bienvenida a Vesta Risk Manager. Seleccione una de las
@@ -23,13 +26,13 @@ export default function Home() {
             <Button
               className="px-4 py-3 me-2 boton_1"
               onClick={() => {
-                navigate(usuario.perfil === "Espectador"? "/inicio/espectador/proyectos" : "/inicio/proyectos");
+                navigate(usuario.nombre_perfil === "Espectador"? "/inicio/espectador/proyectos" : "/inicio/proyectos");
               }}
             >
               Ver Proyectos
             </Button>
             {
-              usuario.perfil === "Administrador" && (
+              usuario.nombre_perfil === "Administrador" && (
                 <Button
                   className="px-4 py-3 me-2 boton_2"
                   onClick={() => {

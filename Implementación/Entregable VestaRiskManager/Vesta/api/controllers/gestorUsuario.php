@@ -5,6 +5,7 @@ require_once __DIR__ . "/../models/permiso.php";
 require_once __DIR__ . "/../models/vincularTabla.php";
 require_once __DIR__ . "/../models/bloquearModificacion.php";
 require_once __DIR__ . "/../../config/BDConexion.php";
+require_once __DIR__ . "/../utils/auth.php";
 
 class GestorUsuario
 {
@@ -14,9 +15,9 @@ class GestorUsuario
         $this->conexion = BDConexion::getInstancia();
         $this->conexion->set_charset("utf8");
 
-        $this->usuario = new Usuario($this->conexion);
-        $this->perfil = new Perfil($this->conexion);
-        $this->permiso = new Permiso($this->conexion);
+        $this->usuario = new Usuario(null, null, $this->conexion);
+        $this->perfil = new Perfil(null, $this->conexion);
+        $this->permiso = new Permiso(null, $this->conexion);
     }
     private function verificarCorreo($correo)
     {
@@ -43,13 +44,27 @@ class GestorUsuario
     public function obtenerUsuarioCorreo($correo)
     {
         $comprobar = $this->verificarCorreo($correo);
-        if ($comprobar) {
-            $this->usuario->setEmail($correo);
-            $resultado = $this->usuario->obtenerUsuarioEmail();
-            return $resultado;
-        } else {
-            return null;
-        }
+        if(!$comprobar) return null;
+        $this->usuario->setEmail($correo);
+        $resultado = $this->usuario->obtenerUsuarioEmail();
+        if(!$resultado) return null;
+        return $resultado;
+    }
+
+    public function iniciarSesion($data)
+    {
+        if (empty($data["correo"])) return null;
+        $correo = $data["correo"];
+        $comprobar = $this->verificarCorreo($correo);
+        if(!$comprobar) return null;
+
+        $this->usuario->setEmail($correo);
+        $resultado = $this->usuario->obtenerUsuarioEmail();
+        if(!$resultado) return null;
+
+        $token = generarJWT($resultado);
+        return $token;
+        
     }
 
     public function bloquearModificacion($nombre, $id_nombre, $token)

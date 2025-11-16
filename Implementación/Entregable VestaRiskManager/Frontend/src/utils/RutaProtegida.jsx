@@ -11,9 +11,10 @@ import { useUsuario } from "../context/usuarioContext";
  */
 export default function RutaProtegida({ element, isAdmin }) {
   const { usuario } = useUsuario();
+  
 
   if (isAdmin) {
-    return usuario && usuario.perfil == "Administrador" ? (
+    return usuario && usuario.nombre_perfil == "Administrador" ? (
       element
     ) : (
       <Navigate to="/inicio" />

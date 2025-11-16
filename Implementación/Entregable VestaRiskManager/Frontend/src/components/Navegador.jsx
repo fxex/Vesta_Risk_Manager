@@ -49,7 +49,7 @@ export default function Navegador() {
                 title="Administrar acceso"
                 id="basic-nav-dropdown"
                 menuVariant="dark"
-                className={usuario.perfil == "Administrador" ? "" : "d-none"}
+                className={usuario.nombre_perfil == "Administrador" ? "" : "d-none"}
               >
                 <NavDropdown.Item href={`${URL_BASE}/inicio/usuarios`}>
                   <FontAwesomeIcon icon={faUser} className="mx-2" />

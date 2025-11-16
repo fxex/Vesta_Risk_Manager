@@ -31,7 +31,7 @@ export default function SeguimientoRiesgo() {
     const riesgos_cargados = riesgos.slice(indice_inicio, indice_fin);
 
     const { usuario } = useUsuario();
-  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+  const comprobacionEspectador = usuario.nombre_perfil === "Espectador" || usuario.nombre_perfil === "Administrador";
     
   return (
     <>

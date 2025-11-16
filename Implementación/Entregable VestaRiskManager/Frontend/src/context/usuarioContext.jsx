@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const UsuarioContext = createContext();
@@ -15,21 +16,18 @@ export function UsuarioProvider({ children }) {
   // Estado para almacenar los datos del usuario
   const [usuario, setUsuario] = useState(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
-    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+    return usuarioGuardado ? jwtDecode(usuarioGuardado) : null;
   });
 
   /**
    * Función para iniciar sesión.
    *
-   * @param {string} id_usuario - ID único del usuario.
-   * @param {string} nombre - Nombre del usuario.
-   * @param {string} email - Correo electrónico del usuario.
-   * @param {string} perfil - Perfil o rol del usuario.
+   * @param {string} jwt
    */
-  function iniciarSesion(id_usuario, nombre, email, perfil) {
-    const usuarioData = { id_usuario, nombre, email, perfil };
+  function iniciarSesion(jwt) {
+    const usuarioData = jwtDecode(jwt);
     setUsuario(usuarioData);
-    localStorage.setItem("usuario", JSON.stringify(usuarioData)); // Guarda en localStorage
+    localStorage.setItem("usuario", jwt); 
   }
 
   /**
@@ -41,14 +39,6 @@ export function UsuarioProvider({ children }) {
     setUsuario(null);
     localStorage.removeItem("usuario");
   }
-
-  // Efecto para cargar el usuario desde localStorage al montar el componente
-  useEffect(() => {
-    const usuarioGuardado = localStorage.getItem("usuario");
-    if (usuarioGuardado) {
-      setUsuario(JSON.parse(usuarioGuardado));
-    }
-  }, []);
 
   return (
     <UsuarioContext.Provider value={{ usuario, iniciarSesion, cerrarSesion }}>

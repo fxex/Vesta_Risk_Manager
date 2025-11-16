@@ -12,6 +12,8 @@ class Router
     /** @var string $base Ruta base o troncal */
     private $base = '';
 
+    private $globalMiddlewares = [];
+
     /**
      * Establece una base para todas las rutas, permitiendo tener una ruta troncal (p. ej., "vesta").
      *
@@ -29,16 +31,28 @@ class Router
      * @param string $path Ruta relativa al prefijo base, acepta parámetros en formato {param}
      * @param callable|array $callback Callback o controlador que se ejecutará cuando la ruta coincida
      */
-    public function add($method, $path, $callback)
+    public function add($method, $path, $callback, $middleware = [])
     {
         // Añade la base a cada ruta si está configurada
         $path = ($this->base ? $this->base . '/' : '') . trim($path, '/');
         $this->routes[] = [
             'method' => strtoupper($method),
             'path' => $this->convertPathToRegex($path),
-            'callback' => $callback
+            'callback' => $callback,
+            'middleware' => $middleware
         ];
     }
+
+    /**
+     * Registra un middleware global que se ejecutará antes de todas las rutas.
+     *
+     * @param callable $middleware
+     */
+    public function use(callable $middleware): void
+    {
+        $this->globalMiddlewares[] = $middleware;
+    }
+
 
     /**
      * Convierte una ruta en una expresión regular, permitiendo capturar parámetros en la URL.
@@ -69,6 +83,22 @@ class Router
             if ($method == $route['method'] && preg_match($route['path'], $url, $matches)) {
                 // Filtra solo los parámetros capturados en la URL como claves asociativas
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+
+                // Ejecutar middlewares globales
+                foreach ($this->globalMiddlewares as $middleware) {
+                    $result = call_user_func($middleware, $params);
+                    if ($result === false) {
+                        return; // Detiene la ejecución si el middleware falla
+                    }
+                }
+
+                // Ejecutar middlewares específicos de la ruta
+                foreach ($route['middleware'] as $middleware) {
+                    $result = call_user_func($middleware, $params);
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 // Si el callback es un array, llámalo como [Controlador, 'metodo']
                 if (is_array($route['callback'])) {

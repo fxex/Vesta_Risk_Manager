@@ -1,23 +1,42 @@
 import { URL } from "../utils/funciones";
 
 export async function obtenerCategorias(pagina) {
+  const token = localStorage.getItem("usuario");
+
   let paginaUsada = pagina ? pagina : 1;
-  const respuesta = await fetch(`${URL}/categoria/generales/${paginaUsada}`);
+  const respuesta = await fetch(`${URL}/categoria/generales/${paginaUsada}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
 
 export async function obtenerCategoriaId(id) {
-  const respuesta = await fetch(`${URL}/categoria/${id}`);
+  const token = localStorage.getItem("usuario");
+
+  const respuesta = await fetch(`${URL}/categoria/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
   return json;
 }
 
 export const crearCategoria = async (data) => {
+  const token = localStorage.getItem("usuario");
+
   const respuesta = await fetch(`${URL}/categoria`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
@@ -27,10 +46,13 @@ export const crearCategoria = async (data) => {
 };
 
 export const actualizarCategoria = async (id_categoria, data) => {
+  const token = localStorage.getItem("usuario");
+
   const respuesta = await fetch(`${URL}/categoria/${id_categoria}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   });
@@ -40,26 +62,28 @@ export const actualizarCategoria = async (id_categoria, data) => {
 };
 
 export const eliminarCategoria = async (id_categoria) => {
-  const respuesta = await fetch(
-    `${URL}/categoria/${id_categoria}/eliminar`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }
-  );
+  const token = localStorage.getItem("usuario");
+
+  const respuesta = await fetch(`${URL}/categoria/${id_categoria}/eliminar`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const json = await respuesta.json();
 
   return json;
 };
 
 export async function obtenerCategoriaNombre(nombre) {
+  const token = localStorage.getItem("usuario");
 
   const respuesta = await fetch(`${URL}/categoria/comprobar/${nombre}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
   const json = await respuesta.json();

@@ -52,7 +52,7 @@ export default function ListaTarea() {
     })
   }, [paginaActual])
     
-  const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+  const comprobacionEspectador = usuario.nombre_perfil === "Espectador" || usuario.nombre_perfil === "Administrador";
   
   return (
     <>

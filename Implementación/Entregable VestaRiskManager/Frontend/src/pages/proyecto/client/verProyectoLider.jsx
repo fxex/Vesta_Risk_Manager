@@ -176,7 +176,7 @@ export default function VerProyectoLider() {
 
   const { usuario } = useUsuario();
   const comprobacionEspectador =
-    usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+    usuario.nombre_perfil === "Espectador" || usuario.nombre_perfil === "Administrador";
 
   return (
     <>

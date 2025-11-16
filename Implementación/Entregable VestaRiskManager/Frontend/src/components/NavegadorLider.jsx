@@ -27,7 +27,7 @@ export default function NavegadorLider() {
 
   const { usuario } = useUsuario();
   const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
-  if (usuario.perfil === "Espectador" || usuario.perfil === "Administrador") {
+  if (usuario.nombre_perfil === "Espectador" || usuario.nombre_perfil === "Administrador") {
     return (
     <Navbar
       expand="lg"
@@ -67,7 +67,7 @@ export default function NavegadorLider() {
               Ayuda
             </Nav.Link>
 
-            <Nav.Link href={usuario.perfil == "Administrador" ? `${URL_BASE}/inicio/proyecto/${proyecto.id_proyecto}` : `${URL_BASE}/inicio/espectador/proyectos`}>
+            <Nav.Link href={usuario.nombre_perfil == "Administrador" ? `${URL_BASE}/inicio/proyecto/${proyecto.id_proyecto}` : `${URL_BASE}/inicio/espectador/proyectos`}>
               <FontAwesomeIcon
                 icon={faArrowRightFromBracket}
                 className="mx-2"

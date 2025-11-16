@@ -16,7 +16,7 @@ export default function VerIncidencia() {
     const proyecto = JSON.parse(localStorage.getItem("proyecto_seleccionado"));
 
     const { usuario } = useUsuario();
-      const comprobacionEspectador = usuario.perfil === "Espectador" || usuario.perfil === "Administrador";
+      const comprobacionEspectador = usuario.nombre_perfil === "Espectador" || usuario.nombre_perfil === "Administrador";
 
   return (
     <>

@@ -10,6 +10,7 @@ import Paginado from '../../components/Paginado';
 import { obtenerIteracionesPaginada } from '../../services/iteraciones.js';
 import CrearIteracion from './CrearIteracion.jsx';
 import ModificarIteracion from "./ModificarIteracion.jsx"
+import Footer from '../../components/Footer.jsx';
 
 export default function ListaIteraciones() {
     const navigate = useNavigate();
@@ -150,6 +151,7 @@ export default function ListaIteraciones() {
                     <Paginado paginaActual={paginaActual} setPaginaActual={setPaginaActual} totalPaginas={totalPaginas} />
             </> 
         </Contenedor>
+        <Footer />
     </>
   )
 }

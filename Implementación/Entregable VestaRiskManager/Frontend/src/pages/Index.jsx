@@ -6,7 +6,7 @@ import Navegador from "../components/Navegador";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { obtenerUsuariosCorreo } from "../services/usuarios";
+import { login, obtenerUsuariosCorreo } from "../services/usuarios";
 import { useUsuario } from "../context/usuarioContext";
 
 
@@ -47,23 +47,31 @@ export default function Index() {
             </Alert>
           )}
           <GoogleLogin
-            onSuccess={(credentialResponse) => {
+            onSuccess={async (credentialResponse) => {
               const decode = jwtDecode(credentialResponse.credential);
-              obtenerUsuariosCorreo(decode.email).then((item) => {
-                if (item) {
-                  localStorage.setItem("jwt", credentialResponse.credential);
-                  iniciarSesion(
-                    item.id_usuario,
-                    item.nombre_usuario,
-                    item.email,
-                    item.nombre_perfil
-                  );
-                  navigation("/inicio");
-                  setError(false);
-                } else {
-                  setError(true);
-                }
-              });
+              const {jwt} = await login({correo:decode.email})
+              if (!jwt) {
+                setError(true)
+              }
+              iniciarSesion(jwt)
+              navigation("/inicio");
+              setError(false);
+
+              
+
+              // obtenerUsuariosCorreo(decode.email).then((item) => {
+              //   if (item) {
+              //     localStorage.setItem("jwt", credentialResponse.credential);
+              //     iniciarSesion(
+              //       item.id_usuario,
+              //       item.nombre_usuario,
+              //       item.email,
+              //       item.nombre_perfil
+              //     );
+              //   } else {
+              //     setError(true);
+              //   }
+              // });
             }}
             onError={() => {
               setError(true);

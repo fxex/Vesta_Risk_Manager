@@ -3,6 +3,7 @@ import NavegadorLider from "../components/NavegadorLider";
 import Contenedor from "../components/Contenedor";
 import DiagramaEscudo from "../assets/img/Diagrama_escudo.png";
 import { Figure } from "react-bootstrap";
+import Footer from "../components/Footer";
 
 export default function Ayuda() {
   return (
@@ -98,6 +99,7 @@ export default function Ayuda() {
           </section>
         </div>
       </Contenedor>
+      <Footer />
     </>
   );
 }
