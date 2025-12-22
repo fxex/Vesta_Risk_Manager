@@ -4,7 +4,7 @@ class Usuario
 {
     private $nombre, $email, $conexion;
 
-    function __construct($nombre = null, $email = null, $conexion)
+    function __construct($conexion,$nombre = null, $email = null)
     {
         $this->nombre = $nombre;
         $this->email = $email;
