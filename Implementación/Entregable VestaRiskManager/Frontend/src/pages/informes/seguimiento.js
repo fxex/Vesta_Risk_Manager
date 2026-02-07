@@ -80,6 +80,56 @@ const generarFichaRiesgo = (riesgo) => {
   };
 };
 
+const generarFichaEvaluacion = (evaluacion) => {
+  return {
+    unbreakable: true, // Cada evaluación se mantiene unida
+    margin: [0, 10, 0, 10],
+    stack: [
+      {
+        table: {
+          headerRows: 0,
+          widths: ['25%', '25%', '25%', '25%'],
+          body: [
+            [
+              { text: 'Fecha', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10, colSpan: 2 },
+              {},
+              { text: 'Iteración', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10, colSpan: 2 },
+              {}
+            ],
+            [
+              { text: evaluacion.fecha || '-', fontSize: 10, colSpan: 2 },
+              {},
+              { text: evaluacion.iteracion || '-', fontSize: 10, colSpan: 2 },
+              {}
+            ],
+            [
+              { text: 'Impacto', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10 },
+              { text: 'Probabilidad', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10, colSpan: 2 },
+              {},
+              { text: 'Factor de riesgo', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10 }
+            ],
+            [
+              { text: evaluacion.impacto || '-', fontSize: 10 },
+              { text: evaluacion.probabilidad + '%' || '-', fontSize: 10, colSpan: 2 },
+              {},
+              { text: evaluacion.impacto * evaluacion.probabilidad || '-', fontSize: 10 }
+            ],
+            [
+              { text: 'Justificación', fillColor: "#8DB3E2", color: "#FFF", bold: true, fontSize: 10, colSpan: 4 },
+              {}, {}, {}
+            ],
+            [
+              { text: evaluacion.descripcion || '', colSpan: 4, alignment: 'justify', fontSize: 10, margin: [0, 5, 0, 5] },
+              {}, {}, {}
+            ]
+          ]
+        },
+        layout: 'customLayout'
+      }
+    ]
+  };
+};
+
 export const informeSeguimiento = (datos) => {
   pdfMake.tableLayouts = {
     customLayout: {
@@ -248,7 +298,21 @@ export const informeSeguimiento = (datos) => {
         ]
       },
       ...(datos.riesgos && datos.riesgos.length > 0
-        ? datos.riesgos.map(riesgo => generarFichaRiesgo(riesgo))
+        ? datos.riesgos.flatMap((riesgo) => {
+          // Obtenemos la ficha de riesgo principal (Leyenda)
+          const fichaRiesgo = generarFichaRiesgo(riesgo);
+
+          // Obtenemos el array de evaluaciones independientes
+          const evaluacionesIndependientes = Object.values(datos.evaluaciones || {})
+            .filter(evalu => evalu.id_riesgo === riesgo.id_riesgo)
+            .map(evalu => generarFichaEvaluacion(evalu));
+
+          // Devolvemos todo en un solo nivel para que pdfMake lo trate independientemente
+          return [
+            fichaRiesgo,
+            { text: "Evaluaciones", fontSize: 12, bold: true, margin: [0, 5, 0, 5] },
+            ...evaluacionesIndependientes];
+        })
         : [{ text: "No hay riesgos registrados", italics: true, alignment: "center" }]
       ),
     ],
