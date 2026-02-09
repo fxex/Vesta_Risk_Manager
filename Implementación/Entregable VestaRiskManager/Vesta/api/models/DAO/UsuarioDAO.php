@@ -4,8 +4,9 @@ require_once __DIR__ . "/../DTO/Usuario/UsuarioDTO.php";
 require_once __DIR__ . "/../DTO/Usuario/ParticipanteDTO.php";
 require_once __DIR__ . "/../DTO/Usuario/PerfilDTO.php";
 require_once __DIR__ . "/../DTO/Usuario/UsuarioPerfilDTO.php";
+require_once __DIR__ . "/../Interface/RepositoryUsuario.php";
 
-class UsuarioDAO
+class UsuarioDAO implements RepositoryUsuario
 {
     private $conexion;
     function __construct($conexion)
@@ -13,7 +14,7 @@ class UsuarioDAO
         $this->conexion = $conexion;
     }
 
-    public function crearUsuario(UsuarioDTO $usuario)
+    public function crearUsuario(UsuarioDTO $usuario): UsuarioDTO
     {
         $nombre = $usuario->getNombre();
         $correo = $usuario->getCorreo();
@@ -52,7 +53,7 @@ class UsuarioDAO
 
     }
 
-    public function obtenerTodosUsuarios(int $pagina, int $cantidad_pagina = 10)
+    public function obtenerTodosUsuariosPaginado(int $pagina, int $cantidad_pagina = 10): array
     {
         $usuariosPorPagina = $cantidad_pagina;
         $offset = 0;
@@ -83,7 +84,7 @@ class UsuarioDAO
     }
 
 
-    public function obtenerUsuarioPorId(int $id_usuario)
+    public function obtenerUsuarioPorId(int $id_usuario): UsuarioPerfilDTO | null
     {
         $query = "SELECT u.nombre AS nombre_usuario, u.email, p.id_perfil, p.nombre AS nombre_perfil FROM usuario u 
         INNER JOIN usuario_perfil up ON u.id_usuario = up.id_usuario 
@@ -95,6 +96,10 @@ class UsuarioDAO
         $stmt->execute();
 
         $resultado = $stmt->get_result()->fetch_assoc();
+
+        if ($resultado == null) {
+            return null;
+        }
 
         return new UsuarioPerfilDTO(
             new UsuarioDTO(
@@ -109,7 +114,7 @@ class UsuarioDAO
         );
     }
 
-    public function obtenerUsuariosPorNombre(string $nombre)
+    public function obtenerUsuariosPorNombre(string $nombre): array
     {
         $query = "SELECT u.id_usuario, u.nombre AS nombre_usuario, u.email, p.id_perfil, p.nombre AS nombre_perfil 
         FROM usuario u 
@@ -142,7 +147,7 @@ class UsuarioDAO
         return $resultado;
     }
 
-    public function obtenerUsuarioPorNombreIgual(string $nombre)
+    public function obtenerUsuarioPorNombreIgual(string $nombre): UsuarioPerfilDTO|null
     {
         $query = "SELECT u.nombre AS nombre_usuario, u.email, p.id_perfil, p.nombre AS nombre_perfil 
         FROM usuario u 
@@ -173,7 +178,7 @@ class UsuarioDAO
         );
     }
 
-    public function obtenerUsuarioPorCorreo($correo)
+    public function obtenerUsuarioPorCorreo(string $correo): UsuarioPerfilDTO|null
     {
         $query = "SELECT u.id_usuario, u.nombre AS nombre_usuario, u.email, p.id_perfil, p.nombre AS nombre_perfil 
         FROM usuario u 
@@ -202,7 +207,7 @@ class UsuarioDAO
         );
     }
 
-    public function actualizarUsuario(UsuarioDTO $usuario)
+    public function actualizarUsuario(UsuarioDTO $usuario): UsuarioDTO
     {
         $id_usuario = $usuario->getId();
         $nombre = $usuario->getNombre();
@@ -237,7 +242,7 @@ class UsuarioDAO
         return $usuario;
     }
 
-    public function eliminarUsuario($id_usuario)
+    public function eliminarUsuario($id_usuario): int
     {
         $query = "DELETE FROM usuario WHERE id_usuario = ?";
         $stmt = $this->conexion->prepare($query);
@@ -266,7 +271,7 @@ class UsuarioDAO
         return $id_usuario;
     }
 
-    public function obtenerIdUsuarioPorNombre(string $nombre)
+    public function obtenerIdUsuarioPorNombre(string $nombre): int | null
     {
         $query = "SELECT id_usuario FROM usuario WHERE nombre = ?";
         $stmt = $this->conexion->prepare($query);
@@ -276,7 +281,7 @@ class UsuarioDAO
         return $resultado["id_usuario"]; 
     }
 
-    public function obtenerParticipanteProyectoPorId(int $id_proyecto)
+    public function obtenerParticipantesProyectoPorId(int $id_proyecto): array
     {
         $query = "SELECT u.id_usuario, u.nombre, u.email, pp.rol FROM `proyecto` p 
         INNER JOIN proyecto_participante pp ON p.id_proyecto = pp.id_proyecto 
@@ -299,7 +304,8 @@ class UsuarioDAO
         return $resultado;
     }
 
-    public function obtenerRolParticipanteProyecto(int $id_proyecto, int $id_usuario){
+    public function obtenerRolParticipanteProyecto(int $id_proyecto, int $id_usuario): string
+    {
         $query = "SELECT rol from proyecto_participante where id_proyecto = ? and id_usuario = ?";
         $stmt = $this->conexion->prepare($query);
         $stmt->bind_param("ii", $id_proyecto, $id_usuario);
@@ -309,5 +315,25 @@ class UsuarioDAO
         return $resultado["rol"];
     }
 
+    public function obtenerParticipantesRiesgo(int $id_proyecto, int $id_riesgo): array
+    {
+        $query = "SELECT u.id_usuario, u.nombre, u.email FROM participante_riesgo pr 
+        INNER JOIN usuario u ON pr.id_usuario = u.id_usuario 
+        WHERE pr.id_riesgo = ? AND pr.id_proyecto = ?";
 
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("ii", $id_riesgo, $id_proyecto);
+        $stmt->execute();
+        $participantes = $stmt->get_result();
+
+        $resultado = [];
+        while ($participante = $participantes->fetch_assoc()) {
+            $resultado[] = new UsuarioDTO(
+                $participante["id_usuario"],
+                $participante["nombre"],
+                $participante["email"]
+            );
+        }
+        return $resultado;
+    }
 }

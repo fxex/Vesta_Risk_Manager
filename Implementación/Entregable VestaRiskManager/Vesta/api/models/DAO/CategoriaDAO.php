@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__ . "/../DTO/Categoria/CategoriaDTO.php";
+require_once __DIR__ . "/../Interface/RepositoryCategoria.php";
 
-class CategoriaDAO
+class CategoriaDAO implements RepositoryCategoria
 {
     private $conexion;
     function __construct($conexion)
@@ -10,7 +11,7 @@ class CategoriaDAO
         $this->conexion = $conexion;
     }
 
-    public function obtenerCategoriasGenerales()
+    public function obtenerCategoriasGenerales(): array
     {
         $categorias = $this->conexion->query("SELECT id_categoria, nombre, descripcion FROM categoria where estado = 'activo'");
         $resultado = [];
@@ -24,26 +25,7 @@ class CategoriaDAO
         return $resultado;
     }
 
-    public function obtenerCategoriasProyecto(int $id_proyecto)
-    {
-        $query = "SELECT c.nombre, c.descripcion FROM categoria c 
-        INNER JOIN proyecto_categoria pc ON c.id_categoria = pc.id_categoria 
-        WHERE pc.id_proyecto = ?";
-        $stmt = $this->conexion->prepare($query);
-
-        $stmt->bind_param("i", $id_proyecto);
-        $stmt->execute();
-        $categorias = $stmt->get_result();
-        $resultado = [];
-
-        while ($categoria = $categorias->fetch_assoc()) {
-            $resultado[] = new CategoriaDTO(null, $categoria["nombre"], $categoria["descripcion"]);
-        }
-
-        return $resultado;
-    }
-
-    public function obtenerDatosGraficoTelaraña(int $id_proyecto)
+    public function obtenerDatosGraficoTelaraña(int $id_proyecto): array
     {
         $query = "SELECT c.nombre, COALESCE(sum(r.factor_riesgo), 0) as total_riesgo  
                 from categoria c
@@ -61,7 +43,7 @@ class CategoriaDAO
         return $resultado;
     }
 
-    public function obtenerCategoriasGeneralesPaginado(int $pagina, int $cantidad_pagina = 10)
+    public function obtenerCategoriasGeneralesPaginado(int $pagina, int $cantidad_pagina = 10): array
     {
         $categoriaPorPagina = $cantidad_pagina;
         $offset = 0;
@@ -87,20 +69,20 @@ class CategoriaDAO
         return $totalPaginas;
     }
 
-    public function obtenerCategoriaId(int $id)
+    public function obtenerCategoriaPorId(int $id_categoria): CategoriaDTO|null
     {
         $query = "SELECT id_categoria, nombre, descripcion, version FROM categoria WHERE id_categoria = ?";
         $stmt = $this->conexion->prepare($query);
-        $stmt->bind_param("i", $id);
+        $stmt->bind_param("i", $id_categoria);
         $stmt->execute();
         $resultado = $stmt->get_result()->fetch_assoc();
 
         if ($resultado == null) {
-            return null; //TODO: Se debe arrojar una excepcion de dominio. No es posible que este metodo reciba un id incorrecto
+            return null; //TODO: Se debe arrojar una excepcion de dominio. No es posible que este metodo reciba un id_categoria incorrecto
         }
 
         return new CategoriaDTO(
-            $id,
+            $id_categoria,
             $resultado["nombre"],
             $resultado["descripcion"],
             null,
@@ -108,7 +90,7 @@ class CategoriaDAO
         );
     }
 
-    public function obtenerCategoriaNombre(string $nombre)
+    public function obtenerCategoriaPorNombre(string $nombre): int | null
     {
         $query = "SELECT id_categoria FROM categoria 
         WHERE nombre = ? AND estado = 'activo'";
@@ -121,7 +103,7 @@ class CategoriaDAO
         return $resultado["id_categoria"] ?? null;
     }
 
-    public function crearCategoria(CategoriaDTO $categoria)
+    public function crearCategoria(CategoriaDTO $categoria): CategoriaDTO
     {
         $nombre = $categoria->getNombre();
         $descripcion = $categoria->getDescripcion();
@@ -157,7 +139,7 @@ class CategoriaDAO
         );
     }
 
-    public function eliminarCategoria(int $id_categoria)
+    public function eliminarCategoria(int $id_categoria): int
     {
         $stmt = NULL;
         $cantidadProyectos = $this->obtenerCantidadProyectosCategoria($id_categoria);
@@ -213,7 +195,7 @@ class CategoriaDAO
         return $totalProyectos;
     }
 
-    public function actualizarCategoria(CategoriaDTO $categoria)
+    public function actualizarCategoria(CategoriaDTO $categoria): CategoriaDTO
     {
         $nombre = $categoria->getNombre();
         $descripcion = $categoria->getDescripcion();
@@ -255,25 +237,22 @@ class CategoriaDAO
         );
     }
 
-    public function obtenerCategoriaProyectoPorId(int $id_proyecto)
+    public function obtenerCategoriasProyectoPorId(int $id_proyecto): array
     {
-        $query = "SELECT c.id_categoria, c.nombre, c.descripcion FROM `proyecto` p 
-        INNER JOIN proyecto_categoria pc ON p.id_proyecto = pc.id_proyecto 
-        INNER JOIN categoria c ON c.id_categoria = pc.id_categoria 
-        WHERE p.id_proyecto = ?";
+        $query = "SELECT c.id_categoria, c.nombre, c.descripcion FROM categoria c 
+        INNER JOIN proyecto_categoria pc ON c.id_categoria = pc.id_categoria 
+        WHERE pc.id_proyecto = ?";
         $stmt = $this->conexion->prepare($query);
+
         $stmt->bind_param("i", $id_proyecto);
         $stmt->execute();
         $categorias = $stmt->get_result();
-
         $resultado = [];
+
         while ($categoria = $categorias->fetch_assoc()) {
-            $resultado[] = new CategoriaDTO(
-                $categoria["id_categoria"],
-                $resultado["nombre"],
-                $resultado["descripcion"],
-            );
+            $resultado[] = new CategoriaDTO($categoria["id_categoria"], $categoria["nombre"], $categoria["descripcion"]);
         }
+
         return $resultado;
     }
 }

@@ -3,8 +3,9 @@
 require_once __DIR__ . "/../DTO/Proyecto/IteracionDTO.php";
 require_once __DIR__ . "/../DTO/Proyecto/ProyectoDTO.php";
 require_once __DIR__ . "/../DTO/Proyecto/ProyectoIteracionDTO.php";
+require_once __DIR__ . "/../Interface/RepositoryProyecto.php";
 
-class ProyectoDAO
+class ProyectoDAO implements RepositoryProyecto
 {
     private $conexion;
     public function __construct($conexion)
@@ -12,7 +13,7 @@ class ProyectoDAO
         $this->conexion = $conexion;
     }
 
-    public function obtenerTodosProyecto()
+    public function obtenerTodosProyectos(): array
     {
         $proyectos = $this->conexion->query("SELECT id_proyecto, nombre, descripcion, estado, fecha_inicio, fecha_fin 
         FROM proyecto");
@@ -34,7 +35,7 @@ class ProyectoDAO
 
 
 
-    public function obtenerTodosProyectoPaginado(int $pagina, int $orden, int $cantidad_pagina = 10)
+    public function obtenerTodosProyectosPaginado(int $pagina, int $orden, int $cantidad_pagina = 10): array
     {
         $ordenado = $this->obtenerOrden($orden);
         $cantidad_proyectos = $cantidad_pagina;
@@ -92,7 +93,7 @@ class ProyectoDAO
         return $totalPaginas;
     }
 
-    public function obtenerTodosProyectoPorRol(string $rol, string $correo)
+    public function obtenerTodosProyectoPorRol(string $rol, string $correo): array
     {
         $query = "SELECT p.id_proyecto, p.nombre, p.descripcion, p.estado, p.fecha_inicio, p.fecha_fin FROM proyecto p 
         INNER JOIN proyecto_participante pp ON p.id_proyecto = pp.id_proyecto
@@ -119,7 +120,7 @@ class ProyectoDAO
         return $resultado;
     }
 
-    public function obtenerTodosProyectoPorRolPaginado(string $rol, string $correo, int $pagina, int $cantidad_pagina = 10)
+    public function obtenerTodosProyectosPorRolPaginado(string $rol, string $correo, int $pagina, int $cantidad_pagina = 10): array
     {
         $cantidad_proyectos = $cantidad_pagina;
         $offset = 0;
@@ -172,7 +173,7 @@ class ProyectoDAO
         return $totalPaginas;
     }
 
-    public function obtenerProyectoPorId($id_proyecto)
+    public function obtenerProyectoPorId($id_proyecto): ProyectoDTO|null
     {
         $query = "SELECT nombre, descripcion, estado, fecha_inicio, fecha_fin from proyecto 
         where id_proyecto = ?";
@@ -195,7 +196,7 @@ class ProyectoDAO
         );
     }
 
-    public function crearProyecto(ProyectoDTO $proyecto)
+    public function crearProyecto(ProyectoDTO $proyecto): ProyectoDTO
     {
         $nombre = $proyecto->getNombre();
         $descripcion = $proyecto->getDescripcion();
@@ -239,10 +240,10 @@ class ProyectoDAO
             $fecha_inicio,
             $fecha_fin,
         );
-        
+
     }
 
-    public function actualizarProyecto(ProyectoDTO $proyecto)
+    public function actualizarProyecto(ProyectoDTO $proyecto): ProyectoDTO
     {
         $id_proyecto = $proyecto->getId();
         $nombre = $proyecto->getNombre();
@@ -279,11 +280,12 @@ class ProyectoDAO
         if ($stmt->affected_rows === 0) {
             throw new RuntimeException("No se actualizo ninguna fila o no se realizo ningun cambio"); // TODO: Cambiar Tipo de excepcion, de dominio.  
         }
-        
+
         return $proyecto;
     }
 
-    public function actualizarEstadoYFechaFin(ProyectoDTO $proyecto){
+    public function actualizarEstadoYFechaFin(ProyectoDTO $proyecto): ProyectoDTO
+    {
         $id_proyecto = $proyecto->getId();
         $estado = $proyecto->getEstado();
         $fecha_fin = $proyecto->getFechaFin();
@@ -312,13 +314,13 @@ class ProyectoDAO
         if ($stmt->affected_rows === 0) {
             throw new RuntimeException("No se actualizo ninguna fila o no se realizo ningun cambio"); // TODO: Cambiar Tipo de excepcion, de dominio.  
         }
-        
+
         return $proyecto;
     }
 
-    public function modificarEstadoProyecto(ProyectoDTO $proyecto)
+    public function modificarEstadoProyecto(ProyectoDTO $proyecto): ProyectoDTO
     {
-        $this->actualizarEstadoYFechaFin($proyecto);
+        return $this->actualizarEstadoYFechaFin($proyecto);
     }
 
 

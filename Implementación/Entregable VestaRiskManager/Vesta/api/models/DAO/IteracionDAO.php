@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__ . "/../DTO/Proyecto/IteracionDTO.php";
+require_once __DIR__ . "/../Interface/RepositoryIteracion.php";
 
-class IteracionDAO
+class IteracionDAO implements RepositoryIteracion
 {
     private $conexion;
     function __construct($conexion)
@@ -10,7 +11,7 @@ class IteracionDAO
         $this->conexion = $conexion;
     }
 
-    public function obtenerIteracionesPaginado(int $id_proyecto, int $pagina, $cantidad_pagina = 10)
+    public function obtenerIteracionesPaginado(int $id_proyecto, int $pagina, $cantidad_pagina = 10): array
     {
         $cantidad_iteraciones = $cantidad_pagina;
         $offset = 0;
@@ -44,7 +45,7 @@ class IteracionDAO
         return $totalPaginas;
     }
 
-    public function crearIteracion(IteracionDTO $iteracion, int $id_proyecto)
+    public function crearIteracion(IteracionDTO $iteracion, int $id_proyecto): IteracionDTO
     {
         $nombre = $iteracion->getNombre();
         $fecha_inicio = $iteracion->getFechaInicio();
@@ -85,7 +86,7 @@ class IteracionDAO
         );
     }
 
-    public function actualizarIteracion(IteracionDTO $iteracion, int $id_proyecto)
+    public function actualizarIteracion(IteracionDTO $iteracion, int $id_proyecto): IteracionDTO
     {
         $nombre = $iteracion->getNombre();
         $fecha_inicio = $iteracion->getFechaInicio();
@@ -123,7 +124,7 @@ class IteracionDAO
         return $iteracion;
     }
 
-    public function eliminarIteracion(int $id_iteracion)
+    public function eliminarIteracion(int $id_iteracion): int
     {
         $query = "DELETE FROM iteracion WHERE id_iteracion = ?";
         $stmt = $this->conexion->prepare($query);
@@ -152,7 +153,7 @@ class IteracionDAO
         return $id_iteracion;
     }
 
-    public function obtenerIteracionProyectoPorId(int $id_proyecto)
+    public function obtenerTodasIteracionesProyectoPorId(int $id_proyecto): array
     {
         $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin FROM proyecto p 
         INNER JOIN iteracion i ON p.id_proyecto = i.id_proyecto 
@@ -176,7 +177,7 @@ class IteracionDAO
         return $resultado;
     }
 
-    public function obtenerIteracionActual(int $id_proyecto, string $fecha_actual)
+    public function obtenerIteracionActual(int $id_proyecto, string $fecha_actual): IteracionDTO
     {
         $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin FROM iteracion i 
         WHERE i.id_proyecto = ? AND (? BETWEEN i.fecha_inicio AND i.fecha_fin)";
@@ -192,7 +193,7 @@ class IteracionDAO
         );
     }
 
-    public function obtenerUltimaIteracion(int $id_proyecto)
+    public function obtenerUltimaIteracion(int $id_proyecto): IteracionDTO
     {
         $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin FROM proyecto p 
         INNER JOIN iteracion i ON p.id_proyecto = i.id_proyecto 
@@ -211,7 +212,7 @@ class IteracionDAO
         );
     }
 
-    public function obtenerUltimasIteraciones(int $id_proyecto, string $fecha_actual)
+    public function obtenerUltimasIteraciones(int $id_proyecto, string $fecha_actual): array
     {
         $query = "
             (SELECT * FROM (
@@ -252,5 +253,26 @@ class IteracionDAO
             );
         }
         return $resultado;
+    }
+
+    public function obtenerIteracionPorId(int $id_iteracion): IteracionDTO|null
+    {
+        $query = "SELECT i.id_iteracion, i.nombre, i.fecha_inicio, i.fecha_fin FROM iteracion i 
+        WHERE i.id_iteracion = ?";
+        $stmt = $this->conexion->prepare($query);
+        $stmt->bind_param("i", $id_iteracion);
+        $stmt->execute();
+        $resultado = $stmt->get_result()->fetch_assoc();
+
+        if ($resultado == null) {
+            return null; //TODO: Se debe arrojar una excepcion de dominio. No es posible que este metodo reciba un id_categoria incorrecto
+        }
+
+        return new IteracionDTO(
+            $resultado["id_iteracion"],
+            $resultado["nombre"],
+            $resultado["fecha_inicio"],
+            $resultado["fecha_fin"]
+        );
     }
 }
